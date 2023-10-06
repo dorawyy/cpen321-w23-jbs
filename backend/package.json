@@ -1,0 +1,22 @@
+{
+  "name": "edumatch",
+  "version": "1.0.0",
+  "description": "Backend for EduMatch",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StanDarJeep/jbs-edumatch.git"
+  },
+  "author": "Arya Phan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/StanDarJeep/jbs-edumatch/issues"
+  },
+  "homepage": "https://github.com/StanDarJeep/jbs-edumatch#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

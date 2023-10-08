@@ -1,27 +1,17 @@
 <resources>
-    <string name="app_name">EduMatch</string>
-    <string name="appname">
-    EduMatch
-    </string>
-    <string name="username">
-    Username
-    </string>
-    <string name="password">
-    Password
-    </string>
-    <string name="enteruser">
-Enter your username
-</string>
-    <string name="enterpass">
-Enter your password
-</string>
-    <string name="signuptext">
-Sign Up
-</string>
-    <string name="signintext">
-Sign In
-</string>
-    <string name="googlesignintext">
-Continue With Google
-</string>
+	<string name="app_name">EduMatch</string>
+	<string name="username">Username</string>
+	<string name="password">Password</string>
+	<string name="enteruser">Enter your username</string>
+	<string name="enterpass"> Enter your password</string>
+	<string name="signuptext"> Sign Up</string>
+	<string name="signintext">Sign In</string>
+	<string name="googlesignintext">Continue With Google</string>
+	<string name="server_client_id">525109856760-2e1g7kljkarhq1gav87erfh6o9aac4ik.apps.googleusercontent.com</string>
+	<string name="tutor_or_tutee">Are you a tutor or tutee?</string>
+	<string name="tutor">Tutor</string>
+	<string name="tutee">Tutee</string>
+	<string name="create_name_label">What is your name?</string>
+	<string name="create_email_label">What is your email?</string>
+
 </resources>

@@ -23,12 +23,16 @@ import com.google.android.gms.tasks.Task;
 
 public class MainActivity extends AppCompatActivity {
     private EditText enterUserEditText;
+    private EditText enterPassEditText;
     private Button signInButton;
+    private Button signUpButton;
     private Button googleSignInButton;
 
     private GoogleSignInAccount account;
     private GoogleSignInClient mGoogleSignInClient;
     final static String TAG = "MainActivity";
+
+    private Intent newIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Find the EditText view by its ID
         enterUserEditText = findViewById(R.id.enteruser);
+        enterPassEditText = findViewById(R.id.enterpassword);
 
         // Find the Button view by its ID (if you have a submit button)
         signInButton = findViewById(R.id.signin_button); // Replace with your actual button ID
@@ -48,13 +53,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Get the user input from the EditText
                 String userInput = enterUserEditText.getText().toString();
+                String passwordInput = enterPassEditText.getText().toString();
 
-                // Do something with the user input, for example, display it in a Toast
+                // Can send this info in POST request
                 Toast.makeText(MainActivity.this, "User input: " + userInput, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Password: " + passwordInput, Toast.LENGTH_SHORT).show();
             }
         });
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.server_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -66,6 +74,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Get the user input from the EditText
                 signIn();
+            }
+        });
+
+        signUpButton = findViewById(R.id.signup_button);
+
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Going to TutorOrTuteeActivity", Toast.LENGTH_LONG).show();
+                newIntent = new Intent(MainActivity.this, TutorOrTuteeActivity.class);
+                startActivity(newIntent);
             }
         });
 
@@ -98,9 +117,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             account = completedTask.getResult(ApiException.class);
 
-            // Signed in successfully, show authenticated UI.
-
-            Toast.makeText(MainActivity.this, "Successful Sign In" + account.getId(), Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Successful Sign In" + account.getIdToken(), Toast.LENGTH_LONG).show();
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.

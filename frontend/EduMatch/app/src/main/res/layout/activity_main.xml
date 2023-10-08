@@ -14,8 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="33dp"
         android:gravity="center"
-        android:text="@string/appname"
-        android:textAppearance="@style/appname"
+        android:text="@string/app_name"
+        android:textAppearance="@style/title"
         android:textStyle="bold"
         app:layout_rowWeight="1" />
 
@@ -104,9 +104,10 @@
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
                 android:hint="@string/enterpass"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:lineSpacingExtra="4sp"
                 android:textAppearance="@style/enteruser"
+                android:fontFamily="sans-serif"
                 android:translationY="-1.8sp" />
         </RelativeLayout>
     </androidx.gridlayout.widget.GridLayout>

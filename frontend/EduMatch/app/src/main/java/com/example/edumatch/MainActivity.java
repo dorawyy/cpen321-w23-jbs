@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main); // Replace 'your_layout' with the actual layout XML file name
 
         // Find the EditText view by its ID
-        enterUserEditText = findViewById(R.id.enteruser);
+        enterUserEditText = findViewById(R.id.username);
         enterPassEditText = findViewById(R.id.enterpassword);
 
         // Find the Button view by its ID (if you have a submit button)
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 String passwordInput = enterPassEditText.getText().toString();
 
                 // Can send this info in POST request
+
                 Toast.makeText(MainActivity.this, "User input: " + userInput, Toast.LENGTH_SHORT).show();
                 Toast.makeText(MainActivity.this, "Password: " + passwordInput, Toast.LENGTH_SHORT).show();
             }

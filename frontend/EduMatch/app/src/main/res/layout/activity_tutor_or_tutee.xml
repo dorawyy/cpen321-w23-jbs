@@ -1,51 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/tutor_or_tutee"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    app:columnCount="1"
-    app:rowCount="2">
-    <TextView
-        android:id="@+id/tutor_or_tutee_display"
-        android:layout_width="match_parent"
-        android:layout_height="33dp"
-        android:gravity="center"
-        android:text="@string/tutor_or_tutee"
-        android:textAppearance="@style/title"
-        android:textStyle="bold"
-        app:layout_rowWeight="1" />
-    <androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="12dp"
-        app:columnCount="2"
-        app:rowCount="1">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/tutor_or_tutee"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_gravity="center"
+	app:columnCount="1"
+	app:rowCount="2">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/tutor_button"
-            android:layout_width="147.5dp"
-            android:layout_height="42dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="12dp"
-            android:background="@drawable/sign_up_btn"
-            android:text="@string/tutor"
-            android:textAppearance="@style/signuptext"
-            app:layout_columnWeight="1"
-            />
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/tutee_button"
-            android:layout_width="147.5dp"
-            android:layout_height="42dp"
-            android:layout_marginRight="12dp"
-            android:background="@drawable/sign_up_btn"
-            android:text="@string/tutee"
-            android:textAppearance="@style/signuptext"
-            app:layout_columnWeight="1"
-            />
-    </androidx.gridlayout.widget.GridLayout>
+	<TextView
+		android:id="@+id/tutor_or_tutee_display"
+		android:layout_width="match_parent"
+		android:layout_height="33dp"
+		android:gravity="center"
+		android:text="@string/tutor_or_tutee"
+		android:textAppearance="@style/title"
+		android:textStyle="bold"
+		app:layout_rowWeight="1" />
+
+	<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="12dp"
+		android:layout_marginTop="16dp"
+		android:layout_marginRight="12dp"
+		app:columnCount="2"
+		app:rowCount="1">
+
+		<androidx.appcompat.widget.AppCompatButton
+			android:id="@+id/tutor_button"
+			android:layout_width="147.5dp"
+			android:layout_height="42dp"
+			android:layout_marginLeft="12dp"
+			android:layout_marginRight="8dp"
+			android:background="@drawable/sign_up_btn"
+			android:text="@string/tutor"
+			android:textAppearance="@style/black_button_text"
+			app:layout_columnWeight="1" />
+
+		<androidx.appcompat.widget.AppCompatButton
+			android:id="@+id/tutee_button"
+			android:layout_width="147.5dp"
+			android:layout_height="42dp"
+			android:layout_marginRight="12dp"
+			android:background="@drawable/sign_up_btn"
+			android:text="@string/tutee"
+			android:textAppearance="@style/black_button_text"
+			app:layout_columnWeight="1" />
+	</androidx.gridlayout.widget.GridLayout>
 </androidx.gridlayout.widget.GridLayout>

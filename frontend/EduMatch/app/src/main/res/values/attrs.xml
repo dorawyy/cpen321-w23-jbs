@@ -5,4 +5,9 @@
 		<attr name="hintText" format="string" />
 		<attr name="inputType" format="string" />
 	</declare-styleable>
+	<declare-styleable name="LoginLabelAndEditText">
+		<attr name="loginLabelText" format="string" />
+		<attr name="loginHintText" format="string" />
+		<attr name="loginInputType" format="string" />
+	</declare-styleable>
 </resources>

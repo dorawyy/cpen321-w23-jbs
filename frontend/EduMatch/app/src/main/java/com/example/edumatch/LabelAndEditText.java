@@ -30,8 +30,13 @@ public class LabelAndEditText extends GridLayout {
         init(context, attrs);
     }
 
+    public EditText getEnterUserEditText() {
+        return editText;
+    }
+
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
+        inflater.inflate(R.layout.label_and_edit_text, this, true);
 
         // Find the TextView for the label inside the custom layout
         label = findViewById(R.id.label);
@@ -43,7 +48,6 @@ public class LabelAndEditText extends GridLayout {
         // Retrieve and set the labelText attribute if it's provided
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LabelAndEditText);
-            inflater.inflate(R.layout.label_and_edit_text, this, true);
 
             String labelText = typedArray.getString(R.styleable.LabelAndEditText_labelText);
             String hintText = typedArray.getString(R.styleable.LabelAndEditText_hintText);

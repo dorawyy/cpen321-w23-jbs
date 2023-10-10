@@ -21,57 +21,18 @@
 
     <com.example.edumatch.LoginLabelAndEditText
         android:id="@+id/username"
-        app:hintText="@string/username_hint"
-        app:labelText="@string/username_label"
-        android:layout_marginLeft="12dp"
+        app:loginHintText="@string/username_hint"
+        app:loginLabelText="@string/username_label"
+        app:layout_gravity="center_horizontal"
         />
 
-    <androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="12dp"
-        app:columnCount="1"
-        app:rowCount="2">
-
-        <TextView
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginTop="0dp"
-            android:lineSpacingExtra="4sp"
-            android:text="@string/password_label"
-            android:textAppearance="@style/label_text"
-            app:layout_rowWeight="1" />
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/passwordcontainer"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/input_container"
-            app:layout_rowWeight="1">
-
-            <EditText
-                android:id="@+id/enterpassword"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_vertical"
-                android:hint="@string/password_hint"
-                android:inputType="textPassword"
-                android:lineSpacingExtra="4sp"
-                android:textAppearance="@style/label_text"
-                android:fontFamily="sans-serif"
-                android:translationY="-1.8sp" />
-        </RelativeLayout>
-    </androidx.gridlayout.widget.GridLayout>
+    <com.example.edumatch.LoginLabelAndEditText
+        android:id="@+id/password"
+        app:loginHintText="@string/password_hint"
+        app:loginLabelText="@string/password_label"
+        app:layout_gravity="center_horizontal"
+        app:loginInputType="textPassword"
+        />
 
     <androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

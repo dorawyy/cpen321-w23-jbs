@@ -22,8 +22,10 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText enterUserEditText;
-    private EditText enterPassEditText;
+    private EditText usernameEditText;
+    private LoginLabelAndEditText username;
+    private EditText passwordEditText;
+    private LoginLabelAndEditText password;
     private Button signInButton;
     private Button signUpButton;
     private Button googleSignInButton;
@@ -40,8 +42,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main); // Replace 'your_layout' with the actual layout XML file name
 
         // Find the EditText view by its ID
-        enterUserEditText = findViewById(R.id.username);
-        enterPassEditText = findViewById(R.id.enterpassword);
+        username = findViewById(R.id.username);
+        usernameEditText = username.getEnterUserEditText();
+        password = findViewById(R.id.password);
+        passwordEditText = password.getEnterUserEditText();
 
         // Find the Button view by its ID (if you have a submit button)
         signInButton = findViewById(R.id.signin_button); // Replace with your actual button ID
@@ -52,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Get the user input from the EditText
-                String userInput = enterUserEditText.getText().toString();
-                String passwordInput = enterPassEditText.getText().toString();
+                String userInput = usernameEditText.getText().toString();
+                String passwordInput = passwordEditText.getText().toString();
 
                 // Can send this info in POST request
 

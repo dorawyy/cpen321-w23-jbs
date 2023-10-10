@@ -30,6 +30,10 @@ public class LoginLabelAndEditText extends GridLayout {
         init(context, attrs);
     }
 
+    public EditText getEnterUserEditText() {
+        return editText;
+    }
+
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.login_label_and_edit_text, this, true);
@@ -42,10 +46,10 @@ public class LoginLabelAndEditText extends GridLayout {
 
         // Retrieve and set the labelText attribute if it's provided
         if (attrs != null) {
-            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LabelAndEditText);
-            String labelText = typedArray.getString(R.styleable.LabelAndEditText_labelText);
-            String hintText = typedArray.getString(R.styleable.LabelAndEditText_hintText);
-            String inputType = typedArray.getString(R.styleable.LabelAndEditText_inputType);
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LoginLabelAndEditText);
+            String labelText = typedArray.getString(R.styleable.LoginLabelAndEditText_loginLabelText);
+            String hintText = typedArray.getString(R.styleable.LoginLabelAndEditText_loginHintText);
+            String inputType = typedArray.getString(R.styleable.LoginLabelAndEditText_loginInputType);
             typedArray.recycle();
 
             if (labelText != null) {

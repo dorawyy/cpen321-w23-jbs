@@ -28,8 +28,8 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/start_time_button"
-            android:layout_width="50dp"
-            android:layout_height="20dp"
+            android:layout_width="60dp"
+            android:layout_height="36dp"
             android:background="@drawable/time_picker_rectangle"
             android:gravity="center"
             android:text=""
@@ -50,8 +50,8 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/end_time_button"
-            android:layout_width="50dp"
-            android:layout_height="20dp"
+            android:layout_width="60dp"
+            android:layout_height="36dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/time_picker_rectangle"
             android:text=""

@@ -99,7 +99,7 @@ public class AvailabilityActivity extends AppCompatActivity {
                         String endTimeString = availableTimes.getEndTime();
 
                         Boolean isValid = isStartTimeBeforeEndTime(startTimeString,endTimeString);
-                            if (!isValid) {
+                            if (isValid == false) {
                                 Toast.makeText(AvailabilityActivity.this, "Start Time Not Before End Time, Not Saved!", Toast.LENGTH_SHORT).show();
                             } else {
                                 availability.set(0,availableTimes.getStartTime());

@@ -30,7 +30,7 @@ public class LoginSignupHelper {
 
     public static boolean isStartTimeBeforeEndTime(String startTimeString, String endTimeString){
 
-        SimpleDateFormat sdf = new SimpleDateFormat("%02d:%02d");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         Date startTime = null;
         Date endTime = null;
 

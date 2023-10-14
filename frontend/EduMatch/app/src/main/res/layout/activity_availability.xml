@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="32dp"
+    app:columnCount="1"
+    app:rowCount="5">
+
+    <TextView
+        android:id="@+id/manual_set_title"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:text="@string/manual_set"
+        android:textAppearance="@style/title"
+        android:textStyle="bold"
+        app:layout_rowWeight="1"
+        android:layout_marginTop="16dp"/>
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:background="@drawable/line_separator"
+        android:layout_marginTop="16dp"
+        app:layout_rowWeight="1" />
+
+    <com.example.edumatch.DayOfTheWeek app:layout_rowWeight="1" />
+
+    <TextView
+        android:id="@+id/selected_day"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:text="@string/select_availability_day"
+        android:textAppearance="@style/title"
+        android:textStyle="bold"
+        app:layout_rowWeight="1"
+        android:layout_marginTop="16dp"/>
+<com.example.edumatch.AvailableTimes
+    android:id="@+id/available_times"
+    android:visibility="gone"
+   />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/manually_set_button"
+        android:layout_width="147.5dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/sign_up_btn"
+        android:text="@string/manually_set_availability_button"
+        android:textAppearance="@style/black_button_text"
+        app:layout_rowWeight="1"
+        app:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/automatically_set_title"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:text="@string/google_calendar_set"
+        android:textAppearance="@style/title"
+        android:textStyle="bold"
+        app:layout_rowWeight="1"
+        android:layout_marginTop="16dp"/>
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:background="@drawable/line_separator"
+        android:layout_marginTop="16dp"
+        app:layout_rowWeight="1" />
+    <ImageView
+        android:background="@drawable/devicon_google"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        app:layout_rowWeight="1"
+        app:layout_gravity="center"
+        />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/automatically_set_button"
+        android:layout_width="147.5dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/sign_up_btn"
+        android:text="@string/googlesignintext"
+        android:textAppearance="@style/black_button_text"
+        app:layout_rowWeight="1"
+        app:layout_gravity="center" />
+</androidx.gridlayout.widget.GridLayout>

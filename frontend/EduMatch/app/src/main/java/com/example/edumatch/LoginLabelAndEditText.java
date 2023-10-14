@@ -3,7 +3,6 @@ package com.example.edumatch;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
-import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.EditText;
@@ -61,7 +60,7 @@ public class LoginLabelAndEditText extends GridLayout {
             }
 
             if(inputType != null){
-                editText.setInputType(LoginHelper.getInputTypeFromString(inputType));
+                editText.setInputType(LoginSignupHelper.getInputTypeFromString(inputType));
                 editText.setTypeface(Typeface.SANS_SERIF);
             }
         }

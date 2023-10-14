@@ -10,4 +10,7 @@
 		<attr name="loginHintText" format="string" />
 		<attr name="loginInputType" format="string" />
 	</declare-styleable>
+	<declare-styleable name="DayOfTheWeekButton">
+		<attr name="DayString" format="string" />
+	</declare-styleable>
 </resources>

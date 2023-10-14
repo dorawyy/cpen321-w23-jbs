@@ -19,5 +19,11 @@
 	<string name="create_name_hint">Name</string>
 	<string name="create_email_hint">example@example.com</string>
 	<string name="create_phone_number_hint">123-456-7890</string>
-
+	<string name="select_availability_day">Select Day</string>
+	<string name="start_time">Start Time</string>
+	<string name="end_time">End Time</string>
+	<string name="set_times">Set Times</string>
+	<string name="manual_set">Manually Set Availability</string>
+	<string name="google_calendar_set">Use Google Calendar Availability</string>
+	<string name="manually_set_availability_button">Manually Set Availability</string>
 </resources>

@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 public class AccountInformationActivity extends AppCompatActivity {
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

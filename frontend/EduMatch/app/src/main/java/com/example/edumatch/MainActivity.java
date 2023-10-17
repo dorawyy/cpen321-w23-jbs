@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -24,12 +25,13 @@ import com.google.android.gms.tasks.Task;
 
 public class MainActivity extends AppCompatActivity {
     private EditText usernameEditText;
-    private LoginLabelAndEditText username;
+    private LabelAndEditText username;
     private EditText passwordEditText;
-    private LoginLabelAndEditText password;
+    private LabelAndEditText password;
     private Button signInButton;
     private Button signUpButton;
     private Button googleSignInButton;
+
 
     private GoogleSignInAccount account;
     private GoogleSignInClient mGoogleSignInClient;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Find the EditText view by its ID
         username = findViewById(R.id.username);
+
         usernameEditText = username.getEnterUserEditText();
         password = findViewById(R.id.password);
         passwordEditText = password.getEnterUserEditText();
@@ -64,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Toast.makeText(MainActivity.this, "User input: " + userInput, Toast.LENGTH_SHORT).show();
                 Toast.makeText(MainActivity.this, "Password: " + passwordInput, Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Going to TutorOrTuteeActivity", Toast.LENGTH_LONG).show();
-                newIntent = new Intent(MainActivity.this, AvailabilityActivity.class);
+                newIntent = new Intent(MainActivity.this, TutorOrTuteeActivity.class);
                 startActivity(newIntent);
             }
         });

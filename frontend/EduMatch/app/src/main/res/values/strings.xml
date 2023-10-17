@@ -26,4 +26,10 @@
 	<string name="manual_set">Manually Set Availability</string>
 	<string name="google_calendar_set">Use Google Calendar Availability</string>
 	<string name="manually_set_availability_button">Manually Set Availability</string>
+	<string name="select_university">Select Your University</string>
+	<string name="choose_program">Choose Your Program</string>
+	<string name="select_year_level">Select Your Year Level</string>
+	<string name="search_courses">Search for your courses here</string>
+	<string name="your_selected_courses">Your Selected Courses</string>
+	<string name="next">Next</string>
 </resources>

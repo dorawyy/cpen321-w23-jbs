@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/tutor_or_tutee"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_gravity="center"
+	app:columnCount="1"
+	app:rowCount="8">
+
+	<com.example.edumatch.LabelAndEditText
+		android:id="@+id/select_university"
+		app:labelText="@string/select_university"
+		app:layout_gravity="center" />
+
+	<com.example.edumatch.LabelAndEditText
+		android:id="@+id/choose_program"
+		app:labelText="@string/choose_program"
+		app:layout_gravity="center" />
+
+	<com.example.edumatch.LabelAndEditText
+		android:id="@+id/select_year_level"
+		app:labelText="@string/select_year_level"
+		app:layout_gravity="center" />
+
+	<TextView
+		android:id="@+id/search_courses"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="12dp"
+		android:layout_marginTop="12dp"
+		android:gravity="left"
+		android:text="@string/search_courses"
+		android:textAppearance="@style/label_text" />
+
+	<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:columnCount="2"
+		app:rowCount="1">
+
+		<com.example.edumatch.CustomAutoCompleteView
+			android:id="@+id/search_courses_auto_complete"
+			android:layout_width="300dp"
+			android:inputType="text"
+			app:layout_columnWeight="1"
+			app:layout_gravity="center_vertical" />
+
+		<androidx.appcompat.widget.AppCompatButton
+			android:id="@+id/add_button"
+			android:layout_width="24dp"
+			android:layout_height="24dp"
+			android:background="@drawable/ic_round_plus"
+			android:textAppearance="@style/black_button_text"
+			app:layout_columnWeight="1"
+			app:layout_gravity="center_vertical" />
+	</androidx.gridlayout.widget.GridLayout>
+
+
+	<TextView
+		android:id="@+id/selected_courses"
+		android:layout_width="match_parent"
+		android:layout_height="33dp"
+		android:layout_marginLeft="12dp"
+		android:layout_marginTop="12dp"
+		android:gravity="left"
+		android:text="@string/your_selected_courses"
+		android:textAppearance="@style/label_text"
+		android:textStyle="bold"
+		app:layout_rowWeight="1" />
+
+	<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="108dp"
+		android:layout_marginLeft="12dp">
+
+		<com.google.android.flexbox.FlexboxLayout
+			android:id="@+id/chip_container"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:minHeight="40dp"
+			android:orientation="horizontal"
+			app:flexWrap="wrap"
+			app:layout_gravity="center"></com.google.android.flexbox.FlexboxLayout>
+
+	</androidx.core.widget.NestedScrollView>
+
+	<androidx.appcompat.widget.AppCompatButton
+		android:id="@+id/next_button"
+		android:layout_width="147.5dp"
+		android:layout_height="42dp"
+		android:layout_marginTop="48dp"
+		android:background="@drawable/sign_up_btn"
+		android:text="@string/next"
+		android:textAppearance="@style/black_button_text"
+		app:layout_gravity="center" />
+</androidx.gridlayout.widget.GridLayout>

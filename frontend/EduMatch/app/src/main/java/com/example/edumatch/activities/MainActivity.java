@@ -1,4 +1,4 @@
-package com.example.edumatch;
+package com.example.edumatch.activities;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -12,9 +12,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.edumatch.views.LabelAndEditTextView;
+import com.example.edumatch.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -25,9 +26,9 @@ import com.google.android.gms.tasks.Task;
 
 public class MainActivity extends AppCompatActivity {
     private EditText usernameEditText;
-    private LabelAndEditText username;
+    private LabelAndEditTextView username;
     private EditText passwordEditText;
-    private LabelAndEditText password;
+    private LabelAndEditTextView password;
     private Button signInButton;
     private Button signUpButton;
     private Button googleSignInButton;
@@ -42,35 +43,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main); // Replace 'your_layout' with the actual layout XML file name
+        setContentView(R.layout.activity_main);
 
-        // Find the EditText view by its ID
-        username = findViewById(R.id.username);
+        // Manual Sign In
 
-        usernameEditText = username.getEnterUserEditText();
-        password = findViewById(R.id.password);
-        passwordEditText = password.getEnterUserEditText();
+        signInButton = findViewById(R.id.signin_button);
 
-        // Find the Button view by its ID (if you have a submit button)
-        signInButton = findViewById(R.id.signin_button); // Replace with your actual button ID
-
-
-        // Set an OnClickListener for the submit button (if you have one)
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get the user input from the EditText
-                String userInput = usernameEditText.getText().toString();
-                String passwordInput = passwordEditText.getText().toString();
-
-                // Can send this info in POST request
-
-                Toast.makeText(MainActivity.this, "User input: " + userInput, Toast.LENGTH_SHORT).show();
-                Toast.makeText(MainActivity.this, "Password: " + passwordInput, Toast.LENGTH_SHORT).show();
-
+                handleSignInClick();
             }
         });
 
+        // Manual Sign Up
+
+        signUpButton = findViewById(R.id.signup_button);
+
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleSignUpClick();
+            }
+        });
+
+        // Google Sign In / Sign Up
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.server_client_id))
                 .requestScopes(new Scope("https://www.googleapis.com/auth/calendar"))
@@ -83,48 +80,35 @@ public class MainActivity extends AppCompatActivity {
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get the user input from the EditText
-                signIn();
+                googleSignIn();
             }
         });
-
-        signUpButton = findViewById(R.id.signup_button);
-
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Going to TutorOrTuteeActivity", Toast.LENGTH_LONG).show();
-                newIntent = new Intent(MainActivity.this, TutorOrTuteeActivity.class);
-                startActivity(newIntent);
-            }
-        });
-
 
     }
 
-    private void signIn() {
-        if(account == null){
+    private void googleSignIn() {
+        if (account == null) {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            signInActivityResultLauncher.launch(signInIntent);
-        } else{
+            googleSignInActivityResultLauncher.launch(signInIntent);
+        } else {
             Toast.makeText(MainActivity.this, "Already signed in!", Toast.LENGTH_LONG).show();
         }
 
     }
 
-    ActivityResultLauncher<Intent> signInActivityResultLauncher = registerForActivityResult(
+    ActivityResultLauncher<Intent> googleSignInActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
-                    handleSignInResult(task);
+                    handleGoogleSignInResult(task);
                 }
             }
     );
 
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    private void handleGoogleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             account = completedTask.getResult(ApiException.class);
 
@@ -134,5 +118,26 @@ public class MainActivity extends AppCompatActivity {
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
         }
+    }
+
+
+    private void handleSignInClick() {
+        username = findViewById(R.id.username);
+        usernameEditText = username.getEnterUserEditText();
+        password = findViewById(R.id.password);
+        passwordEditText = password.getEnterUserEditText();
+
+        String userInput = usernameEditText.getText().toString();
+        String passwordInput = passwordEditText.getText().toString();
+
+        // Todo: Put username and password in post request to try to signin
+
+        Toast.makeText(MainActivity.this, "User input: " + userInput, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "Password: " + passwordInput, Toast.LENGTH_SHORT).show();
+    }
+
+    private void handleSignUpClick() {
+        newIntent = new Intent(MainActivity.this, TutorOrTuteeActivity.class);
+        startActivity(newIntent);
     }
 }

@@ -8,41 +8,39 @@
     app:columnCount="1"
     app:rowCount="6">
 
-    <com.example.edumatch.LabelAndEditText
+    <com.example.edumatch.views.LabelAndEditTextView
         android:id="@+id/create_name"
         app:hintText="@string/create_name_hint"
         app:labelText="@string/create_name_label"
         app:layout_gravity="center" />
 
-    <com.example.edumatch.LabelAndEditText
+    <com.example.edumatch.views.LabelAndEditTextView
         android:id="@+id/create_email"
         app:hintText="@string/create_email_hint"
         app:labelText="@string/create_email_label"
         app:layout_gravity="center" />
 
-    <com.example.edumatch.LabelAndEditText
+    <com.example.edumatch.views.LabelAndEditTextView
         android:id="@+id/create_phone_number"
         app:hintText="@string/create_phone_number_hint"
         app:labelText="@string/create_phone_number_label"
         app:layout_gravity="center" />
 
-    <com.example.edumatch.LabelAndEditText
+    <com.example.edumatch.views.LabelAndEditTextView
         android:id="@+id/create_userName"
         app:labelText="@string/create_username_label"
         app:layout_gravity="center" />
 
-    <com.example.edumatch.LabelAndEditText
+    <com.example.edumatch.views.LabelAndEditTextView
         android:id="@+id/create_password"
         app:labelText="@string/create_password_label"
         app:layout_gravity="center"
         app:inputType="textPassword" />
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/next_button"
-        android:layout_width="147.5dp"
-        android:layout_height="42dp"
-        android:background="@drawable/sign_up_btn"
-        app:layout_gravity="center"
+        style="@style/NextButton"
         android:text="@string/next"
-        android:textAppearance="@style/black_button_text"
-        android:layout_marginTop="24dp"/>
+        app:layout_gravity="center"
+        />
+
 </androidx.gridlayout.widget.GridLayout>

@@ -35,7 +35,8 @@
             android:text=""
             android:textAppearance="@style/black_button_text"
             app:layout_rowWeight="1"
-            android:onClick="showTimePickerStart" />
+            android:onClick="showTimePicker"
+            android:tag="start_time"/>
 
         <TextView
             android:id="@+id/end_time"
@@ -57,7 +58,8 @@
             android:text=""
             android:textAppearance="@style/black_button_text"
             app:layout_rowWeight="1"
-            android:onClick="showTimePickerEnd"/>
+            android:onClick="showTimePicker"
+            android:tag="end_time"/>
 
     </androidx.gridlayout.widget.GridLayout>
 

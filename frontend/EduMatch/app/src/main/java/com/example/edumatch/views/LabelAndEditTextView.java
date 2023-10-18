@@ -1,4 +1,4 @@
-package com.example.edumatch;
+package com.example.edumatch.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,22 +9,25 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
-public class LabelAndEditText extends GridLayout {
+import com.example.edumatch.R;
+import com.example.edumatch.util.LoginSignupHelper;
+
+public class LabelAndEditTextView extends GridLayout {
 
     private TextView label;
     private EditText editText;
 
-    public LabelAndEditText(Context context) {
+    public LabelAndEditTextView(Context context) {
         super(context);
         init(context, null);
     }
 
-    public LabelAndEditText(Context context, AttributeSet attrs) {
+    public LabelAndEditTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public LabelAndEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LabelAndEditTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }

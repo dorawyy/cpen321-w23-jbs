@@ -10,17 +10,17 @@
 	app:columnCount="1"
 	app:rowCount="8">
 
-	<com.example.edumatch.LabelAndEditText
+	<com.example.edumatch.views.LabelAndEditTextView
 		android:id="@+id/select_university"
 		app:labelText="@string/select_university"
 		app:layout_gravity="center" />
 
-	<com.example.edumatch.LabelAndEditText
+	<com.example.edumatch.views.LabelAndEditTextView
 		android:id="@+id/choose_program"
 		app:labelText="@string/choose_program"
 		app:layout_gravity="center" />
 
-	<com.example.edumatch.LabelAndEditText
+	<com.example.edumatch.views.LabelAndEditTextView
 		android:id="@+id/select_year_level"
 		app:labelText="@string/select_year_level"
 		app:layout_gravity="center" />
@@ -42,7 +42,7 @@
 		app:columnCount="2"
 		app:rowCount="1">
 
-		<com.example.edumatch.CustomAutoCompleteView
+		<com.example.edumatch.views.CustomAutoCompleteView
 			android:id="@+id/search_courses_auto_complete"
 			android:layout_width="300dp"
 			android:inputType="text"

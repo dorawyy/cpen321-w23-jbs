@@ -1,31 +1,28 @@
-package com.example.edumatch;
+package com.example.edumatch.views;
 
-import android.app.TimePickerDialog;
 import android.content.Context;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.gridlayout.widget.GridLayout;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.Button;
-import android.widget.TimePicker;
 
-import java.util.Locale;
+import com.example.edumatch.R;
 
-public class AvailableTimes extends GridLayout {
+public class AvailableTimesViews extends GridLayout {
     private AppCompatButton startTimeButton;
     private AppCompatButton endTimeButton;
 
-    public AvailableTimes(Context context) {
+    public AvailableTimesViews(Context context) {
         super(context);
         init(context, null);
     }
 
-    public AvailableTimes(Context context, AttributeSet attrs) {
+    public AvailableTimesViews(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public AvailableTimes(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AvailableTimesViews(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }

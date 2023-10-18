@@ -1,4 +1,4 @@
-package com.example.edumatch;
+package com.example.edumatch.views;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.example.edumatch.R;
 
 import java.util.Arrays;
 import java.util.List;

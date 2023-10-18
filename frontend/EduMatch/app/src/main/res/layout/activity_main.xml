@@ -19,13 +19,13 @@
 		android:textStyle="bold"
 		app:layout_rowWeight="1" />
 
-	<com.example.edumatch.LabelAndEditText
+	<com.example.edumatch.views.LabelAndEditTextView
 		android:id="@+id/username"
 		app:hintText="@string/username_hint"
 		app:labelText="@string/username_label"
 		app:layout_gravity="center_horizontal" />
 
-	<com.example.edumatch.LabelAndEditText
+	<com.example.edumatch.views.LabelAndEditTextView
 		android:id="@+id/password"
 		app:hintText="@string/password_hint"
 		app:inputType="textPassword"

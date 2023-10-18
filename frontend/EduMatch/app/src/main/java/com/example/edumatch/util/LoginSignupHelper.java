@@ -1,4 +1,4 @@
-package com.example.edumatch;
+package com.example.edumatch.util;
 
 import android.text.InputType;
 import android.util.Log;

@@ -1,4 +1,4 @@
-package com.example.edumatch;
+package com.example.edumatch.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -10,11 +10,18 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.edumatch.R;
+
 public class SubjectChipView extends RelativeLayout {
 
     private TextView textView;
     private Button removeButton; // Add a reference to the remove button
 
+    private OnChipRemovedListener chipRemovedListener;
+
+    public interface OnChipRemovedListener {
+        void onChipRemoved(String course);
+    }
     public SubjectChipView(Context context) {
         super(context);
         init(context, null);
@@ -36,6 +43,10 @@ public class SubjectChipView extends RelativeLayout {
         }
     }
 
+    public void setChipRemovedListener(OnChipRemovedListener listener) {
+        this.chipRemovedListener = listener;
+    }
+
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.subject_chip_component, this, true);
@@ -51,7 +62,11 @@ public class SubjectChipView extends RelativeLayout {
                 public void onClick(View v) {
                     if (getParent() instanceof ViewGroup) {
                         ViewGroup parentView = (ViewGroup) getParent();
+                        String removedCourse = textView.getText().toString();
                         parentView.removeView(SubjectChipView.this);
+                        if (chipRemovedListener != null) {
+                            chipRemovedListener.onChipRemoved(removedCourse);
+                        }
                     }
                 }
             });

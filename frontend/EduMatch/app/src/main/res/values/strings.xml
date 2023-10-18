@@ -32,4 +32,7 @@
 	<string name="search_courses">Search for your courses here</string>
 	<string name="your_selected_courses">Your Selected Courses</string>
 	<string name="next">Next</string>
+	<string name="course">Course</string>
+	<string name="course_rate">Rate (CAD)</string>
+	<string name="set_price">Set Pricing For Courses</string>
 </resources>

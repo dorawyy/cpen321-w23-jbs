@@ -10,5 +10,6 @@
 	</declare-styleable>
 	<declare-styleable name="DayOfTheWeekButton">
 		<attr name="DayString" format="string" />
+		<attr name="Day" format="string" />
 	</declare-styleable>
 </resources>

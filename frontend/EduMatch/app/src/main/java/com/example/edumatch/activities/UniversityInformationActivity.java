@@ -54,13 +54,6 @@ public class UniversityInformationActivity extends AppCompatActivity {
 
         nextButton = findViewById(R.id.next_button);
 
-        String apiKey = getResources().getString(R.string.MAPS_API_KEY);
-        if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), apiKey);
-        }
-
-
-
         customAutoCompleteView = findViewById(R.id.search_courses_auto_complete);
         addButton = findViewById(R.id.add_button); // Initialize the "add_button"
 

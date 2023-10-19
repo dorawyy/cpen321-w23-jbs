@@ -1,3 +1,4 @@
+import java.util.Properties
 plugins {
     id("com.android.application")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
@@ -15,6 +16,17 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val localProperties = Properties()
+        localProperties.load(File("local.properties").inputStream())
+        val mapsApiKey = localProperties.getProperty("MAPS_API_KEY")
+
+// Now you can use the mapsApiKey variable
+        buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {

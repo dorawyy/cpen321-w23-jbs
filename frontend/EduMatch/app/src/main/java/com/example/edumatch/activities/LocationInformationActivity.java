@@ -9,8 +9,10 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.example.edumatch.BuildConfig;
 import com.example.edumatch.R;
 import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
@@ -31,6 +33,13 @@ public class LocationInformationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_information);
+
+
+        String apiKey = BuildConfig.MAPS_API_KEY;
+        Log.d("API_KEY", apiKey);
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), apiKey);
+        }
 
         addressText = findViewById(R.id.address);
         addressLabel = findViewById(R.id.address_title);

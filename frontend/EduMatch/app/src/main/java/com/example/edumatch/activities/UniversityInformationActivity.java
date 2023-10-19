@@ -4,14 +4,27 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.edumatch.views.CustomAutoCompleteView;
 import com.example.edumatch.R;
 import com.example.edumatch.views.SubjectChipView;
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,12 +46,20 @@ public class UniversityInformationActivity extends AppCompatActivity {
     List<String> selectedCourses;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_university_information);
 
         nextButton = findViewById(R.id.next_button);
+
+        String apiKey = getResources().getString(R.string.MAPS_API_KEY);
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), apiKey);
+        }
+
+
 
         customAutoCompleteView = findViewById(R.id.search_courses_auto_complete);
         addButton = findViewById(R.id.add_button); // Initialize the "add_button"
@@ -97,7 +118,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
         });
 
 
-        newIntent = new Intent(UniversityInformationActivity.this, CourseRatesActivity.class);
+        newIntent = new Intent(UniversityInformationActivity.this, LocationInformationActivity.class);
 
         Intent intent = getIntent();
 
@@ -115,5 +136,9 @@ public class UniversityInformationActivity extends AppCompatActivity {
             });
 
         }
+
+
+
     }
+
 }

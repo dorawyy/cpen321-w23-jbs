@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.gridlayout.widget.GridLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/tutor_initi"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginTop="150dp"
+	android:layout_marginLeft="12dp"
+	android:layout_marginRight="12dp"
+	app:columnCount="1"
+	app:rowCount="4">
+
+	<TextView
+		android:id="@+id/location_text"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_horizontal"
+		android:text="Select Location"
+		android:textStyle="bold"
+		android:textAppearance="@style/title" />
+
+	<fragment
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/place_autocomplete_fragment"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="16dp"
+		app:layout_constraintTop_toBottomOf="@id/location_text"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+
+		/>
+
+	<RadioGroup
+		android:id="@+id/radio_group"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<RadioButton
+			android:id="@+id/in_person_radio"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="@string/in_person"
+			android:textAppearance="@style/label_text"
+			android:checked="true" />
+		<RadioButton
+			android:id="@+id/online_radio"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:textAppearance="@style/label_text"
+			android:text="@string/online" />
+	</RadioGroup>
+
+	<TextView
+		android:id="@+id/address_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="24dp"
+		android:gravity="left"
+		android:text="@string/selected_location_name"
+		android:textAppearance="@style/title" />
+
+	<TextView
+		android:id="@+id/address"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="24dp"
+		android:gravity="left"
+		android:text=""
+		android:textAppearance="@style/title" />
+</androidx.gridlayout.widget.GridLayout>
+
+

@@ -8,7 +8,7 @@
 	android:layout_height="wrap_content"
 	android:layout_gravity="center"
 	app:columnCount="1"
-	app:rowCount="8">
+	app:rowCount="10">
 
 	<com.example.edumatch.views.LabelAndEditTextView
 		android:id="@+id/select_university"

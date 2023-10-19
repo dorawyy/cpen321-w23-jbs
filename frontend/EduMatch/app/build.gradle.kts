@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -31,6 +32,8 @@ android {
 dependencies {
     implementation("com.google.oauth-client:google-oauth-client-jetty:1.23.0")
     implementation ("com.google.apis:google-api-services-calendar:v3-rev305-1.23.0")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.android.libraries.places:places:2.6.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")

@@ -39,5 +39,13 @@
 		<item name="android:textAppearance">@style/black_button_text</item>
 		<item name="android:layout_gravity">center</item>
 	</style>
+	<style name="AddressAutoComplete">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_marginEnd">12dp</item>
+		<item name="android:layout_marginStart">12dp</item>
+		<item name="android:layout_marginTop">12dp</item>
+		<item name="android:background">@drawable/input_container</item>
+		<item name="android:layout_height">wrap_content</item>
+	</style>
 
 </resources>

@@ -1,39 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/tutor_or_tutee"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
+    style="@style/GridLayout"
     app:columnCount="1"
-    app:rowCount="5">
+    app:rowCount="6">
 
-    <com.example.edumatch.LabelAndEditText
+    <com.example.edumatch.views.LabelAndEditTextView
         android:id="@+id/create_name"
         app:hintText="@string/create_name_hint"
         app:labelText="@string/create_name_label"
         app:layout_gravity="center" />
 
-    <com.example.edumatch.LabelAndEditText
+    <com.example.edumatch.views.LabelAndEditTextView
         android:id="@+id/create_email"
         app:hintText="@string/create_email_hint"
         app:labelText="@string/create_email_label"
         app:layout_gravity="center" />
 
-    <com.example.edumatch.LabelAndEditText
+    <com.example.edumatch.views.LabelAndEditTextView
         android:id="@+id/create_phone_number"
         app:hintText="@string/create_phone_number_hint"
         app:labelText="@string/create_phone_number_label"
         app:layout_gravity="center" />
 
-    <com.example.edumatch.LabelAndEditText
+    <com.example.edumatch.views.LabelAndEditTextView
         android:id="@+id/create_userName"
         app:labelText="@string/create_username_label"
         app:layout_gravity="center" />
 
-    <com.example.edumatch.LabelAndEditText
+    <com.example.edumatch.views.LabelAndEditTextView
         android:id="@+id/create_password"
         app:labelText="@string/create_password_label"
         app:layout_gravity="center"
         app:inputType="textPassword" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/next_button"
+        style="@style/WhiteButton"
+        android:text="@string/next"
+        app:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        />
+
 </androidx.gridlayout.widget.GridLayout>

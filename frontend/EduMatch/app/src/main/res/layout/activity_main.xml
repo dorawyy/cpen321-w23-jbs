@@ -1,101 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/tutor_initi"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="150dp"
-    app:columnCount="1"
-    app:rowCount="5">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	style="@style/GridLayout"
+	app:columnCount="1"
+	app:rowCount="5">
 
-    <TextView
-        android:id="@+id/appname"
-        android:layout_width="match_parent"
-        android:layout_height="33dp"
-        android:gravity="center"
-        android:text="@string/app_name"
-        android:textAppearance="@style/title"
-        android:textStyle="bold"
-        app:layout_rowWeight="1" />
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:text="@string/app_name"
+		android:textAppearance="@style/title"
+		android:textStyle="bold"
+		app:layout_rowWeight="1" />
 
-    <com.example.edumatch.LoginLabelAndEditText
-        android:id="@+id/username"
-        app:loginHintText="@string/username_hint"
-        app:loginLabelText="@string/username_label"
-        app:layout_gravity="center_horizontal"
-        />
+	<com.example.edumatch.views.LabelAndEditTextView
+		android:id="@+id/username"
+		app:hintText="@string/username_hint"
+		app:labelText="@string/username_label"
+		app:layout_gravity="center_horizontal" />
 
-    <com.example.edumatch.LoginLabelAndEditText
-        android:id="@+id/password"
-        app:loginHintText="@string/password_hint"
-        app:loginLabelText="@string/password_label"
-        app:layout_gravity="center_horizontal"
-        app:loginInputType="textPassword"
-        />
+	<com.example.edumatch.views.LabelAndEditTextView
+		android:id="@+id/password"
+		app:hintText="@string/password_hint"
+		app:inputType="textPassword"
+		app:labelText="@string/password_label"
+		app:layout_gravity="center_horizontal" />
 
-    <androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="12dp"
-        app:columnCount="2"
-        app:rowCount="1">
+	<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="24dp"
+		app:columnCount="2"
+		app:rowCount="1">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/signup_button"
-            android:layout_width="147.5dp"
-            android:layout_height="42dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="12dp"
-            android:background="@drawable/sign_up_btn"
-            android:text="@string/signup_button_label"
-            android:textAppearance="@style/black_button_text"
-            app:layout_columnWeight="1"
-            />
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/signin_button"
-            android:layout_width="147.5dp"
-            android:layout_height="42dp"
-            android:layout_marginRight="12dp"
-            android:background="@drawable/sign_in_btn"
-            android:text="@string/signin_button_label"
-            android:textAppearance="@style/white_button_text"
-            app:layout_columnWeight="1"
-            />
-    </androidx.gridlayout.widget.GridLayout>
-    <androidx.gridlayout.widget.GridLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/devicon_goo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:gravity="center_horizontal"
-        android:clipToOutline="true"
-        app:layout_rowWeight="1"
-        app:columnCount="1"
-        app:rowCount="2">
+		<androidx.appcompat.widget.AppCompatButton
+			android:id="@+id/signup_button"
+			style="@style/WhiteButton"
+			android:layout_marginRight="8dp"
+			android:text="@string/signup_button_label"
+			app:layout_columnWeight="1" />
 
-        <ImageView
-            android:background="@drawable/devicon_google"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_rowWeight="1"
-            app:layout_gravity="center"
-            />
+		<androidx.appcompat.widget.AppCompatButton
+			android:id="@+id/signin_button"
+			style="@style/BlackButton"
+			android:text="@string/signin_button_label"
+			app:layout_columnWeight="1" />
+	</androidx.gridlayout.widget.GridLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/google_sign_in_button"
-            android:layout_width="147.5dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/sign_up_btn"
-            android:text="@string/googlesignintext"
-            android:textAppearance="@style/black_button_text"
-            app:layout_rowWeight="1"
-            app:layout_gravity="center" />
-    </androidx.gridlayout.widget.GridLayout>
+ <com.example.edumatch.views.GoogleIconButtonView
+	 android:id="@+id/google"
+	 app:buttonText = "@string/google_sign_in_text"
+	 app:layout_gravity="center"
+	 android:layout_marginTop="36dp"
+	 />
+
 </androidx.gridlayout.widget.GridLayout>

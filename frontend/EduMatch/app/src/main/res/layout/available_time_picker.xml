@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    app:columnCount="1"
+    app:rowCount="3">
+
+    <androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        app:columnCount="2"
+        app:layout_gravity="center_horizontal"
+        app:rowCount="3"
+        app:layout_rowWeight="1">
+
+        <TextView
+            android:id="@+id/start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="33dp"
+            android:gravity="center_vertical"
+            android:text="@string/start_time"
+            android:textAppearance="@style/label_text"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/start_time_button"
+            android:layout_width="60dp"
+            android:layout_height="36dp"
+            android:background="@drawable/time_picker_rectangle"
+            android:gravity="center"
+            android:text=""
+            android:textAppearance="@style/black_button_text"
+            app:layout_rowWeight="1"
+            android:onClick="showTimePicker"
+            android:tag="start_time"/>
+
+        <TextView
+            android:id="@+id/end_time"
+            android:layout_width="wrap_content"
+            android:layout_height="33dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:text="@string/end_time"
+            android:textAppearance="@style/label_text"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/end_time_button"
+            android:layout_width="60dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/time_picker_rectangle"
+            android:text=""
+            android:textAppearance="@style/black_button_text"
+            app:layout_rowWeight="1"
+            android:onClick="showTimePicker"
+            android:tag="end_time"/>
+
+    </androidx.gridlayout.widget.GridLayout>
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:background="@drawable/line_separator"
+        android:layout_marginTop="16dp"
+        app:layout_rowWeight="1" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/set_time_button"
+        android:layout_width="85dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/white_button"
+        android:text="@string/set_times"
+        android:textAppearance="@style/black_button_text"
+        app:layout_gravity="right"
+        app:layout_rowWeight="1" />
+
+</androidx.gridlayout.widget.GridLayout>

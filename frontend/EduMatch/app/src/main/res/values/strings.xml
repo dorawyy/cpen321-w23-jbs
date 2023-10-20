@@ -6,7 +6,7 @@
 	<string name="password_hint"> Enter your password</string>
 	<string name="signup_button_label"> Sign Up</string>
 	<string name="signin_button_label">Sign In</string>
-	<string name="googlesignintext">Continue With Google</string>
+	<string name="google_sign_in_text">Continue With Google</string>
 	<string name="server_client_id">525109856760-2e1g7kljkarhq1gav87erfh6o9aac4ik.apps.googleusercontent.com</string>
 	<string name="tutor_or_tutee">Are you a tutor or tutee?</string>
 	<string name="tutor">Tutor</string>
@@ -19,5 +19,30 @@
 	<string name="create_name_hint">Name</string>
 	<string name="create_email_hint">example@example.com</string>
 	<string name="create_phone_number_hint">123-456-7890</string>
-
+	<string name="select_availability_day">Select Day</string>
+	<string name="start_time">Start Time</string>
+	<string name="end_time">End Time</string>
+	<string name="set_times">Set Times</string>
+	<string name="manual_set">Manually Set Availability</string>
+	<string name="google_calendar_set">Use Google Calendar Availability</string>
+	<string name="manually_set_availability_button">Manually Set Availability</string>
+	<string name="select_university">Select Your University</string>
+	<string name="choose_program">Choose Your Program</string>
+	<string name="select_year_level">Select Your Year Level</string>
+	<string name="search_courses">Search for your courses here</string>
+	<string name="your_selected_courses">Your Selected Courses</string>
+	<string name="next">Next</string>
+	<string name="course">Course</string>
+	<string name="course_rate">Rate (CAD)</string>
+	<string name="set_price">Set Pricing For Courses</string>
+	<string name="select_location">Select Location</string>
+	<string name="selected_location_name">Selected Location Name</string>
+	<string name="in_person">In-Person</string>
+	<string name="online">Online</string>
+	<string name="your_selected_tags">Your Selected Tags</string>
+	<string name="use_google">Use Google</string>
+	<string name="select_location_title">Select Location</string>
+	<string-array name="universities">
+		<item>The University of British Columbia</item>
+	</string-array>
 </resources>

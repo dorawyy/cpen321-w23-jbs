@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="32dp"
+    app:columnCount="1"
+    app:rowCount="7">
+
+	<TextView
+		android:id="@+id/manual_set_title"
+		android:layout_width="wrap_content"
+		android:layout_height="33dp"
+		android:layout_marginTop="16dp"
+		android:text="@string/manual_set"
+		android:textAppearance="@style/title"
+		android:textStyle="bold"
+		app:layout_rowWeight="1" />
+
+
+	<androidx.gridlayout.widget.GridLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="24dp"
+		app:columnCount="7"
+		app:layout_gravity="center"
+		app:rowCount="1">
+
+		<com.example.edumatch.views.DayOfTheWeekView
+			android:id="@+id/sunday_button"
+			style="@style/DayOfTheWeekButtonStyle"
+			app:Day="Sunday"
+			app:DayString="S"
+			app:layout_columnWeight="1" />
+
+		<com.example.edumatch.views.DayOfTheWeekView
+			android:id="@+id/monday_button"
+			style="@style/DayOfTheWeekButtonStyle"
+			app:Day="Monday"
+			app:DayString="M"
+			app:layout_columnWeight="1" />
+
+		<com.example.edumatch.views.DayOfTheWeekView
+			android:id="@+id/tuesday_button"
+			style="@style/DayOfTheWeekButtonStyle"
+			app:Day="Tuesday"
+			app:DayString="T"
+			app:layout_columnWeight="1" />
+
+		<com.example.edumatch.views.DayOfTheWeekView
+			android:id="@+id/wednesday_button"
+			style="@style/DayOfTheWeekButtonStyle"
+			app:Day="Wednesday"
+			app:DayString="W"
+			app:layout_columnWeight="1" />
+
+		<com.example.edumatch.views.DayOfTheWeekView
+			android:id="@+id/thursday_button"
+			style="@style/DayOfTheWeekButtonStyle"
+			app:Day="Thursday"
+			app:DayString="T"
+			app:layout_columnWeight="1" />
+
+		<com.example.edumatch.views.DayOfTheWeekView
+			android:id="@+id/friday_button"
+			style="@style/DayOfTheWeekButtonStyle"
+			app:Day="Friday"
+			app:DayString="F"
+			app:layout_columnWeight="1" />
+
+		<com.example.edumatch.views.DayOfTheWeekView
+			android:id="@+id/saturday_button"
+			style="@style/DayOfTheWeekButtonStyle"
+			app:Day="Saturday"
+			app:DayString="S"
+			app:layout_columnWeight="1" />
+
+
+	</androidx.gridlayout.widget.GridLayout>
+
+	<TextView
+		android:id="@+id/selected_day"
+		android:layout_width="wrap_content"
+		android:layout_height="33dp"
+		android:layout_marginTop="24dp"
+		android:text="@string/select_availability_day"
+		android:textAppearance="@style/title"
+		android:textStyle="bold"
+		app:layout_rowWeight="1" />
+
+	<com.example.edumatch.views.AvailableTimesViews
+		android:id="@+id/available_times"
+		android:layout_marginTop="24dp"
+		app:layout_gravity="center"
+		android:visibility="gone" />
+
+	<androidx.appcompat.widget.AppCompatButton
+		android:id="@+id/manually_set_button"
+		style="@style/WhiteButton"
+		android:layout_marginTop="24dp"
+		android:text="@string/manually_set_availability_button"
+		app:layout_gravity="center"
+		app:layout_rowWeight="1" />
+
+	<TextView
+		android:id="@+id/automatically_set_title"
+		android:layout_width="wrap_content"
+		android:layout_height="33dp"
+		android:layout_marginTop="24dp"
+		android:text="@string/google_calendar_set"
+		android:textAppearance="@style/title"
+		android:textStyle="bold"
+		app:layout_rowWeight="1" />
+
+
+	<com.example.edumatch.views.GoogleIconButtonView
+		android:id="@+id/google"
+		android:layout_marginTop="36dp"
+		app:buttonText="@string/use_google"
+		app:layout_gravity="center" />
+</androidx.gridlayout.widget.GridLayout>

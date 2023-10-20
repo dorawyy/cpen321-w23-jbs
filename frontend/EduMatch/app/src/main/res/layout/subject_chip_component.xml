@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/chip"
+	android:layout_width="wrap_content"
+	android:layout_height="36dp"
+	android:background="@drawable/subject_chip">
+
+
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent">
+
+
+		<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/bx_x"
+			android:layout_width="20dp"
+			android:layout_height="match_parent"
+			android:layout_marginLeft="4dp"
+			>
+			<ImageView
+				android:id="@+id/remove_subject_imageview"
+				android:layout_width="18dp"
+				android:layout_height="18dp"
+				android:src="@drawable/remove_subject"
+				android:layout_centerVertical="true"
+				android:layout_centerHorizontal="true" />
+
+			<Button
+				android:id="@+id/remove_subject_button"
+				android:layout_width="18dp"
+				android:layout_height="18dp"
+				android:layout_centerVertical="true"
+				android:layout_centerHorizontal="true"
+				android:textColorLink="@color/black"
+				android:background="@android:color/transparent" />
+		</RelativeLayout>
+
+		<TextView
+			android:id="@+id/text"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_marginLeft="26dp"
+			android:gravity="center"
+			android:text="CPEN 331"
+			android:textAppearance="@style/label_text"
+			android:layout_marginRight="8dp"/>
+	</RelativeLayout>
+
+
+</RelativeLayout>

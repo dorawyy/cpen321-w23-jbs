@@ -1,5 +1,7 @@
 package com.example.edumatch.activities;
 
+import static com.example.edumatch.util.LoginSignupHelper.printBundle;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.edumatch.views.GoogleIconButtonView;
 import com.example.edumatch.views.LabelAndEditTextView;
 import com.example.edumatch.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -25,29 +28,27 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText usernameEditText;
-    private LabelAndEditTextView username;
-    private EditText passwordEditText;
-    private LabelAndEditTextView password;
-    private Button signInButton;
-    private Button signUpButton;
-    private Button googleSignInButton;
 
-
-    private GoogleSignInAccount account;
+    private boolean useGoogle;
+    private GoogleSignInAccount account = null;
     private GoogleSignInClient mGoogleSignInClient;
     final static String TAG = "MainActivity";
-
-    private Intent newIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Manual Sign In
+        initSignInButton();
 
-        signInButton = findViewById(R.id.signin_button);
+        initSignUpButton();
+
+        initGoogleSignIn();
+
+    }
+
+    private void initSignInButton() {
+        Button signInButton = findViewById(R.id.signin_button);
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,18 +56,21 @@ public class MainActivity extends AppCompatActivity {
                 handleSignInClick();
             }
         });
+    }
 
-        // Manual Sign Up
-
-        signUpButton = findViewById(R.id.signup_button);
+    private void initSignUpButton() {
+        Button signUpButton = findViewById(R.id.signup_button);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleSignUpClick();
+                useGoogle = false;
+                goToSignUpActivity();
             }
         });
+    }
 
+    private void initGoogleSignIn() {
         // Google Sign In / Sign Up
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.server_client_id))
@@ -75,7 +79,9 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        googleSignInButton = findViewById(R.id.google_sign_in_button);
+        GoogleIconButtonView googleSignIn = findViewById(R.id.google);
+
+        Button googleSignInButton = googleSignIn.getButton();
 
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +118,13 @@ public class MainActivity extends AppCompatActivity {
         try {
             account = completedTask.getResult(ApiException.class);
 
+            // Todo: Put IdToken and ServerAuthCode into a server request
+            // Todo: If IdToken matches a known user in our database, go to homepage. Else, go to sign up flow
             Toast.makeText(MainActivity.this, "Successful Sign In" + account.getIdToken(), Toast.LENGTH_LONG).show();
+            useGoogle = true;
+            goToSignUpActivity();
+
+
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -122,10 +134,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void handleSignInClick() {
-        username = findViewById(R.id.username);
-        usernameEditText = username.getEnterUserEditText();
-        password = findViewById(R.id.password);
-        passwordEditText = password.getEnterUserEditText();
+        LabelAndEditTextView username = findViewById(R.id.username);
+        EditText usernameEditText = username.getEnterUserEditText();
+        LabelAndEditTextView password = findViewById(R.id.password);
+        EditText passwordEditText = password.getEnterUserEditText();
 
         String userInput = usernameEditText.getText().toString();
         String passwordInput = passwordEditText.getText().toString();
@@ -136,8 +148,18 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, "Password: " + passwordInput, Toast.LENGTH_SHORT).show();
     }
 
-    private void handleSignUpClick() {
-        newIntent = new Intent(MainActivity.this, TutorOrTuteeActivity.class);
+
+    private Bundle updateBundle() {
+        Bundle userData = new Bundle();
+        userData.putBoolean("useGoogle",useGoogle);
+        return userData;
+    }
+
+    private void goToSignUpActivity() {
+        Intent newIntent = new Intent(MainActivity.this, TutorOrTuteeActivity.class);
+        Bundle userData = updateBundle();
+        printBundle(userData, "");
+        newIntent.putExtras(userData);
         startActivity(newIntent);
     }
 }

@@ -31,13 +31,17 @@
 		<item name="android:background">@drawable/day_button_ellipse</item>
 		<item name="android:textAppearance">@style/black_button_text</item>
 	</style>
-	<style name="NextButton">
+	<style name="WhiteButton">
 		<item name="android:layout_width">147.5dp</item>
 		<item name="android:layout_height">42dp</item>
-		<item name="android:layout_marginTop">48dp</item>
-		<item name="android:background">@drawable/sign_up_btn</item>
+		<item name="android:background">@drawable/white_button</item>
 		<item name="android:textAppearance">@style/black_button_text</item>
-		<item name="android:layout_gravity">center</item>
+	</style>
+	<style name="BlackButton">
+		<item name="android:layout_width">147.5dp</item>
+		<item name="android:layout_height">42dp</item>
+		<item name="android:background">@drawable/black_button</item>
+		<item name="android:textAppearance">@style/white_button_text</item>
 	</style>
 	<style name="AddressAutoComplete">
 		<item name="android:layout_width">match_parent</item>
@@ -47,5 +51,16 @@
 		<item name="android:background">@drawable/input_container</item>
 		<item name="android:layout_height">wrap_content</item>
 	</style>
+	<style name="GridLayout">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:paddingTop">100dp</item>
+		<item name="android:paddingBottom">100dp</item>
+		<item name="android:layout_marginLeft">24dp</item>
+		<item name="android:layout_marginRight">24dp</item>
+		<item name="android:layout_gravity">center</item>
+	</style>
+
+
 
 </resources>

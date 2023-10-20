@@ -42,6 +42,13 @@ public class CourseRateItemView extends RelativeLayout {
         return "";
     }
 
+    public String getCourseText() {
+        if (courseTextView != null) {
+            return courseTextView.getText().toString();
+        }
+        return "";
+    }
+
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.course_rate_item, this, true);

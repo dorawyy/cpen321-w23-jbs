@@ -6,7 +6,7 @@
 	<string name="password_hint"> Enter your password</string>
 	<string name="signup_button_label"> Sign Up</string>
 	<string name="signin_button_label">Sign In</string>
-	<string name="googlesignintext">Continue With Google</string>
+	<string name="google_sign_in_text">Continue With Google</string>
 	<string name="server_client_id">525109856760-2e1g7kljkarhq1gav87erfh6o9aac4ik.apps.googleusercontent.com</string>
 	<string name="tutor_or_tutee">Are you a tutor or tutee?</string>
 	<string name="tutor">Tutor</string>
@@ -39,4 +39,10 @@
 	<string name="selected_location_name">Selected Location Name</string>
 	<string name="in_person">In-Person</string>
 	<string name="online">Online</string>
+	<string name="your_selected_tags">Your Selected Tags</string>
+	<string name="use_google">Use Google</string>
+	<string name="select_location_title">Select Location</string>
+	<string-array name="universities">
+		<item>The University of British Columbia</item>
+	</string-array>
 </resources>

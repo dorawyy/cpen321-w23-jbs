@@ -2,28 +2,20 @@
 <androidx.gridlayout.widget.GridLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:id="@+id/tutor_initi"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:layout_marginTop="150dp"
-	android:layout_marginLeft="12dp"
-	android:layout_marginRight="12dp"
+	style="@style/GridLayout"
 	app:columnCount="1"
-	app:rowCount="4">
+	app:rowCount="6">
 
 	<TextView
 		android:id="@+id/location_text"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:gravity="center_horizontal"
-		android:text="Select Location"
+		android:text="@string/select_location_title"
 		android:textStyle="bold"
 		android:textAppearance="@style/title" />
 
-	<fragment
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/place_autocomplete_fragment"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
+	<fragment android:id="@+id/place_autocomplete_fragment"
 		android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -74,6 +66,13 @@
 		android:gravity="left"
 		android:text=""
 		android:textAppearance="@style/title" />
+
+	<androidx.appcompat.widget.AppCompatButton
+		android:id="@+id/next_button"
+		android:layout_marginTop="36dp"
+		style="@style/WhiteButton"
+		android:text="@string/next"
+		app:layout_gravity="center" />
 </androidx.gridlayout.widget.GridLayout>
 
 

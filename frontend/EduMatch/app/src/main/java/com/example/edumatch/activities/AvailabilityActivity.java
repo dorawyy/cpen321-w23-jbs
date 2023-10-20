@@ -1,10 +1,12 @@
 package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.LoginSignupHelper.isStartTimeBeforeEndTime;
+import static com.example.edumatch.util.LoginSignupHelper.printBundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,8 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.edumatch.views.AvailableTimesViews;
+import com.example.edumatch.views.CourseRateItemView;
 import com.example.edumatch.views.DayOfTheWeekView;
 import com.example.edumatch.R;
+import com.example.edumatch.views.GoogleIconButtonView;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,9 +27,9 @@ import java.util.Locale;
 import java.util.Map;
 
 public class AvailabilityActivity extends AppCompatActivity implements DayOfTheWeekView.DayOfTheWeekClickListener {
-    //TODO Add navigation to next activity on both set buttons
-    //TODO Add a check that google account isn't null if set automatically, IE account needs to be added to the bundle
-    //TODO either add the availability to bundle or make api call here need to send available times, and boolean representing if using calendar or manual times
+    //todo Add navigation to next activity on both set buttons
+    //todo Add a check that google account isn't null if set automatically, IE account needs to be added to the bundle
+    //todo either add the availability to bundle or make api call here need to send available times, and boolean representing if using calendar or manual times
     final static String TAG = "AvailabilityActivity";
     private Map<String,List<String>> availabilityMap;
 
@@ -34,6 +38,8 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
     private Button setTimeButton;
 
    private String currentDay;
+
+   private boolean useGoogleCalendar;
 
 
     @Override
@@ -46,6 +52,8 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
 
         availabilityMap = new HashMap<>();
 
+        initManualButton();
+        initGoogleButton();
         initializeDayButtons();
         initializeSetTimeButton();
     }
@@ -143,5 +151,66 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         }, isStartTime ? 8 : 18, 0, true); // Default time: 8:00 AM for start, 6:00 PM for end
 
         timePickerDialog.show();
+    }
+
+    private void initManualButton() {
+        Button manualButton = findViewById(R.id.manually_set_button);
+
+        manualButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                useGoogleCalendar = false;
+                goToNewActivity();
+            }
+        });
+    }
+
+    private void initGoogleButton() {
+        GoogleIconButtonView google = findViewById(R.id.google);
+        Button googleButton = google.getButton();
+        googleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                useGoogleCalendar = true;
+                goToNewActivity();
+            }
+        });
+    }
+
+
+    private Bundle updateBundle() {
+        Intent currentIntent = getIntent();
+        if (currentIntent != null && currentIntent.getExtras() != null) {
+            Bundle userData = currentIntent.getExtras();
+            if(useGoogleCalendar == false){
+                Bundle availabilityBundle = new Bundle();
+                for (Map.Entry<String, List<String>> entry : availabilityMap.entrySet()) {
+                    String key = entry.getKey();
+                    List<String> values = entry.getValue();
+
+                    // Convert the List<String> into a String array
+                    String[] valuesArray = values.toArray(new String[0]);
+
+                    // Put the String array into the availabilityBundle
+                    availabilityBundle.putStringArray(key, valuesArray);
+                }
+                userData.putBundle("availability", availabilityBundle);
+            }
+            userData.putBoolean("useGoogleCalendar",useGoogleCalendar);
+            return userData;
+
+        } else {
+            Log.e(TAG, "Something went wrong with the intent extras");
+            throw new RuntimeException("Intent is null or doesn't have extras");
+        }
+    }
+
+    private void goToNewActivity() {
+        // todo: this goes into the homepage
+        Intent newIntent = new Intent(AvailabilityActivity.this, LocationInformationActivity.class);
+        Bundle userData = updateBundle();
+        printBundle(userData, "");
+        newIntent.putExtras(userData);
+        startActivity(newIntent);
     }
 }

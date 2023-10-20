@@ -1,0 +1,26 @@
+<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:clipToOutline="true"
+	android:gravity="center_horizontal"
+	app:columnCount="1"
+	app:layout_rowWeight="1"
+	app:rowCount="2">
+
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@drawable/devicon_google"
+		android:gravity="center"
+		app:layout_gravity="center"
+		app:layout_rowWeight="1" />
+
+	<androidx.appcompat.widget.AppCompatButton
+		android:id="@+id/google_sign_in_button"
+		style="@style/WhiteButton"
+		android:layout_marginTop="32dp"
+		android:text="@string/google_sign_in_text"
+		app:layout_gravity="center"
+		app:layout_rowWeight="1" />
+</androidx.gridlayout.widget.GridLayout>

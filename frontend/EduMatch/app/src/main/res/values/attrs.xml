@@ -12,4 +12,7 @@
 		<attr name="DayString" format="string" />
 		<attr name="Day" format="string" />
 	</declare-styleable>
+	<declare-styleable name="GoogleIconButton">
+		<attr name="buttonText" format="string" />
+	</declare-styleable>
 </resources>

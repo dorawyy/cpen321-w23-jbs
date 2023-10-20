@@ -59,6 +59,8 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
 
    private boolean useGoogleCalendar;
 
+   private boolean useGoogleCalendar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

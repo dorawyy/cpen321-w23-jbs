@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/chip"
+	android:layout_width="wrap_content"
+	android:layout_height="36dp"
+	android:layout_marginLeft="12dp"
+	android:layout_marginRight="12dp"
+	android:background="@drawable/chat_input">
+
+	<EditText
+		android:id="@+id/edit_text"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginRight="24dp"
+		android:layout_marginLeft="12dp"
+		android:background="@android:color/transparent"
+		android:gravity="center_vertical"
+		android:lineSpacingExtra="4sp"
+		android:textAppearance="@style/label_text"
+		android:fontFamily="sans-serif"
+		android:translationY="-1.8sp"
+		android:inputType="textMultiLine"
+		android:imeOptions="actionSend"/>
+
+	<RelativeLayout
+		android:id="@+id/send"
+		android:layout_width="24dp"
+		android:layout_height="match_parent"
+		android:layout_marginLeft="4dp"
+		android:layout_marginRight="4dp"
+		android:layout_alignParentEnd="true"> <!-- This line aligns the "send" layout to the right -->
+
+		<ImageView
+			android:id="@+id/send_button_imageview"
+			android:layout_width="24dp"
+			android:layout_height="24dp"
+			android:src="@drawable/carbon_send"
+			android:layout_centerVertical="true"
+			android:layout_centerHorizontal="true" />
+
+		<Button
+			android:id="@+id/send_button"
+			android:layout_width="24dp"
+			android:layout_height="24dp"
+			android:layout_centerVertical="true"
+			android:layout_centerHorizontal="true"
+			android:textColorLink="@color/black"
+			android:background="@android:color/transparent" />
+	</RelativeLayout>
+</RelativeLayout>

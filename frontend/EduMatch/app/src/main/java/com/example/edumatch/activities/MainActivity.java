@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goToSignUpActivity() {
-        Intent newIntent = new Intent(MainActivity.this, TutorOrTuteeActivity.class);
+        Intent newIntent = new Intent(MainActivity.this, ChatActivity.class);
         Bundle userData = updateBundle();
         printBundle(userData, "");
         newIntent.putExtras(userData);

@@ -1,6 +1,8 @@
 const express = require("express");
 require('dotenv').config()
 const db = require("./db")
+const authRoutes = require("./routes/auth.routes")
+
 
 
 const mongoUrl = process.env.MONGODB_URI
@@ -25,6 +27,8 @@ app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
+
+authRoutes(app)
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

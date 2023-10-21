@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.edumatch.views.AvailableTimesViews;
-import com.example.edumatch.views.CourseRateItemView;
 import com.example.edumatch.views.DayOfTheWeekView;
 import com.example.edumatch.R;
 import com.example.edumatch.views.GoogleIconButtonView;

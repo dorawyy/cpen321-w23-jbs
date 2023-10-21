@@ -1,25 +1,21 @@
 package com.example.edumatch.activities;
 
-import android.os.Bundle;
-import android.util.Log;
-
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
 
 import com.example.edumatch.R;
 import com.example.edumatch.views.SubjectChipView;
 import com.google.android.flexbox.FlexboxLayout;
-
 
 public class TuteeHomeActivity extends AppCompatActivity {
     private FlexboxLayout chipContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tutee_home);
+        setContentView(R.layout.activity_home_tutee);
 
         Bundle userData = getIntent().getExtras();
-
-
 
         chipContainer = findViewById(R.id.chip_container);
         if (userData != null) {
@@ -37,5 +33,4 @@ public class TuteeHomeActivity extends AppCompatActivity {
 
 
     }
-
 }

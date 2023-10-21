@@ -1,0 +1,37 @@
+<!-- tutor_chip.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Chip Background -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#F0F0F0" /> <!-- Background color (e.g., light gray) -->
+            <corners android:radius="16dp" /> <!-- Rounded corners, adjust the radius as needed -->
+        </shape>
+    </item>
+
+    <!-- Chip Border (Optional) -->
+    <item android:right="1dp" android:left="1dp" android:top="1dp" android:bottom="1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" /> <!-- Transparent color for the border -->
+            <stroke
+                android:color="#CCCCCC" <!-- Border color (e.g., light gray) -->
+            android:width="1dp" /> <!-- Border width, adjust as needed -->
+            <corners android:radius="16dp" /> <!-- Rounded corners, should match the background radius -->
+        </shape>
+    </item>
+
+    <!-- Chip Text (Adjust text color, size, and padding as needed) -->
+    <item android:drawable="@drawable/tutor_outline" android:gravity="center">
+        <shape>
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+
+    <!-- Chip Size (Adjust width and height to make it longer) -->
+    <item android:right="16dp" android:left="16dp" android:top="8dp" android:bottom="8dp">
+        <shape android:shape="rectangle">
+            <size android:width="200dp" android:height="60dp" /> <!-- Adjust the width and height as needed -->
+        </shape>
+    </item>
+
+</layer-list>

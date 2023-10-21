@@ -169,6 +169,9 @@ public class MainActivity extends AppCompatActivity {
         userInput = usernameEditText.getText().toString();
         passwordInput = passwordEditText.getText().toString();
 
+        Intent intent = new Intent(MainActivity.this, TuteeHomeActivity.class);
+        startActivity(intent);
+
         // Todo: Put username and password in post request to try to signin
 
         Boolean success = postSignIn();

@@ -74,7 +74,11 @@ const User = mongoose.model(
             enum: Object.values(LocationMode)
         },
         location: locationSchema,
-        bio: String
+        bio: String,
+        useGoogleCalendar: {
+            type: Boolean,
+            default: false
+        }
     })
 )
 

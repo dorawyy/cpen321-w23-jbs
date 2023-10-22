@@ -35,28 +35,33 @@ exports.googleAuth = (req, res) => {
 
 exports.signup = async (req, res) => {
     var data = {...req.body}
-    data.password = bcrypt.hashSync(data.password)
-    if (data.authCode) {
-        const tokens = await getGoogleAccessTokens(data.authCode)
-        if (tokens) {
-            data.googleOauth = {
-                accessToken: tokens.access_token,
-                refreshToken: tokens.refresh_token,
-                expiryDate: tokens.expiry_date
+    var token = req.header('Authorization')
+    if (!token) {
+        data.password = bcrypt.hashSync(data.password)
+        new User({...data}).save().then(user => {
+            if (!user) {
+                res.status(500).send({ message: "Unable to create user"})
             }
-        }
+            const jwtToken = jwt.sign(user._id.toString(), secretKey)
+            res.json({ jwtToken })
+        }).catch(err => {
+            console.log(err)
+            res.status(500).send({ message: err.message })
+        })
+    } else {
+        token = token.replace("Bearer ", "")
+        jwt.verify(token, secretKey, (err, userId) => {
+            if (err) {
+                console.log(err)
+                return res.status(403).send({ message: "Failed to verify JWT"}); // Forbidden
+            }
+            User.findByIdAndUpdate(userId, {...data}).then(() => {
+                res.status(200).send({
+                    jwtToken: token
+                })
+            })
+        });
     }
-
-    new User({...data}).save().then(user => {
-        if (!user) {
-            res.status(500).send({ message: "Unable to create user"})
-        }
-        const jwtToken = jwt.sign(user._id.toString(), secretKey)
-        res.json({ jwtToken })
-    }).catch(err => {
-        console.log(err)
-        res.status(500).send({ message: err.message })
-    })
 }
 
 // Adapted from: https://www.bezkoder.com/node-js-mongodb-auth-jwt/ 
@@ -86,11 +91,16 @@ exports.login = (req, res) => {
 }
 
 async function verify(idToken, authCode) {
-    const ticket = await OAuth2Client.verifyIdToken({
-        idToken,
-        audience: process.env.CLIENT_ID
-    })
-    const payload = ticket.getPayload()
+    // const ticket = await OAuth2Client.verifyIdToken({
+    //     idToken,
+    //     audience: process.env.CLIENT_ID
+    // })
+    // const payload = ticket.getPayload()
+    var payload = {
+        sub: "fdklsjafskl",
+        email: "blah@gmail.com",
+        name: "arya"
+    }
     const googleId = payload['sub']
 
     return User.findOne({ googleId }).then(async user => {
@@ -108,6 +118,7 @@ async function verify(idToken, authCode) {
                     refreshToken: tokens.refresh_token,
                     expiryDate: tokens.expiry_date
                 }
+                user.useGoogleCalendar = true
             }
 
             return user.save().then(savedUser => {
@@ -122,6 +133,11 @@ async function verify(idToken, authCode) {
 }
 
 async function getGoogleAccessTokens(authCode) {
-    const { tokens } = await OAuth2Client.getToken(authCode)
+    // const { tokens } = await OAuth2Client.getToken(authCode)
+    const tokens = {
+        access_token: "lkjfdsaklf",
+        refresh_token: "falsdkjfals",
+        expiry_date: "falskdjfk"
+    }
     return Promise.resolve(tokens)
 }

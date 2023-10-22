@@ -3,6 +3,11 @@ const User = db.user
 
 // Source: https://www.bezkoder.com/node-js-mongodb-auth-jwt/ 
 function checkDuplicateUsernameOrEmail(req, res, next) {
+    var token = req.header('Authorization')
+    if (token) {
+        next()
+        return
+    }
     User.findOne({
         username: req.body.username
     }).then(user => {

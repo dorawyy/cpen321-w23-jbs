@@ -23,7 +23,7 @@ const subjectHourlyRateSchema = new mongoose.Schema({
     hourlyRate: Number
 })
 
-const manualAvailablitySchema = new mongoose.Schema({
+const manualAvailabilitySchema = new mongoose.Schema({
     day: String,
     startTime: String,
     endTime: String
@@ -64,9 +64,9 @@ const User = mongoose.model(
                 type: subjectHourlyRateSchema
             }
         ],
-        manualAvailablity: [
+        manualAvailability: [
             {
-                type: manualAvailablitySchema
+                type: manualAvailabilitySchema
             }
         ],
         locationMode: {

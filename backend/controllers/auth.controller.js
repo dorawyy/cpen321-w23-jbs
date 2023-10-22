@@ -59,6 +59,32 @@ exports.signup = async (req, res) => {
     })
 }
 
+// Adapted from: https://www.bezkoder.com/node-js-mongodb-auth-jwt/ 
+exports.login = (req, res) => {
+    User.findOne({
+        username: req.body.username
+    }).then(user => {
+        if (!user) {
+            return res.status(401).send({ message: "Username or password is incorrect" })
+        }
+
+        var passwordIsValid = bcrypt.compareSync(
+            req.body.password,
+            user.password
+        )
+        
+        if (!passwordIsValid) {
+            return res.status(401).send({ message: "Username or password is incorrect" })
+        }
+
+        const jwtToken = jwt.sign(user._id.toString(), secretKey)
+        res.status(200).send({
+            jwtToken,
+            type: user.type
+        })
+    })
+}
+
 async function verify(idToken, authCode) {
     const ticket = await OAuth2Client.verifyIdToken({
         idToken,

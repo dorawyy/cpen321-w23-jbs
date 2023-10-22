@@ -7,22 +7,8 @@ const db = require("./db")
 const authRoutes = require("./routes/auth.routes")
 
 const mongoUrl = process.env.MONGODB_URI
+const env = process.env.ENV
 PORT = 80
-
-const privateKeyFile = "/etc/letsencrypt/live/edumatch.canadacentral.cloudapp.azure.com/privkey.pem"
-const certFile = "/etc/letsencrypt/live/edumatch.canadacentral.cloudapp.azure.com/fullchain.pem"
-const chainFile = "/etc/letsencrypt/live/edumatch.canadacentral.cloudapp.azure.com/chain.pem"
-
-const privateKey = fs.readFileSync(privateKeyFile, 'utf8');
-const certificate = fs.readFileSync(certFile, 'utf8');
-const ca = fs.readFileSync(chainFile, 'utf8');
-
-const credentials = {
-	key: privateKey,
-	cert: certificate,
-	ca: ca
-};
-
 
 db.mongoose
     .connect(mongoUrl, {
@@ -46,17 +32,37 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname, { dotfiles: 'allow' } ));
 
-
 authRoutes(app)
 
-// Starting both http & https servers
-const httpServer = http.createServer(app);
-const httpsServer = https.createServer(credentials, app);
+if (env === 'prod') {
+    // PRODUCTION
+    const privateKeyFile = "/etc/letsencrypt/live/edumatch.canadacentral.cloudapp.azure.com/privkey.pem"
+    const certFile = "/etc/letsencrypt/live/edumatch.canadacentral.cloudapp.azure.com/fullchain.pem"
+    const chainFile = "/etc/letsencrypt/live/edumatch.canadacentral.cloudapp.azure.com/chain.pem"
 
-httpServer.listen(80, () => {
-	console.log('HTTP Server running on port 80');
-});
+    const privateKey = fs.readFileSync(privateKeyFile, 'utf8');
+    const certificate = fs.readFileSync(certFile, 'utf8');
+    const ca = fs.readFileSync(chainFile, 'utf8');
 
-httpsServer.listen(443, () => {
-	console.log('HTTPS Server running on port 443');
-});
+    const credentials = {
+        key: privateKey,
+        cert: certificate,
+        ca: ca
+    };
+    // Starting both http & https servers
+    const httpServer = http.createServer(app);
+    const httpsServer = https.createServer(credentials, app);
+
+    httpServer.listen(80, () => {
+        console.log('HTTP Server running on port 80');
+    });
+
+    httpsServer.listen(443, () => {
+        console.log('HTTPS Server running on port 443');
+    });
+} else {
+    // LOCAL
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT} locally.`);
+    });
+}

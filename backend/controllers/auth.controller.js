@@ -91,16 +91,11 @@ exports.login = (req, res) => {
 }
 
 async function verify(idToken, authCode) {
-    // const ticket = await OAuth2Client.verifyIdToken({
-    //     idToken,
-    //     audience: process.env.CLIENT_ID
-    // })
-    // const payload = ticket.getPayload()
-    var payload = {
-        sub: "fdklsjafskl",
-        email: "blah@gmail.com",
-        name: "arya"
-    }
+    const ticket = await OAuth2Client.verifyIdToken({
+        idToken,
+        audience: process.env.CLIENT_ID
+    })
+    const payload = ticket.getPayload()
     const googleId = payload['sub']
 
     return User.findOne({ googleId }).then(async user => {
@@ -133,11 +128,6 @@ async function verify(idToken, authCode) {
 }
 
 async function getGoogleAccessTokens(authCode) {
-    // const { tokens } = await OAuth2Client.getToken(authCode)
-    const tokens = {
-        access_token: "lkjfdsaklf",
-        refresh_token: "falsdkjfals",
-        expiry_date: "falskdjfk"
-    }
+    const { tokens } = await OAuth2Client.getToken(authCode)
     return Promise.resolve(tokens)
 }

@@ -33,9 +33,20 @@ exports.googleAuth = (req, res) => {
     })
 }
 
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
     var data = {...req.body}
     data.password = bcrypt.hashSync(data.password)
+    if (data.authCode) {
+        const tokens = await getGoogleAccessTokens(data.authCode)
+        if (tokens) {
+            data.googleOauth = {
+                accessToken: tokens.access_token,
+                refreshToken: tokens.refresh_token,
+                expiryDate: tokens.expiry_date
+            }
+        }
+    }
+
     new User({...data}).save().then(user => {
         if (!user) {
             res.status(500).send({ message: "Unable to create user"})
@@ -56,7 +67,7 @@ async function verify(idToken, authCode) {
     const payload = ticket.getPayload()
     const googleId = payload['sub']
 
-    return User.findOne({ googleId }).then(user => {
+    return User.findOne({ googleId }).then(async user => {
         if (!user) {
             var user = new User({
                 googleId,
@@ -64,13 +75,14 @@ async function verify(idToken, authCode) {
                 displayedName: payload['name']
             })
 
-            getGoogleAccessTokens(authCode).then(tokens => {
+            const tokens = await getGoogleAccessTokens(authCode)
+            if (tokens) {
                 user.googleOauth = {
                     accessToken: tokens.access_token,
                     refreshToken: tokens.refresh_token,
                     expiryDate: tokens.expiry_date
                 }
-            })
+            }
 
             return user.save().then(savedUser => {
                 return Promise.resolve(savedUser._id.toString())

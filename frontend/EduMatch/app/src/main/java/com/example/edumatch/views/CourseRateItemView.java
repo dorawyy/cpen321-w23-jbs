@@ -56,4 +56,10 @@ public class CourseRateItemView extends RelativeLayout {
         courseTextView = findViewById(R.id.course);
         rateEditText = findViewById(R.id.rate);
     }
+
+    public void setRateText(String rate) {
+        if(rateEditText != null){
+            rateEditText.setText(rate);
+        }
+    }
 }

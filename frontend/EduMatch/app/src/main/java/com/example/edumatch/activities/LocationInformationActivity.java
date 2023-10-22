@@ -1,10 +1,13 @@
 package com.example.edumatch.activities;
 
-import static com.example.edumatch.util.LoginSignupHelper.printBundle;
+
+import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +27,8 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class LocationInformationActivity extends AppCompatActivity {
 
@@ -37,8 +42,12 @@ public class LocationInformationActivity extends AppCompatActivity {
 
     private boolean isOnline = false;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
     final static String TAG = "LocationInformationActivity";
     private AutocompleteSupportFragment autocompleteFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +60,7 @@ public class LocationInformationActivity extends AppCompatActivity {
         }
 
         addressText = findViewById(R.id.address);
+        initSharedPreferences();
         initAutoComplete();
 
         initRadioGroup();
@@ -114,7 +124,7 @@ public class LocationInformationActivity extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isOnline == false && (Double.isNaN(latitude) || Double.isNaN(longitude))){
+                if (isOnline == false && (Double.isNaN(latitude) || Double.isNaN(longitude))) {
                     Toast.makeText(LocationInformationActivity.this, "No Location Selected", Toast.LENGTH_LONG).show();
                 } else {
                     goToNewActivity();
@@ -123,32 +133,37 @@ public class LocationInformationActivity extends AppCompatActivity {
         });
     }
 
+    private void updatePreferences() {
 
-    private Bundle updateBundle() {
+        editor.putString("locationMode", isOnline ? "online" : "in-person");
 
-        Intent currentIntent = getIntent();
-        if (currentIntent != null && currentIntent.getExtras() != null) {
-            Bundle userData = currentIntent.getExtras();
-            userData.putString("locationMode", isOnline ? "online" : "in-person");
-            if(isOnline == false){
-                Bundle location = new Bundle();
-                location.putDouble("latitude", latitude);
-                location.putDouble("longitude", longitude);
-                userData.putBundle("location", location);
-            }
-            return userData;
-
-        } else {
-            Log.e(TAG, "Something went wrong with the intent extras");
-            throw new RuntimeException("Intent is null or doesn't have extras");
+        if (!isOnline) {
+            // Update the location data in SharedPreferences
+            editor.putFloat("latitude", (float) latitude);
+            editor.putFloat("longitude", (float) longitude);
         }
+
+        // Commit the changes
+        editor.commit();
+
     }
 
     private void goToNewActivity() {
-        Intent newIntent = new Intent(LocationInformationActivity.this, AvailabilityActivity.class);
-        Bundle userData = updateBundle();
-        printBundle(userData, "");
-        newIntent.putExtras(userData);
+        Intent newIntent;
+        updatePreferences();
+        printSharedPreferences(sharedPreferences);
+        if(sharedPreferences.getBoolean("isEditing",false)){
+            //todo do a PUT here (make a common function)
+            newIntent = new Intent(LocationInformationActivity.this, EditProfileListActivity.class);
+        } else {
+            newIntent = new Intent(LocationInformationActivity.this, AvailabilityActivity.class);
+        }
         startActivity(newIntent);
+    }
+
+
+    private void initSharedPreferences() {
+        sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
     }
 }

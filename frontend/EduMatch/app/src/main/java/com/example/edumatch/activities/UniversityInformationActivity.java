@@ -1,11 +1,14 @@
 package com.example.edumatch.activities;
 
-import static com.example.edumatch.util.LoginSignupHelper.printBundle;
+
+import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,28 +17,24 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.edumatch.util.LoginSignupHelper;
 import com.example.edumatch.views.CustomAutoCompleteView;
 import com.example.edumatch.R;
 import com.example.edumatch.views.LabelAndEditTextView;
 import com.example.edumatch.views.SubjectChipView;
 import com.google.android.flexbox.FlexboxLayout;
-import com.google.android.gms.common.api.Status;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AutocompletePrediction;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
-import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class UniversityInformationActivity extends AppCompatActivity {
 
@@ -47,6 +46,9 @@ public class UniversityInformationActivity extends AppCompatActivity {
 
     String selectedUniversity;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
 
 
     @Override
@@ -57,12 +59,18 @@ public class UniversityInformationActivity extends AppCompatActivity {
 
         selectedCourses = new ArrayList<>();
 
+        initSharedPreferences();
+
+
+
         initUniversitySpinner();
         String[] suggestions = initSuggestions();
         // Add an OnClickListener to the "add_button"
         initAddButton(suggestions);
 
         initNextButton();
+
+        initFields();
     }
 
     @NonNull
@@ -170,43 +178,83 @@ public class UniversityInformationActivity extends AppCompatActivity {
         });
     }
 
-    private Bundle updateBundle() {
-        Bundle educationBundle = new Bundle();
+    private void updatePreferences() {
+
+        // Store the relevant data in SharedPreferences
+        editor.putString("university", selectedUniversity);
+
+        // Store the selected courses as a Set<String> (e.g., using a HashSet)
+        Set<String> selectedCoursesSet = new HashSet<>(selectedCourses);
+        editor.putStringSet("courses", selectedCoursesSet);
+
+        // Store program and year level
         int[] viewIds = {R.id.choose_program, R.id.select_year_level};
         String[] keys = {"program", "yearLevel"};
-        Intent currentIntent = getIntent();
-        if (currentIntent != null && currentIntent.getExtras() != null) {
-            Bundle userData = currentIntent.getExtras();
-            educationBundle.putString("university", selectedUniversity);
-            String[] coursesArray = selectedCourses.toArray(new String[selectedCourses.size()]);
-            educationBundle.putStringArray("courses", coursesArray);
-            for (int i = 0; i < viewIds.length; i++) {
-                LabelAndEditTextView view = findViewById(viewIds[i]);
-                String userDataString = view.getEnterUserEditText().getText().toString();
-                educationBundle.putString(keys[i], userDataString);
-            }
-            userData.putBundle("education", educationBundle);
-            return userData;
-
-        } else {
-            Log.e(TAG, "Something went wrong with the intent extras");
-            throw new RuntimeException("Intent is null or doesn't have extras");
+        for (int i = 0; i < viewIds.length; i++) {
+            LabelAndEditTextView view = findViewById(viewIds[i]);
+            String userDataString = view.getEnterUserEditText().getText().toString();
+            editor.putString(keys[i], userDataString);
         }
+
+        editor.commit();
     }
 
     private void goToNewActivity() {
-
-        Bundle userData = updateBundle();
         Class nextClass;
-        if(Objects.equals(userData.getString("userType"), "tutor")){
+        if(Objects.equals(sharedPreferences.getString("userType",""), "tutor")){
             nextClass = CourseRatesActivity.class;
         } else {
-            nextClass = LocationInformationActivity.class;
+            if(sharedPreferences.getBoolean("isEditing",false)){
+                //todo do a PUT here (make a common function)
+                nextClass =  EditProfileListActivity.class;
+            } else {
+                nextClass = LocationInformationActivity.class;
+            }
         }
         Intent newIntent = new Intent(UniversityInformationActivity.this, nextClass);
-        printBundle(userData, "");
-        newIntent.putExtras(userData);
+        updatePreferences();
+        printSharedPreferences(sharedPreferences);
         startActivity(newIntent);
+
+        startActivity(newIntent);
+    }
+
+
+
+    private void initSharedPreferences() {
+        sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+    }
+
+    private void initFields() {
+        // Initialize University Spinner
+        Spinner universitySpinner = findViewById(R.id.select_university_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.universities, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        universitySpinner.setAdapter(adapter);
+        String savedUniversity = sharedPreferences.getString("university", "");
+        if (!savedUniversity.isEmpty()) {
+            int position = adapter.getPosition(savedUniversity);
+            if (position != AdapterView.INVALID_POSITION) {
+                universitySpinner.setSelection(position);
+                selectedUniversity = savedUniversity;
+            }
+        }
+
+        // Initialize Courses (create a copy of selectedCourses to avoid ConcurrentModificationException)
+        List<String> selectedCoursesCopy = new ArrayList<>(sharedPreferences.getStringSet("courses", Collections.emptySet()));
+        for (String course : selectedCoursesCopy) {
+            updateSelectedCourses(course);
+        }
+
+        // Initialize Program and Year Level
+        int[] viewIds = {R.id.choose_program, R.id.select_year_level};
+        String[] keys = {"program", "yearLevel"};
+        for (int i = 0; i < viewIds.length; i++) {
+            LabelAndEditTextView view = findViewById(viewIds[i]);
+            String savedValue = sharedPreferences.getString(keys[i], "");
+            view.getEnterUserEditText().setText(savedValue);
+        }
     }
 
 }

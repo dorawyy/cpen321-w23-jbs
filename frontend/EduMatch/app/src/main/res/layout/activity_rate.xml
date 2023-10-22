@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	style="@style/GridLayout"
+	android:layout_gravity="top"
+	android:paddingTop="40dp"
+	app:columnCount="1"
+	app:rowCount="8">
+
+	<TextView
+		android:layout_marginBottom="24dp"
+		android:text="Rate Your Session With"
+		android:textAppearance="@style/bigTitle"
+		app:layout_gravity="center_horizontal" />
+
+	<TextView
+		android:id="@+id/tutor_name"
+		android:layout_marginBottom="24dp"
+		android:text="Tutor"
+		android:textAppearance="@style/bigTitle"
+		android:textStyle="bold"
+		app:layout_gravity="center_horizontal" />
+
+	<com.example.edumatch.views.LabelAndRatingView
+		android:id="@+id/proficiency"
+		app:label="Proficiency With Subject"
+		app:layout_gravity="center" />
+
+	<com.example.edumatch.views.LabelAndRatingView
+		android:id="@+id/attitude"
+		app:label="Attitude"
+		app:layout_gravity="center" />
+
+	<com.example.edumatch.views.LabelAndRatingView
+		android:id="@+id/organization"
+		app:label="Organization"
+		app:layout_gravity="center" />
+
+	<androidx.gridlayout.widget.GridLayout
+		style="@style/GridLayout"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingTop="0dp"
+		app:columnCount="2"
+		app:layout_gravity="center_horizontal"
+		app:rowCount="1">
+
+		<CheckBox
+			android:id="@+id/no_show"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginRight="8dp"
+			android:text="No Show"
+			android:textAppearance="@style/label_text" />
+
+		<CheckBox
+			android:id="@+id/late"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="8dp"
+			android:text="Late"
+			android:textAppearance="@style/label_text" />
+	</androidx.gridlayout.widget.GridLayout>
+
+	<com.example.edumatch.views.LabelAndCommentEditTextView
+		android:id="@+id/comments"
+		android:layout_marginTop="12dp"
+		app:hintText="leave a comment"
+		app:labelText="Any Comments?" />
+
+
+	<androidx.appcompat.widget.AppCompatButton
+		android:id="@+id/next_button"
+		style="@style/WhiteButton"
+		android:layout_marginTop="24dp"
+		android:text="Submit"
+		app:layout_gravity="center" />
+
+</androidx.gridlayout.widget.GridLayout>

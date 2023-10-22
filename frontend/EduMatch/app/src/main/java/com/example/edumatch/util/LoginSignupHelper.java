@@ -2,6 +2,7 @@ package com.example.edumatch.util;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -11,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 public class LoginSignupHelper {
     private final static String TAG = "LoginSignupHelper";
@@ -58,25 +60,32 @@ public class LoginSignupHelper {
         }
     }
 
-    public static void printBundle(Bundle bundle, String prefix) {
-        Log.d("BundleData", prefix + "Start of Bundle");
+    public static void printSharedPreferences(SharedPreferences sharedPreferences) {
+        Map<String, ?> allEntries = sharedPreferences.getAll();
 
-        for (String key : bundle.keySet()) {
-            Object value = bundle.get(key);
-            if (value instanceof Bundle) {
-                Log.d("BundleData", prefix + "Nested Bundle: " + key);
-                printBundle((Bundle) value, prefix + "  "); // Recursively print nested bundle
-            } else if (value instanceof String[]) {
-                String[] stringArray = (String[]) value;
-                for (int i = 0; i < stringArray.length; i++) {
-                    Log.d("BundleData", prefix + "Key: " + key + "[" + i + "], Value: " + stringArray[i]);
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            if (value instanceof String) {
+                Log.d("SharedPreferencesData", "Key: " + key + ", Value: " + value);
+            } else if (value instanceof Integer) {
+                Log.d("SharedPreferencesData", "Key: " + key + ", Value: " + value);
+            } else if (value instanceof Boolean) {
+                Log.d("SharedPreferencesData", "Key: " + key + ", Value: " + value);
+            } else if (value instanceof Float) {
+                Log.d("SharedPreferencesData", "Key: " + key + ", Value: " + value);
+            } else if (value instanceof Long) {
+                Log.d("SharedPreferencesData", "Key: " + key + ", Value: " + value);
+            } else if (value instanceof Set) {
+                Set<String> stringSet = (Set<String>) value;
+                for (String item : stringSet) {
+                    Log.d("SharedPreferencesData", "Key: " + key + ", Value (Set): " + item);
                 }
             } else {
-                Log.d("BundleData", prefix + "Key: " + key + ", Value: " + value);
+                Log.d("SharedPreferencesData", "Key: " + key + ", Value: " + value.toString());
             }
         }
-
-        Log.d("BundleData", prefix + "End of Bundle");
     }
 
 }

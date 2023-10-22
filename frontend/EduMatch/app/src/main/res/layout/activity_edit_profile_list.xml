@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?><!--<LinearLayout-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/messageContainer"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_gravity="center_horizontal"
+	android:orientation="vertical"
+	android:layout_marginTop="100dp">
+
+	<androidx.appcompat.widget.AppCompatButton
+		android:id="@+id/account_info"
+		android:layout_width="wrap_content"
+		android:layout_height="60dp"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginBottom="12dp"
+		android:background="@drawable/big_button_container"
+		android:gravity="start"
+		android:paddingLeft="36dp"
+		android:paddingTop="17dp"
+		android:text="Account Information"
+		android:textAppearance="@style/black_button_text"
+		android:textStyle="bold" />
+
+	<androidx.appcompat.widget.AppCompatButton
+		android:id="@+id/uni_info"
+		android:layout_width="wrap_content"
+		android:layout_height="60dp"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginBottom="12dp"
+		android:background="@drawable/big_button_container"
+		android:gravity="start"
+		android:paddingLeft="36dp"
+		android:paddingTop="17dp"
+		android:text="University Information"
+		android:textAppearance="@style/black_button_text"
+		android:textStyle="bold" />
+
+	<androidx.appcompat.widget.AppCompatButton
+		android:id="@+id/location_info"
+		android:layout_width="wrap_content"
+		android:layout_height="60dp"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginBottom="12dp"
+		android:background="@drawable/big_button_container"
+		android:gravity="start"
+		android:paddingStart="36dp"
+		android:paddingTop="17dp"
+		android:text="University Information"
+		android:textAppearance="@style/black_button_text"
+		android:textStyle="bold" />
+
+	<androidx.appcompat.widget.AppCompatButton
+		android:id="@+id/availability_info"
+		android:layout_width="wrap_content"
+		android:layout_height="60dp"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginBottom="12dp"
+		android:background="@drawable/big_button_container"
+		android:gravity="start"
+		android:paddingStart="36dp"
+		android:paddingTop="17dp"
+		android:text="Availability Information"
+		android:textAppearance="@style/black_button_text"
+		android:textStyle="bold" />
+</LinearLayout>

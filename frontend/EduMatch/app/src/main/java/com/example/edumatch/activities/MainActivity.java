@@ -1,6 +1,6 @@
 package com.example.edumatch.activities;
 
-import static com.example.edumatch.util.LoginSignupHelper.printBundle;
+import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -8,7 +8,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -155,12 +157,31 @@ public class MainActivity extends AppCompatActivity {
         return userData;
     }
 
+    private void clearPreferences(){
+        Context context = getApplicationContext(); // Replace with your application's context
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.clear(); // Clears all the data in the SharedPreferences file
+        editor.apply(); // Apply the changes
+    }
+
+    private SharedPreferences updatePreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isEditing",false);
+        editor.putBoolean("useGoogle", useGoogle);
+        editor.commit();
+        return sharedPreferences;
+    }
+
     private void goToSignUpActivity() {
         Intent newIntent = new Intent(MainActivity.this,
-                ScheduledAppointmentActivity.class);
-        Bundle userData = updateBundle();
-        printBundle(userData, "");
-        newIntent.putExtras(userData);
+                TutorOrTuteeActivity.class);
+        //todo: uncomment this
+//        clearPreferences();
+        SharedPreferences sharedPreferences =  updatePreferences();
+        printSharedPreferences(sharedPreferences);
         startActivity(newIntent);
     }
 }

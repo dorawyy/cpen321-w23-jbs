@@ -1,12 +1,14 @@
 package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.LoginSignupHelper.isStartTimeBeforeEndTime;
-import static com.example.edumatch.util.LoginSignupHelper.printBundle;
+import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,27 +21,33 @@ import com.example.edumatch.views.CourseRateItemView;
 import com.example.edumatch.views.DayOfTheWeekView;
 import com.example.edumatch.R;
 import com.example.edumatch.views.GoogleIconButtonView;
+import com.example.edumatch.views.LabelAndEditTextView;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class AvailabilityActivity extends AppCompatActivity implements DayOfTheWeekView.DayOfTheWeekClickListener {
     //todo Add navigation to next activity on both set buttons
     //todo Add a check that google account isn't null if set automatically, IE account needs to be added to the bundle
     //todo either add the availability to bundle or make api call here need to send available times, and boolean representing if using calendar or manual times
     final static String TAG = "AvailabilityActivity";
-    private Map<String,List<String>> availabilityMap;
+    private Map<String, List<String>> availabilityMap;
 
     private AvailableTimesViews availableTimesViews;
 
     private Button setTimeButton;
 
-   private String currentDay;
+    private String currentDay;
 
-   private boolean useGoogleCalendar;
+    private boolean useGoogleCalendar;
+
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
 
     @Override
@@ -52,13 +60,26 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
 
         availabilityMap = new HashMap<>();
 
+        initSharedPreferences();
         initManualButton();
         initGoogleButton();
         initializeDayButtons();
         initializeSetTimeButton();
+        initInvisibleFields();
+        initFields();
     }
 
-    private void initializeSetTimeButton(){
+    private void initInvisibleFields() {
+
+        if (!sharedPreferences.getBoolean("useGoogle", false)) {
+            GoogleIconButtonView googleView = findViewById(R.id.google);
+            googleView.setVisibility(View.GONE);
+            TextView text = findViewById(R.id.automatically_set_title);
+            text.setVisibility(View.GONE);
+        }
+    }
+
+    private void initializeSetTimeButton() {
         setTimeButton = availableTimesViews.getSetTimesButton();
 
         setTimeButton.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +91,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
                     String startTimeString = availableTimesViews.getStartTime();
                     String endTimeString = availableTimesViews.getEndTime();
 
-                    Boolean isValid = isStartTimeBeforeEndTime(startTimeString,endTimeString);
+                    Boolean isValid = isStartTimeBeforeEndTime(startTimeString, endTimeString);
                     if (isValid == false) {
                         Toast.makeText(AvailabilityActivity.this, "Start Time Not Before End Time, Not Saved!", Toast.LENGTH_SHORT).show();
                     } else {
@@ -124,9 +145,9 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
     }
 
 
-   private void updateAvailability(String day) {
+    private void updateAvailability(String day) {
         TextView dayText = findViewById(R.id.selected_day);
-       currentDay = day;
+        currentDay = day;
         if (availabilityMap.containsKey(day)) {
             List<String> availability = availabilityMap.get(day);
             String startTime = availability.get(0);
@@ -135,7 +156,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
             availableTimesViews.setEndTime(endTime);
         }
 
-        dayText.setText("Selected Day: " +day);
+        dayText.setText("Selected Day: " + day);
     }
 
     public void showTimePicker(View view) {
@@ -178,39 +199,59 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
     }
 
 
-    private Bundle updateBundle() {
-        Intent currentIntent = getIntent();
-        if (currentIntent != null && currentIntent.getExtras() != null) {
-            Bundle userData = currentIntent.getExtras();
-            if(useGoogleCalendar == false){
-                Bundle availabilityBundle = new Bundle();
-                for (Map.Entry<String, List<String>> entry : availabilityMap.entrySet()) {
-                    String key = entry.getKey();
-                    List<String> values = entry.getValue();
+    private void updatePreferences() {
 
-                    // Convert the List<String> into a String array
-                    String[] valuesArray = values.toArray(new String[0]);
+        editor.putBoolean("useGoogleCalendar", useGoogleCalendar);
 
-                    // Put the String array into the availabilityBundle
-                    availabilityBundle.putStringArray(key, valuesArray);
-                }
-                userData.putBundle("availability", availabilityBundle);
+        if (!useGoogleCalendar) {
+            for (Map.Entry<String, List<String>> entry : availabilityMap.entrySet()) {
+                String key = entry.getKey();
+                List<String> values = entry.getValue();
+
+                // Convert the List<String> into a String set
+                editor.putString(key + "StartTime", values.get(0));
+                editor.putString(key + "EndTime", values.get(1));
             }
-            userData.putBoolean("useGoogleCalendar",useGoogleCalendar);
-            return userData;
-
-        } else {
-            Log.e(TAG, "Something went wrong with the intent extras");
-            throw new RuntimeException("Intent is null or doesn't have extras");
         }
+
+        // Commit the changes to SharedPreferences
+        editor.commit();
+
+
     }
 
     private void goToNewActivity() {
-        // todo: this goes into the homepage
-        Intent newIntent = new Intent(AvailabilityActivity.this, LocationInformationActivity.class);
-        Bundle userData = updateBundle();
-        printBundle(userData, "");
-        newIntent.putExtras(userData);
+        Intent newIntent;
+        updatePreferences();
+        printSharedPreferences(sharedPreferences);
+        if (sharedPreferences.getBoolean("isEditing", false)) {
+            //todo do a PUT here (make a common function)
+            newIntent = new Intent(AvailabilityActivity.this, EditProfileListActivity.class);
+        } else {
+            // todo: this goes into the homepage
+            newIntent = new Intent(AvailabilityActivity.this, EditProfileListActivity.class);
+        }
         startActivity(newIntent);
+    }
+
+
+    private void initSharedPreferences() {
+        sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+    }
+
+    private void initFields() {
+        // Initialize the availability for each day
+        for (String day : availabilityMap.keySet()) {
+            String startTimeKey = day + "StartTime";
+            String endTimeKey = day + "EndTime";
+
+            if (availabilityMap.containsKey(day) && sharedPreferences.contains(startTimeKey) && sharedPreferences.contains(endTimeKey)) {
+                String startTime = sharedPreferences.getString(startTimeKey, "00:00");
+                String endTime = sharedPreferences.getString(endTimeKey, "23:59");
+
+                availabilityMap.put(day, Arrays.asList(startTime, endTime));
+            }
+        }
     }
 }

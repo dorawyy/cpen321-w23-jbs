@@ -108,7 +108,6 @@ public class LocationInformationActivity extends AppCompatActivity {
         });
     }
 
-
     private void initNextButton() {
         Button nextButton = findViewById(R.id.next_button);
 

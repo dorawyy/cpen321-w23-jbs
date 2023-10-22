@@ -1,53 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?><!--<LinearLayout-->
-<!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="match_parent"-->
-<!--android:orientation="vertical"-->
-<!--	>-->
-
-<!--	<ScrollView-->
-<!--		android:layout_width="match_parent"-->
-<!--		android:layout_height="match_parent"-->
-<!--		android:fillViewport="true"-->
-<!--		android:paddingBottom="60dp">-->
-
-<!--		<LinearLayout-->
-<!--			android:id="@+id/messageContainer"-->
-<!--			android:layout_width="match_parent"-->
-<!--			android:layout_height="match_parent"-->
-<!--			android:orientation="vertical"-->
-<!--			>-->
-<!--			<com.example.edumatch.views.MessageChipView-->
-<!--				android:layout_width="wrap_content"-->
-<!--				android:layout_height="wrap_content"-->
-<!--				app:messageText="blah blah blah"/>-->
-
-<!--			&lt;!&ndash; Your MessageChipView items should go here &ndash;&gt;-->
-
-<!--		</LinearLayout>-->
-
-<!--	</ScrollView>-->
-
-<!--	<com.example.edumatch.views.CustomChatInputView-->
-<!--		android:id="@+id/customChatInput"-->
-<!--		android:layout_width="match_parent"-->
-<!--		android:layout_height="wrap_content"-->
-<!--		android:layout_gravity="bottom"-->
-<!--		app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"-->
-<!--		android:layout_marginTop="-60dp" />-->
-
-<!--</LinearLayout>-->
-
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical"
-
 	>
-
 	<ScrollView
 		android:id="@+id/scrollView"
 		android:layout_width="match_parent"

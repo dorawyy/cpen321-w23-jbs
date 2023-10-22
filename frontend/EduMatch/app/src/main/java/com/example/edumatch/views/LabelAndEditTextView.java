@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.GridLayout;
@@ -68,6 +69,7 @@ public class LabelAndEditTextView extends GridLayout {
                 editText.setInputType(LoginSignupHelper.getInputTypeFromString(inputType));
                 editText.setTypeface(Typeface.SANS_SERIF);
             }
+
         }
     }
 

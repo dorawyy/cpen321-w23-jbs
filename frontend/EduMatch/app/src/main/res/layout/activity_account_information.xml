@@ -33,6 +33,10 @@
         app:labelText="@string/create_password_label"
         app:layout_gravity="center"
         app:inputType="textPassword" />
+    <com.example.edumatch.views.LabelAndEditTextView
+        android:id="@+id/create_bio"
+        app:labelText="Bio"
+        app:layout_gravity="center" />
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/next_button"
         style="@style/WhiteButton"

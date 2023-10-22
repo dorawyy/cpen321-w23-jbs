@@ -67,8 +67,8 @@ public class AccountInformationActivity extends AppCompatActivity {
     }
 
     private Bundle updateBundle() {
-        int[] viewIds = {R.id.create_name, R.id.create_email, R.id.create_phone_number, R.id.create_userName, R.id.create_password};
-        String[] keys = {"name", "email", "phoneNumber", "username", "password"};
+        int[] viewIds = {R.id.create_name, R.id.create_email, R.id.create_phone_number, R.id.create_userName, R.id.create_password, R.id.create_bio};
+        String[] keys = {"name", "email", "phoneNumber", "username", "password", "bio"};
 
         int numberOfIters = viewIds.length;
         if (userData.getBoolean("useGoogle")) {

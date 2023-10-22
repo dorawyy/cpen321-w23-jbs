@@ -156,7 +156,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goToSignUpActivity() {
-        Intent newIntent = new Intent(MainActivity.this, ChatActivity.class);
+        Intent newIntent = new Intent(MainActivity.this,
+                ScheduledAppointmentActivity.class);
         Bundle userData = updateBundle();
         printBundle(userData, "");
         newIntent.putExtras(userData);

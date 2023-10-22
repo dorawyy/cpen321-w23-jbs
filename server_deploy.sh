@@ -11,3 +11,9 @@ scp -i $PRIVATE_KEY -r $BACKEND_DIR azureuser@${SERVER_PUBLIC_IP}:backend/
 # recover node_modules
 pushd backend/
 npm install
+
+# Restart the server
+echo "Killing the current server"
+ssh -i $PRIVATE_KEY azureuser@${SERVER_PUBLIC_IP} "sudo lsof -t -i:443 | sudo xargs kill -9"
+echo "Starting a new server"
+ssh -i $PRIVATE_KEY azureuser@${SERVER_PUBLIC_IP} "sudo ENV=prod nohup /home/azureuser/.nvm/versions/node/v20.8.0/bin/node backend/server.js" &

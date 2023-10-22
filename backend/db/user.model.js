@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { UserType } = require("../constants/user.types");
+const { LocationMode } = require("../constants/location.modes");
 
 const educationSchema = new mongoose.Schema({
     school: String,
@@ -43,8 +44,15 @@ const User = mongoose.model(
     "User",
     new mongoose.Schema({
         googleId: String,
+        isBanned: {
+            type: Boolean,
+            default: false
+        },
         googleOauth: oauthSchema,
-        type: [UserType.TUTEE, UserType.TUTOR, UserType.ADMIN],
+        type: {
+            type: String,
+            enum: Object.values(UserType)
+        },
         username: String,
         password: String,
         email: String,
@@ -61,8 +69,12 @@ const User = mongoose.model(
                 type: manualAvailablitySchema
             }
         ],
-        locationMode: String,
-        location: locationSchema
+        locationMode: {
+            type: String,
+            enum: Object.values(LocationMode)
+        },
+        location: locationSchema,
+        bio: String
     })
 )
 

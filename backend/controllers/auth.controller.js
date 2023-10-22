@@ -3,6 +3,7 @@ const { google } = require('googleapis');
 const UserType = require("../constants/user.types")
 const db = require("../db")
 const jwt = require("jsonwebtoken")
+const bcrypt = require("bcryptjs")
 
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
@@ -23,11 +24,7 @@ exports.googleAuth = (req, res) => {
     const idToken = req.body.idToken
     const authCode = req.body.authCode
 
-    console.log(`idtoken : ${idToken}`)
-    console.log(authCode)
-
     verify(idToken, authCode).then(userId => {
-        console.log(`user id: ${userId}`)
         const jwtToken = jwt.sign(userId, secretKey)
         res.json({ jwtToken })
     }).catch(err => {
@@ -36,8 +33,23 @@ exports.googleAuth = (req, res) => {
     })
 }
 
+exports.signup = (req, res) => {
+    var data = {...req.body}
+    data.password = bcrypt.hashSync(data.password)
+    new User({...data}).save().then(user => {
+        if (!user) {
+            res.status(500).send({ message: "Unable to create user"})
+        }
+        const jwtToken = jwt.sign(user._id.toString(), secretKey)
+        res.json({ jwtToken })
+    }).catch(err => {
+        console.log(err)
+        res.status(500).send({ message: err.message })
+    })
+}
+
 async function verify(idToken, authCode) {
-    const ticket = await client.verifyIdToken({
+    const ticket = await OAuth2Client.verifyIdToken({
         idToken,
         audience: process.env.CLIENT_ID
     })
@@ -60,7 +72,7 @@ async function verify(idToken, authCode) {
                 }
             })
 
-            user.save().then(savedUser => {
+            return user.save().then(savedUser => {
                 return Promise.resolve(savedUser._id.toString())
             })
         } else {

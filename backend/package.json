@@ -17,10 +17,9 @@
   },
   "homepage": "https://github.com/StanDarJeep/jbs-edumatch#readme",
   "dependencies": {
-    "connect-mongo": "^5.1.0",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "express-session": "^1.17.3",
     "google-auth-library": "^9.1.0",
     "googleapis": "^128.0.0",
     "jsonwebtoken": "^9.0.2",

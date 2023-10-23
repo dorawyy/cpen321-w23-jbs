@@ -47,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
     private String userInput, passwordInput;
 
-    private String authCode,idToken;
+    private String authCode, idToken;
+
+    private Boolean newUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,12 +113,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void googleSignIn() {
-//        if (account == null) {
-            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            googleSignInActivityResultLauncher.launch(signInIntent);
-//        } else {
-//            Toast.makeText(MainActivity.this, "Already signed in!", Toast.LENGTH_LONG).show();
-//        }
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        googleSignInActivityResultLauncher.launch(signInIntent);
 
     }
 
@@ -141,16 +139,19 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Successful Sign In" + account.getIdToken(), Toast.LENGTH_LONG).show();
             idToken = account.getIdToken();
             authCode = account.getServerAuthCode();
-            Log.d("GooglePost",idToken);
-            Log.d("GooglePost","authcode is " + authCode);
+            Log.d("GooglePost", idToken);
+            Log.d("GooglePost", "authcode is " + authCode);
             useGoogle = true;
             Boolean success = postGoogleAuth();
-            if(success){
-                Toast.makeText(MainActivity.this, "Google Worked", Toast.LENGTH_SHORT).show();
+            if (success) {
+
+                if(newUser){
+                    goToSignUpActivity();
+                } else {
+                    // todo: go to homepage
+                    Toast.makeText(MainActivity.this, "Go to Homepage", Toast.LENGTH_SHORT).show();
+                }
             }
-            goToSignUpActivity();
-
-
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -172,14 +173,14 @@ public class MainActivity extends AppCompatActivity {
 
         Boolean success = postSignIn();
 
-        if(success){
+        if (success) {
             //todo: got to homepage
             Toast.makeText(MainActivity.this, "Sign In Worked", Toast.LENGTH_SHORT).show();
         }
     }
 
 
-    private void clearPreferences(){
+    private void clearPreferences() {
         Context context = getApplicationContext(); // Replace with your application's context
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -191,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences updatePreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("isEditing",false);
+        editor.putBoolean("isEditing", false);
         editor.putBoolean("useGoogle", useGoogle);
         editor.commit();
         return sharedPreferences;
@@ -200,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
     private void goToSignUpActivity() {
         Intent newIntent = new Intent(MainActivity.this,
                 TutorOrTuteeActivity.class);
-        SharedPreferences sharedPreferences =  updatePreferences();
+        SharedPreferences sharedPreferences = updatePreferences();
         printSharedPreferences(sharedPreferences);
         startActivity(newIntent);
     }
@@ -210,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         JSONObject requestBody = constructSignInRequest();// Create your JSON request body
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/api/auth/login";
 
-        JSONObject jsonResponse = postDataToBackend(apiUrl, requestBody,"");
+        JSONObject jsonResponse = postDataToBackend(apiUrl, requestBody, "");
 
         if (jsonResponse != null) {
             try {
@@ -229,8 +230,8 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("jwtToken",jsonResponse.getString("jwtToken"));
-                    editor.putString("userType",jsonResponse.getString("type"));
+                    editor.putString("jwtToken", jsonResponse.getString("jwtToken"));
+                    editor.putString("userType", jsonResponse.getString("type"));
                     editor.commit();
                     printSharedPreferences(sharedPreferences);
                     return true;
@@ -242,12 +243,11 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         } else {
-            Log.d("SignInPost","jsonResponse was NULL");
+            Log.d("SignInPost", "jsonResponse was NULL");
             return false;
         }
         return false;
     }
-
 
 
     private Boolean postGoogleAuth() {
@@ -256,13 +256,15 @@ public class MainActivity extends AppCompatActivity {
 
         JSONObject jsonResponse = postDataToBackend(apiUrl, requestBody, "");
 
-        Log.d("GooglePost","Finished postDataToBackend" + jsonResponse);
+        Log.d("GooglePost", "Finished postDataToBackend" + jsonResponse);
 
         if (jsonResponse != null) {
             try {
                 SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("jwtToken",jsonResponse.getString("jwtToken"));
+                editor.putString("jwtToken", jsonResponse.getString("jwtToken"));
+                newUser = jsonResponse.getBoolean("newUser");
+
                 editor.commit();
                 printSharedPreferences(sharedPreferences);
                 Log.d("GooglePost", jsonResponse.toString());
@@ -272,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         } else {
-            Log.d("GooglePost","jsonResponse was NULL");
+            Log.d("GooglePost", "jsonResponse was NULL");
             return false;
         }
     }
@@ -281,8 +283,8 @@ public class MainActivity extends AppCompatActivity {
     private JSONObject constructSignInRequest() {
         try {
             JSONObject requestBody = new JSONObject();
-            requestBody.put("password",passwordInput);
-            requestBody.put("username",userInput);
+            requestBody.put("password", passwordInput);
+            requestBody.put("username", userInput);
 
             logRequestToConsole(requestBody, "GooglePost");
             return requestBody;
@@ -295,8 +297,8 @@ public class MainActivity extends AppCompatActivity {
     private JSONObject constructGoogleRequest() {
         try {
             JSONObject requestBody = new JSONObject();
-            requestBody.put("idToken",idToken);
-            requestBody.put("authCode",authCode);
+            requestBody.put("idToken", idToken);
+            requestBody.put("authCode", authCode);
 
             logRequestToConsole(requestBody, "SignInPost");
             return requestBody;

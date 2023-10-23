@@ -16,4 +16,4 @@ npm install
 echo "Killing the current server"
 ssh -i $PRIVATE_KEY azureuser@${SERVER_PUBLIC_IP} "sudo lsof -t -i:443 | sudo xargs kill -9"
 echo "Starting a new server"
-ssh -i $PRIVATE_KEY azureuser@${SERVER_PUBLIC_IP} "sudo ENV=prod nohup /home/azureuser/.nvm/versions/node/v20.8.0/bin/node backend/server.js" &
+ssh -i $PRIVATE_KEY azureuser@${SERVER_PUBLIC_IP} "sudo ENV=prod nohup /home/azureuser/.nvm/versions/node/v20.8.0/bin/node backend/server.js > backend/output.log 2>&1 &" &

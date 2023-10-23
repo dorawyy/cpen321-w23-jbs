@@ -20,7 +20,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/topEmptyBar"
         android:layout_marginTop="16dp"/>
-a
+
     <!-- RatingBar and Rating TextView -->
     <LinearLayout
         android:id="@+id/ratingLayout"
@@ -39,7 +39,8 @@ a
             android:numStars="5"
             android:rating="4.5"
             android:isIndicator="true"
-            android:stepSize="0.5"/>
+            android:stepSize="0.5"
+            />
 
         <!-- Rating TextView -->
         <TextView
@@ -58,45 +59,102 @@ a
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@id/starRatingBar"
+        android:layout_below="@id/ratingLayout"
         android:layout_marginTop="16dp">
 
         <!-- Tutor Name -->
-        <TextView
-            android:id="@+id/tutorDescription"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tutorDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="I hate mary"
+                android:textSize="18sp"/>
+        </RelativeLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:textSize="18sp"/>
-        <TextView
-            android:id="@+id/majorDescripion"
-            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:gravity="start">>
+
+            <!-- Majoring In Text -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Majoring In"
+                android:textSize="14sp"
+                android:textColor="#888888"/>  <!-- This color is a light gray, adjust as needed -->
+
+            <!-- Major Description Text -->
+            <TextView
+                android:id="@+id/majorDescripion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Computer Engineering"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:textSize="18sp"/>
-        <TextView
-            android:id="@+id/selectedCourses"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:text="@string/your_selected_courses"
-            android:textAppearance="@style/label_text"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titleBar" />
+            android:gravity="start"
+            >
 
+            <!-- Tutors Text -->
+            <TextView
+                android:id="@+id/selectedCourses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tutors"
+                android:textAppearance="@style/label_text"
+                android:textStyle="bold" />
 
-
+            <!-- Courses FlexboxLayout -->
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/chipContainer"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="20dp"
                 android:orientation="horizontal"
                 app:flexWrap="wrap"
-                app:layout_gravity="center" />
+                android:layout_marginTop="8dp">
+
+                <!-- CPEN 321 Chip/Button -->
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CPEN 321"
+                    android:background="@drawable/subject_chip"
+                android:layout_marginEnd="8dp" />
+
+                <!-- MATH 342 Chip/Button -->
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MATH 342"
+                    android:background="@drawable/subject_chip"
+
+                    android:layout_marginEnd="8dp" />
+
+                <!-- CPEN 331 Chip/Button -->
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CPEN 331"
+                    android:background="@drawable/subject_chip" />
+
+            </com.google.android.flexbox.FlexboxLayout>
+
+        </LinearLayout>
+
 
 
 
@@ -105,7 +163,7 @@ a
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tutorInfoLayout"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="40dp"
             android:orientation="horizontal"
             android:gravity="center">
 
@@ -115,7 +173,7 @@ a
                 android:layout_height="wrap_content"
                 android:text="Pricing"
                 android:textColor="#000000"
-                android:background="#FFFFFF"
+                android:background="@drawable/white_button"
                 android:padding="8dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
@@ -130,7 +188,7 @@ a
                 android:layout_height="wrap_content"
                 android:text="Book"
                 android:textColor="#000000"
-                android:background="#FFFFFF"
+                android:background="@drawable/white_button"
                 android:padding="8dp"
                 android:layout_marginStart="8dp"
                 android:gravity="center"
@@ -141,9 +199,49 @@ a
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <!-- Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Top Comments"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+
+            <include
+                android:id="@+id/includedTutorReview"
+                layout="@layout/tutor_review_chip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+
+
+
 
 
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/baseline_mode_comment_24"
+        android:contentDescription="Chat Button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        />
+
 
 
 </RelativeLayout>

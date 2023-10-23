@@ -6,6 +6,7 @@ const https = require("https")
 const fs = require("fs")
 const db = require("./db")
 const authRoutes = require("./routes/auth.routes")
+const recommendationRoutes = require("./routes/recommendation.routes")
 
 const mongoUrl = process.env.MONGODB_URI
 const env = process.env.ENV
@@ -34,6 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname, { dotfiles: 'allow' } ));
 
 authRoutes(app)
+recommendationRoutes(app)
 
 if (env === 'prod') {
     // PRODUCTION

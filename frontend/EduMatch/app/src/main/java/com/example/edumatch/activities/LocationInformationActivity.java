@@ -135,7 +135,7 @@ public class LocationInformationActivity extends AppCompatActivity {
 
     private void updatePreferences() {
 
-        editor.putString("locationMode", isOnline ? "online" : "in-person");
+        editor.putString("locationMode", isOnline ? "online" : "in person");
 
         if (!isOnline) {
             // Update the location data in SharedPreferences

@@ -2,6 +2,7 @@ package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.LoginSignupHelper.isStartTimeBeforeEndTime;
 import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
+import static com.example.edumatch.util.NetworkUtils.postDataToBackend;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +24,10 @@ import com.example.edumatch.views.DayOfTheWeekView;
 import com.example.edumatch.R;
 import com.example.edumatch.views.GoogleIconButtonView;
 import com.example.edumatch.views.LabelAndEditTextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,6 +54,8 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+
+    private JSONObject jsonResponse;
 
 
     @Override
@@ -227,11 +235,24 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         if (sharedPreferences.getBoolean("isEditing", false)) {
             //todo do a PUT here (make a common function)
             newIntent = new Intent(AvailabilityActivity.this, EditProfileListActivity.class);
+            startActivity(newIntent);
         } else {
             // todo: this goes into the homepage
-            newIntent = new Intent(AvailabilityActivity.this, EditProfileListActivity.class);
+            //try posting user details
+            boolean success = postSignUpInfo();
+            if(success){
+                try {
+                    editor.putString("jwtToken",jsonResponse.getString("jwtToken"));
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                editor.commit();
+                printSharedPreferences(sharedPreferences);
+                newIntent = new Intent(AvailabilityActivity.this, EditProfileListActivity.class);
+                startActivity(newIntent);
+            }
         }
-        startActivity(newIntent);
+
     }
 
 
@@ -253,5 +274,144 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
                 availabilityMap.put(day, Arrays.asList(startTime, endTime));
             }
         }
+    }
+
+    private Boolean postSignUpInfo() {
+        JSONObject requestBody = constructSignUpRequestFromSharedPreferences();// Create your JSON request body
+        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/api/auth/signup";
+
+         jsonResponse = postDataToBackend(apiUrl, requestBody,sharedPreferences.getString("jwtToken", ""));
+
+        if (jsonResponse != null) {
+            try {
+                if (jsonResponse.has("errorDetails")) {
+                    JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
+                    if (errorDetails.has("message")) {
+                        String message = errorDetails.getString("message");
+                        if ("Username already exists.".equals(message)) {
+                            // Handle the case where the username already exists
+                            runOnUiThread(() -> {
+                                Toast.makeText(getApplicationContext(), "Username already exists.", Toast.LENGTH_SHORT).show();
+                            });
+                            return false; // Return false to indicate failure
+                        }
+                    }
+                }
+                Log.d("SignUpPost", jsonResponse.toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            Log.d("SignUpPost","jsonResponse was NULL");
+        }
+        return true;
+    }
+
+
+    private JSONObject constructSignUpRequestFromSharedPreferences() {
+        try {
+            // Retrieve data from SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("type", sharedPreferences.getString("userType", ""));
+            requestBody.put("displayedName", sharedPreferences.getString("name", ""));
+            requestBody.put("email", sharedPreferences.getString("email", ""));
+            requestBody.put("phoneNumber", sharedPreferences.getString("phoneNumber", ""));
+            requestBody.put("username", sharedPreferences.getString("username", ""));
+            requestBody.put("password", sharedPreferences.getString("password", ""));
+            requestBody.put("locationMode", sharedPreferences.getString("locationMode", ""));
+
+            // For location (latitude and longitude)
+            JSONObject location = new JSONObject();
+            location.put("lat", sharedPreferences.getFloat("latitude", 0));
+            location.put("long", sharedPreferences.getFloat("longitude", 0));
+            requestBody.put("location", location);
+
+            // For education
+            JSONObject education = new JSONObject();
+            education.put("school", sharedPreferences.getString("university", ""));
+            education.put("program", sharedPreferences.getString("program", ""));
+            education.put("level", sharedPreferences.getString("yearLevel", ""));
+            Set<String> courses = sharedPreferences.getStringSet("courses", new HashSet<>());
+            JSONArray coursesArray = new JSONArray(courses);
+            education.put("courses", coursesArray);
+
+            Set<String> tags = sharedPreferences.getStringSet("tags", new HashSet<>());
+            JSONArray tagsArray = new JSONArray(tags);
+            education.put("tags", tagsArray);
+
+            requestBody.put("education", education);
+
+            // For useGoogleCalendar
+            boolean useGoogleCalendar = sharedPreferences.getBoolean("useGoogleCalendar", false);
+            requestBody.put("useGoogleCalendar", useGoogleCalendar);
+
+            String subjectHourlyRateJson = sharedPreferences.getString("coursePricePairs", "");
+
+            if (!subjectHourlyRateJson.isEmpty()) {
+                // Parse the subjectHourlyRate JSON
+                JSONObject subjectHourlyRate = new JSONObject(subjectHourlyRateJson);
+                requestBody.put("subjectHourlyRate", subjectHourlyRate);
+            }
+
+            JSONArray manualAvailabilityArray = new JSONArray();
+
+            JSONObject sunday = new JSONObject();
+            sunday.put("day", "Sunday");
+            sunday.put("startTime", sharedPreferences.getString("SundayStartTime", ""));
+            sunday.put("endTime", sharedPreferences.getString("SundayEndTime", ""));
+            manualAvailabilityArray.put(sunday);
+
+            JSONObject monday = new JSONObject();
+            monday.put("day", "Monday");
+            monday.put("startTime", sharedPreferences.getString("MondayStartTime", ""));
+            monday.put("endTime", sharedPreferences.getString("MondayEndTime", ""));
+            manualAvailabilityArray.put(monday);
+
+            JSONObject tuesday = new JSONObject();
+            tuesday.put("day", "Tuesday");
+            tuesday.put("startTime", sharedPreferences.getString("TuesdayStartTime", ""));
+            tuesday.put("endTime", sharedPreferences.getString("TuesdayEndTime", ""));
+            manualAvailabilityArray.put(tuesday);
+
+            JSONObject wednesday = new JSONObject();
+            wednesday.put("day", "Wednesday");
+            wednesday.put("startTime", sharedPreferences.getString("WednesdayStartTime", ""));
+            wednesday.put("endTime", sharedPreferences.getString("WednesdayEndTime", ""));
+            manualAvailabilityArray.put(wednesday);
+
+            JSONObject thursday = new JSONObject();
+            thursday.put("day", "Thursday");
+            thursday.put("startTime", sharedPreferences.getString("ThursdayStartTime", ""));
+            thursday.put("endTime", sharedPreferences.getString("ThursdayEndTime", ""));
+            manualAvailabilityArray.put(thursday);
+
+            JSONObject friday = new JSONObject();
+            friday.put("day", "Friday");
+            friday.put("startTime", sharedPreferences.getString("FridayStartTime", ""));
+            friday.put("endTime", sharedPreferences.getString("FridayEndTime", ""));
+            manualAvailabilityArray.put(friday);
+
+            JSONObject saturday = new JSONObject();
+            saturday.put("day", "Saturday");
+            saturday.put("startTime", sharedPreferences.getString("SaturdayStartTime", ""));
+            saturday.put("endTime", sharedPreferences.getString("SaturdayEndTime", ""));
+            manualAvailabilityArray.put(saturday);
+
+            requestBody.put("manualAvailability", manualAvailabilityArray);
+
+            logRequestToConsole(requestBody);
+            return requestBody;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void logRequestToConsole(JSONObject request) {
+        Log.d("SignUpPost", "Request JSON: " + request.toString());
     }
 }

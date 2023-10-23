@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const { UserRole } = require("../constants/user.roles");
+const { UserType } = require("../constants/user.types");
+const { LocationMode } = require("../constants/location.modes");
 
 const educationSchema = new mongoose.Schema({
     school: String,
@@ -9,7 +10,12 @@ const educationSchema = new mongoose.Schema({
         {
             type: String
         }
-    ]
+    ], // optional
+    tags: [
+        {
+            type: String
+        }
+    ] // tutor only
 })
 
 const subjectHourlyRateSchema = new mongoose.Schema({
@@ -17,12 +23,36 @@ const subjectHourlyRateSchema = new mongoose.Schema({
     hourlyRate: Number
 })
 
+const manualAvailabilitySchema = new mongoose.Schema({
+    day: String,
+    startTime: String,
+    endTime: String
+})
+
+const oauthSchema = new mongoose.Schema({
+    accessToken: String,
+    refreshToken: String,
+    expiryDate: String
+})
+
+const locationSchema = new mongoose.Schema({
+    lat: Number,
+    long: Number
+})
+
 const User = mongoose.model(
     "User",
     new mongoose.Schema({
-        userId: String,
         googleId: String,
-        role: [UserRole.TUTEE, UserRole.TUTOR],
+        isBanned: {
+            type: Boolean,
+            default: false
+        },
+        googleOauth: oauthSchema,
+        type: {
+            type: String,
+            enum: Object.values(UserType)
+        },
         username: String,
         password: String,
         email: String,
@@ -33,9 +63,23 @@ const User = mongoose.model(
             {
                 type: subjectHourlyRateSchema
             }
-        ] 
-
+        ],
+        manualAvailability: [
+            {
+                type: manualAvailabilitySchema
+            }
+        ],
+        locationMode: {
+            type: String,
+            enum: Object.values(LocationMode)
+        },
+        location: locationSchema,
+        bio: String,
+        useGoogleCalendar: {
+            type: Boolean,
+            default: false
+        }
     })
 )
 
-module.exports = Tutee
+module.exports = User

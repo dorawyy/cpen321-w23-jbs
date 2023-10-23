@@ -1,29 +1,16 @@
+const controller = require("../controllers/auth.controller")
+const { authJwt, verifySignUp } = require("../middleware")
+const db = require("../db")
 
-const { OAuth2Client } = require("google-auth-library")
-const UserRole = require("./constants/user.roles")
-const db = require("../models")
-
-const client = new OAuth2Client()
-
-// models
-const Tutee = db.tutee
-
-
+const User = db.user
 
 module.exports = function (app) {
-    app.post('api/auth/google', (req, res) => {
-        const {idToken} = req.body
-
-    })
-}
-
-async function verify(token) {
-    const ticket = await client.verifyIdToken({
-        idToken: token,
-        audience: process.env.CLIENT_ID
-    })
-    const payload = ticket.getPayload()
-    const userId = payload['sub']
-    
-
-}
+    // authenticate through google
+    app.post("/api/auth/google", controller.googleAuth);
+    app.post(
+        "/api/auth/signup", 
+        verifySignUp.checkDuplicateUsernameOrEmail, 
+        controller.signup
+    )
+    app.post("/api/auth/login", controller.login)
+};

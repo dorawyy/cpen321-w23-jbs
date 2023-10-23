@@ -24,9 +24,12 @@ exports.googleAuth = (req, res) => {
     const idToken = req.body.idToken
     const authCode = req.body.authCode
 
-    verify(idToken, authCode).then(userId => {
-        const jwtToken = jwt.sign(userId, secretKey)
-        res.json({ jwtToken })
+    verify(idToken, authCode).then(result => {
+        const jwtToken = jwt.sign(result.userId, secretKey)
+        res.json({ 
+            jwtToken,
+            newUser: result.newUser 
+        })
     }).catch(err => {
         console.log(err)
         res.status(401).send({ message: err.message })
@@ -117,10 +120,18 @@ async function verify(idToken, authCode) {
             }
 
             return user.save().then(savedUser => {
-                return Promise.resolve(savedUser._id.toString())
+                var ret = {
+                    userId: savedUser._id.toString(),
+                    newUser: true
+                }
+                return Promise.resolve(ret)
             })
         } else {
-            return Promise.resolve(user._id.toString())
+            var ret = {
+                userId: user._id.toString(),
+                newUser: false
+            }
+            return Promise.resolve(ret)
         }
     }).catch(err => {
         return Promise.reject(err)

@@ -23,6 +23,9 @@
 			android:name=".activities.ChatListActivity"
 			android:exported="false" />
 		<activity
+			android:name=".activities.TuteeHomeActivity"
+			android:exported="false" />
+		<activity
 			android:name=".activities.TuteeRateActivity"
 			android:exported="false" />
 		<activity

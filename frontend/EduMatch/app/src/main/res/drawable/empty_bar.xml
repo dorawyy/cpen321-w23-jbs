@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Empty bar shape -->
+    <item android:top="0dp">
+        <shape android:shape="rectangle">
+            <size android:height="32dp" /> <!-- Adjust the height as needed -->
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+</layer-list>

@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs")
 
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
-const redirectUri = "https://localhost:8080/redirect";
+const redirectUri = "https://edumatch.canadacentral.cloudapp.azure.com/redirect";
 
 const secretKey = process.env.SECRET_KEY
 

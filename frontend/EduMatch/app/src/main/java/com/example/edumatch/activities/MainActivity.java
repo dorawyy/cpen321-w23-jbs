@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // todo: go to homepage
                     Toast.makeText(MainActivity.this, "Go to Homepage", Toast.LENGTH_SHORT).show();
+                    goToHomePage();
                 }
             }
         } catch (ApiException e) {
@@ -174,7 +176,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (success) {
             //todo: got to homepage
+
             Toast.makeText(MainActivity.this, "Sign In Worked", Toast.LENGTH_SHORT).show();
+            goToHomePage();
         }
     }
 
@@ -202,6 +206,13 @@ public class MainActivity extends AppCompatActivity {
                 TutorOrTuteeActivity.class);
         SharedPreferences sharedPreferences = updatePreferences();
         printSharedPreferences(sharedPreferences);
+        startActivity(newIntent);
+    }
+
+    private void goToHomePage(){
+        // todo: need to check if they are tutor or tutee
+        Intent newIntent = new Intent(MainActivity.this,
+                TuteeHomeActivity.class);
         startActivity(newIntent);
     }
 

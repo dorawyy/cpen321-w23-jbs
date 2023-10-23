@@ -57,10 +57,6 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
 
     private JSONObject jsonResponse;
 
-   private boolean useGoogleCalendar;
-
-   private boolean useGoogleCalendar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

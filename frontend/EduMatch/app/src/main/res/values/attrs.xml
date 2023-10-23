@@ -5,6 +5,10 @@
 		<attr name="hintText" format="string" />
 		<attr name="inputType" format="string" />
 	</declare-styleable>
+	<declare-styleable name="LabelAndTextView">
+		<attr name="label" format="string" />
+		<attr name="contentText" format="string" />
+	</declare-styleable>
 	<declare-styleable name="SubjectChip">
 		<attr name="chipText" format="string" />
 	</declare-styleable>
@@ -14,5 +18,9 @@
 	</declare-styleable>
 	<declare-styleable name="GoogleIconButton">
 		<attr name="buttonText" format="string" />
+	</declare-styleable>
+	<declare-styleable name="MessageChip">
+		<attr name="messageText" format="string" />
+		<attr name="isReceiver" format="boolean" />
 	</declare-styleable>
 </resources>

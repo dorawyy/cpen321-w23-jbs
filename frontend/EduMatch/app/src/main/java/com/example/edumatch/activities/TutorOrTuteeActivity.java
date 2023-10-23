@@ -1,10 +1,12 @@
 package com.example.edumatch.activities;
 
-import static com.example.edumatch.util.LoginSignupHelper.printBundle;
+import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,25 +52,19 @@ public class TutorOrTuteeActivity extends AppCompatActivity {
     }
 
 
-    private Bundle updateBundle() {
-
-        Intent currentIntent = getIntent();
-        if (currentIntent != null && currentIntent.getExtras() != null) {
-            Bundle userData = currentIntent.getExtras();
-            userData.putString("userType",userType);
-            return userData;
-
-        } else {
-            Log.e(TAG, "Something went wrong with the intent extras");
-            throw new RuntimeException("Intent is null or doesn't have extras");
-        }
+    private SharedPreferences updatePreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("userType", userType);
+        editor.commit();
+        return sharedPreferences;
     }
 
     private void goToNewActivity() {
         Intent newIntent = new Intent(TutorOrTuteeActivity.this, AccountInformationActivity.class);
-        Bundle userData = updateBundle();
-        printBundle(userData, "");
-        newIntent.putExtras(userData);
+        SharedPreferences sharedPreferences =  updatePreferences();
+        printSharedPreferences(sharedPreferences);
         startActivity(newIntent);
     }
+
 }

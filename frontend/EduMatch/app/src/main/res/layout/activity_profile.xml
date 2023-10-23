@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
+
+
+    <View
+        android:id="@+id/topEmptyBar"
+        android:layout_width="match_parent"
+        android:layout_height="32dp" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mary Wong"
+        android:textSize="24sp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/topEmptyBar"
+        android:layout_marginTop="16dp"/>
+a
+    <!-- RatingBar and Rating TextView -->
+    <LinearLayout
+        android:id="@+id/ratingLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <!-- RatingBar -->
+        <RatingBar
+            android:id="@+id/starRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:rating="4.5"
+            android:isIndicator="true"
+            android:stepSize="0.5"/>
+
+        <!-- Rating TextView -->
+        <TextView
+            android:id="@+id/ratingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.5"
+            android:textSize="18sp"
+            android:layout_marginStart="4dp"/>
+
+    </LinearLayout>
+
+    <!-- Tutor Information -->
+    <LinearLayout
+        android:id="@+id/tutorInfoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/starRatingBar"
+        android:layout_marginTop="16dp">
+
+        <!-- Tutor Name -->
+        <TextView
+            android:id="@+id/tutorDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/majorDescripion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/selectedCourses"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/your_selected_courses"
+            android:textAppearance="@style/label_text"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleBar" />
+
+
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/chipContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="20dp"
+                android:orientation="horizontal"
+                app:flexWrap="wrap"
+                app:layout_gravity="center" />
+
+
+
+        <!-- Pricing and Book Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tutorInfoLayout"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <!-- Pricing Button -->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pricing"
+                android:textColor="#000000"
+                android:background="#FFFFFF"
+                android:padding="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:backgroundTint="#000000"
+                android:outlineSpotShadowColor="#000000"
+                android:outlineAmbientShadowColor="#000000"
+                android:stateListAnimator="@null"/>
+
+            <!-- Book Button -->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Book"
+                android:textColor="#000000"
+                android:background="#FFFFFF"
+                android:padding="8dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:backgroundTint="#000000"
+                android:outlineSpotShadowColor="#000000"
+                android:outlineAmbientShadowColor="#000000"
+                android:stateListAnimator="@null"/>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

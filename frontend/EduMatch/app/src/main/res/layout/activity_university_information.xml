@@ -96,7 +96,7 @@
 			android:id="@+id/next_button"
 			style="@style/WhiteButton"
 			android:layout_marginTop="36dp"
-			android:text="@string/next"
+			android:text="@string/submit"
 			app:layout_gravity="center" />
 	</androidx.gridlayout.widget.GridLayout>
 </ScrollView>

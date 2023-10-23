@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	style="@style/GridLayout"
+	android:layout_gravity="top"
+	app:columnCount="1"
+	app:rowCount="4">
+
+	<TextView
+		android:id="@+id/name"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Hot Tutor"
+		android:textAppearance="@style/title"
+		android:layout_marginBottom="24dp"
+		/>
+
+	<com.example.edumatch.views.LabelAndTextView
+		android:id="@+id/create_subject"
+		app:contentText="blah blah"
+		app:label="Subject" />
+
+	<com.example.edumatch.views.LabelAndTextView
+		android:id="@+id/create_date"
+		app:contentText="blah blah"
+		app:label="Date"
+		app:layout_gravity="center" />
+
+	<com.example.edumatch.views.LabelAndTextView
+		android:id="@+id/create_time"
+		app:contentText="blah blah"
+		app:label="Time"
+		app:layout_gravity="center" />
+
+	<com.example.edumatch.views.LabelAndTextView
+		android:id="@+id/create_location"
+		app:contentText="blah blah"
+		app:label="Location"
+		app:layout_gravity="center" />
+	<com.example.edumatch.views.LabelAndCommentTextView
+		android:id="@+id/create_comment"
+		app:contentText="blah blah"
+		app:label="Additional Comments"
+		app:layout_gravity="center"
+		/>
+	<androidx.appcompat.widget.AppCompatButton
+		android:id="@+id/cancel_button"
+		style="@style/WhiteButton"
+		app:layout_gravity="center"
+		android:layout_marginTop="24dp"
+		android:text="Cancel" />
+
+</androidx.gridlayout.widget.GridLayout>

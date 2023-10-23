@@ -1,10 +1,13 @@
 package com.example.edumatch.activities;
 
-import static com.example.edumatch.util.LoginSignupHelper.printBundle;
+
+import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,8 +20,15 @@ import com.example.edumatch.views.LabelAndEditTextView;
 import com.example.edumatch.views.SubjectChipView;
 import com.google.android.flexbox.FlexboxLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class CourseRatesActivity extends AppCompatActivity {
 
@@ -32,44 +42,41 @@ public class CourseRatesActivity extends AppCompatActivity {
 
     List<String> selectedTags;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_rates);
         courseRateContainer = findViewById(R.id.course_rate_container);
         selectedTags = new ArrayList<>();
-
-        initCourses();
+        initSharedPreferences();
+//        initCourses();
         initNextButton();
         initAddButton();
+        initFields();
     }
 
-    private void initCourses() {
-        Bundle userData = getIntent().getExtras();
-        if (userData != null) {
-            Bundle educationBundle = userData.getBundle("education");
-            String[] coursesArray = educationBundle.getStringArray("courses");
-
-            if (coursesArray != null) {
-                for (String course : coursesArray) {
-                    // Create a CourseRateChip
-                    CourseRateItemView courseRateItemView = new CourseRateItemView(this);
-                    courseRateItemView.setCourseText(course);
-
-                    // Add the CourseRateChip to the container
-                    courseRateContainer.addView(courseRateItemView);
-                }
-            }
-        } else {
-            Log.e(TAG, "Something went wrong with the intent extras");
-            throw new RuntimeException("Intent doesn't have extras");
-        }
-    }
+//    private void initCourses() {
+//        Set<String> defaultCourses = Collections.emptySet();
+//        Set<String> courses = sharedPreferences.getStringSet("courses", defaultCourses);
+//
+//        for (String course : courses) {
+//            // Create a CourseRateChip
+//            CourseRateItemView courseRateItemView = new CourseRateItemView(this);
+//            courseRateItemView.setCourseText(course);
+//
+//            // Add the CourseRateChip to the container
+//            courseRateContainer.addView(courseRateItemView);
+//        }
+//    }
 
     private void initAddButton() {
         Button addButton = findViewById(R.id.add_button);
 
         tagText = findViewById(R.id.add_tags);
+        chipContainer = findViewById(R.id.chip_container);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,7 +100,7 @@ public class CourseRatesActivity extends AppCompatActivity {
                     });
 
                     // Find the "chip_container" and add the SubjectChipView to it
-                    chipContainer = findViewById(R.id.chip_container);
+
                     chipContainer.addView(subjectChipView);
 
                     // Clear the AutoCompleteTextView
@@ -114,41 +121,107 @@ public class CourseRatesActivity extends AppCompatActivity {
         });
     }
 
+    private void updatePreferences() {
+        // Create a JSON object to store course and price pairs
+        editor.remove("coursePricePairs");
+        editor.commit();
 
-    private Bundle updateBundle() {
-        Bundle subjectHourlyRate = new Bundle();
-        Intent currentIntent = getIntent();
-        if (currentIntent != null && currentIntent.getExtras() != null) {
-            Bundle userData = currentIntent.getExtras();
-            Bundle educationBundle = userData.getBundle("education");
+        JSONObject coursePricePairs = new JSONObject();
 
-            String[] tagsArray = selectedTags.toArray(new String[selectedTags.size()]);
-            educationBundle.putStringArray("tags", tagsArray);
+        // Add course and price pairs to the JSON object
+        for (int i = 0; i < courseRateContainer.getChildCount(); i++) {
+            View child = courseRateContainer.getChildAt(i);
 
-            for (int i = 0; i < courseRateContainer.getChildCount(); i++) {
-                View child = courseRateContainer.getChildAt(i);
+            if (child instanceof CourseRateItemView) {
+                CourseRateItemView courseRateItemView = (CourseRateItemView) child;
+                String course = courseRateItemView.getCourseText();
+                String courseRate = courseRateItemView.getRateText();
 
-                if (child instanceof CourseRateItemView) {
-                    CourseRateItemView courseRateItemView = (CourseRateItemView) child;
-                    String course = courseRateItemView.getCourseText();
-                    String courseRate = courseRateItemView.getRateText();
-                    subjectHourlyRate.putString(course, courseRate);
+                try {
+                    coursePricePairs.put(course, courseRate);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
-            userData.putBundle("subjectHourlyRate", subjectHourlyRate);
-            return userData;
-
-        } else {
-            Log.e(TAG, "Something went wrong with the intent extras");
-            throw new RuntimeException("Intent is null or doesn't have extras");
         }
+
+        // Store the JSON object as a string in SharedPreferences
+        editor.putString("coursePricePairs", coursePricePairs.toString());
+        Set<String> selectedTagsSet = new HashSet<>(selectedTags);
+        editor.putStringSet("tags", selectedTagsSet);
+        editor.commit();
     }
 
     private void goToNewActivity() {
-        Intent newIntent = new Intent(CourseRatesActivity.this, LocationInformationActivity.class);
-        Bundle userData = updateBundle();
-        printBundle(userData, "");
-        newIntent.putExtras(userData);
+        Intent newIntent;
+        updatePreferences();
+        printSharedPreferences(sharedPreferences);
+        if(sharedPreferences.getBoolean("isEditing",false)){
+            //todo do a PUT here (make a common function)
+            newIntent = new Intent(CourseRatesActivity.this, EditProfileListActivity.class);
+        } else {
+            newIntent = new Intent(CourseRatesActivity.this, LocationInformationActivity.class);
+        }
         startActivity(newIntent);
+    }
+
+
+
+    private void initSharedPreferences() {
+        sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+    }
+
+
+    private void initFields() {
+        // Initialize Courses
+        Set<String> defaultCourses = Collections.emptySet();
+        Set<String> courses = sharedPreferences.getStringSet("courses", defaultCourses);
+
+        for (String course : courses) {
+            // Create a CourseRateItemView
+            CourseRateItemView courseRateItemView = new CourseRateItemView(this);
+            courseRateItemView.setCourseText(course);
+
+            // Retrieve the rate for the course from coursePricePairs
+            String coursePricePairsStr = sharedPreferences.getString("coursePricePairs", "");
+            try {
+                JSONObject coursePricePairs = new JSONObject(coursePricePairsStr);
+                if (coursePricePairs.has(course)) {
+                    String rate = coursePricePairs.getString(course);
+                    courseRateItemView.setRateText(rate);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            // Add the CourseRateItemView to the container
+            courseRateContainer.addView(courseRateItemView);
+        }
+
+        // Initialize Tags
+        Set<String> defaultTags = Collections.emptySet();
+        Set<String> tags = sharedPreferences.getStringSet("tags", defaultTags);
+
+        for (String tag : tags) {
+            // Create a SubjectChipView
+            selectedTags.add(tag);
+            SubjectChipView subjectChipView = new SubjectChipView(CourseRatesActivity.this);
+            subjectChipView.setChipText(tag);
+
+            subjectChipView.setChipRemovedListener(new SubjectChipView.OnChipRemovedListener() {
+                @Override
+                public void onChipRemoved(String chipText) {
+                    // Handle chip removal
+                    int index = selectedTags.indexOf(chipText);
+                    if (index >= 0) {
+                        selectedTags.remove(index);
+                    }
+                }
+            });
+
+            // Add the SubjectChipView to the chip container
+            chipContainer.addView(subjectChipView);
+        }
     }
 }

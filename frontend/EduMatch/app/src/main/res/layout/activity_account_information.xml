@@ -2,6 +2,7 @@
 <androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/GridLayout"
+    android:paddingTop="50dp"
     app:columnCount="1"
     app:rowCount="6">
 
@@ -33,10 +34,14 @@
         app:labelText="@string/create_password_label"
         app:layout_gravity="center"
         app:inputType="textPassword" />
+    <com.example.edumatch.views.LabelAndEditTextView
+        android:id="@+id/create_bio"
+        app:labelText="Bio"
+        app:layout_gravity="center" />
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/next_button"
         style="@style/WhiteButton"
-        android:text="@string/next"
+        android:text="@string/submit"
         app:layout_gravity="center"
         android:layout_marginTop="24dp"
         />

@@ -1,0 +1,11 @@
+<!-- res/drawable/fab_messages.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="56dp"
+    android:height="56dp"
+    android:viewportWidth="56"
+    android:viewportHeight="56">
+
+    <path
+        android:fillColor="@android:color/holo_blue_light"
+        android:pathData="M28,4C15.9,4,7,12.9,7,24s8.9,20,21,20s21-8.9,21-20S40.1,4,28,4z M26,37h-4v-4h4V37z M33,31H23c-2.2,0-4-1.8-4-4v-8c0-2.2,1.8-4,4-4h2v6l4-4l4,4v-6h2c2.2,0,4,1.8,4,4v8C37,29.2,35.2,31,33,31z" />
+</vector>

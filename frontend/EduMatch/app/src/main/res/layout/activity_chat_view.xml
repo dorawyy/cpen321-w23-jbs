@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?><!--<LinearLayout-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	>
+	<ScrollView
+		android:id="@+id/scrollView"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:fillViewport="true"
+		android:nestedScrollingEnabled="false"
+		android:paddingBottom="60dp">
+
+		<LinearLayout
+			android:id="@+id/messageContainer"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+
+			android:orientation="vertical">
+
+			<com.example.edumatch.views.MessageChipView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				app:messageText="blah blah blah"/>
+			<com.example.edumatch.views.MessageChipView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				app:messageText="blah blah blah" />
+		</LinearLayout>
+	</ScrollView>
+
+	<com.example.edumatch.views.CustomChatInputView
+		android:id="@+id/customChatInput"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom"
+		android:layout_marginTop="-60dp"
+		app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
+
+</LinearLayout>

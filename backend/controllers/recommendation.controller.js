@@ -7,13 +7,14 @@ const User = db.user
 exports.checkedProfile = async (req, res) => {
     const tutor = await User.findById(req.body.tutorId)
     const tutee = await User.findById(req.userId)
-    const distance = haversine(tutor.location, tutee.location)
 
     tutee.recommendationWeights.minRating -= (tutee.recommendationWeights.minRating - tutor.rating) * (tutor.rating < tutee.recommendationWeights.minRating ? 0.15 : 0.05)
     tutee.recommendationWeights.locationModeWeight -= (tutor.locationMode != tutee.locationMode ? 0.01 : -0.005)
 
-    if (tutee.locationMode == LocationMode.IN_PERSON)
+    if (tutee.locationMode == LocationMode.IN_PERSON && tutor.location) {
+        const distance = haversine(tutor.location, tutee.location)
         tutee.recommendationWeights.maxDistance += (distance - tutee.recommendationWeights.maxDistance) * (distance > tutee.recommendationWeights.maxDistance ? 0.15 : 0.02)
+    }
 
     tutee.save()
     res.status(200).send({ message: "Adjusted weights based on checked profile"})
@@ -32,8 +33,10 @@ exports.contactedTutor = async (req, res) => {
     tutee.recommendationWeights.minRating -= (tutee.recommendationWeights.minRating - tutor.rating) * (tutor.rating < tutee.recommendationWeights.minRating ? 0.3 : 0.05)
     tutee.recommendationWeights.locationModeWeight -= (tutor.locationMode != tutee.locationMode ? 0.05 : -0.01)
 
-    if (tutee.locationMode == LocationMode.IN_PERSON)
+    if (tutee.locationMode == LocationMode.IN_PERSON && tutor.location) {
+        const distance = haversine(tutor.location, tutee.location)
         tutee.recommendationWeights.maxDistance += (distance - tutee.recommendationWeights.maxDistance) * (distance > tutee.recommendationWeights.maxDistance ? 0.2 : 0.02)
+    }
 
     tutee.save()
     res.status(200).send({ message: "Adjusted weights based on contacted tutor"})
@@ -42,7 +45,6 @@ exports.contactedTutor = async (req, res) => {
 exports.scheduledAppointment = async (req, res) => {
     const tutor = await User.findById(req.body.tutorId)
     const tutee = await User.findById(req.userId)
-    const distance = haversine(tutor.location, tutee.location)
     const scheduledSubjectHourlyRate = tutor.subjectHourlyRate.find(subject => subject.course == req.body.scheduledSubject)
     if (!scheduledSubjectHourlyRate)
         res.status(500).send({ message: "Unable to find hourly rate associated with subject" })
@@ -52,8 +54,10 @@ exports.scheduledAppointment = async (req, res) => {
     tutee.recommendationWeights.minRating -= (tutee.recommendationWeights.minRating - tutor.rating) * (tutor.rating < tutee.recommendationWeights.minRating ? 0.5 : 0.1)
     tutee.recommendationWeights.locationModeWeight -= (tutor.locationMode != tutee.locationMode ? 0.1 : -0.02)
 
-    if (tutee.locationMode == LocationMode.IN_PERSON)
+    if (tutee.locationMode == LocationMode.IN_PERSON && tutor.location) {
+        const distance = haversine(tutor.location, tutee.location)
         tutee.recommendationWeights.maxDistance += (distance - tutee.recommendationWeights.maxDistance) * (distance > tutee.recommendationWeights.maxDistance ? 0.4 : 0.1)
+    }
 
     tutee.previousSubjects.push(req.body.scheduledSubject)
 
@@ -64,7 +68,6 @@ exports.scheduledAppointment = async (req, res) => {
 exports.reviewedTutor = async (req, res) => {
     const tutor = await User.findById(req.body.tutorId)
     const tutee = await User.findById(req.userId)
-    const distance = haversine(tutor.location, tutee.location)
     const reviewFactor = req.body.review * 0.1
 
     if (tutor.subjectHourlyRate.length != 0) {
@@ -75,8 +78,10 @@ exports.reviewedTutor = async (req, res) => {
     tutee.recommendationWeights.minRating -= (tutee.recommendationWeights.minRating - tutor.rating) * (tutor.rating < tutee.recommendationWeights.minRating ? 0.3 : 0.05) * reviewFactor
     tutee.recommendationWeights.locationModeWeight -= (tutor.locationMode != tutee.locationMode ? 0.05 : -0.01) * reviewFactor
 
-    if (tutee.locationMode == LocationMode.IN_PERSON)
+    if (tutee.locationMode == LocationMode.IN_PERSON && tutor.location) {
+        const distance = haversine(tutor.location, tutee.location)
         tutee.recommendationWeights.maxDistance += (distance - tutee.recommendationWeights.maxDistance) * (distance > tutee.recommendationWeights.maxDistance ? 0.2 : 0.02) * reviewFactor
+    }
 
     tutee.save()
     res.status(200).send({ message: "Adjusted weights based on reviewed tutor"})

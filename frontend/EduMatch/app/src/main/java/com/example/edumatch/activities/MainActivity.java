@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private SharedPreferences updatePreferences() {
+
         SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isEditing", false);

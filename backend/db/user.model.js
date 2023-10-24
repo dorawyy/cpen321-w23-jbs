@@ -40,6 +40,13 @@ const locationSchema = new mongoose.Schema({
     long: Number
 })
 
+const recommendationWeightsSchema = new mongoose.Schema({
+    budget: Number,
+    minRating: Number,
+    locationModeWeight: Number,
+    maxDistance: Number
+})
+
 const User = mongoose.model(
     "User",
     new mongoose.Schema({
@@ -74,6 +81,11 @@ const User = mongoose.model(
             enum: Object.values(LocationMode)
         },
         location: locationSchema,
+        recommendationWeights: recommendationWeightsSchema
+        ,
+        previousSubjects: [
+        ],
+        rating: Number,
         bio: String,
         useGoogleCalendar: {
             type: Boolean,

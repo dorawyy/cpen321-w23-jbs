@@ -1,0 +1,702 @@
+Index: app/src/main/java/com/example/edumatch/activities/ChatListActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.edumatch.activities;\r\n\r\nimport static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.LinearLayout;\r\n\r\nimport com.example.edumatch.R;\r\n\r\npublic class ChatListActivity extends AppCompatActivity {\r\n\r\n    //todo: assuming that when the user clicked the button to go to chatlist a GET to conversations\r\n    // endpoint was called and populated sharedPreferences\r\n    //\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_chat_list);\r\n        String[] conversations = { \"Stanley Zhao\", \"Arya Phan\", \"Arya Phan\", \"Arya Phan\", \"Arya Phan\", \"Arya Phan\", \"Arya Phan\", \"Arya Phan\", \"Arya Phan\", \"Arya Phan\" };\r\n\r\n// Get the container where you want to add the buttons (e.g., a LinearLayout)\r\n        LinearLayout buttonContainer = findViewById(R.id.messageContainer); // Replace with your container ID\r\n\r\n// Loop through the array and create buttons\r\n        for (String conversation : conversations) {\r\n            Button customButton = (Button) LayoutInflater.from(this)\r\n                    .inflate(R.layout.big_button, buttonContainer, false);\r\n\r\n            // Set the text for the button using the conversation name\r\n            customButton.setText(conversation);\r\n\r\n            // Add the button to the container\r\n            buttonContainer.addView(customButton);\r\n\r\n            // Add a click listener to handle button click events\r\n            customButton.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View v) {\r\n                    // Handle button click event here, e.g., open the chat with the selected user\r\n\r\n                }\r\n            });\r\n        }\r\n    }\r\n\r\n\r\n    private void goToNewActivity(){\r\n        Intent newIntent = new Intent(ChatListActivity.this,\r\n                ChatActivity.class);\r\n        SharedPreferences sharedPreferences = updatePreferences();\r\n        printSharedPreferences(sharedPreferences);\r\n        startActivity(newIntent);\r\n    }\r\n\r\n    private SharedPreferences updatePreferences() {\r\n        SharedPreferences sharedPreferences = getSharedPreferences(\"AccountPreferences\", Context.MODE_PRIVATE);\r\n        SharedPreferences.Editor editor = sharedPreferences.edit();\r\n//        editor.putBoolean(\"isEditing\", false);\r\n//        editor.putBoolean(\"useGoogle\", useGoogle);\r\n        editor.commit();\r\n        return sharedPreferences;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/edumatch/activities/ChatListActivity.java b/app/src/main/java/com/example/edumatch/activities/ChatListActivity.java
+--- a/app/src/main/java/com/example/edumatch/activities/ChatListActivity.java	(revision c3ae16fa9c31b5beff0ed1dec245f02d0591e963)
++++ b/app/src/main/java/com/example/edumatch/activities/ChatListActivity.java	(date 1698038281275)
+@@ -1,6 +1,7 @@
+ package com.example.edumatch.activities;
+ 
+ import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
++import static com.example.edumatch.util.NetworkUtils.postDataToBackend;
+ 
+ import androidx.appcompat.app.AppCompatActivity;
+ 
+@@ -8,34 +9,65 @@
+ import android.content.Intent;
+ import android.content.SharedPreferences;
+ import android.os.Bundle;
++import android.util.Log;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.widget.Button;
+ import android.widget.LinearLayout;
++import android.widget.Toast;
+ 
+ import com.example.edumatch.R;
+ 
++import org.json.JSONException;
++import org.json.JSONObject;
++
++import java.util.ArrayList;
++import java.util.List;
++
+ public class ChatListActivity extends AppCompatActivity {
+ 
+     //todo: assuming that when the user clicked the button to go to chatlist a GET to conversations
+     // endpoint was called and populated sharedPreferences
+-    //
++    List<List<String>> conversationsList;
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_chat_list);
+-        String[] conversations = { "Stanley Zhao", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan" };
+ 
++        initConvos();
+ // Get the container where you want to add the buttons (e.g., a LinearLayout)
+-        LinearLayout buttonContainer = findViewById(R.id.messageContainer); // Replace with your container ID
++
+ 
+ // Loop through the array and create buttons
+-        for (String conversation : conversations) {
++
++    }
++
++    private void initConvos() {
++        conversationsList = new ArrayList<>();
++
++// Simulate data from a GET request
++        String[] conversationIds = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
++        String[] conversationNames = {"Stanley Zhao", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan"};
++
++        for (int i = 0; i < conversationIds.length; i++) {
++            List<String> conversationInfo = new ArrayList<>();
++            conversationInfo.add(conversationIds[i]);
++            conversationInfo.add(conversationNames[i]);
++            conversationsList.add(conversationInfo);
++        }
++        initConvoComponents();
++    }
++
++
++    private void initConvoComponents() {
++        LinearLayout buttonContainer = findViewById(R.id.messageContainer); // Replace with your container ID
++        for (List<String> conversation : conversationsList) {
+             Button customButton = (Button) LayoutInflater.from(this)
+                     .inflate(R.layout.big_button, buttonContainer, false);
+ 
+             // Set the text for the button using the conversation name
+-            customButton.setText(conversation);
++            customButton.setText(conversation.get(1));
+ 
+             // Add the button to the container
+             buttonContainer.addView(customButton);
+@@ -44,7 +76,7 @@
+             customButton.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+-                    // Handle button click event here, e.g., open the chat with the selected user
++                    goToNewActivity(conversation.get(1),conversation.get(0));
+ 
+                 }
+             });
+@@ -52,11 +84,10 @@
+     }
+ 
+ 
+-    private void goToNewActivity(){
+-        Intent newIntent = new Intent(ChatListActivity.this,
+-                ChatActivity.class);
+-        SharedPreferences sharedPreferences = updatePreferences();
+-        printSharedPreferences(sharedPreferences);
++    private void goToNewActivity(String convoName, String convoId) {
++        Intent newIntent = new Intent(ChatListActivity.this, ChatActivity.class);
++        newIntent.putExtra("conversationId", convoId);
++        newIntent.putExtra("conversationName", convoName);
+         startActivity(newIntent);
+     }
+ 
+@@ -68,4 +99,49 @@
+         editor.commit();
+         return sharedPreferences;
+     }
++
++    //todo: create a get all conversations function here
++//    private Boolean getConversations() {
++//        JSONObject requestBody = constructSignInRequest();// Create your JSON request body
++//        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/api/auth/login";
++//
++//        SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
++//        SharedPreferences.Editor editor = sharedPreferences.edit();
++//        JSONObject jsonResponse = getDatafrombackend...(apiUrl, requestBody, sharedPreferences.getString("jwtToken",""));
++//
++//        if (jsonResponse != null) {
++//            try {
++//                if (jsonResponse.has("errorDetails")) {
++//                    JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
++//                    if (errorDetails.has("message")) {
++//                        String message = errorDetails.getString("message");
++//                        if ("Username or password is incorrect".equals(message)) {
++//                            // Handle the case where the username already exists
++//                            runOnUiThread(() -> {
++//                                Toast.makeText(getApplicationContext(), "Username or password is incorrect", Toast.LENGTH_SHORT).show();
++//                            });
++//                            return false; // Return false to indicate failure
++//                        }
++//                    }
++//                } else {
++//                    SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
++//                    SharedPreferences.Editor editor = sharedPreferences.edit();
++//                    editor.putString("jwtToken", jsonResponse.getString("jwtToken"));
++//                    editor.putString("userType", jsonResponse.getString("type"));
++//                    editor.commit();
++//                    printSharedPreferences(sharedPreferences);
++//                    return true;
++//                }
++//                Log.d("ConversationsGet", jsonResponse.toString());
++//
++//            } catch (JSONException e) {
++//                e.printStackTrace();
++//                return false;
++//            }
++//        } else {
++//            Log.d("ConversationsGet", "jsonResponse was NULL");
++//            return false;
++//        }
++//        return false;
++//    }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/edumatch/activities/TutorRateActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.edumatch.activities;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.os.Bundle;\r\n\r\nimport com.example.edumatch.R;\r\n\r\npublic class TutorRateActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_rate);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/edumatch/activities/TutorRateActivity.java b/app/src/main/java/com/example/edumatch/activities/TutorRateActivity.java
+--- a/app/src/main/java/com/example/edumatch/activities/TutorRateActivity.java	(revision c3ae16fa9c31b5beff0ed1dec245f02d0591e963)
++++ b/app/src/main/java/com/example/edumatch/activities/TutorRateActivity.java	(date 1698042801233)
+@@ -3,14 +3,128 @@
+ import androidx.appcompat.app.AppCompatActivity;
+ 
+ import android.os.Bundle;
++import android.util.Log;
++import android.view.View;
++import android.widget.Button;
++import android.widget.CheckBox;
++import android.widget.TextView;
+ 
+ import com.example.edumatch.R;
++import com.example.edumatch.views.LabelAndRatingView;
++
++import org.json.JSONException;
++import org.json.JSONObject;
+ 
+ public class TutorRateActivity extends AppCompatActivity {
++    private double proficiencyValue;
++    private double attitudeValue;
++    private double organizationValue;
++    private boolean noShowValue;
++    private boolean lateValue;
++
++    private String receiverId; // todo: Get this value from the previous view
++    private String receiverName; // todo: Get this value from the previous view
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_rate);
++
++        initName();
++        initComponents();
++        initSubmitButton();
+     }
+-}
+\ No newline at end of file
++
++    private void initComponents() {
++        CheckBox noShowCheckBox = findViewById(R.id.no_show);
++        CheckBox lateCheckBox = findViewById(R.id.late);
++
++        noShowCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
++            noShowValue = isChecked;
++        });
++
++        lateCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
++            lateValue = isChecked;
++        });
++
++        LabelAndRatingView proficiencyRatingView = findViewById(R.id.proficiency);
++        proficiencyRatingView.getRatingView().setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
++            proficiencyValue = rating;
++        });
++
++        LabelAndRatingView attitudeRatingView = findViewById(R.id.attitude);
++        attitudeRatingView.getRatingView().setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
++            attitudeValue = rating;
++        });
++
++        LabelAndRatingView organizationRatingView = findViewById(R.id.organization);
++        organizationRatingView.getRatingView().setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
++            organizationValue = rating;
++        });
++    }
++
++    private void initName() {
++        TextView nameTextView = findViewById(R.id.tutor_name);
++        nameTextView.setText(receiverName);
++    }
++
++    private void initSubmitButton() {
++        Button submitButton = findViewById(R.id.submit_button);
++
++        submitButton.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                Boolean success = postReview();
++                goToNewActivity();
++            }
++        });
++    }
++
++    private boolean postReview() {
++        // todo: Implement your post request logic here
++        JSONObject requestBody = constructRatingRequest();
++        //        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/api/rating";
++//        Context context = getApplicationContext(); // Replace with your application's context
++//        SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
++//        JSONObject jsonResponse = postDataToBackend(apiUrl, requestBody, sharedPreferences.getString("jwtToken", ""));
++//
++//        Log.d("RatingPost", "Finished postDataToBackend" + jsonResponse);
++//
++//        if (jsonResponse != null) {
++//            Log.d("RatingPost", jsonResponse.toString());
++//            return true;
++//        } else {
++//            Log.d("RatingPost", "jsonResponse was NULL");
++//            return false;
++//        }
++        // You can post the rating to your server here and handle the response.
++        return true; // For demonstration, return true if the post is successful.
++    }
++
++    private JSONObject constructRatingRequest() {
++        try {
++            JSONObject requestBody = new JSONObject();
++            requestBody.put("receiverId", receiverId);
++            requestBody.put("proficiency", proficiencyValue);
++            requestBody.put("attitude", attitudeValue);
++            requestBody.put("organization", organizationValue);
++            requestBody.put("noShow", noShowValue);
++            requestBody.put("late", lateValue);
++            // Add any other fields you need in the request.
++
++            logRequestToConsole(requestBody, "RatingPost");
++            return requestBody;
++        } catch (JSONException e) {
++            e.printStackTrace();
++            return null;
++        }
++    }
++
++    private void goToNewActivity() {
++        // todo: Navigate to the next activity or go back to the previous view
++    }
++
++    private void logRequestToConsole(JSONObject request, String tag) {
++        Log.d(tag, "Request JSON: " + request.toString());
++    }
++}
+Index: app/src/main/java/com/example/edumatch/views/LabelAndRatingView.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.edumatch.views;\r\n\r\nimport android.content.Context;\r\nimport android.content.res.TypedArray;\r\nimport android.util.AttributeSet;\r\nimport android.view.LayoutInflater;\r\nimport android.widget.EditText;\r\nimport android.widget.GridLayout;\r\nimport android.widget.TextView;\r\n\r\nimport com.example.edumatch.R;\r\n\r\npublic class LabelAndRatingView extends GridLayout {\r\n\r\n    private TextView label;\r\n\r\n    public LabelAndRatingView(Context context) {\r\n        super(context);\r\n        init(context, null);\r\n    }\r\n\r\n    public LabelAndRatingView(Context context, AttributeSet attrs) {\r\n        super(context, attrs);\r\n        init(context, attrs);\r\n    }\r\n\r\n    public LabelAndRatingView(Context context, AttributeSet attrs, int defStyleAttr) {\r\n        super(context, attrs, defStyleAttr);\r\n        init(context, attrs);\r\n    }\r\n\r\n\r\n    private void init(Context context, AttributeSet attrs) {\r\n        LayoutInflater inflater = LayoutInflater.from(context);\r\n        inflater.inflate(R.layout.label_and_rating, this, true);\r\n\r\n        label = findViewById(R.id.label);\r\n\r\n        if (attrs != null) {\r\n            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LabelAndTextView);\r\n\r\n            String labelText = typedArray.getString(R.styleable.LabelAndTextView_label);\r\n\r\n            typedArray.recycle();\r\n\r\n            if (labelText != null) {\r\n                label.setText(labelText);\r\n            }\r\n        }\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/edumatch/views/LabelAndRatingView.java b/app/src/main/java/com/example/edumatch/views/LabelAndRatingView.java
+--- a/app/src/main/java/com/example/edumatch/views/LabelAndRatingView.java	(revision c3ae16fa9c31b5beff0ed1dec245f02d0591e963)
++++ b/app/src/main/java/com/example/edumatch/views/LabelAndRatingView.java	(date 1698039842351)
+@@ -6,6 +6,7 @@
+ import android.view.LayoutInflater;
+ import android.widget.EditText;
+ import android.widget.GridLayout;
++import android.widget.RatingBar;
+ import android.widget.TextView;
+ 
+ import com.example.edumatch.R;
+@@ -29,6 +30,10 @@
+         init(context, attrs);
+     }
+ 
++    public RatingBar getRatingView(){
++        return findViewById(R.id.starRatingBar);
++    }
++
+ 
+     private void init(Context context, AttributeSet attrs) {
+         LayoutInflater inflater = LayoutInflater.from(context);
+Index: app/src/main/java/com/example/edumatch/activities/TuteeRateActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.edumatch.activities;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.os.Bundle;\r\n\r\nimport com.example.edumatch.R;\r\n\r\npublic class TuteeRateActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_tutee_rate);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/edumatch/activities/TuteeRateActivity.java b/app/src/main/java/com/example/edumatch/activities/TuteeRateActivity.java
+--- a/app/src/main/java/com/example/edumatch/activities/TuteeRateActivity.java	(revision c3ae16fa9c31b5beff0ed1dec245f02d0591e963)
++++ b/app/src/main/java/com/example/edumatch/activities/TuteeRateActivity.java	(date 1698041090095)
+@@ -1,16 +1,130 @@
+ package com.example.edumatch.activities;
+ 
++import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
++import static com.example.edumatch.util.NetworkUtils.postDataToBackend;
++
+ import androidx.appcompat.app.AppCompatActivity;
+ 
++import android.content.Context;
++import android.content.Intent;
++import android.content.SharedPreferences;
+ import android.os.Bundle;
++import android.util.Log;
++import android.view.View;
++import android.widget.Button;
++import android.widget.CheckBox;
++import android.widget.RatingBar;
++import android.widget.TextView;
+ 
+ import com.example.edumatch.R;
++import com.example.edumatch.views.LabelAndRatingView;
++
++import org.json.JSONException;
++import org.json.JSONObject;
+ 
+ public class TuteeRateActivity extends AppCompatActivity {
++    private double attitudeValue;
++    private boolean noShowValue;
++    private boolean lateValue;
+ 
++    //todo: I need the receiverId from the previous view
++    //todo I need the receiverName from the previous view
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_tutee_rate);
++
++        initName();
++        initComponents();
++        initSubmitButton();
++    }
++
++    private void initComponents() {
++        CheckBox noShowCheckBox = findViewById(R.id.no_show);
++        CheckBox lateCheckBox = findViewById(R.id.late);
++
++
++        noShowCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
++            noShowValue = isChecked;
++        });
++
++// Set an OnCheckedChangeListener for the Late CheckBox
++        lateCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
++            lateValue = isChecked;
++        });
+     }
++
++    private void initName(){
++        //todo insert name from previous view
++        TextView name = findViewById(R.id.tutee_name);
++        name.setText("NEED THIS INFO FROM PREVIOUS VIEW");
++    }
++
++    private void initSubmitButton() {
++        Button submitButton = findViewById(R.id.submit_button);
++
++        submitButton.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                LabelAndRatingView attitudeTextView = findViewById(R.id.attitude);
++                RatingBar rating = attitudeTextView.getRatingView();
++                attitudeValue = rating.getRating();
++                Boolean success = postReview();
++                goToNewActivity();
++            }
++        });
++    }
++
++    private boolean postReview() {
++        //todo: do post request to https://edumatch.canadacentral.cloudapp.azure.com/api/rating
++        JSONObject requestBody = constructRatingRequest();
++//        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/api/rating";
++//        Context context = getApplicationContext(); // Replace with your application's context
++//        SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
++//        JSONObject jsonResponse = postDataToBackend(apiUrl, requestBody, sharedPreferences.getString("jwtToken", ""));
++//
++//        Log.d("RatingPost", "Finished postDataToBackend" + jsonResponse);
++//
++//        if (jsonResponse != null) {
++//            Log.d("RatingPost", jsonResponse.toString());
++//            return true;
++//        } else {
++//            Log.d("RatingPost", "jsonResponse was NULL");
++//            return false;
++//        }
++        return true;
++    }
++
++    private JSONObject constructRatingRequest() {
++        try {
++            JSONObject requestBody = new JSONObject();
++            requestBody.put("receiverId", "needthis");
++            requestBody.put("attitude", attitudeValue);
++            requestBody.put("noShow", noShowValue);
++            requestBody.put("late", lateValue);
++
++            logRequestToConsole(requestBody, "RatingPost");
++            return requestBody;
++        } catch (JSONException e) {
++            e.printStackTrace();
++            return null;
++        }
++    }
++
++    private void goToNewActivity() {
++        Intent newIntent;
++        // todo go back to previous view
++//        printSharedPreferences(sharedPreferences);
++//        if(sharedPreferences.getBoolean("isEditing",false)){
++//            newIntent = new Intent(CourseRatesActivity.this, EditProfileListActivity.class);
++//        } else {
++//            newIntent = new Intent(CourseRatesActivity.this, LocationInformationActivity.class);
++//        }
++//        startActivity(newIntent);
++    }
++
++    private void logRequestToConsole(JSONObject request, String tag) {
++        Log.d(tag, "Request JSON: " + request.toString());
++    }
++
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_tutee_rate.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.gridlayout.widget.GridLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n\txmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n\tstyle=\"@style/GridLayout\"\r\n\tandroid:layout_gravity=\"center\"\r\n\tandroid:paddingTop=\"40dp\"\r\n\tapp:columnCount=\"1\"\r\n\tapp:rowCount=\"7\">\r\n\r\n\t<TextView\r\n\t\tandroid:layout_marginBottom=\"24dp\"\r\n\t\tandroid:text=\"Rate Your Session With\"\r\n\t\tandroid:textAppearance=\"@style/bigTitle\"\r\n\t\tapp:layout_gravity=\"center_horizontal\" />\r\n\r\n\t<TextView\r\n\t\tandroid:id=\"@+id/tutor_name\"\r\n\t\tandroid:layout_marginBottom=\"24dp\"\r\n\t\tandroid:text=\"Tutee\"\r\n\t\tandroid:textAppearance=\"@style/bigTitle\"\r\n\t\tandroid:textStyle=\"bold\"\r\n\t\tapp:layout_gravity=\"center_horizontal\" />\r\n\r\n\t<com.example.edumatch.views.LabelAndRatingView\r\n\t\tandroid:id=\"@+id/attitude\"\r\n\t\tapp:label=\"Attitude\"\r\n\t\tapp:layout_gravity=\"center\" />\r\n\r\n\r\n\t<androidx.gridlayout.widget.GridLayout\r\n\t\tstyle=\"@style/GridLayout\"\r\n\t\tandroid:layout_width=\"wrap_content\"\r\n\t\tandroid:layout_height=\"wrap_content\"\r\n\t\tandroid:paddingTop=\"0dp\"\r\n\t\tapp:columnCount=\"2\"\r\n\t\tapp:layout_gravity=\"center_horizontal\"\r\n\t\tapp:rowCount=\"1\">\r\n\r\n\t\t<CheckBox\r\n\t\t\tandroid:id=\"@+id/no_show\"\r\n\t\t\tandroid:layout_width=\"wrap_content\"\r\n\t\t\tandroid:layout_height=\"wrap_content\"\r\n\t\t\tandroid:layout_marginRight=\"8dp\"\r\n\t\t\tandroid:text=\"No Show\"\r\n\t\t\tandroid:textAppearance=\"@style/label_text\" />\r\n\r\n\t\t<CheckBox\r\n\t\t\tandroid:id=\"@+id/late\"\r\n\t\t\tandroid:layout_width=\"wrap_content\"\r\n\t\t\tandroid:layout_height=\"wrap_content\"\r\n\t\t\tandroid:layout_marginLeft=\"8dp\"\r\n\t\t\tandroid:text=\"Late\"\r\n\t\t\tandroid:textAppearance=\"@style/label_text\" />\r\n\t</androidx.gridlayout.widget.GridLayout>\r\n\r\n\t<androidx.appcompat.widget.AppCompatButton\r\n\t\tandroid:id=\"@+id/next_button\"\r\n\t\tstyle=\"@style/WhiteButton\"\r\n\t\tandroid:layout_marginTop=\"24dp\"\r\n\t\tandroid:text=\"Submit\"\r\n\t\tapp:layout_gravity=\"center\" />\r\n\r\n</androidx.gridlayout.widget.GridLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_tutee_rate.xml b/app/src/main/res/layout/activity_tutee_rate.xml
+--- a/app/src/main/res/layout/activity_tutee_rate.xml	(revision c3ae16fa9c31b5beff0ed1dec245f02d0591e963)
++++ b/app/src/main/res/layout/activity_tutee_rate.xml	(date 1698041090090)
+@@ -14,7 +14,7 @@
+ 		app:layout_gravity="center_horizontal" />
+ 
+ 	<TextView
+-		android:id="@+id/tutor_name"
++		android:id="@+id/tutee_name"
+ 		android:layout_marginBottom="24dp"
+ 		android:text="Tutee"
+ 		android:textAppearance="@style/bigTitle"
+@@ -54,7 +54,7 @@
+ 	</androidx.gridlayout.widget.GridLayout>
+ 
+ 	<androidx.appcompat.widget.AppCompatButton
+-		android:id="@+id/next_button"
++		android:id="@+id/submit_button"
+ 		style="@style/WhiteButton"
+ 		android:layout_marginTop="24dp"
+ 		android:text="Submit"
+Index: app/src/main/java/com/example/edumatch/activities/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.edumatch.activities;\r\n\r\nimport static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;\r\nimport static com.example.edumatch.util.NetworkUtils.postDataToBackend;\r\n\r\nimport androidx.activity.result.ActivityResult;\r\nimport androidx.activity.result.ActivityResultCallback;\r\nimport androidx.activity.result.ActivityResultLauncher;\r\nimport androidx.activity.result.contract.ActivityResultContracts;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.Toast;\r\n\r\nimport com.example.edumatch.views.GoogleIconButtonView;\r\nimport com.example.edumatch.views.LabelAndEditTextView;\r\nimport com.example.edumatch.R;\r\nimport com.google.android.gms.auth.api.signin.GoogleSignIn;\r\nimport com.google.android.gms.auth.api.signin.GoogleSignInAccount;\r\nimport com.google.android.gms.auth.api.signin.GoogleSignInClient;\r\nimport com.google.android.gms.auth.api.signin.GoogleSignInOptions;\r\nimport com.google.android.gms.common.api.ApiException;\r\nimport com.google.android.gms.common.api.Scope;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.api.services.calendar.CalendarScopes;\r\n\r\nimport org.json.JSONArray;\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.util.HashSet;\r\nimport java.util.Set;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n\r\n    private boolean useGoogle;\r\n    private GoogleSignInAccount account = null;\r\n    private GoogleSignInClient mGoogleSignInClient;\r\n    final static String TAG = \"MainActivity\";\r\n\r\n    private String userInput, passwordInput;\r\n\r\n    private String authCode, idToken;\r\n\r\n    private Boolean newUser;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n\r\n        clearPreferences();\r\n\r\n        initSignInButton();\r\n\r\n        initSignUpButton();\r\n\r\n        initGoogleSignIn();\r\n\r\n    }\r\n\r\n    private void initSignInButton() {\r\n        Button signInButton = findViewById(R.id.signin_button);\r\n\r\n        signInButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                handleSignInClick();\r\n            }\r\n        });\r\n    }\r\n\r\n    private void initSignUpButton() {\r\n        Button signUpButton = findViewById(R.id.signup_button);\r\n\r\n        signUpButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                useGoogle = false;\r\n                goToSignUpActivity();\r\n            }\r\n        });\r\n    }\r\n\r\n    private void initGoogleSignIn() {\r\n        // Google Sign In / Sign Up\r\n        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)\r\n                .requestEmail()\r\n                .requestScopes(new Scope(CalendarScopes.CALENDAR))\r\n                .requestIdToken(getString(R.string.server_client_id))\r\n                .requestServerAuthCode(getString(R.string.server_client_id))\r\n                .build();\r\n        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);\r\n\r\n        GoogleIconButtonView googleSignIn = findViewById(R.id.google);\r\n\r\n        Button googleSignInButton = googleSignIn.getButton();\r\n\r\n        googleSignInButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                googleSignIn();\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    private void googleSignIn() {\r\n        Intent signInIntent = mGoogleSignInClient.getSignInIntent();\r\n        googleSignInActivityResultLauncher.launch(signInIntent);\r\n\r\n    }\r\n\r\n    ActivityResultLauncher<Intent> googleSignInActivityResultLauncher = registerForActivityResult(\r\n            new ActivityResultContracts.StartActivityForResult(),\r\n            new ActivityResultCallback<ActivityResult>() {\r\n                @Override\r\n                public void onActivityResult(ActivityResult result) {\r\n                    Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());\r\n                    handleGoogleSignInResult(task);\r\n                }\r\n            }\r\n    );\r\n\r\n\r\n    private void handleGoogleSignInResult(Task<GoogleSignInAccount> completedTask) {\r\n        try {\r\n            account = completedTask.getResult(ApiException.class);\r\n\r\n            // Todo: Put IdToken and ServerAuthCode into a server request\r\n            // Todo: If IdToken matches a known user in our database, go to homepage. Else, go to sign up flow\r\n            Toast.makeText(MainActivity.this, \"Successful Sign In\" + account.getIdToken(), Toast.LENGTH_LONG).show();\r\n            idToken = account.getIdToken();\r\n            authCode = account.getServerAuthCode();\r\n            Log.d(\"GooglePost\", idToken);\r\n            Log.d(\"GooglePost\", \"authcode is \" + authCode);\r\n            useGoogle = true;\r\n            Boolean success = postGoogleAuth();\r\n            if (success) {\r\n\r\n                if(newUser){\r\n                    goToSignUpActivity();\r\n                } else {\r\n                    // todo: go to homepage\r\n                    Toast.makeText(MainActivity.this, \"Go to Homepage\", Toast.LENGTH_SHORT).show();\r\n                    goToHomePage();\r\n                }\r\n            }\r\n        } catch (ApiException e) {\r\n            // The ApiException status code indicates the detailed failure reason.\r\n            // Please refer to the GoogleSignInStatusCodes class reference for more information.\r\n            Log.w(TAG, \"signInResult:failed code=\" + e.getStatusCode());\r\n        }\r\n    }\r\n\r\n\r\n    private void handleSignInClick() {\r\n        LabelAndEditTextView username = findViewById(R.id.username);\r\n        EditText usernameEditText = username.getEnterUserEditText();\r\n        LabelAndEditTextView password = findViewById(R.id.password);\r\n        EditText passwordEditText = password.getEnterUserEditText();\r\n\r\n        userInput = usernameEditText.getText().toString();\r\n        passwordInput = passwordEditText.getText().toString();\r\n\r\n        // Todo: Put username and password in post request to try to signin\r\n\r\n        Boolean success = postSignIn();\r\n\r\n        if (success) {\r\n            //todo: got to homepage\r\n\r\n            Toast.makeText(MainActivity.this, \"Sign In Worked\", Toast.LENGTH_SHORT).show();\r\n            goToHomePage();\r\n        }\r\n    }\r\n\r\n\r\n    private void clearPreferences() {\r\n        Context context = getApplicationContext(); // Replace with your application's context\r\n        SharedPreferences sharedPreferences = context.getSharedPreferences(\"AccountPreferences\", Context.MODE_PRIVATE);\r\n        SharedPreferences.Editor editor = sharedPreferences.edit();\r\n\r\n        editor.clear(); // Clears all the data in the SharedPreferences file\r\n        editor.apply(); // Apply the changes\r\n    }\r\n\r\n    private SharedPreferences updatePreferences() {\r\n        SharedPreferences sharedPreferences = getSharedPreferences(\"AccountPreferences\", Context.MODE_PRIVATE);\r\n        SharedPreferences.Editor editor = sharedPreferences.edit();\r\n        editor.putBoolean(\"isEditing\", false);\r\n        editor.putBoolean(\"useGoogle\", useGoogle);\r\n        editor.commit();\r\n        return sharedPreferences;\r\n    }\r\n\r\n    private void goToSignUpActivity() {\r\n        Intent newIntent = new Intent(MainActivity.this,\r\n                TutorOrTuteeActivity.class);\r\n        SharedPreferences sharedPreferences = updatePreferences();\r\n        printSharedPreferences(sharedPreferences);\r\n        startActivity(newIntent);\r\n    }\r\n\r\n    private void goToHomePage(){\r\n        // todo: need to check if they are tutor or tutee\r\n        Intent newIntent = new Intent(MainActivity.this,\r\n                TuteeHomeActivity.class);\r\n        startActivity(newIntent);\r\n    }\r\n\r\n\r\n    private Boolean postSignIn() {\r\n        JSONObject requestBody = constructSignInRequest();// Create your JSON request body\r\n        String apiUrl = \"https://edumatch.canadacentral.cloudapp.azure.com/api/auth/login\";\r\n\r\n        JSONObject jsonResponse = postDataToBackend(apiUrl, requestBody, \"\");\r\n\r\n        if (jsonResponse != null) {\r\n            try {\r\n                if (jsonResponse.has(\"errorDetails\")) {\r\n                    JSONObject errorDetails = new JSONObject(jsonResponse.getString(\"errorDetails\"));\r\n                    if (errorDetails.has(\"message\")) {\r\n                        String message = errorDetails.getString(\"message\");\r\n                        if (\"Username or password is incorrect\".equals(message)) {\r\n                            // Handle the case where the username already exists\r\n                            runOnUiThread(() -> {\r\n                                Toast.makeText(getApplicationContext(), \"Username or password is incorrect\", Toast.LENGTH_SHORT).show();\r\n                            });\r\n                            return false; // Return false to indicate failure\r\n                        }\r\n                    }\r\n                } else {\r\n                    SharedPreferences sharedPreferences = getSharedPreferences(\"AccountPreferences\", Context.MODE_PRIVATE);\r\n                    SharedPreferences.Editor editor = sharedPreferences.edit();\r\n                    editor.putString(\"jwtToken\", jsonResponse.getString(\"jwtToken\"));\r\n                    editor.putString(\"userType\", jsonResponse.getString(\"type\"));\r\n                    editor.commit();\r\n                    printSharedPreferences(sharedPreferences);\r\n                    return true;\r\n                }\r\n                Log.d(\"SignInPost\", jsonResponse.toString());\r\n\r\n            } catch (JSONException e) {\r\n                e.printStackTrace();\r\n                return false;\r\n            }\r\n        } else {\r\n            Log.d(\"SignInPost\", \"jsonResponse was NULL\");\r\n            return false;\r\n        }\r\n        return false;\r\n    }\r\n\r\n\r\n    private Boolean postGoogleAuth() {\r\n        JSONObject requestBody = constructGoogleRequest();// Create your JSON request body\r\n        String apiUrl = \"https://edumatch.canadacentral.cloudapp.azure.com/api/auth/google\";\r\n\r\n        JSONObject jsonResponse = postDataToBackend(apiUrl, requestBody, \"\");\r\n\r\n        Log.d(\"GooglePost\", \"Finished postDataToBackend\" + jsonResponse);\r\n\r\n        if (jsonResponse != null) {\r\n            try {\r\n                SharedPreferences sharedPreferences = getSharedPreferences(\"AccountPreferences\", Context.MODE_PRIVATE);\r\n                SharedPreferences.Editor editor = sharedPreferences.edit();\r\n                editor.putString(\"jwtToken\", jsonResponse.getString(\"jwtToken\"));\r\n                newUser = jsonResponse.getBoolean(\"newUser\");\r\n\r\n                editor.commit();\r\n                printSharedPreferences(sharedPreferences);\r\n                Log.d(\"GooglePost\", jsonResponse.toString());\r\n                return true;\r\n            } catch (JSONException e) {\r\n                e.printStackTrace();\r\n                return false;\r\n            }\r\n        } else {\r\n            Log.d(\"GooglePost\", \"jsonResponse was NULL\");\r\n            return false;\r\n        }\r\n    }\r\n\r\n\r\n    private JSONObject constructSignInRequest() {\r\n        try {\r\n            JSONObject requestBody = new JSONObject();\r\n            requestBody.put(\"password\", passwordInput);\r\n            requestBody.put(\"username\", userInput);\r\n\r\n            logRequestToConsole(requestBody, \"GooglePost\");\r\n            return requestBody;\r\n        } catch (JSONException e) {\r\n            e.printStackTrace();\r\n            return null;\r\n        }\r\n    }\r\n\r\n    private JSONObject constructGoogleRequest() {\r\n        try {\r\n            JSONObject requestBody = new JSONObject();\r\n            requestBody.put(\"idToken\", idToken);\r\n            requestBody.put(\"authCode\", authCode);\r\n\r\n            logRequestToConsole(requestBody, \"SignInPost\");\r\n            return requestBody;\r\n        } catch (JSONException e) {\r\n            e.printStackTrace();\r\n            return null;\r\n        }\r\n    }\r\n\r\n    private void logRequestToConsole(JSONObject request, String tag) {\r\n        Log.d(tag, \"Request JSON: \" + request.toString());\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/edumatch/activities/MainActivity.java b/app/src/main/java/com/example/edumatch/activities/MainActivity.java
+--- a/app/src/main/java/com/example/edumatch/activities/MainActivity.java	(revision c3ae16fa9c31b5beff0ed1dec245f02d0591e963)
++++ b/app/src/main/java/com/example/edumatch/activities/MainActivity.java	(date 1698041090087)
+@@ -133,10 +133,6 @@
+     private void handleGoogleSignInResult(Task<GoogleSignInAccount> completedTask) {
+         try {
+             account = completedTask.getResult(ApiException.class);
+-
+-            // Todo: Put IdToken and ServerAuthCode into a server request
+-            // Todo: If IdToken matches a known user in our database, go to homepage. Else, go to sign up flow
+-            Toast.makeText(MainActivity.this, "Successful Sign In" + account.getIdToken(), Toast.LENGTH_LONG).show();
+             idToken = account.getIdToken();
+             authCode = account.getServerAuthCode();
+             Log.d("GooglePost", idToken);
+@@ -148,8 +144,7 @@
+                 if(newUser){
+                     goToSignUpActivity();
+                 } else {
+-                    // todo: go to homepage
+-                    Toast.makeText(MainActivity.this, "Go to Homepage", Toast.LENGTH_SHORT).show();
++//                    Toast.makeText(MainActivity.this, "Go to Homepage", Toast.LENGTH_SHORT).show();
+                     goToHomePage();
+                 }
+             }
+@@ -170,8 +165,6 @@
+         userInput = usernameEditText.getText().toString();
+         passwordInput = passwordEditText.getText().toString();
+ 
+-        // Todo: Put username and password in post request to try to signin
+-
+         Boolean success = postSignIn();
+ 
+         if (success) {
+@@ -211,8 +204,9 @@
+ 
+     private void goToHomePage(){
+         // todo: need to check if they are tutor or tutee
++        // todo: go to right view
+         Intent newIntent = new Intent(MainActivity.this,
+-                TuteeHomeActivity.class);
++                TuteeRateActivity.class);
+         startActivity(newIntent);
+     }
+ 
+Index: app/src/main/java/com/example/edumatch/activities/ChatActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.edumatch.activities;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport android.os.Bundle;\r\nimport android.view.KeyEvent;\r\nimport android.view.View;\r\nimport android.view.inputmethod.EditorInfo;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.LinearLayout;\r\nimport android.widget.ScrollView;\r\nimport android.widget.TextView;\r\n\r\nimport com.example.edumatch.R;\r\nimport com.example.edumatch.views.CustomChatInputView;\r\nimport com.example.edumatch.views.MessageChipView;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\nimport java.util.List;\r\n\r\npublic class ChatActivity extends AppCompatActivity {\r\n\r\n    private List<List<String>> messages = new ArrayList<>();\r\n    private LinearLayout messageContainer;\r\n    private EditText messageEditText;\r\n    private Button sendMessageButton;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_chat_view);\r\n\r\n        // Initialize your views\r\n        messageContainer = findViewById(R.id.messageContainer);\r\n        CustomChatInputView inputText = findViewById(R.id.customChatInput);\r\n        inputText.bringToFront();\r\n        messageEditText = inputText.getEditText(); // Replace with your EditText's ID\r\n        sendMessageButton = inputText.getSendButton(); // Replace with your Button's ID\r\n\r\n        // Add existing messages\r\n        messages.add(Arrays.asList(\"receiver\", \"Hey, how's it going? How was your test.\"));\r\n        messages.add(Arrays.asList(\"sender\", \"Good morning! How are you today?\"));\r\n        messages.add(Arrays.asList(\"receiver\", \"I'm doing well, thank you. How about you?\"));\r\n        messages.add(Arrays.asList(\"sender\", \"I'm great! The weather is fantastic.\"));\r\n        messages.add(Arrays.asList(\"receiver\", \"That's awesome. I wish I could be outside right now.\"));\r\n        messages.add(Arrays.asList(\"sender\", \"Yes, it's a perfect day for a picnic.\"));\r\n        messages.add(Arrays.asList(\"sender\", \"I'm planning to go to the park this afternoon.\"));\r\n        messages.add(Arrays.asList(\"receiver\", \"Sounds lovely! Don't forget to take some photos.\"));\r\n        // Add more existing messages here...\r\n\r\n        // Initialize messages\r\n        initMessages();\r\n\r\n        // Set a click listener for the send button\r\n        sendMessageButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                sendMessage();\r\n            }\r\n        });\r\n\r\n        // Set an EditorActionListener for the EditText\r\n        messageEditText.setOnKeyListener(new View.OnKeyListener() {\r\n            @Override\r\n            public boolean onKey(View v, int keyCode, KeyEvent event) {\r\n                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {\r\n                    sendMessage();\r\n                    return true;\r\n                }\r\n                return false;\r\n            }\r\n        });\r\n    }\r\n\r\n    private void initMessages() {\r\n        for (List<String> message : messages) {\r\n            String sender = message.get(0);\r\n            String text = message.get(1);\r\n            boolean isReceiver = \"receiver\".equals(sender);\r\n\r\n            MessageChipView messageChipView = new MessageChipView(this, null);\r\n            messageChipView.setChipText(text);\r\n            messageChipView.setIsReceiver(isReceiver);\r\n\r\n            messageContainer.addView(messageChipView);\r\n        }\r\n    }\r\n\r\n    private void sendMessage() {\r\n        String messageText = messageEditText.getText().toString().trim();\r\n        if (!messageText.isEmpty()) {\r\n            // Create a new message with isReceiver set to false\r\n            MessageChipView messageChipView = new MessageChipView(this, null);\r\n            messageChipView.setChipText(messageText);\r\n            messageChipView.setIsReceiver(false);\r\n\r\n            // Add the new message to the message container\r\n            messageContainer.addView(messageChipView);\r\n\r\n\r\n            // Clear the EditText\r\n            messageEditText.getText().clear();\r\n\r\n            ScrollView sv = (ScrollView) findViewById(R.id.scrollView);\r\n            sv.scrollTo(0, sv.getBottom());\r\n        }\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/edumatch/activities/ChatActivity.java b/app/src/main/java/com/example/edumatch/activities/ChatActivity.java
+--- a/app/src/main/java/com/example/edumatch/activities/ChatActivity.java	(revision c3ae16fa9c31b5beff0ed1dec245f02d0591e963)
++++ b/app/src/main/java/com/example/edumatch/activities/ChatActivity.java	(date 1698038720991)
+@@ -10,6 +10,7 @@
+ import android.widget.LinearLayout;
+ import android.widget.ScrollView;
+ import android.widget.TextView;
++import android.widget.Toast;
+ 
+ import com.example.edumatch.R;
+ import com.example.edumatch.views.CustomChatInputView;
+@@ -31,6 +32,11 @@
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_chat_view);
+ 
++        String conversationId = getIntent().getStringExtra("conversationId");
++        String conversationName = getIntent().getStringExtra("conversationName");
++
++        Toast.makeText(this, "Conversation ID: " + conversationId, Toast.LENGTH_SHORT).show();
++        Toast.makeText(this, "Conversation Name: " + conversationName, Toast.LENGTH_SHORT).show();
+         // Initialize your views
+         messageContainer = findViewById(R.id.messageContainer);
+         CustomChatInputView inputText = findViewById(R.id.customChatInput);
+@@ -38,7 +44,6 @@
+         messageEditText = inputText.getEditText(); // Replace with your EditText's ID
+         sendMessageButton = inputText.getSendButton(); // Replace with your Button's ID
+ 
+-        // Add existing messages
+         messages.add(Arrays.asList("receiver", "Hey, how's it going? How was your test."));
+         messages.add(Arrays.asList("sender", "Good morning! How are you today?"));
+         messages.add(Arrays.asList("receiver", "I'm doing well, thank you. How about you?"));
+@@ -52,7 +57,6 @@
+         // Initialize messages
+         initMessages();
+ 
+-        // Set a click listener for the send button
+         sendMessageButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+@@ -60,7 +64,6 @@
+             }
+         });
+ 
+-        // Set an EditorActionListener for the EditText
+         messageEditText.setOnKeyListener(new View.OnKeyListener() {
+             @Override
+             public boolean onKey(View v, int keyCode, KeyEvent event) {
+@@ -73,6 +76,11 @@
+         });
+     }
+ 
++    // Todo: need to make a get request to get the messages request: conversationId
++//    private void getMessages(){
++//
++//    }
++
+     private void initMessages() {
+         for (List<String> message : messages) {
+             String sender = message.get(0);
+@@ -88,6 +96,7 @@
+     }
+ 
+     private void sendMessage() {
++        //todo: need to send message to socket somehow too
+         String messageText = messageEditText.getText().toString().trim();
+         if (!messageText.isEmpty()) {
+             // Create a new message with isReceiver set to false
+Index: app/src/main/res/layout/activity_chat_list.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?><!--<LinearLayout-->\r\n\r\n<ScrollView xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n\txmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n\tandroid:id=\"@+id/scrollView\"\r\n\tandroid:layout_width=\"match_parent\"\r\n\tandroid:layout_height=\"match_parent\"\r\n\tandroid:layout_weight=\"1\"\r\n\tandroid:fillViewport=\"true\"\r\n\tandroid:nestedScrollingEnabled=\"false\"\r\n\tandroid:paddingTop=\"30dp\"\r\n\tandroid:paddingBottom=\"30dp\">\r\n\r\n\t<LinearLayout\r\n\t\tandroid:id=\"@+id/messageContainer\"\r\n\t\tandroid:layout_width=\"match_parent\"\r\n\t\tandroid:layout_height=\"wrap_content\"\r\n\t\tandroid:layout_gravity=\"center_horizontal\"\r\n\t\tandroid:orientation=\"vertical\">\r\n\r\n\t\t<androidx.appcompat.widget.AppCompatButton\r\n\t\t\tandroid:layout_height=\"60dp\"\r\n\t\t\tandroid:layout_width=\"wrap_content\"\r\n\t\t\tandroid:id=\"@+id/signup_button\"\r\n\t\t\tandroid:layout_gravity=\"center_horizontal\"\r\n\t\t\tandroid:background=\"@drawable/big_button_container\"\r\n\t\t\tandroid:text=\"Stanley Zhao\"\r\n\t\t\tandroid:textStyle=\"bold\"\r\n\t\t\tandroid:textAppearance=\"@style/black_button_text\"\r\n\t\t\tandroid:gravity=\"start\"\r\n\t\t\tandroid:paddingTop=\"17dp\"\r\n\t\t\tandroid:paddingLeft=\"36dp\"\r\n\t\t\tandroid:layout_marginBottom=\"12dp\"/>\r\n\t\t<androidx.appcompat.widget.AppCompatButton\r\n\t\t\tandroid:layout_height=\"60dp\"\r\n\t\t\tandroid:layout_width=\"wrap_content\"\r\n\t\t\tandroid:id=\"@+id/signup_button2\"\r\n\t\t\tandroid:layout_gravity=\"center_horizontal\"\r\n\t\t\tandroid:background=\"@drawable/big_button_container\"\r\n\t\t\tandroid:text=\"Arya Phan\"\r\n\t\t\tandroid:textStyle=\"bold\"\r\n\t\t\tandroid:textAppearance=\"@style/black_button_text\"\r\n\t\t\tandroid:gravity=\"start\"\r\n\t\t\tandroid:paddingTop=\"17dp\"\r\n\t\t\tandroid:paddingLeft=\"36dp\"\r\n\t\t\tandroid:layout_marginBottom=\"12dp\"/>\r\n\t</LinearLayout>\r\n</ScrollView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_chat_list.xml b/app/src/main/res/layout/activity_chat_list.xml
+--- a/app/src/main/res/layout/activity_chat_list.xml	(revision c3ae16fa9c31b5beff0ed1dec245f02d0591e963)
++++ b/app/src/main/res/layout/activity_chat_list.xml	(date 1698038410814)
+@@ -17,32 +17,5 @@
+ 		android:layout_height="wrap_content"
+ 		android:layout_gravity="center_horizontal"
+ 		android:orientation="vertical">
+-
+-		<androidx.appcompat.widget.AppCompatButton
+-			android:layout_height="60dp"
+-			android:layout_width="wrap_content"
+-			android:id="@+id/signup_button"
+-			android:layout_gravity="center_horizontal"
+-			android:background="@drawable/big_button_container"
+-			android:text="Stanley Zhao"
+-			android:textStyle="bold"
+-			android:textAppearance="@style/black_button_text"
+-			android:gravity="start"
+-			android:paddingTop="17dp"
+-			android:paddingLeft="36dp"
+-			android:layout_marginBottom="12dp"/>
+-		<androidx.appcompat.widget.AppCompatButton
+-			android:layout_height="60dp"
+-			android:layout_width="wrap_content"
+-			android:id="@+id/signup_button2"
+-			android:layout_gravity="center_horizontal"
+-			android:background="@drawable/big_button_container"
+-			android:text="Arya Phan"
+-			android:textStyle="bold"
+-			android:textAppearance="@style/black_button_text"
+-			android:gravity="start"
+-			android:paddingTop="17dp"
+-			android:paddingLeft="36dp"
+-			android:layout_marginBottom="12dp"/>
+ 	</LinearLayout>
+ </ScrollView>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_chat_view.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?><!--<LinearLayout-->\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n\txmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n\tandroid:layout_width=\"match_parent\"\r\n\tandroid:layout_height=\"match_parent\"\r\n\tandroid:orientation=\"vertical\"\r\n\t>\r\n\t<ScrollView\r\n\t\tandroid:id=\"@+id/scrollView\"\r\n\t\tandroid:layout_width=\"match_parent\"\r\n\t\tandroid:layout_height=\"wrap_content\"\r\n\t\tandroid:layout_weight=\"1\"\r\n\t\tandroid:fillViewport=\"true\"\r\n\t\tandroid:nestedScrollingEnabled=\"false\"\r\n\t\tandroid:paddingBottom=\"60dp\">\r\n\r\n\t\t<LinearLayout\r\n\t\t\tandroid:id=\"@+id/messageContainer\"\r\n\t\t\tandroid:layout_width=\"match_parent\"\r\n\t\t\tandroid:layout_height=\"wrap_content\"\r\n\r\n\t\t\tandroid:orientation=\"vertical\">\r\n\r\n\t\t\t<com.example.edumatch.views.MessageChipView\r\n\t\t\t\tandroid:layout_width=\"wrap_content\"\r\n\t\t\t\tandroid:layout_height=\"wrap_content\"\r\n\t\t\t\tapp:messageText=\"blah blah blah\"/>\r\n\t\t\t<com.example.edumatch.views.MessageChipView\r\n\t\t\t\tandroid:layout_width=\"wrap_content\"\r\n\t\t\t\tandroid:layout_height=\"wrap_content\"\r\n\t\t\t\tapp:messageText=\"blah blah blah\" />\r\n\t\t</LinearLayout>\r\n\t</ScrollView>\r\n\r\n\t<com.example.edumatch.views.CustomChatInputView\r\n\t\tandroid:id=\"@+id/customChatInput\"\r\n\t\tandroid:layout_width=\"match_parent\"\r\n\t\tandroid:layout_height=\"wrap_content\"\r\n\t\tandroid:layout_gravity=\"bottom\"\r\n\t\tandroid:layout_marginTop=\"-60dp\"\r\n\t\tapp:layout_behavior=\"com.google.android.material.bottomsheet.BottomSheetBehavior\" />\r\n\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_chat_view.xml b/app/src/main/res/layout/activity_chat_view.xml
+--- a/app/src/main/res/layout/activity_chat_view.xml	(revision c3ae16fa9c31b5beff0ed1dec245f02d0591e963)
++++ b/app/src/main/res/layout/activity_chat_view.xml	(date 1698038410818)
+@@ -18,17 +18,7 @@
+ 			android:id="@+id/messageContainer"
+ 			android:layout_width="match_parent"
+ 			android:layout_height="wrap_content"
+-
+ 			android:orientation="vertical">
+-
+-			<com.example.edumatch.views.MessageChipView
+-				android:layout_width="wrap_content"
+-				android:layout_height="wrap_content"
+-				app:messageText="blah blah blah"/>
+-			<com.example.edumatch.views.MessageChipView
+-				android:layout_width="wrap_content"
+-				android:layout_height="wrap_content"
+-				app:messageText="blah blah blah" />
+ 		</LinearLayout>
+ 	</ScrollView>
+ 

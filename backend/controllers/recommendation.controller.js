@@ -5,131 +5,79 @@ const haversine = require('haversine')
 const User = db.user
 
 exports.checkedProfile = async (req, res) => {
-    const tutor = await User.find({ username: req.body.tutorUsername }).exec()
-    const tutee = await User.findById(req.userId).exec()
+    const tutor = await User.findById(req.body.tutorId)
+    const tutee = await User.findById(req.userId)
     const distance = haversine(tutor.location, tutee.location)
 
-    var adjustedWeights = tutee.recommendationWeights
-
-    if (tutor.rating < adjustedWeights.minRating)
-        adjustedWeights.minRating -= (adjustedWeights.minRating - tutor.rating) * 0.15
-    else
-        adjustedWeights.minRating -= (adjustedWeights.minRating - tutor.rating) * 0.05
-
-    if (tutor.locationMode != tutee.locationMode)
-        adjustedWeights.locationModeWeight -= 0.01
-    else
-        adjustedWeights.locationModeWeight += 0.005
+    tutee.recommendationWeights.minRating -= (tutee.recommendationWeights.minRating - tutor.rating) * (tutor.rating < tutee.recommendationWeights.minRating ? 0.15 : 0.05)
+    tutee.recommendationWeights.locationModeWeight -= (tutor.locationMode != tutee.locationMode ? 0.01 : -0.005)
 
     if (tutee.locationMode == LocationMode.IN_PERSON)
-        if (distance > adjustedWeights.maxDistance)
-            adjustedWeights.maxDistance += (distance - adjustedWeights.maxDistance) * 0.15
-        else
-            adjustedWeights.maxDistance += (distance - adjustedWeights.maxDistance) * 0.02
+        tutee.recommendationWeights.maxDistance += (distance - tutee.recommendationWeights.maxDistance) * (distance > tutee.recommendationWeights.maxDistance ? 0.15 : 0.02)
 
-    User.findByIdAndUpdate(req.userId, {recommendationWeights: adjustedWeights}).exec()
+    tutee.save()
     res.status(200).send({ message: "Adjusted weights based on checked profile"})
 }
 
 exports.contactedTutor = async (req, res) => {
-    const tutor = await User.find({ username: req.body.tutorUsername }).exec()
-    const tutee = await User.findById(req.userId).exec()
+    const tutor = await User.findById(req.body.tutorId)
+    const tutee = await User.findById(req.userId)
     const distance = haversine(tutor.location, tutee.location)
-
-    var adjustedWeights = tutee.recommendationWeights
 
     if (tutor.subjectHourlyRate.length != 0) {
         const averageHourlyRate = tutor.subjectHourlyRate.reduce((acc, subject) => acc + subject.hourlyRate) / tutor.subjectHourlyRate.length
-        if (averageHourlyRate > adjustedWeights.budget)
-            adjustedWeights.budget += (averageHourlyRate - adjustedWeights.budget) * 0.15
-        else
-            adjustedWeights.budget += (averageHourlyRate - adjustedWeights.budget) * 0.05
+        tutee.recommendationWeights.budget += (averageHourlyRate - tutee.recommendationWeights.budget) * (averageHourlyRate > tutee.recommendationWeights.budget ? 0.15 : 0.05)
     }
-    if (tutor.rating < adjustedWeights.minRating)
-        adjustedWeights.minRating -= (adjustedWeights.minRating - tutor.rating) * 0.3
-    else
-        adjustedWeights.minRating -= (adjustedWeights.minRating - tutor.rating) * 0.05
 
-    if (tutor.locationMode != tutee.locationMode)
-        adjustedWeights.locationModeWeight -= 0.05
-    else
-        adjustedWeights.locationModeWeight += 0.01
+    tutee.recommendationWeights.minRating -= (tutee.recommendationWeights.minRating - tutor.rating) * (tutor.rating < tutee.recommendationWeights.minRating ? 0.3 : 0.05)
+    tutee.recommendationWeights.locationModeWeight -= (tutor.locationMode != tutee.locationMode ? 0.05 : -0.01)
 
     if (tutee.locationMode == LocationMode.IN_PERSON)
-        if (distance > adjustedWeights.maxDistance)
-            adjustedWeights.maxDistance += (distance - adjustedWeights.maxDistance) * 0.2
-        else
-            adjustedWeights.maxDistance += (distance - adjustedWeights.maxDistance) * 0.02
+        tutee.recommendationWeights.maxDistance += (distance - tutee.recommendationWeights.maxDistance) * (distance > tutee.recommendationWeights.maxDistance ? 0.2 : 0.02)
 
-    User.findByIdAndUpdate(req.userId, {recommendationWeights: adjustedWeights}).exec()
+    tutee.save()
     res.status(200).send({ message: "Adjusted weights based on contacted tutor"})
 }
 
 exports.scheduledAppointment = async (req, res) => {
-    const tutor = await User.find({ username: req.body.tutorUsername }).exec()
-    const tutee = await User.findById(req.userId).exec()
+    const tutor = await User.findById(req.body.tutorId)
+    const tutee = await User.findById(req.userId)
     const distance = haversine(tutor.location, tutee.location)
     const scheduledSubjectHourlyRate = tutor.subjectHourlyRate.find(subject => subject.course == req.body.scheduledSubject)
     if (!scheduledSubjectHourlyRate)
         res.status(500).send({ message: "Unable to find hourly rate associated with subject" })
 
-    var adjustedWeights = tutee.recommendationWeights
+    tutee.recommendationWeights.budget += (scheduledSubjectHourlyRate - tutee.recommendationWeights.budget) * (scheduledSubjectHourlyRate > tutee.recommendationWeights.budget ? 0.5 : 0.1)
 
-    if (scheduledSubjectHourlyRate > adjustedWeights.budget)
-        adjustedWeights.budget += (averageHourlyRate - adjustedWeights.budget) * 0.5
-    else
-        adjustedWeights.budget += (averageHourlyRate - adjustedWeights.budget) * 0.1
-    if (tutor.rating < adjustedWeights.minRating)
-        adjustedWeights.minRating -= (adjustedWeights.minRating - tutor.rating) * 0.5
-    else
-        adjustedWeights.minRating -= (adjustedWeights.minRating - tutor.rating) * 0.1
-
-    if (tutor.locationMode != tutee.locationMode)
-        adjustedWeights.locationModeWeight -= 0.1
-    else
-        adjustedWeights.locationModeWeight += 0.02
+    tutee.recommendationWeights.minRating -= (tutee.recommendationWeights.minRating - tutor.rating) * (tutor.rating < tutee.recommendationWeights.minRating ? 0.5 : 0.1)
+    tutee.recommendationWeights.locationModeWeight -= (tutor.locationMode != tutee.locationMode ? 0.1 : -0.02)
 
     if (tutee.locationMode == LocationMode.IN_PERSON)
-        if (distance > adjustedWeights.maxDistance)
-            adjustedWeights.maxDistance += (distance - adjustedWeights.maxDistance) * 0.4
-        else
-            adjustedWeights.maxDistance += (distance - adjustedWeights.maxDistance) * 0.1
+        tutee.recommendationWeights.maxDistance += (distance - tutee.recommendationWeights.maxDistance) * (distance > tutee.recommendationWeights.maxDistance ? 0.4 : 0.1)
 
-    User.findByIdAndUpdate(req.userId, {recommendationWeights: adjustedWeights}).exec()
+    tutee.previousSubjects.push(req.body.scheduledSubject)
+
+    tutee.save()
     res.status(200).send({ message: "Adjusted weights based on scheduled appointment"})
 }
 
 exports.reviewedTutor = async (req, res) => {
-    const tutor = await User.find({ username: req.body.tutorUsername }).exec()
-    const tutee = await User.findById(req.userId).exec()
+    const tutor = await User.findById(req.body.tutorId)
+    const tutee = await User.findById(req.userId)
     const distance = haversine(tutor.location, tutee.location)
     const reviewFactor = req.body.review * 0.1
 
-    var adjustedWeights = tutee.recommendationWeights
-
     if (tutor.subjectHourlyRate.length != 0) {
         const averageHourlyRate = tutor.subjectHourlyRate.reduce((acc, subject) => acc + subject.hourlyRate) / tutor.subjectHourlyRate.length
-        if (averageHourlyRate > adjustedWeights.budget)
-            adjustedWeights.budget += (averageHourlyRate - adjustedWeights.budget) * 0.15 * reviewFactor
-        else
-            adjustedWeights.budget += (averageHourlyRate - adjustedWeights.budget) * 0.05 * reviewFactor
+        tutee.recommendationWeights.budget += (averageHourlyRate - tutee.recommendationWeights.budget) * (averageHourlyRate > tutee.recommendationWeights.budget ? 0.15 : 0.05) * reviewFactor
     }
-    if (tutor.rating < adjustedWeights.minRating)
-        adjustedWeights.minRating -= (adjustedWeights.minRating - tutor.rating) * 0.3 * reviewFactor
-    else
-        adjustedWeights.minRating -= (adjustedWeights.minRating - tutor.rating) * 0.05 * reviewFactor
 
-    if (tutor.locationMode != tutee.locationMode)
-        adjustedWeights.locationModeWeight -= 0.05 * reviewFactor
-    else
-        adjustedWeights.locationModeWeight += 0.01 * reviewFactor
+    tutee.recommendationWeights.minRating -= (tutee.recommendationWeights.minRating - tutor.rating) * (tutor.rating < tutee.recommendationWeights.minRating ? 0.3 : 0.05) * reviewFactor
+    tutee.recommendationWeights.locationModeWeight -= (tutor.locationMode != tutee.locationMode ? 0.05 : -0.01) * reviewFactor
 
     if (tutee.locationMode == LocationMode.IN_PERSON)
-        if (distance > adjustedWeights.maxDistance)
-            adjustedWeights.maxDistance += (distance - adjustedWeights.maxDistance) * 0.2 * reviewFactor
-        else
-            adjustedWeights.maxDistance += (distance - adjustedWeights.maxDistance) * 0.02 * reviewFactor
+        tutee.recommendationWeights.maxDistance += (distance - tutee.recommendationWeights.maxDistance) * (distance > tutee.recommendationWeights.maxDistance ? 0.2 : 0.02) * reviewFactor
 
-    User.findByIdAndUpdate(req.userId, {recommendationWeights: adjustedWeights}).exec()
+    tutee.save()
     res.status(200).send({ message: "Adjusted weights based on reviewed tutor"})
 }

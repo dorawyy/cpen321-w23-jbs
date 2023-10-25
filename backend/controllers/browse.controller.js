@@ -9,7 +9,7 @@ exports.recommended = async (req, res) => {
     const tutee = await User.findById(req.userId)
     if (!tutee)
         res.status(400).send({ message: "Could not find tutee in database with provided id"})
-    
+
     if (req.query.page < 1)
         res.status(400).send({ message: "Page number cannot be less than 1" })
 
@@ -32,7 +32,8 @@ exports.recommended = async (req, res) => {
             location: tutor.location,
             school: tutor.education.school,
             courses: tutor.education.courses,
-            tags: tutor.education.tags
+            tags: tutor.education.tags,
+            pricing: tutor.subjectHourlyRate.filter(subject => req.query.courses.includes(subject.course))
         })))
     } else {
         // generic browse

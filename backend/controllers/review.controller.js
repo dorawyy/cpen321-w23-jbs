@@ -1,5 +1,4 @@
 const db = require("../db")
-const mongoose = require("mongoose")
 const User = db.user
 
 exports.addReview = async (req, res) => {

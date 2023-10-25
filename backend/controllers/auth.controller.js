@@ -4,7 +4,6 @@ const UserType = require("../constants/user.types")
 const db = require("../db")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
-const mongoose = require("mongoose")
 
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;

@@ -1,7 +1,7 @@
 const { UserType } = require("../constants/user.types")
 const db = require("../db")
 const jwt = require("jsonwebtoken")
-const ratingController = require("./rating.controller")
+const ratingController = require("./review.controller")
 
 const User = db.user
 const EXCLUDED_FIELDS = [

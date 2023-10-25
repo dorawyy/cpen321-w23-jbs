@@ -6,5 +6,16 @@ const User = db.user
 
 module.exports = function (app) {
     app.get("/user/publicProfile", profileController.getPublicProfile)
-    app.get("/user/profile", authJwt.verifyJwt, profileController.getPrivateProfile)
+
+    app.get(
+        "/user/profile", 
+        authJwt.verifyJwt, 
+        profileController.getPrivateProfile
+    )
+
+    app.put(
+        "/user/editProfile", 
+        authJwt.verifyJwt, 
+        profileController.editProfile
+    )
 };

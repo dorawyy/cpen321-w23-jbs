@@ -66,7 +66,7 @@ exports.getPrivateProfile = (req, res) => {
 exports.editProfile = (req, res) => {
     var userId = req.userId
     var data = {...req.body}
-    User.findByIdAndUpdate(userId, {...data})
+    User.findByIdAndUpdate(userId, {...data}, {new: true})
         .select(EXCLUDED_FIELDS)
         .then(updatedUser => {
             if (!updatedUser || updatedUser.isBanned) {

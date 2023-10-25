@@ -4,6 +4,7 @@ const UserType = require("../constants/user.types")
 const db = require("../db")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
+const mongoose = require("mongoose")
 
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
@@ -62,6 +63,9 @@ exports.signup = async (req, res) => {
                 res.status(200).send({
                     jwtToken: token
                 })
+            }).catch(err => {
+                console.log(err)
+                res.status(500).send({ message: err.message })
             })
         });
     }

@@ -1,5 +1,5 @@
 const db = require("../db")
-
+const mongoose = require("mongoose")
 const User = db.user
 
 exports.addReview = async (req, res) => {
@@ -40,6 +40,23 @@ exports.addReview = async (req, res) => {
             console.log(err)
             res.status(500).send({ message: err.message })
         })
+}
+
+exports.getUserReviews = (req, res) => {
+    var userId = req.query.userId
+    if (!userId) {
+        res.status(400).send({ message: "Must specify userId" })
+    }
+    User.findById(userId, "userReviews").then(user => {
+        if (!user) {
+            res.status(404).send({ message: "User not found" })
+            return
+        }
+        res.status(200).send(user)
+    }).catch(err => {
+        console.log(err.message)
+        res.status(500).send({ message: err.message })
+    })
 }
 
 exports.getOverallRating = (userReviews) => {

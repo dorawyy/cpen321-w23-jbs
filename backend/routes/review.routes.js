@@ -6,4 +6,5 @@ const User = db.user
 
 module.exports = function (app) {
     app.post("/review/addReview", authJwt.verifyJwt, controller.addReview)
+    app.get("/review", controller.getUserReviews)
 };

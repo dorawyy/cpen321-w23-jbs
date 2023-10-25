@@ -1,7 +1,14 @@
 const db = require("../db")
+const appointmentController = require("./appointment.controller")
 const User = db.user
 
 exports.addReview = async (req, res) => {
+    var appointmentIsCompleted = await appointmentController
+        .appointmentIsCompleted(req.body.appointmentId)
+    if (!appointmentIsCompleted) {
+        res.status(403).send({ message: "The appointment hasn't completed" })
+    }
+
     var reviewerId = req.userId
     var reviewerDisplayedName = await User
         .findById(reviewerId, ["displayedName", "-_id"])
@@ -68,4 +75,5 @@ exports.getOverallRating = (userReviews) => {
     }
     return sum/userReviews.length
 }
+
 

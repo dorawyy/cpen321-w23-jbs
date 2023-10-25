@@ -6,9 +6,8 @@ exports.addReview = async (req, res) => {
     var reviewerId = req.userId
     var reviewerDisplayedName = await User
         .findById(reviewerId, ["displayedName", "-_id"])
-        .then(user => {
-            return user.displayedName
-        }).catch(err => {
+        .then(user => {return user.displayedName})
+        .catch(err => {
             console.log(err)
             res.status(500).send({ message: err.message })
         })

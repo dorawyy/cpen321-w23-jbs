@@ -62,6 +62,9 @@ exports.signup = async (req, res) => {
                 res.status(200).send({
                     jwtToken: token
                 })
+            }).catch(err => {
+                console.log(err)
+                res.status(500).send({ message: err.message })
             })
         });
     }

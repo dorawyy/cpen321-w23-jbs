@@ -42,6 +42,7 @@ const locationSchema = new mongoose.Schema({
 
 const userReviewSchema = new mongoose.Schema({
     reviewerId: String,
+    reviewerDisplayedName: String,
     noShow: Boolean,
     late: Boolean,
     rating: {
@@ -100,7 +101,6 @@ const User = mongoose.model(
                 type: String,
             }
         ],
-        rating: Number,
         bio: String,
         useGoogleCalendar: {
             type: Boolean,

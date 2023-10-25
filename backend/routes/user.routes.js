@@ -6,4 +6,5 @@ const User = db.user
 
 module.exports = function (app) {
     app.get("/user/publicProfile", profileController.getPublicProfile)
+    app.get("/user/profile", authJwt.verifyJwt, profileController.getPrivateProfile)
 };

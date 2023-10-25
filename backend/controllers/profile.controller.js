@@ -12,7 +12,7 @@ exports.getPublicProfile = (req, res) => {
     }
 
     User.findById(userId).then(user => {
-        if (!user) {
+        if (!user || user.isBanned) {
             res.status(404).send({ message: "User not found."})
         }
         
@@ -27,7 +27,7 @@ exports.getPublicProfile = (req, res) => {
 
         var data = {
             displayedName: user.displayedName,
-            overallRating: ratingController.getTutorOverallRating(ratings),
+            overallRating: ratingController.getOverallRating(ratings),
             bio: user.bio,
             school: user.school,
             program: user.program,
@@ -39,3 +39,21 @@ exports.getPublicProfile = (req, res) => {
         
     })
 }
+
+exports.getPrivateProfile = (req, res) => {
+    var userId = req.userId
+    User.findById(userId).select([
+        "-googleId",
+        "-isBanned",
+        "-password",
+        "-googleOauth",
+        "-recommendationWeights",
+    ]).then(user => {
+        if (!user || user.isBanned) {
+            res.status(404).send({ message: "User not found."})
+        }
+        res.status(200).send(user)
+
+    })
+}
+

@@ -3,7 +3,7 @@ const db = require("../db")
 const User = db.user
 
 
-exports.getTutorOverallRating = (userReviews) => {
+exports.getOverallRating = (userReviews) => {
     if (userReviews.length == 0) {
         return 0
     }

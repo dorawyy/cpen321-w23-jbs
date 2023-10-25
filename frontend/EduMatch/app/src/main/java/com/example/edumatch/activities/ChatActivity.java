@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.edumatch.R;
 import com.example.edumatch.views.CustomChatInputView;
@@ -31,6 +32,11 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_view);
 
+        String conversationId = getIntent().getStringExtra("conversationId");
+        String conversationName = getIntent().getStringExtra("conversationName");
+
+        Toast.makeText(this, "Conversation ID: " + conversationId, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Conversation Name: " + conversationName, Toast.LENGTH_SHORT).show();
         // Initialize your views
         messageContainer = findViewById(R.id.messageContainer);
         CustomChatInputView inputText = findViewById(R.id.customChatInput);
@@ -38,7 +44,6 @@ public class ChatActivity extends AppCompatActivity {
         messageEditText = inputText.getEditText(); // Replace with your EditText's ID
         sendMessageButton = inputText.getSendButton(); // Replace with your Button's ID
 
-        // Add existing messages
         messages.add(Arrays.asList("receiver", "Hey, how's it going? How was your test."));
         messages.add(Arrays.asList("sender", "Good morning! How are you today?"));
         messages.add(Arrays.asList("receiver", "I'm doing well, thank you. How about you?"));
@@ -52,7 +57,6 @@ public class ChatActivity extends AppCompatActivity {
         // Initialize messages
         initMessages();
 
-        // Set a click listener for the send button
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,7 +64,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        // Set an EditorActionListener for the EditText
         messageEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -72,6 +75,11 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+    // Todo: need to make a get request to get the messages request: conversationId
+//    private void getMessages(){
+//
+//    }
 
     private void initMessages() {
         for (List<String> message : messages) {
@@ -88,6 +96,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
+        //todo: need to send message to socket somehow too
         String messageText = messageEditText.getText().toString().trim();
         if (!messageText.isEmpty()) {
             // Create a new message with isReceiver set to false

@@ -2,8 +2,7 @@
 <androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	style="@style/GridLayout"
-	android:layout_gravity="top"
-	android:paddingTop="40dp"
+	android:layout_gravity="center"
 	app:columnCount="1"
 	app:rowCount="8">
 
@@ -21,19 +20,10 @@
 		android:textStyle="bold"
 		app:layout_gravity="center_horizontal" />
 
-	<com.example.edumatch.views.LabelAndRatingView
-		android:id="@+id/proficiency"
-		app:label="Proficiency With Subject"
-		app:layout_gravity="center" />
 
 	<com.example.edumatch.views.LabelAndRatingView
-		android:id="@+id/attitude"
-		app:label="Attitude"
-		app:layout_gravity="center" />
-
-	<com.example.edumatch.views.LabelAndRatingView
-		android:id="@+id/organization"
-		app:label="Organization"
+		android:id="@+id/rating"
+		app:label="Rating"
 		app:layout_gravity="center" />
 
 	<androidx.gridlayout.widget.GridLayout
@@ -70,7 +60,7 @@
 
 
 	<androidx.appcompat.widget.AppCompatButton
-		android:id="@+id/next_button"
+		android:id="@+id/submit_button"
 		style="@style/WhiteButton"
 		android:layout_marginTop="24dp"
 		android:text="Submit"

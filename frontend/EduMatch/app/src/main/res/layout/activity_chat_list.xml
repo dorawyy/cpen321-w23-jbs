@@ -17,32 +17,5 @@
 		android:layout_height="wrap_content"
 		android:layout_gravity="center_horizontal"
 		android:orientation="vertical">
-
-		<androidx.appcompat.widget.AppCompatButton
-			android:layout_height="60dp"
-			android:layout_width="wrap_content"
-			android:id="@+id/signup_button"
-			android:layout_gravity="center_horizontal"
-			android:background="@drawable/big_button_container"
-			android:text="Stanley Zhao"
-			android:textStyle="bold"
-			android:textAppearance="@style/black_button_text"
-			android:gravity="start"
-			android:paddingTop="17dp"
-			android:paddingLeft="36dp"
-			android:layout_marginBottom="12dp"/>
-		<androidx.appcompat.widget.AppCompatButton
-			android:layout_height="60dp"
-			android:layout_width="wrap_content"
-			android:id="@+id/signup_button2"
-			android:layout_gravity="center_horizontal"
-			android:background="@drawable/big_button_container"
-			android:text="Arya Phan"
-			android:textStyle="bold"
-			android:textAppearance="@style/black_button_text"
-			android:gravity="start"
-			android:paddingTop="17dp"
-			android:paddingLeft="36dp"
-			android:layout_marginBottom="12dp"/>
 	</LinearLayout>
 </ScrollView>

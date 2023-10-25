@@ -14,7 +14,7 @@
 		app:layout_gravity="center_horizontal" />
 
 	<TextView
-		android:id="@+id/tutor_name"
+		android:id="@+id/tutee_name"
 		android:layout_marginBottom="24dp"
 		android:text="Tutee"
 		android:textAppearance="@style/bigTitle"
@@ -22,8 +22,8 @@
 		app:layout_gravity="center_horizontal" />
 
 	<com.example.edumatch.views.LabelAndRatingView
-		android:id="@+id/attitude"
-		app:label="Attitude"
+		android:id="@+id/rating"
+		app:label="Rating"
 		app:layout_gravity="center" />
 
 
@@ -54,7 +54,7 @@
 	</androidx.gridlayout.widget.GridLayout>
 
 	<androidx.appcompat.widget.AppCompatButton
-		android:id="@+id/next_button"
+		android:id="@+id/submit_button"
 		style="@style/WhiteButton"
 		android:layout_marginTop="24dp"
 		android:text="Submit"

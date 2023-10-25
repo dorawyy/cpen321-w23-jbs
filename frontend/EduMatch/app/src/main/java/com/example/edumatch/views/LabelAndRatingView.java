@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.edumatch.R;
@@ -27,6 +28,10 @@ public class LabelAndRatingView extends GridLayout {
     public LabelAndRatingView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
+    }
+
+    public RatingBar getRatingView(){
+        return findViewById(R.id.starRatingBar);
     }
 
 

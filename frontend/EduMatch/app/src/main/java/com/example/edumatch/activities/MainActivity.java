@@ -31,12 +31,8 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
 import com.google.api.services.calendar.CalendarScopes;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -133,10 +129,6 @@ public class MainActivity extends AppCompatActivity {
     private void handleGoogleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             account = completedTask.getResult(ApiException.class);
-
-            // Todo: Put IdToken and ServerAuthCode into a server request
-            // Todo: If IdToken matches a known user in our database, go to homepage. Else, go to sign up flow
-            Toast.makeText(MainActivity.this, "Successful Sign In" + account.getIdToken(), Toast.LENGTH_LONG).show();
             idToken = account.getIdToken();
             authCode = account.getServerAuthCode();
             Log.d("GooglePost", idToken);
@@ -148,8 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 if(newUser){
                     goToSignUpActivity();
                 } else {
-                    // todo: go to homepage
-                    Toast.makeText(MainActivity.this, "Go to Homepage", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, "Go to Homepage", Toast.LENGTH_SHORT).show();
                     goToHomePage();
                 }
             }
@@ -169,8 +160,6 @@ public class MainActivity extends AppCompatActivity {
 
         userInput = usernameEditText.getText().toString();
         passwordInput = passwordEditText.getText().toString();
-
-        // Todo: Put username and password in post request to try to signin
 
         Boolean success = postSignIn();
 
@@ -193,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private SharedPreferences updatePreferences() {
-
         SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isEditing", false);
@@ -212,8 +200,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void goToHomePage(){
         // todo: need to check if they are tutor or tutee
+        // todo: go to right view
         Intent newIntent = new Intent(MainActivity.this,
-                TuteeHomeActivity.class);
+                TutorRateActivity.class);
         startActivity(newIntent);
     }
 

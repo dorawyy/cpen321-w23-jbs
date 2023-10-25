@@ -51,6 +51,7 @@ const userReviewSchema = new mongoose.Schema({
         max: 5,
         default: 0
     },
+    comment: String,
     appointmentId: String,
 }, { timestamps: true })
 

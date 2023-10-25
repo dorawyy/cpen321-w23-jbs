@@ -58,7 +58,7 @@ exports.signup = async (req, res) => {
                 console.log(err)
                 return res.status(403).send({ message: "Failed to verify JWT"}); // Forbidden
             }
-            User.findByIdAndUpdate(userId, {...data}).then(() => {
+            User.findByIdAndUpdate(userId, {...data}, {new: true}).then(() => {
                 res.status(200).send({
                     jwtToken: token
                 })

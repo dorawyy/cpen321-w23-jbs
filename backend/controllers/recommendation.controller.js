@@ -59,8 +59,6 @@ exports.scheduledAppointment = async (req, res) => {
         tutee.recommendationWeights.maxDistance += (distance - tutee.recommendationWeights.maxDistance) * (distance > tutee.recommendationWeights.maxDistance ? 0.4 : 0.1)
     }
 
-    tutee.previousSubjects.push(req.body.scheduledSubject)
-
     tutee.save()
     res.status(200).send({ message: "Adjusted weights based on scheduled appointment"})
 }

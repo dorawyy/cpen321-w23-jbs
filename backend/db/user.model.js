@@ -83,8 +83,6 @@ const User = mongoose.model(
         location: locationSchema,
         recommendationWeights: recommendationWeightsSchema
         ,
-        previousSubjects: [
-        ],
         rating: Number,
         bio: String,
         useGoogleCalendar: {

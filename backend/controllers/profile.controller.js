@@ -4,6 +4,14 @@ const jwt = require("jsonwebtoken")
 const ratingController = require("./rating.controller")
 
 const User = db.user
+const EXCLUDED_FIELDS = [
+    "-_id",
+    "-googleId",
+    "-isBanned",
+    "-password",
+    "-googleOauth",
+    "-recommendationWeights"
+]
 
 exports.getPublicProfile = (req, res) => {
     var userId = req.query.userId
@@ -36,24 +44,37 @@ exports.getPublicProfile = (req, res) => {
             top2Ratings
         }
         res.status(200).send(data)
-        
+    }).catch(err => {
+        console.log(err)
+        res.status(500).send({ message: err.message })
     })
 }
 
 exports.getPrivateProfile = (req, res) => {
     var userId = req.userId
-    User.findById(userId).select([
-        "-googleId",
-        "-isBanned",
-        "-password",
-        "-googleOauth",
-        "-recommendationWeights",
-    ]).then(user => {
+    User.findById(userId).select(EXCLUDED_FIELDS).then(user => {
         if (!user || user.isBanned) {
             res.status(404).send({ message: "User not found."})
         }
         res.status(200).send(user)
-
+    }).catch(err => {
+        console.log(err)
+        res.status(500).send({ message: err.message })
     })
 }
 
+exports.editProfile = (req, res) => {
+    var userId = req.userId
+    var data = {...req.body}
+    User.findByIdAndUpdate(userId, {...data})
+        .select(EXCLUDED_FIELDS)
+        .then(updatedUser => {
+            if (!updatedUser || updatedUser.isBanned) {
+                res.status(404).send({ message: "User not found."})
+            }
+            res.status(200).send(updatedUser)
+        }).catch(err => {
+            console.log(err)
+            res.status(500).send({ message: err.message })
+        })
+}

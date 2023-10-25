@@ -24,7 +24,7 @@ exports.recommended = async (req, res) => {
         res.status(200).json(tutorsToDisplay.map(tutor => ({
             tutorId: tutor._id,
             displayedName: tutor.displayedName,
-            rating: tutor.rating,
+            rating: tutor.overallRating,
             locationMode: tutor.locationMode,
             location: tutor.location,
             school: tutor.education.school,
@@ -47,7 +47,7 @@ exports.recommended = async (req, res) => {
                 res.status(200).json(tutorsToDisplay.map(tutor => ({
                     tutorId: tutor._id,
                     displayedName: tutor.displayedName,
-                    rating: tutor.rating,
+                    rating: tutor.overallRating,
                     locationMode: tutor.locationMode,
                     location: tutor.location,
                     school: tutor.education.school,
@@ -71,7 +71,7 @@ exports.recommended = async (req, res) => {
                 res.status(200).json(tutorsToDisplay.map(tutor => ({
                     tutorId: tutor._id,
                     displayedName: tutor.displayedName,
-                    rating: tutor.rating,
+                    rating: tutor.overallRating,
                     locationMode: tutor.locationMode,
                     location: tutor.location,
                     school: tutor.education.school,
@@ -90,7 +90,7 @@ exports.recommended = async (req, res) => {
                 res.status(200).json(tutorsToDisplay.map(tutor => ({
                     tutorId: tutor._id,
                     displayedName: tutor.displayedName,
-                    rating: tutor.rating,
+                    rating: tutor.overallRating,
                     locationMode: tutor.locationMode,
                     location: tutor.location,
                     school: tutor.education.school,
@@ -109,7 +109,7 @@ exports.recommended = async (req, res) => {
             res.status(200).json(tutorsToDisplay.map(tutor => ({
                 tutorId: tutor._id,
                 displayedName: tutor.displayedName,
-                rating: tutor.rating,
+                rating: tutor.overallRating,
                 locationMode: tutor.locationMode,
                 location: tutor.location,
                 school: tutor.education.school,
@@ -125,7 +125,7 @@ function score(tutee, tutor) {
     var aggregate = 0
 
     aggregate += budgetScore(tutee.recommendationWeights.budget, tutor.subjectHourlyRate)
-    aggregate += ratingScore(tutee.recommendationWeights.minRating, tutor.rating)
+    aggregate += ratingScore(tutee.recommendationWeights.minRating, tutor.overallRating)
     aggregate += locationModeScore(tutee.recommendationWeights.locationModeWeight, tutee.locationMode, tutor.locationMode)
     if (tutee.locationMode == LocationMode.IN_PERSON && tutor.location)
         aggregate += distanceScore(tutee.recommendationWeights.maxDistance, tutee.location, tutor.location)

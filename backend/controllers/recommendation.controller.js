@@ -23,7 +23,6 @@ exports.checkedProfile = async (req, res) => {
 exports.contactedTutor = async (req, res) => {
     const tutor = await User.findById(req.body.tutorId)
     const tutee = await User.findById(req.userId)
-    const distance = haversine(tutor.location, tutee.location)
 
     if (tutor.subjectHourlyRate.length != 0) {
         const averageHourlyRate = tutor.subjectHourlyRate.reduce((acc, subject) => acc + subject.hourlyRate) / tutor.subjectHourlyRate.length

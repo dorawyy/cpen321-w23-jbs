@@ -9,6 +9,13 @@ const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const redirectUri = "https://edumatch.canadacentral.cloudapp.azure.com/redirect";
 
+const DEFAULT_RECOMMENDATION_WEIGHTS = {
+    budget: 50,
+    minRating: 3,
+    locationModeWeight: 0.5,
+    maxDistance: 20
+}
+
 const secretKey = process.env.SECRET_KEY
 
 const OAuth2Client = new google.auth.OAuth2(
@@ -42,7 +49,10 @@ exports.signup = async (req, res) => {
     var token = req.header('Authorization')
     if (!token) {
         data.password = bcrypt.hashSync(data.password)
-        new User({...data}).save().then(user => {
+        new User({
+            ...data,
+            recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS
+        }).save().then(user => {
             if (!user) {
                 return res.status(500).send({ message: "Unable to create user"})
             }
@@ -60,7 +70,10 @@ exports.signup = async (req, res) => {
                 console.log(err)
                 return res.status(403).send({ message: "Failed to verify JWT"}); // Forbidden
             }
-            User.findByIdAndUpdate(userId, {...data}, {new: true}).then(() => {
+            User.findByIdAndUpdate(userId, {
+                ...data,
+                recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS
+            }, {new: true}).then(() => {
                 return res.status(200).send({
                     jwtToken: token
                 })

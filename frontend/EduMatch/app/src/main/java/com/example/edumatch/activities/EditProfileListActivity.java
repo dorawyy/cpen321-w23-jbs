@@ -1,5 +1,7 @@
 package com.example.edumatch.activities;
 
+import static com.example.edumatch.util.ProfileHelper.getProfile;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -23,10 +25,14 @@ public class EditProfileListActivity extends AppCompatActivity {
         Button availabilityInfoButton = findViewById(R.id.availability_info);
 
         updatePreferences();
+
+        getProfile(EditProfileListActivity.this);
         accountInfoButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                //todo: maybe add a get here to refresh the preferences from the server?
+                // TODO: GET {API_URL}/user/profile
+
                 Intent newIntent = new Intent(EditProfileListActivity.this,
                         AccountInformationActivity.class);
                 startActivity(newIntent);
@@ -37,7 +43,7 @@ public class EditProfileListActivity extends AppCompatActivity {
         uniInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo: maybe add a get here to refresh the preferences from the server?
+                // TODO: GET {API_URL}/user/profile
                 Intent newIntent = new Intent(EditProfileListActivity.this,
                         UniversityInformationActivity.class);
                 startActivity(newIntent);
@@ -47,7 +53,7 @@ public class EditProfileListActivity extends AppCompatActivity {
         locationInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo: maybe add a get here to refresh the preferences from the server?
+                // TODO: GET {API_URL}/user/profile
                 Intent newIntent = new Intent(EditProfileListActivity.this,
                         LocationInformationActivity.class);
                 startActivity(newIntent);
@@ -57,7 +63,7 @@ public class EditProfileListActivity extends AppCompatActivity {
         availabilityInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo: maybe add a get here to refresh the preferences from the server?
+                // TODO: GET {API_URL}/user/profile
                 Intent newIntent = new Intent(EditProfileListActivity.this,
                         AvailabilityActivity.class);
                 startActivity(newIntent);

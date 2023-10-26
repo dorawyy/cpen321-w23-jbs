@@ -2,6 +2,8 @@ package com.example.edumatch.activities;
 
 
 import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
+import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
+import static com.example.edumatch.util.ProfileHelper.putEditProfile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,6 +27,10 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.mortbay.util.ajax.JSON;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -153,7 +159,9 @@ public class LocationInformationActivity extends AppCompatActivity {
         updatePreferences();
         printSharedPreferences(sharedPreferences);
         if(sharedPreferences.getBoolean("isEditing",false)){
-            //todo do a PUT here (make a common function)
+            JSONObject request = constructEditLocationInformation();
+            putEditProfile(request,LocationInformationActivity.this);
+            //TODO: do a PUT here (make a common function)
             newIntent = new Intent(LocationInformationActivity.this, EditProfileListActivity.class);
         } else {
             newIntent = new Intent(LocationInformationActivity.this, AvailabilityActivity.class);
@@ -165,5 +173,31 @@ public class LocationInformationActivity extends AppCompatActivity {
     private void initSharedPreferences() {
         sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+    }
+
+
+    public JSONObject constructEditLocationInformation() {
+
+        try {
+            // Retrieve data from SharedPreferences
+
+            SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+            JSONObject requestBody = new JSONObject();
+
+            // For education
+
+            JSONObject location = new JSONObject();
+            location.put("lat", sharedPreferences.getFloat("latitude", 0));
+            location.put("long", sharedPreferences.getFloat("longitude", 0));
+            requestBody.put("location", location);
+            requestBody.put("locationMode", sharedPreferences.getString("locationMode", ""));
+
+            logRequestToConsole(requestBody);
+            return requestBody;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 }

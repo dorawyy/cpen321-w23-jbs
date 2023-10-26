@@ -18,7 +18,7 @@
 	<com.example.edumatch.views.LabelAndTextView
 		android:id="@+id/create_subject"
 		app:contentText="blah blah"
-		app:label="Subject" />
+		app:label="Course" />
 
 	<com.example.edumatch.views.LabelAndTextView
 		android:id="@+id/create_date"

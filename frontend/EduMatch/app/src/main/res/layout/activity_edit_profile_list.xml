@@ -47,7 +47,7 @@
 		android:gravity="start"
 		android:paddingStart="36dp"
 		android:paddingTop="17dp"
-		android:text="University Information"
+		android:text="Location Information"
 		android:textAppearance="@style/black_button_text"
 		android:textStyle="bold" />
 

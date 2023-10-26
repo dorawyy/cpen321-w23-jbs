@@ -75,8 +75,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
-
-    // Todo: need to make a get request to get the messages request: conversationId
+    // TODO: need to make a get request to get the messages request: conversationId
 //    private void getMessages(){
 //
 //    }

@@ -2,6 +2,8 @@ package com.example.edumatch.activities;
 
 
 import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
+import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
+import static com.example.edumatch.util.ProfileHelper.putEditProfile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,6 +22,7 @@ import com.example.edumatch.views.LabelAndEditTextView;
 import com.example.edumatch.views.SubjectChipView;
 import com.google.android.flexbox.FlexboxLayout;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,25 +55,10 @@ public class CourseRatesActivity extends AppCompatActivity {
         courseRateContainer = findViewById(R.id.course_rate_container);
         selectedTags = new ArrayList<>();
         initSharedPreferences();
-//        initCourses();
         initNextButton();
         initAddButton();
         initFields();
     }
-
-//    private void initCourses() {
-//        Set<String> defaultCourses = Collections.emptySet();
-//        Set<String> courses = sharedPreferences.getStringSet("courses", defaultCourses);
-//
-//        for (String course : courses) {
-//            // Create a CourseRateChip
-//            CourseRateItemView courseRateItemView = new CourseRateItemView(this);
-//            courseRateItemView.setCourseText(course);
-//
-//            // Add the CourseRateChip to the container
-//            courseRateContainer.addView(courseRateItemView);
-//        }
-//    }
 
     private void initAddButton() {
         Button addButton = findViewById(R.id.add_button);
@@ -122,31 +110,46 @@ public class CourseRatesActivity extends AppCompatActivity {
     }
 
     private void updatePreferences() {
-        // Create a JSON object to store course and price pairs
         editor.remove("coursePricePairs");
-        editor.commit();
 
-        JSONObject coursePricePairs = new JSONObject();
+        JSONArray coursePricePairsArray = new JSONArray();
 
-        // Add course and price pairs to the JSON object
         for (int i = 0; i < courseRateContainer.getChildCount(); i++) {
             View child = courseRateContainer.getChildAt(i);
 
             if (child instanceof CourseRateItemView) {
                 CourseRateItemView courseRateItemView = (CourseRateItemView) child;
                 String course = courseRateItemView.getCourseText();
-                String courseRate = courseRateItemView.getRateText();
+                String courseRate = courseRateItemView.getRateText().toString();
+                double courseRateNumber = 0;
+                if(!courseRate.isEmpty())
+                    try
+                    {
+                        courseRateNumber = Double.parseDouble(courseRate);
+                        // it means it is double
+                    } catch (Exception e1) {
+                        // this means it is not double
+                        e1.printStackTrace();
+                    }
 
                 try {
-                    coursePricePairs.put(course, courseRate);
+                    JSONObject courseData = new JSONObject();
+                    courseData.put("course", course);
+                    courseData.put("hourlyRate", courseRateNumber);
+
+                    coursePricePairsArray.put(courseData);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         }
 
-        // Store the JSON object as a string in SharedPreferences
-        editor.putString("coursePricePairs", coursePricePairs.toString());
+// Convert the JSON array to a string
+        String coursePricePairsStr = coursePricePairsArray.toString();
+
+// Save it in SharedPreferences
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("coursePricePairs", coursePricePairsStr);
         Set<String> selectedTagsSet = new HashSet<>(selectedTags);
         editor.putStringSet("tags", selectedTagsSet);
         editor.commit();
@@ -157,15 +160,21 @@ public class CourseRatesActivity extends AppCompatActivity {
         updatePreferences();
         printSharedPreferences(sharedPreferences);
         if(sharedPreferences.getBoolean("isEditing",false)){
-            //todo do a PUT here (make a common function)
-            newIntent = new Intent(CourseRatesActivity.this, EditProfileListActivity.class);
+            JSONObject request = constructEditCourseRates();
+            Boolean success = putEditProfile(request, CourseRatesActivity.this);
+            if(success){
+                newIntent = new Intent(CourseRatesActivity.this, EditProfileListActivity.class);
+                startActivity(newIntent);
+            } else {
+                Log.e("EditProfilePut", "Error in updating university information");
+            }
+
         } else {
             newIntent = new Intent(CourseRatesActivity.this, LocationInformationActivity.class);
+            startActivity(newIntent);
         }
-        startActivity(newIntent);
+
     }
-
-
 
     private void initSharedPreferences() {
         sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
@@ -183,13 +192,17 @@ public class CourseRatesActivity extends AppCompatActivity {
             CourseRateItemView courseRateItemView = new CourseRateItemView(this);
             courseRateItemView.setCourseText(course);
 
-            // Retrieve the rate for the course from coursePricePairs
+            // Retrieve the course rate for the course from coursePricePairs
             String coursePricePairsStr = sharedPreferences.getString("coursePricePairs", "");
             try {
-                JSONObject coursePricePairs = new JSONObject(coursePricePairsStr);
-                if (coursePricePairs.has(course)) {
-                    String rate = coursePricePairs.getString(course);
-                    courseRateItemView.setRateText(rate);
+                JSONArray coursePricePairsArray = new JSONArray(coursePricePairsStr);
+                for (int i = 0; i < coursePricePairsArray.length(); i++) {
+                    JSONObject courseData = coursePricePairsArray.getJSONObject(i);
+                    if (course.equals(courseData.getString("course"))) {
+                        double rate = courseData.getDouble("hourlyRate");
+                        courseRateItemView.setRateText(Double.toString(rate));
+                        break; // Stop searching once found
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -222,6 +235,37 @@ public class CourseRatesActivity extends AppCompatActivity {
 
             // Add the SubjectChipView to the chip container
             chipContainer.addView(subjectChipView);
+        }
+    }
+
+
+    public JSONObject constructEditCourseRates() {
+        try {
+            // Retrieve data from SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+            JSONObject requestBody = new JSONObject();
+
+            // For education
+            JSONObject education = new JSONObject();
+
+            Set<String> tags = sharedPreferences.getStringSet("tags", new HashSet<>());
+            JSONArray tagsArray = new JSONArray(tags);
+            education.put("tags", tagsArray);
+
+            requestBody.put("education",education);
+
+            String subjectHourlyRateJson = sharedPreferences.getString("coursePricePairs", "");
+
+            if (!subjectHourlyRateJson.isEmpty()) {
+                // Parse the subjectHourlyRate JSON
+                JSONArray subjectHourlyRate = new JSONArray(subjectHourlyRateJson);
+                requestBody.put("subjectHourlyRate", subjectHourlyRate);
+            }
+            logRequestToConsole(requestBody);
+            return requestBody;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

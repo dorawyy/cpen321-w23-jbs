@@ -17,7 +17,7 @@ exports.addReview = async (req, res) => {
         .then(user => {return user.displayedName})
         .catch(err => {
             console.log(err)
-            res.status(500).send({ message: err.message })
+            return res.status(500).send({ message: err.message })
         })
 
     var userReview = {
@@ -31,7 +31,7 @@ exports.addReview = async (req, res) => {
         .then(user => {return user})
         .catch(err => {
             console.log(err)
-            res.status(500).send({ message: err.message })
+            return res.status(500).send({ message: err.message })
         })
     
     receiver.userReviews.push(userReview)
@@ -43,28 +43,26 @@ exports.addReview = async (req, res) => {
                 overallRating: user.overallRating,
                 userReviews: user.userReviews
             }
-            res.status(200).send(ret)
+            return res.status(200).send(ret)
         }).catch(err => {
             console.log(err)
-            res.status(500).send({ message: err.message })
+            return res.status(500).send({ message: err.message })
         })
 }
 
 exports.getUserReviews = (req, res) => {
     var userId = req.query.userId
     if (!userId) {
-        res.status(400).send({ message: "Must specify userId" })
+        return res.status(400).send({ message: "Must specify userId" })
     }
     User.findById(userId, "userReviews").then(user => {
         if (!user) {
-            res.status(404).send({ message: "User not found" })
-            return
+            return res.status(404).send({ message: "User not found" })
         }
-        res.status(200).send(user)
-        return
+        return res.status(200).send(user)
     }).catch(err => {
         console.log(err.message)
-        res.status(500).send({ message: err.message })
+        return res.status(500).send({ message: err.message })
     })
 }
 

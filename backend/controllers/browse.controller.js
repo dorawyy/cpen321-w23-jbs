@@ -8,10 +8,10 @@ const User = db.user
 exports.recommended = async (req, res) => {
     const tutee = await User.findById(req.userId)
     if (!tutee)
-        res.status(400).send({ message: "Could not find tutee in database with provided id"})
+        return res.status(400).send({ message: "Could not find tutee in database with provided id"})
 
     if (req.query.page < 1)
-        res.status(400).send({ message: "Page number cannot be less than 1" })
+        return res.status(400).send({ message: "Page number cannot be less than 1" })
 
     if (req.query.courses) {
         // specific course browse
@@ -24,7 +24,7 @@ exports.recommended = async (req, res) => {
         // note: the slice() method handles slicing beyond the end of the array
         const tutorsToDisplay = tutors.slice((req.query.page - 1) * 10, req.query.page * 10)
 
-        res.status(200).json(tutorsToDisplay.map(tutor => ({
+        return res.status(200).json(tutorsToDisplay.map(tutor => ({
             tutorId: tutor._id,
             displayedName: tutor.displayedName,
             rating: tutor.overallRating,
@@ -48,7 +48,7 @@ exports.recommended = async (req, res) => {
                 tutorsWithSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
                 const tutorsToDisplay = tutorsWithSharedCourses.slice((req.query.page - 1) * 10, req.query.page * 10)
 
-                res.status(200).json(tutorsToDisplay.map(tutor => ({
+                return res.status(200).json(tutorsToDisplay.map(tutor => ({
                     tutorId: tutor._id,
                     displayedName: tutor.displayedName,
                     rating: tutor.overallRating,
@@ -72,7 +72,7 @@ exports.recommended = async (req, res) => {
                     ...tutorsWithoutSharedCourses.slice(0, req.query.page * 10 - tutorsWithSharedCourses.length)
                 ]
 
-                res.status(200).json(tutorsToDisplay.map(tutor => ({
+                return res.status(200).json(tutorsToDisplay.map(tutor => ({
                     tutorId: tutor._id,
                     displayedName: tutor.displayedName,
                     rating: tutor.overallRating,
@@ -91,7 +91,7 @@ exports.recommended = async (req, res) => {
                 tutorsWithoutSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
                 const tutorsToDisplay = tutorsWithoutSharedCourses.slice((req.query.page - 1) * 10, req.query.page * 10)
                 
-                res.status(200).json(tutorsToDisplay.map(tutor => ({
+                return res.status(200).json(tutorsToDisplay.map(tutor => ({
                     tutorId: tutor._id,
                     displayedName: tutor.displayedName,
                     rating: tutor.overallRating,
@@ -110,7 +110,7 @@ exports.recommended = async (req, res) => {
             tutors.sort((a, b) => score(tutee, b) - score(tutee, a))
             const tutorsToDisplay = tutors.slice((req.query.page - 1) * 10, req.query.page * 10)
             
-            res.status(200).json(tutorsToDisplay.map(tutor => ({
+            return res.status(200).json(tutorsToDisplay.map(tutor => ({
                 tutorId: tutor._id,
                 displayedName: tutor.displayedName,
                 rating: tutor.overallRating,

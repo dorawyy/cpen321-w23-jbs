@@ -26,30 +26,32 @@ exports.googleAuth = (req, res) => {
 
     verify(idToken, authCode).then(result => {
         const jwtToken = jwt.sign(result.userId, secretKey)
-        res.json({ 
+        return res.json({ 
             jwtToken,
             newUser: result.newUser 
         })
     }).catch(err => {
         console.log(err)
-        res.status(401).send({ message: err.message })
+        return res.status(401).send({ message: err.message })
     })
 }
 
 exports.signup = async (req, res) => {
+    console.log("signing up user")
     var data = {...req.body}
     var token = req.header('Authorization')
     if (!token) {
         data.password = bcrypt.hashSync(data.password)
         new User({...data}).save().then(user => {
             if (!user) {
-                res.status(500).send({ message: "Unable to create user"})
+                return res.status(500).send({ message: "Unable to create user"})
             }
+            console.log(`new user: ${user}`)
             const jwtToken = jwt.sign(user._id.toString(), secretKey)
-            res.json({ jwtToken })
+            return res.json({ jwtToken })
         }).catch(err => {
             console.log(err)
-            res.status(500).send({ message: err.message })
+            return res.status(500).send({ message: err.message })
         })
     } else {
         token = token.replace("Bearer ", "")
@@ -58,10 +60,13 @@ exports.signup = async (req, res) => {
                 console.log(err)
                 return res.status(403).send({ message: "Failed to verify JWT"}); // Forbidden
             }
-            User.findByIdAndUpdate(userId, {...data}).then(() => {
-                res.status(200).send({
+            User.findByIdAndUpdate(userId, {...data}, {new: true}).then(() => {
+                return res.status(200).send({
                     jwtToken: token
                 })
+            }).catch(err => {
+                console.log(err)
+                return res.status(500).send({ message: err.message })
             })
         });
     }
@@ -86,7 +91,7 @@ exports.login = (req, res) => {
         }
 
         const jwtToken = jwt.sign(user._id.toString(), secretKey)
-        res.status(200).send({
+        return res.status(200).send({
             jwtToken,
             type: user.type
         })

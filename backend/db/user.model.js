@@ -40,6 +40,21 @@ const locationSchema = new mongoose.Schema({
     long: Number
 })
 
+const userReviewSchema = new mongoose.Schema({
+    reviewerId: String,
+    reviewerDisplayedName: String,
+    noShow: Boolean,
+    late: Boolean,
+    rating: {
+        type: Number,
+        min: 0,
+        max: 5,
+        default: 0
+    },
+    comment: String,
+    appointmentId: String,
+}, { timestamps: true })
+
 const recommendationWeightsSchema = new mongoose.Schema({
     budget: Number,
     minRating: Number,
@@ -81,16 +96,22 @@ const User = mongoose.model(
             enum: Object.values(LocationMode)
         },
         location: locationSchema,
-        recommendationWeights: recommendationWeightsSchema
-        ,
-        previousSubjects: [
-        ],
-        rating: Number,
+        recommendationWeights: recommendationWeightsSchema,
         bio: String,
         useGoogleCalendar: {
             type: Boolean,
             default: false
+        },
+        userReviews: [
+            {
+                type: userReviewSchema
+            }
+        ],
+        overallRating: {
+            type: Number,
+            default: 0
         }
+
     })
 )
 

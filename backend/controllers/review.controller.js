@@ -3,11 +3,13 @@ const appointmentController = require("./appointment.controller")
 const User = db.user
 
 exports.addReview = async (req, res) => {
-    var appointmentIsCompleted = await appointmentController
-        .appointmentIsCompleted(req.body.appointmentId)
-    if (!appointmentIsCompleted) {
-        res.status(403).send({ message: "The appointment hasn't completed" })
-    }
+    // comment this out for now to integrate addReview cuz we havent
+    // added bookAppointment endpoint
+    // var appointmentIsCompleted = await appointmentController
+    //     .appointmentIsCompleted(req.body.appointmentId)
+    // if (!appointmentIsCompleted) {
+    //     res.status(403).send({ message: "The appointment hasn't completed" })
+    // }
 
     var reviewerId = req.userId
     var reviewerDisplayedName = await User
@@ -59,6 +61,7 @@ exports.getUserReviews = (req, res) => {
             return
         }
         res.status(200).send(user)
+        return
     }).catch(err => {
         console.log(err.message)
         res.status(500).send({ message: err.message })

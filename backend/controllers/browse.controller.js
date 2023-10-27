@@ -138,7 +138,7 @@ function score(tutee, tutor) {
 }
 
 function budgetScore(budget, subjectHourlyRate) {
-    const averageHourlyRate = subjectHourlyRate.reduce((acc, subject) => acc + subject.hourlyRate) / tutor.subjectHourlyRate.length
+    const averageHourlyRate = subjectHourlyRate.reduce((acc, subject) => acc + subject.hourlyRate) / subjectHourlyRate.length
     return averageHourlyRate < budget ? 100 - (1/3) * averageHourlyRate : 100 - (1/3) * budget - (2/3) * (averageHourlyRate - budget)
 }
 
@@ -152,6 +152,6 @@ function locationModeScore(locationModeWeight, tuteeLocationMode, tutorLocationM
 }
 
 function distanceScore(maxDistance, tuteeLocation, tutorLocation) {
-    const distance = haversine(tutor.location, tutee.location)
+    const distance = haversine(tutorLocation, tuteeLocation)
     return distance < maxDistance ? 100 - (1/3) * distance : 100 - (1/3) * maxDistance - (2/3) * (distance - maxDistance)
 }

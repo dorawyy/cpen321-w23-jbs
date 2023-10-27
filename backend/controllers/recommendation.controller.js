@@ -1,10 +1,14 @@
 const db = require("../db")
 const { LocationMode } = require("../constants/location.modes");
 const haversine = require('haversine')
+const mongoose = require('mongoose')
 
 const User = db.user
 
 exports.checkedProfile = async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
+        return res.status(400).send({ message: "Invalid provided tutorId" })
+    }
     const tutor = await User.findById(req.body.tutorId)
     const tutee = await User.findById(req.userId)
     if (!tutor)
@@ -25,6 +29,9 @@ exports.checkedProfile = async (req, res) => {
 }
 
 exports.contactedTutor = async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
+        return res.status(400).send({ message: "Invalid provided tutorId" })
+    }
     const tutor = await User.findById(req.body.tutorId)
     const tutee = await User.findById(req.userId)
     if (!tutor)
@@ -50,6 +57,9 @@ exports.contactedTutor = async (req, res) => {
 }
 
 exports.scheduledAppointment = async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
+        return res.status(400).send({ message: "Invalid provided tutorId" })
+    }
     const tutor = await User.findById(req.body.tutorId)
     const tutee = await User.findById(req.userId)
     if (!tutor)
@@ -76,6 +86,9 @@ exports.scheduledAppointment = async (req, res) => {
 }
 
 exports.reviewedTutor = async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
+        return res.status(400).send({ message: "Invalid provided tutorId" })
+    }
     const tutor = await User.findById(req.body.tutorId)
     const tutee = await User.findById(req.userId)
     if (!tutor)

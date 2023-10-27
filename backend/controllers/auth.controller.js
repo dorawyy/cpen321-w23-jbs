@@ -123,7 +123,7 @@ async function verify(idToken, authCode) {
     const googleId = payload['sub']
 
     return User.findOne({ googleId }).then(async user => {
-        if (!user || !user.hasSignedUp) {
+        if (!user || user.hasSignedUp == false) {
             var user = new User({
                 googleId,
                 email: payload['email'],

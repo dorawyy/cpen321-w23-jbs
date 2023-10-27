@@ -52,7 +52,8 @@ exports.signup = async (req, res) => {
         data.password = bcrypt.hashSync(data.password)
         new User({
             ...data,
-            recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS
+            recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
+            hasSignedUp: true
         }).save().then(user => {
             if (!user) {
                 return res.status(500).send({ message: "Unable to create user"})
@@ -73,7 +74,8 @@ exports.signup = async (req, res) => {
             }
             User.findByIdAndUpdate(userId, {
                 ...data,
-                recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS
+                recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
+                hasSignedUp: true
             }, {new: true}).then(() => {
                 return res.status(200).send({
                     jwtToken: token
@@ -121,7 +123,7 @@ async function verify(idToken, authCode) {
     const googleId = payload['sub']
 
     return User.findOne({ googleId }).then(async user => {
-        if (!user) {
+        if (!user || !user.hasSignedUp) {
             var user = new User({
                 googleId,
                 email: payload['email'],

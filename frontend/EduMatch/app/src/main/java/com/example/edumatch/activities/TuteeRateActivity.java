@@ -25,8 +25,8 @@ public class TuteeRateActivity extends AppCompatActivity {
     private boolean noShowValue;
     private boolean lateValue;
 
-    //todo: I need the receiverId from the previous view
-    //todo I need the receiverName from the previous view
+    //TODO: I need the receiverId from the previous view
+    //TODO: I need the receiverName from the previous view
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +53,7 @@ public class TuteeRateActivity extends AppCompatActivity {
     }
 
     private void initName(){
-        //todo insert name from previous view
+        //TODO: insert name from previous view
         TextView name = findViewById(R.id.tutee_name);
         name.setText("NEED THIS INFO FROM PREVIOUS VIEW");
     }

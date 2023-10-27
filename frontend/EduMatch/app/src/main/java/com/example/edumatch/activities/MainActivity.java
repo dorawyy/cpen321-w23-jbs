@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         // todo: need to check if they are tutor or tutee
         // todo: go to right view (currently is on view I am testing)
         Intent newIntent = new Intent(MainActivity.this,
-                TuteeRateActivity.class);
+                TuteeHomeActivity.class);
         startActivity(newIntent);
     }
 
@@ -281,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("jwtToken", jsonResponse.getString("jwtToken"));
                 newUser = jsonResponse.getBoolean("newUser");
-
+                //TODO: Add userType from response
                 editor.commit();
                 printSharedPreferences(sharedPreferences);
                 Log.d("GooglePost", jsonResponse.toString());
@@ -303,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
             requestBody.put("password", passwordInput);
             requestBody.put("username", userInput);
 
-            logRequestToConsole(requestBody, "GooglePost");
+            logRequestToConsole(requestBody, "SignInPost");
             return requestBody;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -317,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
             requestBody.put("idToken", idToken);
             requestBody.put("authCode", authCode);
 
-            logRequestToConsole(requestBody, "SignInPost");
+            logRequestToConsole(requestBody, "GooglePost");
             return requestBody;
         } catch (JSONException e) {
             e.printStackTrace();

@@ -35,7 +35,8 @@ exports.googleAuth = (req, res) => {
         const jwtToken = jwt.sign(result.userId, secretKey)
         return res.json({ 
             jwtToken,
-            newUser: result.newUser 
+            newUser: result.newUser,
+            type: result.type
         })
     }).catch(err => {
         console.log(err)
@@ -140,14 +141,16 @@ async function verify(idToken, authCode) {
             return user.save().then(savedUser => {
                 var ret = {
                     userId: savedUser._id.toString(),
-                    newUser: true
+                    newUser: true,
+                    type: null
                 }
                 return Promise.resolve(ret)
             })
         } else {
             var ret = {
                 userId: user._id.toString(),
-                newUser: false
+                newUser: false,
+                type: user.type
             }
             return Promise.resolve(ret)
         }

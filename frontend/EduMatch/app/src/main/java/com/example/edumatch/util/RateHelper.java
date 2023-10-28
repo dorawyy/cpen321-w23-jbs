@@ -35,4 +35,29 @@ public class RateHelper {
         }
         return true;
     }
+
+    public static boolean postRatingWeight(Context context, JSONObject requestBody) {
+        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/user_action/reviewed_tutor";
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+
+        JSONObject jsonResponse = sendHttpRequest(apiUrl,sharedPreferences.getString("jwtToken", ""),"POST",requestBody);
+
+        if (jsonResponse != null) {
+            try {
+                // TODO: get possible error messages/codes
+                if (jsonResponse.has("errorDetails")) {
+                    JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
+                    Log.d("RateWeightPost", "There was an error!");
+                }
+                Log.d("RateWeightPost", jsonResponse.toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            Log.d("RateWeightPost","jsonResponse was NULL");
+        }
+        return true;
+    }
 }

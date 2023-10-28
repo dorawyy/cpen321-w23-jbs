@@ -54,7 +54,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        //TODO: this is just for testing
+        Intent newIntent = new Intent(MainActivity.this,
+                ChatListActivity.class);
+        startActivity(newIntent);
 
         initSignInButton();
 
@@ -216,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         // todo: need to check if they are tutor or tutee
         // todo: go to right view (currently is on view I am testing)
         Intent newIntent = new Intent(MainActivity.this,
-                TuteeHomeActivity.class);
+                TutorRateActivity.class);
         startActivity(newIntent);
     }
 

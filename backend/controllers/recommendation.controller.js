@@ -71,6 +71,8 @@ exports.scheduledAppointment = async (req, res) => {
     if (!tutee)
         return res.status(400).send({ message: "Could not find tutee in database with provided id"})
 
+    if (!tutor.subjectHourlyRate)
+        return res.status(500).send({ message: "Tutor subjectHourlyRate array does not exist" })
     const scheduledSubjectHourlyRate = tutor.subjectHourlyRate.find(subject => subject.course == req.body.scheduledSubject)
     if (!scheduledSubjectHourlyRate)
         return res.status(500).send({ message: "Unable to find hourly rate associated with subject" })

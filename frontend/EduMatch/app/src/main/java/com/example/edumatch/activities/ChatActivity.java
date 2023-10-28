@@ -95,7 +95,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
-        //todo: need to send message to socket somehow too
+        //TODO: need to send message to socket somehow too
         String messageText = messageEditText.getText().toString().trim();
         if (!messageText.isEmpty()) {
             // Create a new message with isReceiver set to false

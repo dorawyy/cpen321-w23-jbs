@@ -1,24 +1,16 @@
 package com.example.edumatch.activities;
 
-import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import com.example.edumatch.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +89,7 @@ public class ChatListActivity extends AppCompatActivity {
         return sharedPreferences;
     }
 
-    //TODO: create a GET all conversations function here
+    // TODO: create a GET all conversations function here
 //    private Boolean getConversations() {
 //        JSONObject requestBody = constructSignInRequest();// Create your JSON request body
 //        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/api/auth/login";

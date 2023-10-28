@@ -1,6 +1,7 @@
 package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
+import static com.example.edumatch.util.RateHelper.postRatingWeight;
 import static com.example.edumatch.util.RateHelper.postReview;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,8 +79,10 @@ public class TutorRateActivity extends AppCompatActivity {
                 LabelAndCommentEditTextView comment = findViewById(R.id.comments);
                 commentValue = comment.getEnterUserEditText().getText().toString().trim();
                 JSONObject requestBody = constructRatingRequest();
+                JSONObject weightRequestBody = constructRatingWeightRequest();
+                Boolean weight_success = postRatingWeight(TutorRateActivity.this,weightRequestBody);
                 Boolean success = postReview(TutorRateActivity.this,requestBody);
-                if(success){
+                if(success && weight_success){
                     Toast.makeText(getApplicationContext(), "Successfully Rated Tutor!", Toast.LENGTH_SHORT).show();
                     goToNewActivity();
                 } else {
@@ -88,6 +91,20 @@ public class TutorRateActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private JSONObject constructRatingWeightRequest() {
+        try {
+            JSONObject requestBody = new JSONObject();
+            // TODO: don't use static tutorId
+            requestBody.put("tutorId", "653c328d72d322083f1d4eea");
+            requestBody.put("review", ratingValue);
+            logRequestToConsole(requestBody, "RateWeightPost");
+            return requestBody;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

@@ -21,29 +21,29 @@
 		/>
 
 	<com.example.edumatch.views.LabelAndTextView
-		android:id="@+id/create_subject"
+		android:id="@+id/course"
 		app:contentText="blah blah"
 		app:label="Course" />
 
 	<com.example.edumatch.views.LabelAndTextView
-		android:id="@+id/create_date"
+		android:id="@+id/date"
 		app:contentText="blah blah"
 		app:label="Date"
 		app:layout_gravity="center" />
 
 	<com.example.edumatch.views.LabelAndTextView
-		android:id="@+id/create_time"
+		android:id="@+id/time"
 		app:contentText="blah blah"
 		app:label="Time"
 		app:layout_gravity="center" />
 
 	<com.example.edumatch.views.LabelAndTextView
-		android:id="@+id/create_location"
+		android:id="@+id/location"
 		app:contentText="blah blah"
 		app:label="Location"
 		app:layout_gravity="center" />
 	<com.example.edumatch.views.LabelAndCommentTextView
-		android:id="@+id/create_comment"
+		android:id="@+id/comment"
 		app:contentText="blah blah"
 		app:label="Additional Comments"
 		app:layout_gravity="center"

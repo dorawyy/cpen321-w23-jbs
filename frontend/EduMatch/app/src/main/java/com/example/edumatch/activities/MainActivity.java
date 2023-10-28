@@ -55,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //TODO: this is just for testing
-        Intent newIntent = new Intent(MainActivity.this,
-                ChatListActivity.class);
-        startActivity(newIntent);
+//        Intent newIntent = new Intent(MainActivity.this,
+//                ChatListActivity.class);
+//        startActivity(newIntent);
 
         initSignInButton();
 

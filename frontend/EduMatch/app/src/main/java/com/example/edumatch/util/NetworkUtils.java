@@ -1,8 +1,10 @@
 package com.example.edumatch.util;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,6 +85,7 @@ public class NetworkUtils {
             return errorResponse;
         }
     }
+
     public static JSONObject sendHttpRequest(String apiUrl, String accessToken, String httpMethod, JSONObject requestBody) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         CompletableFuture<JSONObject> future = new CompletableFuture<>();
@@ -121,6 +124,15 @@ public class NetworkUtils {
             }
             return errorResponse;
         }
+    }
+
+    public static void showToastOnUiThread(final Context context, final String message) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
 

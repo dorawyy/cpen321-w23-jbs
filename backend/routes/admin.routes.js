@@ -13,4 +13,10 @@ module.exports = function (app) {
         authJwt.verifyJwt,
         controller.unban
     );
+
+    // app.post(
+    //     "/admin/users",
+    //     authJwt.verifyJwt,
+    //     controller.getUsers
+    // );
 }

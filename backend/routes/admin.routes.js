@@ -2,21 +2,27 @@ const controller = require("../controllers/admin.controller")
 const { authJwt, verifySignUp } = require("../middleware")
 
 module.exports = function (app) {
-    app.post(
+    app.put(
         "/admin/ban",
         authJwt.verifyJwt,
         controller.ban
     );
 
-    app.post(
+    app.put(
         "/admin/unban",
         authJwt.verifyJwt,
         controller.unban
     );
 
-    // app.post(
-    //     "/admin/users",
-    //     authJwt.verifyJwt,
-    //     controller.getUsers
-    // );
+    app.get(
+        "/admin/users",
+        authJwt.verifyJwt,
+        controller.getUsers
+    );
+
+    app.get(
+        "/admin/profile",
+        authJwt.verifyJwt,
+        controller.getProfile
+    );
 }

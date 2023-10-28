@@ -1,6 +1,8 @@
 package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
+import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
+import static com.example.edumatch.util.ProfileHelper.putEditProfile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,13 +10,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.edumatch.views.LabelAndEditTextView;
 import com.example.edumatch.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class AccountInformationActivity extends AppCompatActivity {
@@ -28,8 +36,6 @@ public class AccountInformationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_information);
-
-
 
         initSharedPreferences();
 
@@ -45,7 +51,7 @@ public class AccountInformationActivity extends AppCompatActivity {
 
     private void initInvisibleFields() {
 
-        if (sharedPreferences.getBoolean("useGoogle", false)) {
+        if (sharedPreferences.getBoolean("useGoogle", false) || sharedPreferences.getBoolean("isEditing", false)) {
             int[] viewIds = {R.id.create_userName, R.id.create_password};
 
             for (int i = 0; i < viewIds.length; i++) {
@@ -95,6 +101,8 @@ public class AccountInformationActivity extends AppCompatActivity {
         Intent newIntent;
         if(sharedPreferences.getBoolean("isEditing",false)){
             //todo do a PUT here (make a common function)
+            JSONObject request = constructEditCourseRates();
+            putEditProfile(request,AccountInformationActivity.this);
             newIntent = new Intent(AccountInformationActivity.this, EditProfileListActivity.class);
         } else {
             newIntent = new Intent(AccountInformationActivity.this, UniversityInformationActivity.class);
@@ -104,7 +112,6 @@ public class AccountInformationActivity extends AppCompatActivity {
 
 
     private boolean verifyFields() {
-        // todo need an api call to make sure username is unique?
         int[] viewIds = {R.id.create_name, R.id.create_email, R.id.create_userName, R.id.create_password};
 
         int numberOfIters = viewIds.length;
@@ -112,6 +119,9 @@ public class AccountInformationActivity extends AppCompatActivity {
             numberOfIters = viewIds.length - 2;
         }
         for (int i = 0; i < numberOfIters; i++) {
+            if(i >= 2 && (sharedPreferences.getBoolean("useGoogle", false) || sharedPreferences.getBoolean("isEditing", false))){
+                break;
+            }
             LabelAndEditTextView view = findViewById(viewIds[i]);
             String userDataString = view.getEnterUserEditText().getText().toString().trim();
             if (userDataString.isEmpty()) {
@@ -137,5 +147,28 @@ public class AccountInformationActivity extends AppCompatActivity {
         }
     }
 
+    public JSONObject constructEditCourseRates() {
 
+        try {
+            // Retrieve data from SharedPreferences
+
+            SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+
+
+            JSONObject requestBody = new JSONObject();
+
+            // For education
+            requestBody.put("displayedName", sharedPreferences.getString("name", ""));
+            requestBody.put("email", sharedPreferences.getString("email", ""));
+            requestBody.put("phoneNumber", sharedPreferences.getString("phoneNumber", ""));
+            requestBody.put("bio", sharedPreferences.getString("bio", ""));
+
+            logRequestToConsole(requestBody);
+            return requestBody;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
 }

@@ -5,6 +5,11 @@
 	android:layout_gravity="top"
 	app:columnCount="1"
 	app:rowCount="4">
+	<ImageView
+		android:id="@+id/emptyBar"
+		android:layout_width="match_parent"
+		android:layout_height="40dp"
+		android:background="@drawable/empty_bar"/>
 
 	<TextView
 		android:id="@+id/name"
@@ -18,7 +23,7 @@
 	<com.example.edumatch.views.LabelAndTextView
 		android:id="@+id/create_subject"
 		app:contentText="blah blah"
-		app:label="Subject" />
+		app:label="Course" />
 
 	<com.example.edumatch.views.LabelAndTextView
 		android:id="@+id/create_date"

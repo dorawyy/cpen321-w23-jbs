@@ -6,15 +6,20 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:layout_gravity="center_horizontal"
-	android:orientation="vertical"
-	android:layout_marginTop="100dp">
+	android:orientation="vertical">
+
+	<ImageView
+		android:id="@+id/emptyBar"
+		android:layout_width="match_parent"
+		android:layout_height="40dp"
+		android:background="@drawable/empty_bar"/>
 
 	<androidx.appcompat.widget.AppCompatButton
 		android:id="@+id/account_info"
 		android:layout_width="wrap_content"
 		android:layout_height="60dp"
 		android:layout_gravity="center_horizontal"
-		android:layout_marginBottom="12dp"
+		android:layout_marginTop="50dp"
 		android:background="@drawable/big_button_container"
 		android:gravity="start"
 		android:paddingLeft="36dp"
@@ -47,7 +52,7 @@
 		android:gravity="start"
 		android:paddingStart="36dp"
 		android:paddingTop="17dp"
-		android:text="University Information"
+		android:text="Location Information"
 		android:textAppearance="@style/black_button_text"
 		android:textStyle="bold" />
 

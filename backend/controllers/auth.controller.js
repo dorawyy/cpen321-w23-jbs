@@ -9,6 +9,13 @@ const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const redirectUri = "https://edumatch.canadacentral.cloudapp.azure.com/redirect";
 
+const DEFAULT_RECOMMENDATION_WEIGHTS = {
+    budget: 50,
+    minRating: 3,
+    locationModeWeight: 0.5,
+    maxDistance: 20
+}
+
 const secretKey = process.env.SECRET_KEY
 
 const OAuth2Client = new google.auth.OAuth2(
@@ -26,30 +33,37 @@ exports.googleAuth = (req, res) => {
 
     verify(idToken, authCode).then(result => {
         const jwtToken = jwt.sign(result.userId, secretKey)
-        res.json({ 
+        return res.json({ 
             jwtToken,
-            newUser: result.newUser 
+            newUser: result.newUser,
+            type: result.type
         })
     }).catch(err => {
         console.log(err)
-        res.status(401).send({ message: err.message })
+        return res.status(401).send({ message: err.message })
     })
 }
 
 exports.signup = async (req, res) => {
+    console.log("signing up user")
     var data = {...req.body}
     var token = req.header('Authorization')
     if (!token) {
         data.password = bcrypt.hashSync(data.password)
-        new User({...data}).save().then(user => {
+        new User({
+            ...data,
+            recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
+            hasSignedUp: true
+        }).save().then(user => {
             if (!user) {
-                res.status(500).send({ message: "Unable to create user"})
+                return res.status(500).send({ message: "Unable to create user"})
             }
+            console.log(`new user: ${user}`)
             const jwtToken = jwt.sign(user._id.toString(), secretKey)
-            res.json({ jwtToken })
+            return res.json({ jwtToken })
         }).catch(err => {
             console.log(err)
-            res.status(500).send({ message: err.message })
+            return res.status(500).send({ message: err.message })
         })
     } else {
         token = token.replace("Bearer ", "")
@@ -58,13 +72,17 @@ exports.signup = async (req, res) => {
                 console.log(err)
                 return res.status(403).send({ message: "Failed to verify JWT"}); // Forbidden
             }
-            User.findByIdAndUpdate(userId, {...data}).then(() => {
-                res.status(200).send({
+            User.findByIdAndUpdate(userId, {
+                ...data,
+                recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
+                hasSignedUp: true
+            }, {new: true}).then(() => {
+                return res.status(200).send({
                     jwtToken: token
                 })
             }).catch(err => {
                 console.log(err)
-                res.status(500).send({ message: err.message })
+                return res.status(500).send({ message: err.message })
             })
         });
     }
@@ -89,7 +107,7 @@ exports.login = (req, res) => {
         }
 
         const jwtToken = jwt.sign(user._id.toString(), secretKey)
-        res.status(200).send({
+        return res.status(200).send({
             jwtToken,
             type: user.type
         })
@@ -105,7 +123,7 @@ async function verify(idToken, authCode) {
     const googleId = payload['sub']
 
     return User.findOne({ googleId }).then(async user => {
-        if (!user) {
+        if (!user || user.hasSignedUp == false) {
             var user = new User({
                 googleId,
                 email: payload['email'],
@@ -125,14 +143,16 @@ async function verify(idToken, authCode) {
             return user.save().then(savedUser => {
                 var ret = {
                     userId: savedUser._id.toString(),
-                    newUser: true
+                    newUser: true,
+                    type: null
                 }
                 return Promise.resolve(ret)
             })
         } else {
             var ret = {
                 userId: user._id.toString(),
-                newUser: false
+                newUser: false,
+                type: user.type
             }
             return Promise.resolve(ret)
         }

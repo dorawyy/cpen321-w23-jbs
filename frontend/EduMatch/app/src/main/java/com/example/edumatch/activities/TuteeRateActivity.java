@@ -1,5 +1,7 @@
 package com.example.edumatch.activities;
 
+import static com.example.edumatch.util.RateHelper.postReview;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.edumatch.R;
 import com.example.edumatch.views.LabelAndRatingView;
@@ -22,8 +25,8 @@ public class TuteeRateActivity extends AppCompatActivity {
     private boolean noShowValue;
     private boolean lateValue;
 
-    //todo: I need the receiverId from the previous view
-    //todo I need the receiverName from the previous view
+    //TODO: I need the receiverId from the previous view
+    //TODO: I need the receiverName from the previous view
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +53,7 @@ public class TuteeRateActivity extends AppCompatActivity {
     }
 
     private void initName(){
-        //todo insert name from previous view
+        //TODO: insert name from previous view
         TextView name = findViewById(R.id.tutee_name);
         name.setText("NEED THIS INFO FROM PREVIOUS VIEW");
     }
@@ -64,41 +67,32 @@ public class TuteeRateActivity extends AppCompatActivity {
                 LabelAndRatingView attitudeTextView = findViewById(R.id.rating);
                 RatingBar rating = attitudeTextView.getRatingView();
                 ratingValue = rating.getRating();
-                Boolean success = postReview();
-                goToNewActivity();
+                JSONObject requestBody = constructRatingRequest();
+                Boolean success = postReview(TuteeRateActivity.this,requestBody);
+                if(success){
+                    Toast.makeText(getApplicationContext(), "Successfully Rated Tutee!", Toast.LENGTH_SHORT).show();
+                    goToNewActivity();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Something went wrong. Rating not sent. ", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-    private boolean postReview() {
-        //todo: do post request to https://edumatch.canadacentral.cloudapp.azure.com/api/rating
-        JSONObject requestBody = constructRatingRequest();
-//        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/api/rating";
-//        Context context = getApplicationContext(); // Replace with your application's context
-//        SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
-//        JSONObject jsonResponse = postDataToBackend(apiUrl, requestBody, sharedPreferences.getString("jwtToken", ""));
-//
-//        Log.d("RatingPost", "Finished postDataToBackend" + jsonResponse);
-//
-//        if (jsonResponse != null) {
-//            Log.d("RatingPost", jsonResponse.toString());
-//            return true;
-//        } else {
-//            Log.d("RatingPost", "jsonResponse was NULL");
-//            return false;
-//        }
-        return true;
-    }
 
     private JSONObject constructRatingRequest() {
         try {
             JSONObject requestBody = new JSONObject();
-            requestBody.put("receiverId", "needthis");
+            // TODO: don't use static receiverId
+            // TODO: add appointmentId
+            requestBody.put("receiverId", "6539d8bc84ac67a095b338e1");
             requestBody.put("rating", ratingValue);
             requestBody.put("noShow", noShowValue);
             requestBody.put("late", lateValue);
+            // requestBody.put("appointmentId",appointmentId);
+            // Add any other fields you need in the request.
 
-            logRequestToConsole(requestBody, "RatingPost");
+            logRequestToConsole(requestBody, "TuteeRatePost");
             return requestBody;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -108,7 +102,7 @@ public class TuteeRateActivity extends AppCompatActivity {
 
     private void goToNewActivity() {
         Intent newIntent;
-        // todo go back to previous view
+        // TODO: go back to scheduled list of appointments view
 //        printSharedPreferences(sharedPreferences);
 //        if(sharedPreferences.getBoolean("isEditing",false)){
 //            newIntent = new Intent(CourseRatesActivity.this, EditProfileListActivity.class);

@@ -110,8 +110,11 @@ const User = mongoose.model(
         overallRating: {
             type: Number,
             default: 0
+        },
+        hasSignedUp: {
+            type: Boolean,
+            default: false
         }
-
     })
 )
 

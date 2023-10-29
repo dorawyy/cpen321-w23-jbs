@@ -1,13 +1,14 @@
 const axios = require("axios")
 
-const API_URL = "https://ubcexplorer.io"
+const API_URL =  "https://ubcgrades.com/api/v3"
 
 exports.getCourseCodes = async (req, res) => {
     const code = req.query.code
-    axios.get(`${API_URL}/searchAny/${code}`)
+    
+    axios.get(`${API_URL}/courses/UBCV/${code}`)
             .then((result) => {
                 var data = result.data
-                data = data.map(info => info.code)
+                data = data.map(info => `${code} ${info.course}`)
                 return res.status(200).send(data)
             })
             .catch(err => {

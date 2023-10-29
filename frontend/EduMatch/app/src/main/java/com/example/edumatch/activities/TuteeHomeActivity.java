@@ -1,29 +1,25 @@
 package com.example.edumatch.activities;
 
-import static com.example.edumatch.util.LoginSignupHelper.isStartTimeBeforeEndTime;
-import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
-import static com.example.edumatch.util.ProfileHelper.constructSignUpRequest;
 import static com.example.edumatch.util.ProfileHelper.getProfile;
-import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
 import static com.example.edumatch.util.TutorsHelper.getTuteeHome;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.edumatch.R;
 import com.example.edumatch.views.SubjectChipView;
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.mortbay.util.ajax.JSON;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,6 +34,8 @@ public class TuteeHomeActivity extends AppCompatActivity {
 
     private JSONObject jsonResponse;
     private List<String> courseList;
+    private List<SubjectChipView> subjectChipViews;
+
 
     String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/recommended?";
 
@@ -55,6 +53,8 @@ public class TuteeHomeActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         Set<String> courses = sharedPreferences.getStringSet("courses", new HashSet<>());
         courseList = new ArrayList<>(courses); // Convert Set to List
+        courseList.add("ALL");
+        subjectChipViews = new ArrayList<>();
 
          apiUrlBuilder = new StringBuilder(apiUrl);
 
@@ -64,16 +64,35 @@ public class TuteeHomeActivity extends AppCompatActivity {
                 // Perform an action on each course, for example, print it to the log
                 SubjectChipView subjectChipView = new SubjectChipView(TuteeHomeActivity.this);
                 subjectChipView.setChipText(course);
-                chipContainer.addView(subjectChipView);
-                subjectChipView.setChipRemovedListener(new SubjectChipView.OnChipRemovedListener() {
+                subjectChipViews.add(subjectChipView);
+
+                subjectChipView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onChipRemoved(String course) {
-                        int index = courseList.indexOf(course);
-                        if (index >= 0) {
-                            courseList.remove(index);
+                    public void onClick(View v) {
+                        if (subjectChipView.isClicked) {
+                            // Assuming you've added the isClicked boolean in SubjectChipView
+                            subjectChipView.setBackgroundColor(Color.TRANSPARENT);  // or your default color
+                            subjectChipView.isClicked = false;
+                        } else {
+                            subjectChipView.setBackgroundColor(Color.parseColor("#A9A9A9"));
+                            subjectChipView.isClicked = true;
                         }
                     }
                 });
+                chipContainer.addView(subjectChipView);
+
+                // Inside your loop where you instantiate the SubjectChipView
+                subjectChipView.setChipClickListener(new SubjectChipView.ChipClickListener() {
+                    @Override
+                    public void onChipClicked(SubjectChipView chipView) {
+                        if (isAnyChipViewPressed()) {
+                            Log.d("Tutee", "hi");
+                        } else {
+                            // None of the SubjectChipViews are pressed
+                        }
+                    }
+                });
+
 
                 // Append the course to the API URL
                 apiUrlBuilder.append(course);
@@ -87,14 +106,47 @@ public class TuteeHomeActivity extends AppCompatActivity {
             apiUrlBuilder.append("&page=1");
             JSONObject jsonResponse = getTuteeHome(apiUrlBuilder,TuteeHomeActivity.this);
 
-
-
             initSearchTutorButton();
+
+            FloatingActionButton fabChat = findViewById(R.id.fabChat);
+            fabChat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(TuteeHomeActivity.this, ChatListActivity.class);
+                    startActivity(intent);
+                }
+            });
 
 
         }
 
     }
+
+    private void fetchCourseData(String courseName) {
+        String courseApiUrl = apiUrl + "course=" + courseName + "&page=1";
+
+        // Now, make an API call using the generated URL.
+        // I noticed in your code, you might be using a method named getTuteeHome to fetch data.
+        // If that's the method you use to make API calls, you can call it here:
+
+        JSONObject jsonResponse = getTuteeHome(courseApiUrl, TuteeHomeActivity.this);
+
+        // If you need further processing on the jsonResponse, you can do it here.
+    }
+
+
+
+
+
+    private boolean isAnyChipViewPressed() {
+        for (SubjectChipView chipView : subjectChipViews) {
+            if (chipView.isClicked) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private void initSearchTutorButton() {
 

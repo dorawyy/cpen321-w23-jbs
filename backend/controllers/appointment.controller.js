@@ -1,7 +1,7 @@
 const { AppointmentStatus } = require("../constants/appointment.status");
 const { UserType } = require("../constants/user.types");
 const db = require("../db")
-const { getCalendarEvents, getFreeTime } = require("../utils/google.utils");
+const { getCalendarEvents, getFreeTime, createGoogleEvent } = require("../utils/google.utils");
 const momenttz = require("moment-timezone")
 const mongoose = require("mongoose")
 
@@ -170,6 +170,7 @@ exports.acceptAppointment = async (req, res) => {
     var user = await User.findById(userId)
         .then(user => {
             if (!user || user.isBanned) {
+                console.log("line 173")
                 return res.status(400).send({ message: "User not found" })
             }
             return user
@@ -197,21 +198,22 @@ exports.acceptAppointment = async (req, res) => {
     var idStrings = usersApptIds.map(id => id.toString())
 
     if (!(idStrings.includes(apptId))) {
+        console.log("line 201")
         return res.status(404).send({
             message: "Appointment not found"
         })
     }
 
-    await Appointment.findByIdAndUpdate(
+    var acceptedAppt = await Appointment.findByIdAndUpdate(
         apptId, {status: AppointmentStatus.ACCEPTED},
         { new: true }
     ).then(appt => {
         if (!appt) {
             return res.status(404).send({
                 message: "Appointment not found"
-            })
+            }) 
         }
-        
+        return appt
     })
     .catch(err => {
         console.log(err)
@@ -236,9 +238,10 @@ exports.acceptAppointment = async (req, res) => {
         })
     })
 
-    user = await User.findById(userId)
+    var tutor = await User.findById(userId)
         .then(user => {
             if (!user || user.isBanned) {
+                console.log("line 244")
                 return res.status(400).send({ message: "User not found" })
             }
             return user
@@ -249,9 +252,42 @@ exports.acceptAppointment = async (req, res) => {
                 message: err.message
             })
         })
+
+    var tuteeId = acceptedAppt.participantsInfo
+        .filter(user => user.userId != userId)[0].userId
     
-    cleanupUserAppointments(user).then(result => {
-        res.status(200).send({
+    var tutee = await User.findById(tuteeId)
+        .then(user => {
+            if (!user || user.isBanned) {
+                console.log("line 260")
+                return res.status(400).send({ message: "User not found" })
+            }
+            return user
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(500).send({
+                message: err.message
+            })
+        })
+
+    if (tutor.useGoogleCalendar) {
+        await createGoogleEvent(tutor, tutee, acceptedAppt)
+            .catch(err => {
+                console.log(err)
+                return res.status(500).send({message: err.message})
+            })
+    }
+    if (tutee.useGoogleCalendar) {
+        await createGoogleEvent(tutee, tutor, acceptedAppt)
+                .catch(err => {
+                    console.log(err)
+                    return res.status(500).send({message: err.message})
+                })
+    }
+    
+    await cleanupUserAppointments(tutor).then(result => {
+        return res.status(200).send({
             message: "Accepted appointment successfully"
         })
     }).catch(err => {

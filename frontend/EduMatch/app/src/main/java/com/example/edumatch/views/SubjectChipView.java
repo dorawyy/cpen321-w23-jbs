@@ -9,13 +9,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.graphics.Color; // import Color class
 
 import com.example.edumatch.R;
 
 public class SubjectChipView extends RelativeLayout {
+    public interface ChipClickListener {
+        void onChipClicked(SubjectChipView chipView);
+    }
+
+    private ChipClickListener chipClickListener;
+
+    public void setChipClickListener(ChipClickListener listener) {
+        this.chipClickListener = listener;
+    }
 
     private TextView textView;
-    private Button removeButton; // Add a reference to the remove button
+    public Button removeButton; // Add a reference to the remove button
+
+    public boolean isClicked = false;
 
     private OnChipRemovedListener chipRemovedListener;
 
@@ -43,6 +55,11 @@ public class SubjectChipView extends RelativeLayout {
         }
     }
 
+    public void hideRemoveButton() {
+            removeButton.setVisibility(View.GONE);
+    }
+
+
     public void setChipRemovedListener(OnChipRemovedListener listener) {
         this.chipRemovedListener = listener;
     }
@@ -54,6 +71,7 @@ public class SubjectChipView extends RelativeLayout {
         // Find the TextView and the remove button inside the custom layout
         textView = findViewById(R.id.text);
         removeButton = findViewById(R.id.remove_subject_button);
+        isClicked = false;
 
         // Set an OnClickListener for the remove button
         if (removeButton != null) {
@@ -81,6 +99,28 @@ public class SubjectChipView extends RelativeLayout {
             if (text != null) {
                 setChipText(text);
             }
+        }
+
+
+        // Inside your onClickListener in SubjectChipView
+        this.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Toggle the clicked state and update background color accordingly
+                isClicked = !isClicked;
+                updateBackgroundColor();
+                if(chipClickListener != null) {
+                    chipClickListener.onChipClicked(SubjectChipView.this);
+                }
+            }
+        });
+    }
+
+    private void updateBackgroundColor() {
+        if (isClicked) {
+            setBackgroundColor(Color.parseColor("#A9A9A9")); // Dark Grey color when clicked
+        } else {
+            setBackgroundColor(Color.TRANSPARENT); // Reset to original or transparent color
         }
     }
 }

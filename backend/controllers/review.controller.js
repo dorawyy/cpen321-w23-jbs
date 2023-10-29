@@ -14,10 +14,15 @@ exports.addReview = async (req, res) => {
     var reviewerId = req.userId
     var reviewerDisplayedName = await User
         .findById(reviewerId, ["displayedName", "-_id"])
-        .then(user => {return user.displayedName})
+        .then(user => {
+            if (!user || user.isBanned) {
+                return res.status(400).send({message: "user not found"})
+            }
+            return user.displayedName
+        })
         .catch(err => {
             console.log(err)
-            res.status(500).send({ message: err.message })
+            return res.status(500).send({ message: err.message })
         })
 
     var userReview = {
@@ -28,10 +33,15 @@ exports.addReview = async (req, res) => {
 
     var receiver = await User
         .findById(req.body.receiverId)
-        .then(user => {return user})
+        .then(user => {
+            if (!user || user.isBanned) {
+                return res.status(400).send({message: "user not found"})
+            }
+            return user
+        })
         .catch(err => {
             console.log(err)
-            res.status(500).send({ message: err.message })
+            return res.status(500).send({ message: err.message })
         })
     
     receiver.userReviews.push(userReview)
@@ -39,21 +49,24 @@ exports.addReview = async (req, res) => {
 
     receiver.save()
         .then(user => {
+            if (!user || user.isBanned) {
+                return res.status(400).send({message: "user not found"})
+            }
             var ret = {
                 overallRating: user.overallRating,
                 userReviews: user.userReviews
             }
-            res.status(200).send(ret)
+            return res.status(200).send(ret)
         }).catch(err => {
             console.log(err)
-            res.status(500).send({ message: err.message })
+            return res.status(500).send({ message: err.message })
         })
 }
 
 exports.getUserReviews = (req, res) => {
     var userId = req.query.userId
     if (!userId) {
-        res.status(400).send({ message: "Must specify userId" })
+        return res.status(400).send({ message: "Must specify userId" })
     }
     User.findById(userId, "userReviews").then(user => {
         if (!user) {
@@ -64,7 +77,7 @@ exports.getUserReviews = (req, res) => {
         return
     }).catch(err => {
         console.log(err.message)
-        res.status(500).send({ message: err.message })
+        return res.status(500).send({ message: err.message })
     })
 }
 

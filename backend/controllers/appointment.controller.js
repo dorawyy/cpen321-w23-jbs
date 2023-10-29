@@ -7,6 +7,45 @@ const momenttz = require("moment-timezone")
 const User = db.user
 const Appointment = db.appointment
 
+exports.getAppointments = async (req, res) => {
+    var appointmentId = req.query.appointmentId
+    Appointment.findById(appointmentId)
+                .then(async appt => {
+                    if (!appt) {
+                        return res.status(404).send({
+                            message: "Appointment not found."
+                        })
+                    }
+                    var otherUserName = ""
+                    for (user of appt.participantsInfo) {
+                        if (user.userId != req.userId) {
+                            otherUserName = await User
+                                .findById(user.userId, "displayedName")
+                                .then(user => {
+                                    if (!user) {
+                                        return res.status(404).send({
+                                            message: "The other user is not found"
+                                        })
+                                    }
+                                    return user
+                                })
+                                .catch(err => {
+                                    return res.status(500).send({
+                                        message: err.message
+                                    })
+                                })
+                        }
+                    }
+                    var ret = appt
+                    ret.otherUserName = otherUserName
+                    return res.status(200).send(ret)
+                })
+                .catch(err => {
+                    return res.status(500).send({
+                        message: err.message
+                    })
+                })
+}
 
 exports.bookAppointment = async (req, res) => {
     const tutorId = req.body.tutorId

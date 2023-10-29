@@ -12,7 +12,6 @@ const participantsInfoSchema = new mongoose.Schema({
 const Appointment = mongoose.model(
     "Appointment",
     new mongoose.Schema({
-        status: Boolean,
         participantsInfo: [
             {
                 type: participantsInfoSchema
@@ -20,11 +19,11 @@ const Appointment = mongoose.model(
         ],
         course: String,
         pstStartDatetime: {
-            type: Date,
+            type: String,
             require: true
         },
         pstEndDatetime: {
-            type: Date,
+            type: String,
             require: true
         },
         location: String,

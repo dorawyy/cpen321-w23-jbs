@@ -62,6 +62,12 @@ const recommendationWeightsSchema = new mongoose.Schema({
     maxDistance: Number
 })
 
+const appointmentSchema = new mongoose.Schema({
+    _id: mongoose.Types.ObjectId, // same as Appointment db
+    pstStartDatetime: String,
+    pstEndDatetime: String
+})
+
 const User = mongoose.model(
     "User",
     new mongoose.Schema({
@@ -111,6 +117,11 @@ const User = mongoose.model(
             type: Number,
             default: 0
         },
+        appointments: [
+            {
+                type: appointmentSchema
+            }
+        ],
         hasSignedUp: {
             type: Boolean,
             default: false

@@ -5,8 +5,6 @@ import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences
 import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
 import static com.example.edumatch.util.ProfileHelper.putEditProfile;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,8 +14,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.example.edumatch.views.CourseRateItemView;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.edumatch.R;
+import com.example.edumatch.views.CourseRateItemView;
 import com.example.edumatch.views.LabelAndEditTextView;
 import com.example.edumatch.views.SubjectChipView;
 import com.google.android.flexbox.FlexboxLayout;
@@ -30,12 +30,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class CourseRatesActivity extends AppCompatActivity {
-
-    final static String TAG = "SignUpFlow";
 
     private FlexboxLayout chipContainer;
 
@@ -65,35 +62,29 @@ public class CourseRatesActivity extends AppCompatActivity {
 
         tagText = findViewById(R.id.add_tags);
         chipContainer = findViewById(R.id.chip_container);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String enteredText = tagText.getEnterUserEditText().getText().toString();
-                if (!enteredText.isEmpty()) {
+        addButton.setOnClickListener(view -> {
+            String enteredText = tagText.getEnterUserEditText().getText().toString();
+            if (!enteredText.isEmpty()) {
 
-                    // Create a SubjectChipView
-                    selectedTags.add(enteredText);
-                    SubjectChipView subjectChipView = new SubjectChipView(CourseRatesActivity.this);
-                    subjectChipView.setChipText(enteredText);
+                // Create a SubjectChipView
+                selectedTags.add(enteredText);
+                SubjectChipView subjectChipView = new SubjectChipView(CourseRatesActivity.this);
+                subjectChipView.setChipText(enteredText);
 
-                    subjectChipView.setChipRemovedListener(new SubjectChipView.OnChipRemovedListener() {
-                        @Override
-                        public void onChipRemoved(String course) {
+                subjectChipView.setChipRemovedListener(course -> {
 
-                            int index = selectedTags.indexOf(course);
-                            if (index >= 0) {
-                                selectedTags.remove(index);
-                            }
-                        }
-                    });
+                    int index = selectedTags.indexOf(course);
+                    if (index >= 0) {
+                        selectedTags.remove(index);
+                    }
+                });
 
-                    // Find the "chip_container" and add the SubjectChipView to it
+                // Find the "chip_container" and add the SubjectChipView to it
 
-                    chipContainer.addView(subjectChipView);
+                chipContainer.addView(subjectChipView);
 
-                    // Clear the AutoCompleteTextView
-                    tagText.getEnterUserEditText().setText("");
-                }
+                // Clear the AutoCompleteTextView
+                tagText.getEnterUserEditText().setText("");
             }
         });
     }
@@ -101,12 +92,7 @@ public class CourseRatesActivity extends AppCompatActivity {
     private void initNextButton() {
         Button nextButton = findViewById(R.id.next_button);
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToNewActivity();
-            }
-        });
+        nextButton.setOnClickListener(v -> goToNewActivity());
     }
 
     private void updatePreferences() {
@@ -120,7 +106,7 @@ public class CourseRatesActivity extends AppCompatActivity {
             if (child instanceof CourseRateItemView) {
                 CourseRateItemView courseRateItemView = (CourseRateItemView) child;
                 String course = courseRateItemView.getCourseText();
-                String courseRate = courseRateItemView.getRateText().toString();
+                String courseRate = courseRateItemView.getRateText();
                 double courseRateNumber = 0;
                 if(!courseRate.isEmpty())
                     try
@@ -152,7 +138,7 @@ public class CourseRatesActivity extends AppCompatActivity {
         editor.putString("coursePricePairs", coursePricePairsStr);
         Set<String> selectedTagsSet = new HashSet<>(selectedTags);
         editor.putStringSet("tags", selectedTagsSet);
-        editor.commit();
+        editor.apply();
     }
 
     private void goToNewActivity() {
@@ -222,14 +208,11 @@ public class CourseRatesActivity extends AppCompatActivity {
             SubjectChipView subjectChipView = new SubjectChipView(CourseRatesActivity.this);
             subjectChipView.setChipText(tag);
 
-            subjectChipView.setChipRemovedListener(new SubjectChipView.OnChipRemovedListener() {
-                @Override
-                public void onChipRemoved(String chipText) {
-                    // Handle chip removal
-                    int index = selectedTags.indexOf(chipText);
-                    if (index >= 0) {
-                        selectedTags.remove(index);
-                    }
+            subjectChipView.setChipRemovedListener(chipText -> {
+                // Handle chip removal
+                int index = selectedTags.indexOf(chipText);
+                if (index >= 0) {
+                    selectedTags.remove(index);
                 }
             });
 

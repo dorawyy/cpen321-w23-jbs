@@ -9,6 +9,7 @@ import static com.example.edumatch.util.ProfileHelper.putEditProfile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -40,8 +41,6 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
     private Map<String, List<String>> availabilityMap;
 
     private AvailableTimesViews availableTimesViews;
-
-    private Button setTimeButton;
 
     private String currentDay;
 
@@ -81,27 +80,25 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
     }
 
     private void initializeSetTimeButton() {
-        setTimeButton = availableTimesViews.getSetTimesButton();
+        Button setTimeButton = availableTimesViews.getSetTimesButton();
 
-        setTimeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Toggle the clicked state
-                if (availabilityMap.containsKey(currentDay)) {
-                    List<String> availability = availabilityMap.get(currentDay);
-                    String startTimeString = availableTimesViews.getStartTime();
-                    String endTimeString = availableTimesViews.getEndTime();
+        setTimeButton.setOnClickListener(v -> {
+            // Toggle the clicked state
+            if (availabilityMap.containsKey(currentDay)) {
+                List<String> availability = availabilityMap.get(currentDay);
+                String startTimeString = availableTimesViews.getStartTime();
+                String endTimeString = availableTimesViews.getEndTime();
 
-                    Boolean isValid = isStartTimeBeforeEndTime(startTimeString, endTimeString);
-                    if (isValid == false) {
-                        Toast.makeText(AvailabilityActivity.this, "Start Time Not Before End Time, Not Saved!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        availability.set(0, availableTimesViews.getStartTime());
-                        availability.set(1, availableTimesViews.getEndTime());
-                        Toast.makeText(AvailabilityActivity.this, "Saved for " + currentDay, Toast.LENGTH_SHORT).show();
-                    }
-
+                boolean isValid = isStartTimeBeforeEndTime(startTimeString, endTimeString);
+                if (!isValid) {
+                    Toast.makeText(AvailabilityActivity.this, "Start Time Not Before End Time, Not Saved!", Toast.LENGTH_SHORT).show();
+                } else {
+                    assert availability != null;
+                    availability.set(0, availableTimesViews.getStartTime());
+                    availability.set(1, availableTimesViews.getEndTime());
+                    Toast.makeText(AvailabilityActivity.this, "Saved for " + currentDay, Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
     }
@@ -137,6 +134,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         if (availabilityMap.containsKey(day)) {
             List<String> availability = availabilityMap.get(day);
 
+            assert availability != null;
             Log.w(TAG, day + availability.get(0) + availability.get(1));
         } else {
             Toast.makeText(AvailabilityActivity.this, "No availability data for " + day, Toast.LENGTH_SHORT).show();
@@ -146,11 +144,13 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void updateAvailability(String day) {
         TextView dayText = findViewById(R.id.selected_day);
         currentDay = day;
         if (availabilityMap.containsKey(day)) {
             List<String> availability = availabilityMap.get(day);
+            assert availability != null;
             String startTime = availability.get(0);
             String endTime = availability.get(1);
             availableTimesViews.setStartTime(startTime);
@@ -178,24 +178,18 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
     private void initManualButton() {
         Button manualButton = findViewById(R.id.manually_set_button);
 
-        manualButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                useGoogleCalendar = false;
-                goToNewActivity();
-            }
+        manualButton.setOnClickListener(v -> {
+            useGoogleCalendar = false;
+            goToNewActivity();
         });
     }
 
     private void initGoogleButton() {
         GoogleIconButtonView google = findViewById(R.id.google);
         Button googleButton = google.getButton();
-        googleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                useGoogleCalendar = true;
-                goToNewActivity();
-            }
+        googleButton.setOnClickListener(v -> {
+            useGoogleCalendar = true;
+            goToNewActivity();
         });
     }
 

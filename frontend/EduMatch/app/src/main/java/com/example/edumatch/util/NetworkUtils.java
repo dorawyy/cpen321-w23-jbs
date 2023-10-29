@@ -129,12 +129,7 @@ public class NetworkUtils {
     }
 
     public static void showToastOnUiThread(final Context context, final String message) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-            }
-        });
+        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context, message, Toast.LENGTH_SHORT).show());
     }
 
 
@@ -167,7 +162,7 @@ public class NetworkUtils {
                             throw new RuntimeException(e);
                         }
                     }
-                    editor.commit();
+                    editor.apply();
                     printSharedPreferences(sharedPreferences);
                     if(!successMessage.isEmpty()){
                         showToastOnUiThread(context, successMessage);

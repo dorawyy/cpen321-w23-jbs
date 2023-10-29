@@ -11,8 +11,6 @@ import android.widget.TextView;
 import com.example.edumatch.R;
 
 public class ProfileActivity extends AppCompatActivity {
-    private TextView nameTextView;
-    private TextView descriptionTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +22,8 @@ public class ProfileActivity extends AppCompatActivity {
         starRatingBar.setRating(tutorRating);
         starRatingBar.setIsIndicator(true); // Make it non-editable
 
-        nameTextView = findViewById(R.id.name);
-        descriptionTextView = findViewById(R.id.tutorDescription);
+        TextView nameTextView = findViewById(R.id.name);
+        TextView descriptionTextView = findViewById(R.id.tutorDescription);
 
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);

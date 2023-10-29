@@ -5,13 +5,11 @@ import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences
 import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
 import static com.example.edumatch.util.ProfileHelper.putEditProfile;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,9 +17,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.edumatch.BuildConfig;
 import com.example.edumatch.R;
-import com.example.edumatch.views.CourseRateItemView;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -30,15 +30,11 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mortbay.util.ajax.JSON;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Objects;
 
 public class LocationInformationActivity extends AppCompatActivity {
-
-    private RadioGroup radioGroup;
 
     private TextView addressText;
 
@@ -51,7 +47,6 @@ public class LocationInformationActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
-    final static String TAG = "LocationInformationActivity";
     private AutocompleteSupportFragment autocompleteFragment;
 
     @Override
@@ -75,23 +70,24 @@ public class LocationInformationActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void initRadioGroup() {
-        radioGroup = findViewById(R.id.radio_group);
+        RadioGroup radioGroup = findViewById(R.id.radio_group);
 
         // Set a listener for the radio group
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.in_person_radio) {
                 // Show the AutocompleteSupportFragment
-                autocompleteFragment.getView().setVisibility(View.VISIBLE);
+                autocompleteFragment.requireView().setVisibility(View.VISIBLE);
                 addressText.setVisibility(View.VISIBLE);
                 addressText.setText("");
                 isOnline = false;
             } else if (checkedId == R.id.online_radio) {
                 // Hide the AutocompleteSupportFragment
-                autocompleteFragment.getView().setVisibility(View.GONE);
+                autocompleteFragment.requireView().setVisibility(View.GONE);
                 addressText.setText("Online");
                 // Reset input of autocomplete
-                EditText autocompleteSearch = autocompleteFragment.getView().findViewById(com.google.android.libraries.places.R.id.places_autocomplete_search_input);
+                EditText autocompleteSearch = autocompleteFragment.requireView().findViewById(com.google.android.libraries.places.R.id.places_autocomplete_search_input);
                 autocompleteSearch.setText("");
                 latitude = Double.NaN;
                 longitude = Double.NaN;
@@ -105,20 +101,21 @@ public class LocationInformationActivity extends AppCompatActivity {
                 getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
         // Set the type of place data to return
+        assert autocompleteFragment != null;
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
 
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG, Place.Field.NAME));
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
-            public void onPlaceSelected(Place place) {
+            public void onPlaceSelected(@NonNull Place place) {
                 addressText.setText(String.valueOf(place.getName()));
-                latitude = place.getLatLng().latitude;
+                latitude = Objects.requireNonNull(place.getLatLng()).latitude;
                 longitude = place.getLatLng().longitude;
             }
 
             @Override
-            public void onError(Status status) {
+            public void onError(@NonNull Status status) {
                 throw new RuntimeException("Google Place API Error");
             }
         });
@@ -127,14 +124,11 @@ public class LocationInformationActivity extends AppCompatActivity {
     private void initNextButton() {
         Button nextButton = findViewById(R.id.next_button);
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isOnline == false && (Double.isNaN(latitude) || Double.isNaN(longitude))) {
-                    Toast.makeText(LocationInformationActivity.this, "No Location Selected", Toast.LENGTH_LONG).show();
-                } else {
-                    goToNewActivity();
-                }
+        nextButton.setOnClickListener(v -> {
+            if (!isOnline && (Double.isNaN(latitude) || Double.isNaN(longitude))) {
+                Toast.makeText(LocationInformationActivity.this, "No Location Selected", Toast.LENGTH_LONG).show();
+            } else {
+                goToNewActivity();
             }
         });
     }

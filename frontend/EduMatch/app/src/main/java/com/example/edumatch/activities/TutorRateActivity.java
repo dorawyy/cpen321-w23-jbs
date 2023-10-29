@@ -1,23 +1,18 @@
 package com.example.edumatch.activities;
 
-import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
 import static com.example.edumatch.util.RateHelper.postRatingWeight;
 import static com.example.edumatch.util.RateHelper.postReview;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.edumatch.R;
-import com.example.edumatch.util.NetworkUtils;
 import com.example.edumatch.views.LabelAndCommentEditTextView;
 import com.example.edumatch.views.LabelAndRatingView;
 
@@ -50,19 +45,13 @@ public class TutorRateActivity extends AppCompatActivity {
         CheckBox noShowCheckBox = findViewById(R.id.no_show);
         CheckBox lateCheckBox = findViewById(R.id.late);
 
-        noShowCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            noShowValue = isChecked;
-        });
+        noShowCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> noShowValue = isChecked);
 
-        lateCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            lateValue = isChecked;
-        });
+        lateCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> lateValue = isChecked);
 
 
         LabelAndRatingView organizationRatingView = findViewById(R.id.rating);
-        organizationRatingView.getRatingView().setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            ratingValue = rating;
-        });
+        organizationRatingView.getRatingView().setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> ratingValue = rating);
     }
 
     private void initName() {
@@ -73,23 +62,20 @@ public class TutorRateActivity extends AppCompatActivity {
     private void initSubmitButton() {
         Button submitButton = findViewById(R.id.submit_button);
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LabelAndCommentEditTextView comment = findViewById(R.id.comments);
-                commentValue = comment.getEnterUserEditText().getText().toString().trim();
-                JSONObject requestBody = constructRatingRequest();
-                JSONObject weightRequestBody = constructRatingWeightRequest();
-                Boolean weight_success = postRatingWeight(TutorRateActivity.this,weightRequestBody);
-                Boolean success = postReview(TutorRateActivity.this,requestBody);
-                if(success && weight_success){
-                    Toast.makeText(getApplicationContext(), "Successfully Rated Tutor!", Toast.LENGTH_SHORT).show();
-                    goToNewActivity();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Something went wrong. Rating not sent. ", Toast.LENGTH_SHORT).show();
-                }
-
+        submitButton.setOnClickListener(v -> {
+            LabelAndCommentEditTextView comment = findViewById(R.id.comments);
+            commentValue = comment.getEnterUserEditText().getText().toString().trim();
+            JSONObject requestBody = constructRatingRequest();
+            JSONObject weightRequestBody = constructRatingWeightRequest();
+            Boolean weight_success = postRatingWeight(TutorRateActivity.this,weightRequestBody);
+            Boolean success = postReview(TutorRateActivity.this,requestBody);
+            if(success && weight_success){
+                Toast.makeText(getApplicationContext(), "Successfully Rated Tutor!", Toast.LENGTH_SHORT).show();
+                goToNewActivity();
+            } else {
+                Toast.makeText(getApplicationContext(), "Something went wrong. Rating not sent. ", Toast.LENGTH_SHORT).show();
             }
+
         });
     }
 

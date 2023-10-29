@@ -39,8 +39,6 @@ import java.util.Set;
 
 public class UniversityInformationActivity extends AppCompatActivity {
 
-    final static String TAG = "SignUpFlow";
-
     CustomAutoCompleteView customAutoCompleteView;
 
     List<String> selectedCourses;
@@ -90,39 +88,30 @@ public class UniversityInformationActivity extends AppCompatActivity {
     private void initNextButton() {
 
         Button nextButton = findViewById(R.id.next_button);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToNewActivity();
-            }
-        });
+        nextButton.setOnClickListener(v -> goToNewActivity());
     }
 
     private void initAddButton(String[] suggestions) {
         Button addButton = findViewById(R.id.add_button); // Initialize the "add_button"
-        addButton.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(view -> {
+            String enteredText = customAutoCompleteView.getAutoCompleteTextView().getText().toString();
+            if (!enteredText.isEmpty()) {
 
-            @Override
-            public void onClick(View view) {
-                String enteredText = customAutoCompleteView.getAutoCompleteTextView().getText().toString();
-                if (!enteredText.isEmpty()) {
+                if (suggestions != null && !Arrays.asList(suggestions).contains(enteredText)) {
+                    // Display an error if the entered text doesn't match any suggestion.
+                    Toast.makeText(UniversityInformationActivity.this, "Invalid selection", Toast.LENGTH_SHORT).show();
 
-                    if (suggestions != null && !Arrays.asList(suggestions).contains(enteredText)) {
-                        // Display an error if the entered text doesn't match any suggestion.
-                        Toast.makeText(UniversityInformationActivity.this, "Invalid selection", Toast.LENGTH_SHORT).show();
+                    // Clear the entered text if it's invalid
+                    customAutoCompleteView.getAutoCompleteTextView().setText("");
+                } else if (selectedCourses.contains(enteredText)) {
+                    // Display an error if the course has already been selected.
+                    Toast.makeText(UniversityInformationActivity.this, "Course already selected", Toast.LENGTH_SHORT).show();
 
-                        // Clear the entered text if it's invalid
-                        customAutoCompleteView.getAutoCompleteTextView().setText("");
-                    } else if (selectedCourses.contains(enteredText)) {
-                        // Display an error if the course has already been selected.
-                        Toast.makeText(UniversityInformationActivity.this, "Course already selected", Toast.LENGTH_SHORT).show();
-
-                        // Clear the entered text if it's invalid
-                        customAutoCompleteView.getAutoCompleteTextView().setText("");
-                    } else {
-                        // Create a SubjectChipView
-                        updateSelectedCourses(enteredText);
-                    }
+                    // Clear the entered text if it's invalid
+                    customAutoCompleteView.getAutoCompleteTextView().setText("");
+                } else {
+                    // Create a SubjectChipView
+                    updateSelectedCourses(enteredText);
                 }
             }
         });
@@ -133,14 +122,11 @@ public class UniversityInformationActivity extends AppCompatActivity {
         SubjectChipView subjectChipView = new SubjectChipView(UniversityInformationActivity.this);
         subjectChipView.setChipText(enteredText);
 
-        subjectChipView.setChipRemovedListener(new SubjectChipView.OnChipRemovedListener() {
-            @Override
-            public void onChipRemoved(String course) {
+        subjectChipView.setChipRemovedListener(course -> {
 
-                int index = selectedCourses.indexOf(course);
-                if (index >= 0) {
-                    selectedCourses.remove(index);
-                }
+            int index = selectedCourses.indexOf(course);
+            if (index >= 0) {
+                selectedCourses.remove(index);
             }
         });
 

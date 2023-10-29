@@ -3,6 +3,8 @@ package com.example.edumatch.activities;
 import static com.example.edumatch.util.AppointmentHelper.getAppointment;
 import static com.example.edumatch.util.AppointmentHelper.putAppointment;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +30,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void initFields() {
         TextView name = findViewById(R.id.name);
         TextView course = findViewById(R.id.course);
@@ -64,12 +67,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
 
     private void initCancelButton() {
         Button cancelButton = findViewById(R.id.cancel_button);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToNewActivity();
-            }
-        });
+        cancelButton.setOnClickListener(v -> goToNewActivity());
     }
 
 

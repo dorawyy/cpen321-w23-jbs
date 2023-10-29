@@ -19,8 +19,6 @@ import org.json.JSONObject;
 
 public class AccountInformationActivity extends AppCompatActivity {
 
-    final static String TAG = "SignUpFlow";
-
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
@@ -46,8 +44,8 @@ public class AccountInformationActivity extends AppCompatActivity {
         if (sharedPreferences.getBoolean("useGoogle", false) || sharedPreferences.getBoolean("isEditing", false)) {
             int[] viewIds = {R.id.create_userName, R.id.create_password};
 
-            for (int i = 0; i < viewIds.length; i++) {
-                LabelAndEditTextView view = findViewById(viewIds[i]);
+            for (int viewId : viewIds) {
+                LabelAndEditTextView view = findViewById(viewId);
                 view.setVisibility(View.GONE);
             }
         }
@@ -55,13 +53,10 @@ public class AccountInformationActivity extends AppCompatActivity {
 
     private void initNextButton() {
         Button nextButton = findViewById(R.id.next_button);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean verified = verifyFields();
-                if (verified == true) {
-                    goToNewActivity();
-                }
+        nextButton.setOnClickListener(v -> {
+            boolean verified = verifyFields();
+            if (verified) {
+                goToNewActivity();
             }
         });
     }

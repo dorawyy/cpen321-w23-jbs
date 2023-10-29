@@ -2,28 +2,17 @@ package com.example.edumatch.util;
 
 import static com.example.edumatch.util.NetworkUtils.handlePutPostResponse;
 import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
-import static com.example.edumatch.util.NetworkUtils.showToastOnUiThread;
-import static com.example.edumatch.util.ProfileHelper.constructSignUpRequest;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.edumatch.activities.AvailabilityActivity;
-
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.mortbay.util.ajax.JSON;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,7 +25,6 @@ public class LoginSignupHelper {
         if (inputType != null) {
             switch (inputType) {
                 case "text":
-                    inputTypeValue = InputType.TYPE_CLASS_TEXT;
                     break;
                 case "textPassword":
                     inputTypeValue = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
@@ -62,11 +50,7 @@ public class LoginSignupHelper {
         }
 
         if (startTime != null && endTime != null) {
-            if (endTime.before(startTime)) {
-                return false;
-            } else {
-                return true;
-            }
+            return !endTime.before(startTime);
         } else {
             Log.e(TAG, "Parsing Error");
             return false;

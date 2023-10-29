@@ -3,33 +3,28 @@ package com.example.edumatch.activities;
 import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
 import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.edumatch.R;
 import com.example.edumatch.views.GoogleIconButtonView;
 import com.example.edumatch.views.LabelAndEditTextView;
-import com.example.edumatch.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.api.services.calendar.CalendarScopes;
 
@@ -39,7 +34,6 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
 
     private boolean useGoogle;
-    private GoogleSignInAccount account = null;
     private GoogleSignInClient mGoogleSignInClient;
     final static String TAG = "MainActivity";
 
@@ -49,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Boolean newUser;
 
-    private Class nextActivity = EditProfileListActivity.class;
+    private final Class<EditProfileListActivity> nextActivity = EditProfileListActivity.class;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,23 +61,15 @@ public class MainActivity extends AppCompatActivity {
     private void initSignInButton() {
         Button signInButton = findViewById(R.id.signin_button);
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleSignInClick();
-            }
-        });
+        signInButton.setOnClickListener(v -> handleSignInClick());
     }
 
     private void initSignUpButton() {
         Button signUpButton = findViewById(R.id.signup_button);
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                useGoogle = false;
-                goToSignUpActivity();
-            }
+        signUpButton.setOnClickListener(v -> {
+            useGoogle = false;
+            goToSignUpActivity();
         });
     }
 
@@ -95,12 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button googleSignInButton = googleSignIn.getButton();
 
-        googleSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                googleSignIn();
-            }
-        });
+        googleSignInButton.setOnClickListener(v -> googleSignIn());
 
     }
 
@@ -114,16 +95,16 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignIn.getClient(this, gso).signOut()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            // After signing out, request account selection explicitly
-                            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                            googleSignInActivityResultLauncher.launch(signInIntent);
-                        } else {
-                            // Handle sign-out error
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // After signing out, request account selection explicitly
+                        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                        googleSignInActivityResultLauncher.launch(signInIntent);
+                    } else {
+                        // Handle sign-out error
+                        Log.e("GoogleSignIn","Problem Signing Out");
+                        throw new RuntimeException();
+
                     }
                 });
 
@@ -134,19 +115,16 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityResultLauncher<Intent> googleSignInActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
-                    handleGoogleSignInResult(task);
-                }
+            result -> {
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                handleGoogleSignInResult(task);
             }
     );
 
 
     private void handleGoogleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            account = completedTask.getResult(ApiException.class);
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             idToken = account.getIdToken();
             authCode = account.getServerAuthCode();
             Log.d("GooglePost", idToken);
@@ -200,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isEditing", false);
         editor.putBoolean("useGoogle", useGoogle);
-        editor.commit();
+        editor.apply();
         return sharedPreferences;
     }
 
@@ -234,37 +212,30 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        if (jsonResponse != null) {
-            try {
-                if (jsonResponse.has("errorDetails")) {
-                    JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
-                    if (errorDetails.has("message")) {
-                        String message = errorDetails.getString("message");
-                        if ("Username or password is incorrect".equals(message)) {
-                            // Handle the case where the username already exists
-                            runOnUiThread(() -> {
-                                Toast.makeText(getApplicationContext(), "Username or password is incorrect", Toast.LENGTH_SHORT).show();
-                            });
-                            return false; // Return false to indicate failure
-                        }
+        try {
+            if (jsonResponse.has("errorDetails")) {
+                JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
+                if (errorDetails.has("message")) {
+                    String message = errorDetails.getString("message");
+                    if ("Username or password is incorrect".equals(message)) {
+                        // Handle the case where the username already exists
+                        runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Username or password is incorrect", Toast.LENGTH_SHORT).show());
+                        return false; // Return false to indicate failure
                     }
-                } else {
-                    SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("jwtToken", jsonResponse.getString("jwtToken"));
-                    editor.putString("userType", jsonResponse.getString("type"));
-                    editor.commit();
-                    printSharedPreferences(sharedPreferences);
-                    return true;
                 }
-                Log.d("SignInPost", jsonResponse.toString());
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return false;
+            } else {
+                SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("jwtToken", jsonResponse.getString("jwtToken"));
+                editor.putString("userType", jsonResponse.getString("type"));
+                editor.apply();
+                printSharedPreferences(sharedPreferences);
+                return true;
             }
-        } else {
-            Log.d("SignInPost", "jsonResponse was NULL");
+            Log.d("SignInPost", jsonResponse.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
             return false;
         }
         return false;
@@ -287,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("jwtToken", jsonResponse.getString("jwtToken"));
                 newUser = jsonResponse.getBoolean("newUser");
                 editor.putString("userType", jsonResponse.getString("type"));
-                editor.commit();
+                editor.apply();
                 printSharedPreferences(sharedPreferences);
                 Log.d("GooglePost", jsonResponse.toString());
                 return true;

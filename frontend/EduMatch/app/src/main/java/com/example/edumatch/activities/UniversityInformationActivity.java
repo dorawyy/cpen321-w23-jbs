@@ -2,6 +2,8 @@ package com.example.edumatch.activities;
 
 
 import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
+import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
+import static com.example.edumatch.util.ProfileHelper.putEditProfile;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,15 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -27,9 +25,12 @@ import com.example.edumatch.views.LabelAndEditTextView;
 import com.example.edumatch.views.SubjectChipView;
 import com.google.android.flexbox.FlexboxLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -37,8 +38,6 @@ import java.util.Objects;
 import java.util.Set;
 
 public class UniversityInformationActivity extends AppCompatActivity {
-
-    final static String TAG = "SignUpFlow";
 
     CustomAutoCompleteView customAutoCompleteView;
 
@@ -78,7 +77,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
     private String[] initSuggestions() {
         customAutoCompleteView = findViewById(R.id.search_courses_auto_complete);
 
-        // todo replace this with an api call to get courses
+        // TODO: replace this with an api call to get courses
         String[] suggestions = new String[]{"CPEN 322", "CPEN 321", "ELEC 201", "MATH 220", "ELEC 221", "CPSC 320", "CPEN 300", "CPEN 301", "CPEN 999", "CPEN 666", "CPEN 696", "CPEN 123"};
 
         customAutoCompleteView.setSuggestions(suggestions);
@@ -89,39 +88,30 @@ public class UniversityInformationActivity extends AppCompatActivity {
     private void initNextButton() {
 
         Button nextButton = findViewById(R.id.next_button);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToNewActivity();
-            }
-        });
+        nextButton.setOnClickListener(v -> goToNewActivity());
     }
 
     private void initAddButton(String[] suggestions) {
         Button addButton = findViewById(R.id.add_button); // Initialize the "add_button"
-        addButton.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(view -> {
+            String enteredText = customAutoCompleteView.getAutoCompleteTextView().getText().toString();
+            if (!enteredText.isEmpty()) {
 
-            @Override
-            public void onClick(View view) {
-                String enteredText = customAutoCompleteView.getAutoCompleteTextView().getText().toString();
-                if (!enteredText.isEmpty()) {
+                if (suggestions != null && !Arrays.asList(suggestions).contains(enteredText)) {
+                    // Display an error if the entered text doesn't match any suggestion.
+                    Toast.makeText(UniversityInformationActivity.this, "Invalid selection", Toast.LENGTH_SHORT).show();
 
-                    if (suggestions != null && !Arrays.asList(suggestions).contains(enteredText)) {
-                        // Display an error if the entered text doesn't match any suggestion.
-                        Toast.makeText(UniversityInformationActivity.this, "Invalid selection", Toast.LENGTH_SHORT).show();
+                    // Clear the entered text if it's invalid
+                    customAutoCompleteView.getAutoCompleteTextView().setText("");
+                } else if (selectedCourses.contains(enteredText)) {
+                    // Display an error if the course has already been selected.
+                    Toast.makeText(UniversityInformationActivity.this, "Course already selected", Toast.LENGTH_SHORT).show();
 
-                        // Clear the entered text if it's invalid
-                        customAutoCompleteView.getAutoCompleteTextView().setText("");
-                    } else if (selectedCourses.contains(enteredText)) {
-                        // Display an error if the course has already been selected.
-                        Toast.makeText(UniversityInformationActivity.this, "Course already selected", Toast.LENGTH_SHORT).show();
-
-                        // Clear the entered text if it's invalid
-                        customAutoCompleteView.getAutoCompleteTextView().setText("");
-                    } else {
-                        // Create a SubjectChipView
-                        updateSelectedCourses(enteredText);
-                    }
+                    // Clear the entered text if it's invalid
+                    customAutoCompleteView.getAutoCompleteTextView().setText("");
+                } else {
+                    // Create a SubjectChipView
+                    updateSelectedCourses(enteredText);
                 }
             }
         });
@@ -132,14 +122,11 @@ public class UniversityInformationActivity extends AppCompatActivity {
         SubjectChipView subjectChipView = new SubjectChipView(UniversityInformationActivity.this);
         subjectChipView.setChipText(enteredText);
 
-        subjectChipView.setChipRemovedListener(new SubjectChipView.OnChipRemovedListener() {
-            @Override
-            public void onChipRemoved(String course) {
+        subjectChipView.setChipRemovedListener(course -> {
 
-                int index = selectedCourses.indexOf(course);
-                if (index >= 0) {
-                    selectedCourses.remove(index);
-                }
+            int index = selectedCourses.indexOf(course);
+            if (index >= 0) {
+                selectedCourses.remove(index);
             }
         });
 
@@ -201,21 +188,21 @@ public class UniversityInformationActivity extends AppCompatActivity {
 
     private void goToNewActivity() {
         Class nextClass;
+        updatePreferences();
+        printSharedPreferences(sharedPreferences);
         if(Objects.equals(sharedPreferences.getString("userType",""), "tutor")){
             nextClass = CourseRatesActivity.class;
         } else {
             if(sharedPreferences.getBoolean("isEditing",false)){
-                //todo do a PUT here (make a common function)
+                //TODO: do a PUT here (make a common function)
+                JSONObject request = constructEditUniversityInformation();
+                putEditProfile(request,UniversityInformationActivity.this);
                 nextClass =  EditProfileListActivity.class;
             } else {
                 nextClass = LocationInformationActivity.class;
             }
         }
         Intent newIntent = new Intent(UniversityInformationActivity.this, nextClass);
-        updatePreferences();
-        printSharedPreferences(sharedPreferences);
-        startActivity(newIntent);
-
         startActivity(newIntent);
     }
 
@@ -254,6 +241,34 @@ public class UniversityInformationActivity extends AppCompatActivity {
             LabelAndEditTextView view = findViewById(viewIds[i]);
             String savedValue = sharedPreferences.getString(keys[i], "");
             view.getEnterUserEditText().setText(savedValue);
+        }
+    }
+
+
+    public JSONObject constructEditUniversityInformation() {
+        try {
+            // Retrieve data from SharedPreferences
+
+            SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+
+            JSONObject requestBody = new JSONObject();
+
+            // For education
+            JSONObject education = new JSONObject();
+            education.put("school", sharedPreferences.getString("university", ""));
+            education.put("program", sharedPreferences.getString("program", ""));
+            education.put("level", sharedPreferences.getString("yearLevel", ""));
+            Set<String> courses = sharedPreferences.getStringSet("courses", new HashSet<>());
+            JSONArray coursesArray = new JSONArray(courses);
+            education.put("courses", coursesArray);
+            requestBody.put("education",education);
+
+
+            logRequestToConsole(requestBody);
+            return requestBody;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

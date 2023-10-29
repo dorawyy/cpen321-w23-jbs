@@ -2,15 +2,13 @@ package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.edumatch.R;
 
@@ -18,7 +16,6 @@ public class TutorOrTuteeActivity extends AppCompatActivity {
 
     private String userType;
 
-    final static String TAG = "TutorOrTuteeActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,23 +28,17 @@ public class TutorOrTuteeActivity extends AppCompatActivity {
 
     private void initTutorButton() {
         Button tutorButton = findViewById(R.id.tutor_button);
-        tutorButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userType = "tutor";
-                goToNewActivity();
-            }
+        tutorButton.setOnClickListener(v -> {
+            userType = "tutor";
+            goToNewActivity();
         });
     }
 
     private void initTuteeButton() {
         Button tuteeButton = findViewById(R.id.tutee_button);
-        tuteeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userType = "tutee";
-                goToNewActivity();
-            }
+        tuteeButton.setOnClickListener(v -> {
+            userType = "tutee";
+            goToNewActivity();
         });
     }
 
@@ -56,7 +47,7 @@ public class TutorOrTuteeActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("userType", userType);
-        editor.commit();
+        editor.apply();
         return sharedPreferences;
     }
 

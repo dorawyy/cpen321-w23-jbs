@@ -1,21 +1,18 @@
 package com.example.edumatch.util;
 
-import android.app.Activity;
+import static com.example.edumatch.util.NetworkUtils.handlePutPostResponse;
+import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
+
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.widget.Toast;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,7 +25,6 @@ public class LoginSignupHelper {
         if (inputType != null) {
             switch (inputType) {
                 case "text":
-                    inputTypeValue = InputType.TYPE_CLASS_TEXT;
                     break;
                 case "textPassword":
                     inputTypeValue = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
@@ -54,11 +50,7 @@ public class LoginSignupHelper {
         }
 
         if (startTime != null && endTime != null) {
-            if (endTime.before(startTime)) {
-                return false;
-            } else {
-                return true;
-            }
+            return !endTime.before(startTime);
         } else {
             Log.e(TAG, "Parsing Error");
             return false;
@@ -91,6 +83,21 @@ public class LoginSignupHelper {
                 Log.d("SharedPreferencesData", "Key: " + key + ", Value: " + value.toString());
             }
         }
+    }
+
+
+
+    public static Boolean postSignUpInfo(Context context, JSONObject requestBody) {
+        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/api/auth/signup";
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+
+        JSONObject jsonResponse = sendHttpRequest(apiUrl, sharedPreferences.getString("jwtToken", ""), "POST", requestBody);
+
+        String successMessage = "Successfully Signed Up";
+        String logTag = "SignUpPost";
+
+        return handlePutPostResponse(context,jsonResponse,successMessage,logTag);
     }
 
 }

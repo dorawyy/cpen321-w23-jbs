@@ -16,7 +16,6 @@ import com.example.edumatch.util.LoginSignupHelper;
 public class LabelAndCommentTextView extends GridLayout {
 
     private TextView label;
-    private EditText editText;
     private TextView content;
 
     public LabelAndCommentTextView(Context context) {
@@ -34,9 +33,6 @@ public class LabelAndCommentTextView extends GridLayout {
         init(context, attrs);
     }
 
-    public EditText getEditText() {
-        return editText;
-    }
 
     public TextView getContentText() {
         return content;

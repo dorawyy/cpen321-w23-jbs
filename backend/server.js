@@ -11,6 +11,7 @@ const recommendationRoutes = require("./routes/recommendation.routes")
 const browseRoutes = require("./routes/browse.routes")
 const reviewRoutes = require("./routes/review.routes")
 const appointmentRoutes = require("./routes/appointment.routes")
+const adminRoutes = require("./routes/admin.routes")
 
 const mongoUrl = process.env.MONGODB_URI
 const env = process.env.ENV
@@ -44,6 +45,7 @@ recommendationRoutes(app)
 browseRoutes(app)
 reviewRoutes(app)
 appointmentRoutes(app)
+adminRoutes(app)
 
 if (env === 'prod') {
     // PRODUCTION

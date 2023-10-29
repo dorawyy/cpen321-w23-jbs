@@ -121,8 +121,11 @@ const User = mongoose.model(
             {
                 type: appointmentSchema
             }
-        ]
-
+        ],
+        hasSignedUp: {
+            type: Boolean,
+            default: false
+        }
     })
 )
 

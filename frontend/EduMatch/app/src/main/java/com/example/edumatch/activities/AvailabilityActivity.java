@@ -1,29 +1,30 @@
 package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.LoginSignupHelper.isStartTimeBeforeEndTime;
+import static com.example.edumatch.util.LoginSignupHelper.postSignUpInfo;
 import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
-import static com.example.edumatch.util.NetworkUtils.postDataToBackend;
+import static com.example.edumatch.util.ProfileHelper.constructSignUpRequest;
+import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
+import static com.example.edumatch.util.ProfileHelper.putEditProfile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.edumatch.views.AvailableTimesViews;
-import com.example.edumatch.views.CourseRateItemView;
 import com.example.edumatch.views.DayOfTheWeekView;
 import com.example.edumatch.R;
 import com.example.edumatch.views.GoogleIconButtonView;
-import com.example.edumatch.views.LabelAndEditTextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,22 +32,15 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 public class AvailabilityActivity extends AppCompatActivity implements DayOfTheWeekView.DayOfTheWeekClickListener {
-    //todo Add navigation to next activity on both set buttons
-    //todo Add a check that google account isn't null if set automatically, IE account needs to be added to the bundle
-    //todo either add the availability to bundle or make api call here need to send available times, and boolean representing if using calendar or manual times
     final static String TAG = "AvailabilityActivity";
     private Map<String, List<String>> availabilityMap;
 
     private AvailableTimesViews availableTimesViews;
-
-    private Button setTimeButton;
 
     private String currentDay;
 
@@ -54,8 +48,6 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-
-    private JSONObject jsonResponse;
 
 
     @Override
@@ -79,7 +71,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
 
     private void initInvisibleFields() {
 
-        if (!sharedPreferences.getBoolean("useGoogle", false)) {
+        if (!sharedPreferences.getBoolean("useGoogle", false) && !sharedPreferences.getString("username", "").isEmpty()) {
             GoogleIconButtonView googleView = findViewById(R.id.google);
             googleView.setVisibility(View.GONE);
             TextView text = findViewById(R.id.automatically_set_title);
@@ -88,27 +80,25 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
     }
 
     private void initializeSetTimeButton() {
-        setTimeButton = availableTimesViews.getSetTimesButton();
+        Button setTimeButton = availableTimesViews.getSetTimesButton();
 
-        setTimeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Toggle the clicked state
-                if (availabilityMap.containsKey(currentDay)) {
-                    List<String> availability = availabilityMap.get(currentDay);
-                    String startTimeString = availableTimesViews.getStartTime();
-                    String endTimeString = availableTimesViews.getEndTime();
+        setTimeButton.setOnClickListener(v -> {
+            // Toggle the clicked state
+            if (availabilityMap.containsKey(currentDay)) {
+                List<String> availability = availabilityMap.get(currentDay);
+                String startTimeString = availableTimesViews.getStartTime();
+                String endTimeString = availableTimesViews.getEndTime();
 
-                    Boolean isValid = isStartTimeBeforeEndTime(startTimeString, endTimeString);
-                    if (isValid == false) {
-                        Toast.makeText(AvailabilityActivity.this, "Start Time Not Before End Time, Not Saved!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        availability.set(0, availableTimesViews.getStartTime());
-                        availability.set(1, availableTimesViews.getEndTime());
-                        Toast.makeText(AvailabilityActivity.this, "Saved for " + currentDay, Toast.LENGTH_SHORT).show();
-                    }
-
+                boolean isValid = isStartTimeBeforeEndTime(startTimeString, endTimeString);
+                if (!isValid) {
+                    Toast.makeText(AvailabilityActivity.this, "Start Time Not Before End Time, Not Saved!", Toast.LENGTH_SHORT).show();
+                } else {
+                    assert availability != null;
+                    availability.set(0, availableTimesViews.getStartTime());
+                    availability.set(1, availableTimesViews.getEndTime());
+                    Toast.makeText(AvailabilityActivity.this, "Saved for " + currentDay, Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
     }
@@ -144,6 +134,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         if (availabilityMap.containsKey(day)) {
             List<String> availability = availabilityMap.get(day);
 
+            assert availability != null;
             Log.w(TAG, day + availability.get(0) + availability.get(1));
         } else {
             Toast.makeText(AvailabilityActivity.this, "No availability data for " + day, Toast.LENGTH_SHORT).show();
@@ -153,11 +144,13 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void updateAvailability(String day) {
         TextView dayText = findViewById(R.id.selected_day);
         currentDay = day;
         if (availabilityMap.containsKey(day)) {
             List<String> availability = availabilityMap.get(day);
+            assert availability != null;
             String startTime = availability.get(0);
             String endTime = availability.get(1);
             availableTimesViews.setStartTime(startTime);
@@ -185,24 +178,18 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
     private void initManualButton() {
         Button manualButton = findViewById(R.id.manually_set_button);
 
-        manualButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                useGoogleCalendar = false;
-                goToNewActivity();
-            }
+        manualButton.setOnClickListener(v -> {
+            useGoogleCalendar = false;
+            goToNewActivity();
         });
     }
 
     private void initGoogleButton() {
         GoogleIconButtonView google = findViewById(R.id.google);
         Button googleButton = google.getButton();
-        googleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                useGoogleCalendar = true;
-                goToNewActivity();
-            }
+        googleButton.setOnClickListener(v -> {
+            useGoogleCalendar = true;
+            goToNewActivity();
         });
     }
 
@@ -233,21 +220,16 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         updatePreferences();
         printSharedPreferences(sharedPreferences);
         if (sharedPreferences.getBoolean("isEditing", false)) {
-            //todo do a PUT here (make a common function)
+            JSONObject request = constructEditAvailabilityRequest();
+            putEditProfile(request, AvailabilityActivity.this);
             newIntent = new Intent(AvailabilityActivity.this, EditProfileListActivity.class);
             startActivity(newIntent);
         } else {
-            // todo: this goes into the homepage
+            // TODO: this goes into the homepage
             //try posting user details
-            boolean success = postSignUpInfo();
-            if(success){
-                try {
-                    editor.putString("jwtToken",jsonResponse.getString("jwtToken"));
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-                editor.commit();
-                printSharedPreferences(sharedPreferences);
+            JSONObject requestBody = constructSignUpRequest(AvailabilityActivity.this);// Create your JSON request body
+            boolean success = postSignUpInfo(AvailabilityActivity.this,requestBody);
+            if (success) {
                 newIntent = new Intent(AvailabilityActivity.this, EditProfileListActivity.class);
                 startActivity(newIntent);
             }
@@ -276,86 +258,19 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         }
     }
 
-    private Boolean postSignUpInfo() {
-        JSONObject requestBody = constructSignUpRequestFromSharedPreferences();// Create your JSON request body
-        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/api/auth/signup";
-
-         jsonResponse = postDataToBackend(apiUrl, requestBody,sharedPreferences.getString("jwtToken", ""));
-
-        if (jsonResponse != null) {
-            try {
-                if (jsonResponse.has("errorDetails")) {
-                    JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
-                    if (errorDetails.has("message")) {
-                        String message = errorDetails.getString("message");
-                        if ("Username already exists.".equals(message)) {
-                            // Handle the case where the username already exists
-                            runOnUiThread(() -> {
-                                Toast.makeText(getApplicationContext(), "Username already exists.", Toast.LENGTH_SHORT).show();
-                            });
-                            return false; // Return false to indicate failure
-                        }
-                    }
-                }
-                Log.d("SignUpPost", jsonResponse.toString());
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return false;
-            }
-        } else {
-            Log.d("SignUpPost","jsonResponse was NULL");
-        }
-        return true;
-    }
 
 
-    private JSONObject constructSignUpRequestFromSharedPreferences() {
+
+    public JSONObject constructEditAvailabilityRequest() {
+
         try {
             // Retrieve data from SharedPreferences
-            SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 
             JSONObject requestBody = new JSONObject();
-            requestBody.put("type", sharedPreferences.getString("userType", ""));
-            requestBody.put("displayedName", sharedPreferences.getString("name", ""));
-            requestBody.put("email", sharedPreferences.getString("email", ""));
-            requestBody.put("phoneNumber", sharedPreferences.getString("phoneNumber", ""));
-            requestBody.put("username", sharedPreferences.getString("username", ""));
-            requestBody.put("password", sharedPreferences.getString("password", ""));
-            requestBody.put("locationMode", sharedPreferences.getString("locationMode", ""));
-
-            // For location (latitude and longitude)
-            JSONObject location = new JSONObject();
-            location.put("lat", sharedPreferences.getFloat("latitude", 0));
-            location.put("long", sharedPreferences.getFloat("longitude", 0));
-            requestBody.put("location", location);
-
-            // For education
-            JSONObject education = new JSONObject();
-            education.put("school", sharedPreferences.getString("university", ""));
-            education.put("program", sharedPreferences.getString("program", ""));
-            education.put("level", sharedPreferences.getString("yearLevel", ""));
-            Set<String> courses = sharedPreferences.getStringSet("courses", new HashSet<>());
-            JSONArray coursesArray = new JSONArray(courses);
-            education.put("courses", coursesArray);
-
-            Set<String> tags = sharedPreferences.getStringSet("tags", new HashSet<>());
-            JSONArray tagsArray = new JSONArray(tags);
-            education.put("tags", tagsArray);
-
-            requestBody.put("education", education);
 
             // For useGoogleCalendar
             boolean useGoogleCalendar = sharedPreferences.getBoolean("useGoogleCalendar", false);
             requestBody.put("useGoogleCalendar", useGoogleCalendar);
-
-            String subjectHourlyRateJson = sharedPreferences.getString("coursePricePairs", "");
-
-            if (!subjectHourlyRateJson.isEmpty()) {
-                // Parse the subjectHourlyRate JSON
-                JSONObject subjectHourlyRate = new JSONObject(subjectHourlyRateJson);
-                requestBody.put("subjectHourlyRate", subjectHourlyRate);
-            }
 
             JSONArray manualAvailabilityArray = new JSONArray();
 
@@ -402,16 +317,14 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
             manualAvailabilityArray.put(saturday);
 
             requestBody.put("manualAvailability", manualAvailabilityArray);
-
             logRequestToConsole(requestBody);
             return requestBody;
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
+
     }
 
-    private void logRequestToConsole(JSONObject request) {
-        Log.d("SignUpPost", "Request JSON: " + request.toString());
-    }
+
 }

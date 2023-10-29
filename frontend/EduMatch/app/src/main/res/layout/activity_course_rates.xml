@@ -7,6 +7,7 @@
 	<androidx.gridlayout.widget.GridLayout xmlns:app="http://schemas.android.com/apk/res-auto"
 		style="@style/GridLayout"
 		android:layout_gravity="top"
+		android:paddingTop="100dp"
 		app:columnCount="1"
 		app:rowCount="7">
 

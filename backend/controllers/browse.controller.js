@@ -8,10 +8,10 @@ const User = db.user
 exports.recommended = async (req, res) => {
     const tutee = await User.findById(req.userId)
     if (!tutee)
-        res.status(400).send({ message: "Could not find tutee in database with provided id"})
+        return res.status(400).send({ message: "Could not find tutee in database with provided id"})
 
     if (req.query.page < 1)
-        res.status(400).send({ message: "Page number cannot be less than 1" })
+        return res.status(400).send({ message: "Page number cannot be less than 1" })
 
     if (req.query.courses) {
         // specific course browse
@@ -24,17 +24,19 @@ exports.recommended = async (req, res) => {
         // note: the slice() method handles slicing beyond the end of the array
         const tutorsToDisplay = tutors.slice((req.query.page - 1) * 10, req.query.page * 10)
 
-        res.status(200).json(tutorsToDisplay.map(tutor => ({
-            tutorId: tutor._id,
-            displayedName: tutor.displayedName,
-            rating: tutor.overallRating,
-            locationMode: tutor.locationMode,
-            location: tutor.location,
-            school: tutor.education.school,
-            courses: tutor.education.courses,
-            tags: tutor.education.tags,
-            pricing: tutor.subjectHourlyRate.filter(subject => req.query.courses.includes(subject.course))
-        })))
+        return res.status(200).json({
+            tutors: tutorsToDisplay.map(tutor => ({
+                tutorId: tutor._id,
+                displayedName: tutor.displayedName,
+                rating: tutor.overallRating,
+                locationMode: tutor.locationMode,
+                location: tutor.location,
+                school: tutor.education.school,
+                courses: tutor.education.courses,
+                tags: tutor.education.tags,
+                pricing: tutor.subjectHourlyRate.filter(subject => req.query.courses.includes(subject.course))
+            }))
+        })
     } else {
         // generic browse
         if (tutee.education.courses) {
@@ -48,16 +50,18 @@ exports.recommended = async (req, res) => {
                 tutorsWithSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
                 const tutorsToDisplay = tutorsWithSharedCourses.slice((req.query.page - 1) * 10, req.query.page * 10)
 
-                res.status(200).json(tutorsToDisplay.map(tutor => ({
-                    tutorId: tutor._id,
-                    displayedName: tutor.displayedName,
-                    rating: tutor.overallRating,
-                    locationMode: tutor.locationMode,
-                    location: tutor.location,
-                    school: tutor.education.school,
-                    courses: tutor.education.courses,
-                    tags: tutor.education.tags
-                })))
+                return res.status(200).json({
+                    tutors: tutorsToDisplay.map(tutor => ({
+                        tutorId: tutor._id,
+                        displayedName: tutor.displayedName,
+                        rating: tutor.overallRating,
+                        locationMode: tutor.locationMode,
+                        location: tutor.location,
+                        school: tutor.education.school,
+                        courses: tutor.education.courses,
+                        tags: tutor.education.tags,
+                    }))
+                })
             } else if ((req.query.page - 1) * 10 < tutorsWithSharedCourses.length && 
                         req.query.page * 10 > tutorsWithSharedCourses.length) {
                 // the page will display the bottom of the scored tutors with shared courses, and the top of the scored tutors without shared courses
@@ -72,16 +76,18 @@ exports.recommended = async (req, res) => {
                     ...tutorsWithoutSharedCourses.slice(0, req.query.page * 10 - tutorsWithSharedCourses.length)
                 ]
 
-                res.status(200).json(tutorsToDisplay.map(tutor => ({
-                    tutorId: tutor._id,
-                    displayedName: tutor.displayedName,
-                    rating: tutor.overallRating,
-                    locationMode: tutor.locationMode,
-                    location: tutor.location,
-                    school: tutor.education.school,
-                    courses: tutor.education.courses,
-                    tags: tutor.education.tags
-                })))
+                return res.status(200).json({
+                    tutors: tutorsToDisplay.map(tutor => ({
+                        tutorId: tutor._id,
+                        displayedName: tutor.displayedName,
+                        rating: tutor.overallRating,
+                        locationMode: tutor.locationMode,
+                        location: tutor.location,
+                        school: tutor.education.school,
+                        courses: tutor.education.courses,
+                        tags: tutor.education.tags,
+                    }))
+                })
             } else if ((req.query.page - 1) * 10 >= tutorsWithSharedCourses.length) {
                 // the page will display only tutors without shared courses
                 const tutorsWithoutSharedCourses = await User.find({
@@ -91,16 +97,18 @@ exports.recommended = async (req, res) => {
                 tutorsWithoutSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
                 const tutorsToDisplay = tutorsWithoutSharedCourses.slice((req.query.page - 1) * 10, req.query.page * 10)
                 
-                res.status(200).json(tutorsToDisplay.map(tutor => ({
-                    tutorId: tutor._id,
-                    displayedName: tutor.displayedName,
-                    rating: tutor.overallRating,
-                    locationMode: tutor.locationMode,
-                    location: tutor.location,
-                    school: tutor.education.school,
-                    courses: tutor.education.courses,
-                    tags: tutor.education.tags
-                })))
+                return res.status(200).json({
+                    tutors: tutorsToDisplay.map(tutor => ({
+                        tutorId: tutor._id,
+                        displayedName: tutor.displayedName,
+                        rating: tutor.overallRating,
+                        locationMode: tutor.locationMode,
+                        location: tutor.location,
+                        school: tutor.education.school,
+                        courses: tutor.education.courses,
+                        tags: tutor.education.tags,
+                    }))
+                })
             }
         } else {
             // do not filter if courses field is not set
@@ -110,16 +118,18 @@ exports.recommended = async (req, res) => {
             tutors.sort((a, b) => score(tutee, b) - score(tutee, a))
             const tutorsToDisplay = tutors.slice((req.query.page - 1) * 10, req.query.page * 10)
             
-            res.status(200).json(tutorsToDisplay.map(tutor => ({
-                tutorId: tutor._id,
-                displayedName: tutor.displayedName,
-                rating: tutor.overallRating,
-                locationMode: tutor.locationMode,
-                location: tutor.location,
-                school: tutor.education.school,
-                courses: tutor.education.courses,
-                tags: tutor.education.tags
-            })))
+            return res.status(200).json({
+                tutors: tutorsToDisplay.map(tutor => ({
+                    tutorId: tutor._id,
+                    displayedName: tutor.displayedName,
+                    rating: tutor.overallRating,
+                    locationMode: tutor.locationMode,
+                    location: tutor.location,
+                    school: tutor.education.school,
+                    courses: tutor.education.courses,
+                    tags: tutor.education.tags,
+                }))
+            })
         }
     }
 }
@@ -138,7 +148,7 @@ function score(tutee, tutor) {
 }
 
 function budgetScore(budget, subjectHourlyRate) {
-    const averageHourlyRate = subjectHourlyRate.reduce((acc, subject) => acc + subject.hourlyRate) / tutor.subjectHourlyRate.length
+    const averageHourlyRate = subjectHourlyRate.reduce((acc, subject) => acc + subject.hourlyRate) / subjectHourlyRate.length
     return averageHourlyRate < budget ? 100 - (1/3) * averageHourlyRate : 100 - (1/3) * budget - (2/3) * (averageHourlyRate - budget)
 }
 
@@ -152,6 +162,6 @@ function locationModeScore(locationModeWeight, tuteeLocationMode, tutorLocationM
 }
 
 function distanceScore(maxDistance, tuteeLocation, tutorLocation) {
-    const distance = haversine(tutor.location, tutee.location)
+    const distance = haversine(tutorLocation, tuteeLocation)
     return distance < maxDistance ? 100 - (1/3) * distance : 100 - (1/3) * maxDistance - (2/3) * (distance - maxDistance)
 }

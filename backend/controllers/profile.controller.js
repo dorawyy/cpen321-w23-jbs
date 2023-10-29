@@ -16,12 +16,12 @@ const EXCLUDED_FIELDS = [
 exports.getPublicProfile = (req, res) => {
     var userId = req.query.userId
     if (!userId) {
-        res.status(400).send({ message: "Must specify userId."})
+        return res.status(400).send({ message: "Must specify userId."})
     }
 
     User.findById(userId).then(user => {
         if (!user || user.isBanned) {
-            res.status(404).send({ message: "User not found."})
+            return res.status(404).send({ message: "User not found."})
         }
         
         var ratings = user.userReviews
@@ -43,10 +43,10 @@ exports.getPublicProfile = (req, res) => {
             tags: user.education.tags,
             top2Ratings
         }
-        res.status(200).send(data)
+        return res.status(200).send(data)
     }).catch(err => {
         console.log(err)
-        res.status(500).send({ message: err.message })
+        return res.status(500).send({ message: err.message })
     })
 }
 
@@ -54,27 +54,32 @@ exports.getPrivateProfile = (req, res) => {
     var userId = req.userId
     User.findById(userId).select(EXCLUDED_FIELDS).then(user => {
         if (!user || user.isBanned) {
-            res.status(404).send({ message: "User not found."})
+            return res.status(404).send({ message: "User not found."})
         }
-        res.status(200).send(user)
+        return res.status(200).send(user)
     }).catch(err => {
         console.log(err)
-        res.status(500).send({ message: err.message })
+        return res.status(500).send({ message: err.message })
     })
 }
 
 exports.editProfile = (req, res) => {
     var userId = req.userId
     var data = {...req.body}
-    User.findByIdAndUpdate(userId, {...data})
+    if (data.password) {
+        return res.status(403).send({ message:  "not allowed to change pw." })
+    }
+    User.findByIdAndUpdate(userId, {...data}, {new: true})
         .select(EXCLUDED_FIELDS)
         .then(updatedUser => {
             if (!updatedUser || updatedUser.isBanned) {
-                res.status(404).send({ message: "User not found."})
+                return res.status(404).send({ message: "User not found."})
+                
             }
-            res.status(200).send(updatedUser)
+            return res.status(200).send(updatedUser)
+            
         }).catch(err => {
             console.log(err)
-            res.status(500).send({ message: err.message })
+            return res.status(500).send({ message: err.message })
         })
 }

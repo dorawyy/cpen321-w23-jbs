@@ -1,4 +1,5 @@
 const db = require("../db")
+const mongoose = require('mongoose')
 
 const User = db.user
 const Conversation = db.conversation
@@ -27,6 +28,9 @@ exports.create = async (req, res) => {
     if (!user)
         return res.status(400).send({ message: "Could not find creating user in database with provided id" })
 
+    if (!mongoose.Types.ObjectId.isValid(req.body.userId)) {
+        return res.status(400).send({ message: "Invalid provided userId" })
+    }
     const otherUser = await User.findById(req.body.userId)
     if (!otherUser)
         return res.status(400).send({ message: "Could not find other user in database with provided id" })

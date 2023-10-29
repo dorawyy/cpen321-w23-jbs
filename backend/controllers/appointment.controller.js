@@ -1,4 +1,5 @@
 const { AppointmentStatus } = require("../constants/appointment.status");
+const { UserType } = require("../constants/user.types");
 const db = require("../db")
 const { getCalendarEvents } = require("../utils/google.utils");
 const momenttz = require("moment-timezone")
@@ -22,23 +23,33 @@ exports.bookAppointment = async (req, res) => {
             return res.status(500).send({ message: err.message })
         })
 
+    var tutee = await await User
+        .findById(req.userId)
+        .then(user => {
+            if (!user) {
+                return res.status(400).send({ message: "User not found." })
+            }
+            return user
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
+
     const pstStartDatetime = toPST(req.body.pstStartDatetime)
     const pstEndDatetime = toPST(req.body.pstEndDatetime)
 
-    var isAvailable = false
-    if (tutor.useGoogleCalendar) {
-        isAvailable = await checkTutorAvailabilityWithGoogleCalendar(
-            tutor, pstStartDatetime, pstEndDatetime
-        )
-    } else {
-        isAvailable = await checkTutorManualAvailability(
-            tutor, pstStartDatetime, pstEndDatetime
-        )
-    }
+    var tutorIsAvailable = await isAvailable(tutor, pstStartDatetime, pstEndDatetime)
+    var tuteeIsAvailable = await isAvailable(tutee, pstStartDatetime, pstEndDatetime)
 
-    if (!isAvailable) {
+    if (!tutorIsAvailable) {
         return res.status(400).send({ 
             message: "Tutor is unavailable during the specified time slot. "
+        })
+    }
+    if (!tuteeIsAvailable) {
+        return res.status(400).send({ 
+            message: "You already have a pending/accepted appointment during the specified time slot. "
         })
     }
 
@@ -76,21 +87,6 @@ exports.bookAppointment = async (req, res) => {
         return res.status(500).send({ message: err.message })
     })
 
-
-    var tutee = await User.findById(req.userId)
-                    .then(user => {
-                        if (!user) {
-                            return res.status(400).send({ message: "User not found." })
-                        }
-                        return user
-                    })
-                    .catch(err => {
-                        console.log(err)
-                        return res.status(500).send({ message: err.message })
-                    })
-
-    await cleanupUserAppointments(tutee)
-
     await User.findByIdAndUpdate(
         req.userId,
         { $push: {appointments: userNewAppt} }
@@ -104,23 +100,42 @@ exports.bookAppointment = async (req, res) => {
 
 }
 
-async function checkTutorManualAvailability( 
-    tutor, pstStartDatetime, pstEndDatetime
+async function isAvailable(user, pstStartDatetime, pstEndDatetime) {
+    var isAvailable = false
+    if (user.useGoogleCalendar) {
+        isAvailable = await checkUserAvailabilityWithGoogleCalendar(
+            user, pstStartDatetime, pstEndDatetime
+        )
+    } else {
+        isAvailable = await checkUserManualAvailability(
+            user, pstStartDatetime, pstEndDatetime
+        )
+    }
+    return isAvailable
+}
+
+async function checkUserManualAvailability( 
+    user, pstStartDatetime, pstEndDatetime
 ) {
-    if (tutor.appointments.length == 0) {
+    if (user.appointments.length == 0) {
         return true
     }
 
-    var upcomingAppointments = await cleanupUserAppointments(tutor)
+    var upcomingAppointments = await cleanupUserAppointments(user)
     if (upcomingAppointments.length == 0) {
         return true
     }
-
-    var acceptedAppointments = await getAcceptedAppointments(upcomingAppointments)
+    
+    // TUTEE: a pending appointment is considered unavailable for the tutee
+    // TUTOR: a pending appointment is considered available for the tutor
+    var acceptedAppointments = upcomingAppointments
+    if (user.type === UserType.TUTOR) {
+        acceptedAppointments = await getAcceptedAppointments(upcomingAppointments)
+    }
     if (acceptedAppointments.length == 0) {
         return true
     }
-    
+
     var conflicts = acceptedAppointments.filter(
         appt => {
             var newPstStart = momenttz(pstStartDatetime)
@@ -137,10 +152,18 @@ async function checkTutorManualAvailability(
         } 
     )
     return conflicts.length === 0
-
 }
 
 
+async function checkUserAvailabilityWithGoogleCalendar(
+    user, pstStartDatetime, pstEndDatetime
+) {
+    const events = await getCalendarEvents(
+        user, pstStartDatetime, pstEndDatetime
+    )
+   
+    return events.length === 0;
+}
 
 async function appointmentIsCompleted (appointmentId) {
     return Appointment
@@ -198,17 +221,6 @@ async function getAcceptedAppointments(appointments) {
         }
     }
     return acceptedAppointments
-}
-
-
-async function checkTutorAvailabilityWithGoogleCalendar(
-    tutorUser, pstStartDatetime, pstEndDatetime
-) {
-    const events = await getCalendarEvents(
-        tutorUser, pstStartDatetime, pstEndDatetime
-    )
-   
-    return events.length === 0;
 }
 
 // chatgpt

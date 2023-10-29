@@ -1,5 +1,6 @@
 const db = require("../db")
 const { UserType } = require("../constants/user.types");
+const mongoose = require('mongoose')
 
 const User = db.user
 
@@ -8,7 +9,15 @@ exports.ban = async (req, res) => {
     if (admin.type != UserType.ADMIN)
         return res.status(401).send({ message: "User is not admin and is not authorized to ban" })
 
+    if (!mongoose.Types.ObjectId.isValid(req.body.userId)) {
+        return res.status(400).send({ message: "Invalid provided userId" })
+    }
+
     const user = await User.findById(req.body.userId)
+
+    if (user.type == UserType.ADMIN)
+        return res.status(401).send({ message: "User is admin and can't be banned" })
+
     user.isBanned = true
     user.save()
     
@@ -19,6 +28,10 @@ exports.unban = async (req, res) => {
     const admin = await User.findById(req.userId)
     if (admin.type != UserType.ADMIN)
         return res.status(401).send({ message: "User is not admin and is not authorized to unban" })
+
+    if (!mongoose.Types.ObjectId.isValid(req.body.userId)) {
+        return res.status(400).send({ message: "Invalid provided userId" })
+    }
 
     const user = await User.findById(req.body.userId)
     user.isBanned = false
@@ -62,7 +75,10 @@ exports.getProfile = async (req, res) => {
     const userReviews = await User.aggregate([
         { $unwind: '$userReviews' },
         { $match: { 'userReviews.reviewerId': req.body.userId } },
-        { $project: { '$userReviews.comment': 1 } }
+        { $project: { 
+            '_id': 0,
+            'comment': 'userReviews.comment'
+        } }
     ])
 
     return res.status(200).json({

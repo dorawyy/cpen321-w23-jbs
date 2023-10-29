@@ -196,6 +196,29 @@ async function isAvailable(user, pstStartDatetime, pstEndDatetime) {
 async function checkUserManualAvailability( 
     user, pstStartDatetime, pstEndDatetime
 ) {
+    if (user.type === UserType.TUTOR) {
+        var requestedDay = momenttz(pstStartDatetime).format("dddd")
+        var requestedStartTime = momenttz(
+            momenttz(pstStartDatetime).format("HH:mm"),
+            "HH:mm"
+        )
+        var requestedEndTime = momenttz(
+            momenttz(pstEndDatetime).format("HH:mm"),
+            "HH:mm"
+        )
+
+        var availabilities = user.manualAvailability.filter(avail => {
+            var availStart = momenttz(avail.startTime, "HH:mm")
+            var availEnd = momenttz(avail.endTime, "HH:mm")
+
+            return avail.day === requestedDay
+                && availStart.isSameOrBefore(requestedStartTime)
+                && availEnd.isSameOrAfter(requestedEndTime)
+        })
+        if (availabilities.length == 0) {
+            return false
+        }
+    }
     if (user.appointments.length == 0) {
         return true
     }

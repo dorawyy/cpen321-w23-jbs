@@ -8,6 +8,92 @@ const mongoose = require("mongoose")
 const User = db.user
 const Appointment = db.appointment
 
+exports.cancelAppointment = async (req, res) => {
+    var userId = req.userId
+    var apptId = req.query.appointmentId
+    var user = await User.findById(userId)
+        .then(user => {
+            if (!user || user.isBanned) {
+                return res.status(400).send({
+                    message: "User not found"
+                })
+            }
+            return user
+        }).catch(err => {
+            console.log(err)
+            return res.status(500).send({
+                message: err.message
+            })
+        })
+    var upcomingAppointments = await cleanupUserAppointments(user)
+                                    .catch(err => {
+                                        console.log(err)
+                                        return res.status(500).send({
+                                            message: err.message
+                                        })
+                                    })
+
+    if (!apptId) {
+        return res.status(400).send({
+            message: "appointmentId is required"
+        })
+    }
+    var usersApptIds = upcomingAppointments.map(appt => appt._id)
+    var idStrings = usersApptIds.map(id => id.toString())
+
+    if (!(idStrings.includes(apptId))) {
+        return res.status(404).send({
+            message: "Appointment not found"
+        })
+    }
+
+    await Appointment.findByIdAndUpdate(
+        apptId, {status: AppointmentStatus.CANCELED},
+        { new: true }
+    ).then(appt => {
+        if (!appt) {
+            return res.status(404).send({
+                message: "Appointment not found"
+            })
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        return res.status(500).send({
+            message: err.message
+        })
+    })
+
+    user = await User.findById(userId)
+        .then(user => {
+            if (!user || user.isBanned) {
+                return res.status(400).send({
+                    message: "User not found"
+                })
+            }
+            return user
+        }).catch(err => {
+            console.log(err)
+            return res.status(500).send({
+                message: err.message
+            })
+        })
+
+    cleanupUserAppointments(user)
+        .then(result => {
+            return res.status(200).send({
+                message: "Canceled appointment successfully"
+            })
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(500).send({
+                message: err.message
+            })
+        })
+    
+}
+
 exports.getTutorAvailability = async (req, res) => {
     var tutorId = req.query.userId
     var date = req.query.date

@@ -7,11 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".activities.TuteeHomeActivity">
 
-    <ImageView
+    <com.example.edumatch.views.AppBarCustomView
         android:id="@+id/emptyBar"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/empty_bar"/>
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Title Bar -->
     <LinearLayout

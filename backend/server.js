@@ -4,6 +4,7 @@ require('dotenv').config({ path: path.join(__dirname, '.env') })
 const http = require("http")
 const https = require("https")
 const fs = require("fs")
+const ws = require('ws')
 const db = require("./db")
 const authRoutes = require("./routes/auth.routes")
 const userRoutes = require("./routes/user.routes")
@@ -12,6 +13,7 @@ const browseRoutes = require("./routes/browse.routes")
 const reviewRoutes = require("./routes/review.routes")
 const appointmentRoutes = require("./routes/appointment.routes")
 const adminRoutes = require("./routes/admin.routes")
+const conversationRoutes = require("./routes/conversation.routes")
 
 const mongoUrl = process.env.MONGODB_URI
 const env = process.env.ENV
@@ -46,6 +48,7 @@ browseRoutes(app)
 reviewRoutes(app)
 appointmentRoutes(app)
 adminRoutes(app)
+conversationRoutes(app)
 
 if (env === 'prod') {
     // PRODUCTION
@@ -56,6 +59,7 @@ if (env === 'prod') {
     const privateKey = fs.readFileSync(privateKeyFile, 'utf8');
     const certificate = fs.readFileSync(certFile, 'utf8');
     const ca = fs.readFileSync(chainFile, 'utf8');
+    const secretKey = process.env.SECRET_KEY
 
     const credentials = {
         key: privateKey,
@@ -65,6 +69,51 @@ if (env === 'prod') {
     // Starting both http & https servers
     const httpServer = http.createServer(app);
     const httpsServer = https.createServer(credentials, app);
+
+    const clients = new Map(); // Currently connected client sockets
+    
+    const wss = new ws.Server({ server: httpsServer })
+    wss.on('connection', (ws, req) => {
+        const token = req.url.split('?token=')[1]
+        if (token) {
+            jwt.verify(token, secretKey, (err, userId) => {
+                if (err) {
+                    console.log(err)
+                    ws.close()
+                } else {
+                    clients.set(userId, ws);
+                    ws.on('message', (message) => {
+                        try {
+                            const data = JSON.parse(message)
+                            const receiverUserId = data.userId
+                            const messageText = data.message
+                            const currentDate = new Date()
+
+                            const messageToSend = {
+                                senderId: userId,
+                                message: messageText,
+                                timestamp: currentDate.toUTCString()
+                            };
+            
+                            // Send to receiver client socket if online
+                            if (clients.has(receiverUserId)) 
+                                clients.get(receiverUserId).send(JSON.stringify(messageToSend))
+
+                            // TODO: send to database
+                        } catch (error) {
+                            console.error(error);
+                        }
+                    });
+                    ws.on('close', () => {
+                        clients.delete(userId);
+                    });  
+                }
+            });
+        } else {
+            console.log("Missing token")
+            ws.close()
+        } 
+    });
 
     httpServer.listen(80, () => {
         console.log('HTTP Server running on port 80');

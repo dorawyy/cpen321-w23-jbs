@@ -9,7 +9,10 @@ exports.getCourseCodes = async (req, res) => {
             .then((result) => {
                 var data = result.data
                 data = data.map(info => `${code} ${info.course}`)
-                return res.status(200).send(data)
+                var ret = {
+                    courses: data
+                }
+                return res.status(200).send(ret)
             })
             .catch(err => {
                 console.log(err)

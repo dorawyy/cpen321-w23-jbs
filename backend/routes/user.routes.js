@@ -1,5 +1,6 @@
 const profileController = require("../controllers/profile.controller")
 const apptController = require("../controllers/appointment.controller")
+const courseController = require("../controllers/courses.controller")
 const { authJwt, verifySignUp } = require("../middleware")
 const db = require("../db")
 
@@ -23,5 +24,10 @@ module.exports = function (app) {
     app.get(
         "/user/availability",
         apptController.getTutorAvailability
+    )
+
+    app.get(
+        "/courses",
+        courseController.getCourseCodes
     )
 };

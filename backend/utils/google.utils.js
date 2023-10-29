@@ -1,5 +1,6 @@
 const { google } = require('googleapis');
 const db = require("../db")
+const momenttz = require("moment-timezone")
 
 const User = db.user
 
@@ -13,6 +14,62 @@ const OAuth2Client = new google.auth.OAuth2(
     googleClientSecret,
     redirectUri  // Use a placeholder redirect_uri
 );
+
+// chatgpt
+exports.getFreeTime = async (
+    user, timeMin, timeMax
+) => {
+    OAuth2Client.setCredentials({
+        access_token: user.googleOauth.accessToken,
+        refresh_token: user.googleOauth.refreshToken,
+        expiry_date: Number(user.googleOauth.expiryDate)
+    })
+
+    google.options({ auth: OAuth2Client });
+    const calendar = google.calendar({ version: 'v3' });
+    const calendarId = 'primary'
+    
+    const response = await calendar.freebusy.query({
+        requestBody: {
+          timeMin: startDateTime,
+          timeMax: endDateTime,
+          timeZone: 'America/Los_Angeles',
+          items: [{ id: calendarId }],
+        },
+    });
+
+    const busyTimes = response.data.calendars[calendarId].busy;
+    var freeTimes = []
+
+    // Include free time before the first busy period
+    const firstBusyStart = momenttz(busyTimes[0].start);
+    const startDateTime = momenttz(timeMin)
+    if (firstBusyStart.isSameOrAfter(startDateTime)) {
+        const freeStart = startDateTime.toISOString();
+        const freeEnd = firstBusyStart.toISOString();
+        freeTimes.push({ start: freeStart, end: freeEnd });
+    }
+
+    // Infer free times based on busy intervals
+    for (let i = 0; i < busyTimes.length - 1; i++) {
+        const busyEnd = momenttz(busyTimes[i].end);
+        const nextBusyStart = momenttz(busyTimes[i + 1].start);
+    
+        const freeStart = busyEnd.toISOString();
+        const freeEnd = nextBusyStart.toISOString();
+        freeTimes.push({ start: freeStart, end: freeEnd });
+    }
+
+    // Include free time after the last busy period
+    const lastBusyEnd = momenttz(busyTimes[busyTimes.length - 1].end);
+    const endDateTime = momenttz(timeMax)
+    if (lastBusyEnd.isSameOrBefore(endDateTime)) {
+        const freeStart = lastBusyEnd.toISOString();
+        const freeEnd = endDateTime.toISOString();
+        freeTimes.push({ start: freeStart, end: freeEnd });
+    }
+    return freeTimes
+}
 
 // chatgpt
 exports.getCalendarEvents = async (

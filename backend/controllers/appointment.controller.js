@@ -1,12 +1,83 @@
 const { AppointmentStatus } = require("../constants/appointment.status");
 const { UserType } = require("../constants/user.types");
 const db = require("../db")
-const { getCalendarEvents } = require("../utils/google.utils");
+const { getCalendarEvents, getFreeTime } = require("../utils/google.utils");
 const momenttz = require("moment-timezone")
 const mongoose = require("mongoose")
 
 const User = db.user
 const Appointment = db.appointment
+
+exports.getTutorAvailability = async (req, res) => {
+    var tutorId = req.query.userId
+    var date = req.query.date
+    if (!tutorId || !date) {
+        return res.status(400).send({ 
+            message: "userId and date are required."
+        })
+    }
+    var tutor = await User.findById(tutorId)
+        .then(user => {
+            if (!user || user.isBanned) {
+                return res.status(400).send({ message: "User not found" })
+            }
+            return user
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(500).send({
+                message: err.message
+            })
+        })
+    var timeMin = momenttz(date)
+        .tz('America/Los_Angeles')
+        .startOf('day')
+        .toISOString(true)
+
+    var timeMax = momenttz(date)
+        .tz('America/Los_Angeles')
+        .endOf('day')
+        .toISOString(true)
+
+    if (tutor.useGoogleCalendar) {
+        var freeTimes = await getFreeTime(
+            tutor, timeMin, timeMax
+        ).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
+        return res.status(200).send(freeTimes)
+    } else {
+        if (tutor.manualAvailability) {
+            var requestedDay = momenttz(date).format("dddd")
+            var dayAvailabilities = tutor.manualAvailability.filter(avail => {
+                return avail.day === requestedDay 
+            })
+            var availabilities = []
+            
+
+            for (block of dayAvailabilities) {            
+                var start = momenttz(`${date}T${block.startTime}:00-07:00`)
+                    .tz('America/Los_Angeles')
+                    .toISOString(true)
+                var end = momenttz(`${date}T${block.endTime}:00-07:00`)
+                    .tz('America/Los_Angeles')
+                    .toISOString(true)
+                var freeTimes = await getManualFreeTimes(
+                    tutor, start, end
+                )
+                availabilities = availabilities.concat(freeTimes)
+            }
+            return res.status(200).send(availabilities)
+        } else {
+            var freeTimes = [{
+                start: "00:00",
+                end: "23:59"
+            }]
+            return res.status(200).send(freeTimes)
+        }
+    }    
+}
 
 exports.acceptAppointment = async (req, res) => {
     var userId = req.userId
@@ -370,7 +441,7 @@ async function appointmentIsCompleted (appointmentId) {
     return Appointment
         .findById(appointmentId, "pstEndDatetime")
         .then(appt => {
-            var pstNow = momenttz(new Date().toISOString())
+            var pstNow = momenttz(new Date().toISOString(true))
                             .tz('America/Los_Angeles')
             
             if (momenttz(appt.pstEndDatetime).isAfter(pstNow)) {
@@ -433,6 +504,86 @@ async function getAcceptedAppointments(appointments) {
         }
     }
     return acceptedAppointments
+}
+
+async function getManualFreeTimes(user, timeMin, timeMax) {
+    var upcomingAppointments = await cleanupUserAppointments(user)
+    var acceptedAppointments = await getAcceptedAppointments(
+        upcomingAppointments
+    )
+    var busyTimes = []
+    timeMin = momenttz(timeMin).tz('America/Los_Angeles')
+    timeMax = momenttz(timeMax).tz('America/Los_Angeles')
+    for (appt of acceptedAppointments) {
+        var apptStart = momenttz(appt.pstStartDatetime).tz('America/Los_Angeles');
+        var apptEnd = momenttz(appt.pstEndDatetime).tz('America/Los_Angeles')
+        if (apptStart.isSameOrAfter(timeMin) && 
+            apptEnd.isSameOrBefore(timeMax)) {
+            busyTimes.push(appt)
+        }
+    }
+    if (busyTimes.length == 0) {
+        return [{
+            start: timeMin,
+            end: timeMax
+        }]
+    }
+    var freeTimes = []
+
+    // Include free time before the first busy period
+    const firstBusyStart = momenttz(busyTimes[0].pstStartDatetime)
+    .tz('America/Los_Angeles');
+    const startDateTime = momenttz(timeMin).tz('America/Los_Angeles')
+
+    if (firstBusyStart.isSameOrAfter(startDateTime)) {
+        const freeStart = startDateTime;
+        const freeEnd = firstBusyStart;
+        const diff = momenttz.duration(freeEnd.diff(freeStart))
+        if (diff.hours() >= 1) {
+            freeTimes.push({ 
+                start: freeStart.toISOString(true),
+                end: freeEnd.toISOString(true) 
+            });
+        }
+    }
+
+    // Infer free times based on busy intervals
+    for (let i = 0; i < busyTimes.length - 1; i++) {
+        const busyEnd = momenttz(busyTimes[i].pstEndDatetime)
+                        .tz('America/Los_Angeles');
+        if (i + 1 < busyTimes.length) {
+            var nextBusyStart = momenttz(busyTimes[i + 1].pstStartDatetime)
+                                .tz('America/Los_Angeles');
+        } else {
+            var nextBusyStart = momenttz(busyTimes[i].pstEndDatetime)
+                                .tz('America/Los_Angeles')
+        }
+        
+        const freeStart = busyEnd.toISOString(true);
+        const freeEnd = nextBusyStart.toISOString(true);
+        freeTimes.push({ start: freeStart, end: freeEnd });
+    }
+
+     // Include free time after the last busy period
+    const lastBusyEnd = momenttz(
+        busyTimes[busyTimes.length - 1].pstEndDatetime
+    ).tz('America/Los_Angeles');
+    const endDateTime = momenttz(timeMax).tz('America/Los_Angeles')
+
+    if (lastBusyEnd.isSameOrBefore(endDateTime)) {
+        const freeStart = lastBusyEnd;
+        const freeEnd = endDateTime;
+        const diff = momenttz.duration(freeEnd.diff(freeStart))
+        if (diff.hours() >= 1) {
+            freeTimes.push({ 
+                start: freeStart.toISOString(true),
+                end: freeEnd.toISOString(true) 
+            });
+        }
+    }
+
+    return freeTimes
+    
 }
 
 // chatgpt

@@ -28,4 +28,10 @@ module.exports = function (app) {
         authJwt.verifyJwt,
         controller.acceptAppointment
     )
+
+    app.put(
+        "/appointment/cancel",
+        authJwt.verifyJwt,
+        controller.cancelAppointment
+    )
 };

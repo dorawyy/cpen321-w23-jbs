@@ -70,7 +70,8 @@ if (env === 'prod') {
     const httpServer = http.createServer(app);
     const httpsServer = https.createServer(credentials, app);
 
-    const clients = new Map(); // Currently connected client sockets
+    const Conversation = db.conversation
+    const clients = new Map() // Currently connected client sockets
     
     const wss = new ws.Server({ server: httpsServer })
     wss.on('connection', (ws, req) => {
@@ -99,16 +100,35 @@ if (env === 'prod') {
                             if (clients.has(receiverUserId)) 
                                 clients.get(receiverUserId).send(JSON.stringify(messageToSend))
 
-                            // TODO: send to database
+                            // Update conversation in database
+                            Conversation.findOne({
+                                $or: [
+                                    {
+                                        'participants.userId1': userId,
+                                        'participants.userId2': receiverUserId
+                                    },
+                                    {
+                                        'participants.userId1': receiverUserId,
+                                        'participants.userId2': userId
+                                    }
+                                ]
+                            }).then(conversation => {
+                                if (!conversation)
+                                    console.log("Conversation between " + userId + " and " + receiverUserId + " not found")
+                                else
+                                    conversation.messages.push(messageToSend)
+                            }).catch(error => {
+                                console.log("Error sending message to conversation in database "+ error)
+                            })
                         } catch (error) {
-                            console.error(error);
+                            console.log("Error processing message event: " + error)
                         }
-                    });
+                    })
                     ws.on('close', () => {
-                        clients.delete(userId);
-                    });  
+                        clients.delete(userId)
+                    })
                 }
-            });
+            })
         } else {
             console.log("Missing token")
             ws.close()

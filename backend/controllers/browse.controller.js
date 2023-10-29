@@ -6,12 +6,12 @@ const haversine = require('haversine')
 const User = db.user
 
 exports.recommended = async (req, res) => {
-    const tutee = await User.findById(req.userId)
-    if (!tutee)
-        return res.status(400).send({ message: "Could not find tutee in database with provided id"})
-
     if (req.query.page < 1)
         return res.status(400).send({ message: "Page number cannot be less than 1" })
+
+    const tutee = await User.findById(req.userId)
+    if (!tutee)
+        return res.status(404).send({ message: "Could not find tutee in database with provided id"})
 
     if (req.query.courses) {
         // specific course browse

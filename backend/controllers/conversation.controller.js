@@ -7,7 +7,7 @@ const Conversation = db.conversation
 exports.getList = async (req, res) => {
     const user = await User.findById(req.userId)
     if (!user)
-        return res.status(400).send({ message: "Could not find user in database with provided id" })
+        return res.status(404).send({ message: "Could not find user in database with provided id" })
 
     const conversationList = await Conversation.find({
         $or: [
@@ -23,17 +23,47 @@ exports.getList = async (req, res) => {
     })
 }
 
+exports.getConversation = async (req, res) => {
+    if (req.query.page < 1)
+        return res.status(400).send({ message: "Page number cannot be less than 1" })
+
+    const user = await User.findById(req.userId)
+    if (!user)
+        return res.status(404).send({ message: "Could not find user in database with provided id" })
+
+    if (!mongoose.Types.ObjectId.isValid(req.query.conversationId)) {
+        return res.status(400).send({ message: "Invalid provided conversationId" })
+    }
+
+    const conversation = await Conversation.findById(req.query.conversationId)
+    if (!conversation)
+        return res.status(404).send({ message: "Conversation not found" })
+
+    const endIndex = conversation.messages.length - (req.query.page - 1) * 10
+    if (endIndex < 0)
+        return res.status(200).json({
+            messages: []
+        })
+    else {
+        const startIndex = endIndex - 10
+
+        return res.status(200).json({
+            messages: startIndex < 0 ? conversation.messages.slice(0, endIndex) : conversation.messages.slice(startIndex, endIndex)
+        })
+    }
+}
+
 exports.create = async (req, res) => {
     const user = await User.findById(req.userId)
     if (!user)
-        return res.status(400).send({ message: "Could not find creating user in database with provided id" })
+        return res.status(404).send({ message: "Could not find creating user in database with provided id" })
 
     if (!mongoose.Types.ObjectId.isValid(req.body.userId)) {
         return res.status(400).send({ message: "Invalid provided userId" })
     }
     const otherUser = await User.findById(req.body.userId)
     if (!otherUser)
-        return res.status(400).send({ message: "Could not find other user in database with provided id" })
+        return res.status(404).send({ message: "Could not find other user in database with provided id" })
 
     const existingConversation = await Conversation.findOne({
         $or: [

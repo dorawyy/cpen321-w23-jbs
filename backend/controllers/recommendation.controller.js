@@ -12,9 +12,9 @@ exports.checkedProfile = async (req, res) => {
     const tutor = await User.findById(req.body.tutorId)
     const tutee = await User.findById(req.userId)
     if (!tutor)
-        return res.status(400).send({ message: "Could not find tutor in database with provided id"})
+        return res.status(404).send({ message: "Could not find tutor in database with provided id"})
     if (!tutee)
-        return res.status(400).send({ message: "Could not find tutee in database with provided id"})
+        return res.status(404).send({ message: "Could not find tutee in database with provided id"})
 
     if (tutor.rating) {
         tutee.recommendationWeights.minRating -= (tutee.recommendationWeights.minRating - tutor.rating) * (tutor.rating < tutee.recommendationWeights.minRating ? 0.15 : 0.05)
@@ -37,9 +37,9 @@ exports.contactedTutor = async (req, res) => {
     const tutor = await User.findById(req.body.tutorId)
     const tutee = await User.findById(req.userId)
     if (!tutor)
-        return res.status(400).send({ message: "Could not find tutor in database with provided id"})
+        return res.status(404).send({ message: "Could not find tutor in database with provided id"})
     if (!tutee)
-        return res.status(400).send({ message: "Could not find tutee in database with provided id"})
+        return res.status(404).send({ message: "Could not find tutee in database with provided id"})
 
     if (!tutor.subjectHourlyRate || tutor.subjectHourlyRate.length != 0) {
         const averageHourlyRate = tutor.subjectHourlyRate.reduce((acc, subject) => acc + subject.hourlyRate, 0) / tutor.subjectHourlyRate.length
@@ -67,9 +67,9 @@ exports.scheduledAppointment = async (req, res) => {
     const tutor = await User.findById(req.body.tutorId)
     const tutee = await User.findById(req.userId)
     if (!tutor)
-        return res.status(400).send({ message: "Could not find tutor in database with provided id"})
+        return res.status(404).send({ message: "Could not find tutor in database with provided id"})
     if (!tutee)
-        return res.status(400).send({ message: "Could not find tutee in database with provided id"})
+        return res.status(404).send({ message: "Could not find tutee in database with provided id"})
 
     if (!tutor.subjectHourlyRate)
         return res.status(500).send({ message: "Tutor subjectHourlyRate array does not exist" })
@@ -100,9 +100,9 @@ exports.reviewedTutor = async (req, res) => {
     const tutor = await User.findById(req.body.tutorId)
     const tutee = await User.findById(req.userId)
     if (!tutor)
-        return res.status(400).send({ message: "Could not find tutor in database with provided id"})
+        return res.status(404).send({ message: "Could not find tutor in database with provided id"})
     if (!tutee)
-        return res.status(400).send({ message: "Could not find tutee in database with provided id"})
+        return res.status(404).send({ message: "Could not find tutee in database with provided id"})
 
     const reviewFactor = req.body.review * 0.1
 

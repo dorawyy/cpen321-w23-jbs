@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         // todo: go to right view (currently is on view I am testing)
         SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 
-        String userType = sharedPreferences.getString("type", ""); // Assuming the key for user type is "type"
+        String userType = sharedPreferences.getString("userType", ""); // Assuming the key for user type is "type"
 
         Intent newIntent;
         switch (userType) {

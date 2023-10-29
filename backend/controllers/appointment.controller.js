@@ -3,9 +3,108 @@ const { UserType } = require("../constants/user.types");
 const db = require("../db")
 const { getCalendarEvents } = require("../utils/google.utils");
 const momenttz = require("moment-timezone")
+const mongoose = require("mongoose")
 
 const User = db.user
 const Appointment = db.appointment
+
+exports.acceptAppointment = async (req, res) => {
+    var userId = req.userId
+    var user = await User.findById(userId)
+        .then(user => {
+            if (!user || user.isBanned) {
+                return res.status(400).send({ message: "User not found" })
+            }
+            return user
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(500).send({
+                message: err.message
+            })
+        })
+    if (user.type === UserType.TUTEE) {
+        return res.status(403).send({ 
+            message: "Only tutors are allowed to accept appointments." 
+        })
+    }
+    var upcomingAppointments = await cleanupUserAppointments(user)
+
+    var apptId = req.query.appointmentId
+    if (!apptId) {
+        return res.status(400).send({
+            message: "appointmentId is required"
+        })
+    }
+    var usersApptIds = upcomingAppointments.map(appt => appt._id)
+    var idStrings = usersApptIds.map(id => id.toString())
+
+    if (!(idStrings.includes(apptId))) {
+        return res.status(404).send({
+            message: "Appointment not found"
+        })
+    }
+
+    await Appointment.findByIdAndUpdate(
+        apptId, {status: AppointmentStatus.ACCEPTED},
+        { new: true }
+    ).then(appt => {
+        if (!appt) {
+            return res.status(404).send({
+                message: "Appointment not found"
+            })
+        }
+        
+    })
+    .catch(err => {
+        console.log(err)
+        return res.status(500).send({
+            message: err.message
+        })
+    })
+
+    await Appointment.updateMany(
+        {
+            _id: {
+                $in: usersApptIds,
+                $ne: apptId
+            },
+            status: AppointmentStatus.PENDING
+        },
+        { $set: { status: AppointmentStatus.CANCELED} },
+    ).catch(err => {
+        console.log(err)
+        return res.status(500).send({
+            message: err.message
+        })
+    })
+
+    user = await User.findById(userId)
+        .then(user => {
+            if (!user || user.isBanned) {
+                return res.status(400).send({ message: "User not found" })
+            }
+            return user
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(500).send({
+                message: err.message
+            })
+        })
+    
+    cleanupUserAppointments(user).then(result => {
+        res.status(200).send({
+            message: "Accepted appointment successfully"
+        })
+    }).catch(err => {
+        console.log(err)
+        return res.status(500).send({
+            message: err.message
+        })
+    })
+
+}
 
 exports.getUserAppointments = async (req, res) => {
     var userId = req.userId
@@ -15,7 +114,7 @@ exports.getUserAppointments = async (req, res) => {
     var user = await User
         .findById(userId)
         .then(user => {
-            if (!user) {
+            if (!user || user.isBanned) {
                 return res.status(404).send({
                     message: "The other user is not found"
                 })
@@ -62,7 +161,7 @@ exports.getAppointment = async (req, res) => {
                             otherUserName = await User
                                 .findById(user.userId, "displayedName")
                                 .then(user => {
-                                    if (!user) {
+                                    if (!user || user.isBanned) {
                                         return res.status(404).send({
                                             message: "The other user is not found"
                                         })
@@ -94,7 +193,7 @@ exports.bookAppointment = async (req, res) => {
     var tutor = await User
         .findById(tutorId)
         .then(user => {
-            if (!user) {
+            if (!user || user.isBanned) {
                 return res.status(400).send({ message: "User not found." })
             }
             return user
@@ -107,7 +206,7 @@ exports.bookAppointment = async (req, res) => {
     var tutee = await await User
         .findById(req.userId)
         .then(user => {
-            if (!user) {
+            if (!user || user.isBanned) {
                 return res.status(400).send({ message: "User not found." })
             }
             return user
@@ -196,6 +295,29 @@ async function isAvailable(user, pstStartDatetime, pstEndDatetime) {
 async function checkUserManualAvailability( 
     user, pstStartDatetime, pstEndDatetime
 ) {
+    if (user.manualAvailability && user.type === UserType.TUTOR) {
+        var requestedDay = momenttz(pstStartDatetime).format("dddd")
+        var requestedStartTime = momenttz(
+            momenttz(pstStartDatetime).format("HH:mm"),
+            "HH:mm"
+        )
+        var requestedEndTime = momenttz(
+            momenttz(pstEndDatetime).format("HH:mm"),
+            "HH:mm"
+        )
+
+        var availabilities = user.manualAvailability.filter(avail => {
+            var availStart = momenttz(avail.startTime, "HH:mm")
+            var availEnd = momenttz(avail.endTime, "HH:mm")
+
+            return avail.day === requestedDay
+                && availStart.isSameOrBefore(requestedStartTime)
+                && availEnd.isSameOrAfter(requestedEndTime)
+        })
+        if (availabilities.length == 0) {
+            return false
+        }
+    }
     if (user.appointments.length == 0) {
         return true
     }
@@ -269,14 +391,25 @@ async function appointmentIsAccepted(appointmentId) {
     return isAccepted
 }
 
+async function getAppointmentStatus(appointmentId) {
+    var status = await Appointment
+        .findById(appointmentId, "status")
+        .then(appt => { 
+            return appt.status
+        })
+    return status
+}
+
 // remove completed appointments. upcomingAppointments includes
 // pending/accepted appointments
 async function cleanupUserAppointments(user) {
     var upcomingAppointments = []
     if (user.appointments) {
         for (appt of user.appointments) {
+            var status = await getAppointmentStatus(appt._id)
             var isCompleted = await appointmentIsCompleted(appt._id)
-            if (!isCompleted) {
+
+            if (!isCompleted && status !== AppointmentStatus.CANCELED) {
                 upcomingAppointments.push(appt)
             }
         }

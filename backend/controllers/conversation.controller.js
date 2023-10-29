@@ -42,12 +42,14 @@ exports.getConversation = async (req, res) => {
     const endIndex = conversation.messages.length - (req.query.page - 1) * 10
     if (endIndex < 0)
         return res.status(200).json({
+            otherUserId: conversation.participants.userId1 == req.userId ? conversation.participants.userId2 : conversation.participants.userId1,
             messages: []
         })
     else {
         const startIndex = endIndex - 10
 
         return res.status(200).json({
+            otherUserId: conversation.participants.userId1 == req.userId ? conversation.participants.userId2 : conversation.participants.userId1,
             messages: startIndex < 0 ? conversation.messages.slice(0, endIndex) : conversation.messages.slice(startIndex, endIndex)
         })
     }
@@ -58,10 +60,10 @@ exports.create = async (req, res) => {
     if (!user)
         return res.status(404).send({ message: "Could not find creating user in database with provided id" })
 
-    if (!mongoose.Types.ObjectId.isValid(req.body.userId)) {
+    if (!mongoose.Types.ObjectId.isValid(req.body.otherUserId)) {
         return res.status(400).send({ message: "Invalid provided userId" })
     }
-    const otherUser = await User.findById(req.body.userId)
+    const otherUser = await User.findById(req.body.otherUserId)
     if (!otherUser)
         return res.status(404).send({ message: "Could not find other user in database with provided id" })
 
@@ -69,10 +71,10 @@ exports.create = async (req, res) => {
         $or: [
             {
                 'participants.userId1': req.userId,
-                'participants.userId2': req.body.userId
+                'participants.userId2': req.body.otherUserId
             },
             {
-                'participants.userId1': req.body.userId,
+                'participants.userId1': req.body.otherUserId,
                 'participants.userId2': req.userId
             }
         ]
@@ -85,7 +87,7 @@ exports.create = async (req, res) => {
             participants:
                 {
                     userId1: req.userId,
-                    userId2: req.body.userId,
+                    userId2: req.body.otherUserId,
                     displayedName1: user.displayedName,
                     displayedName2: otherUser.displayedName
                 },

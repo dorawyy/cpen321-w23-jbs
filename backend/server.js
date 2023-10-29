@@ -5,6 +5,7 @@ const http = require("http")
 const https = require("https")
 const fs = require("fs")
 const ws = require('ws')
+const jwt = require("jsonwebtoken")
 const db = require("./db")
 const authRoutes = require("./routes/auth.routes")
 const userRoutes = require("./routes/user.routes")
@@ -75,6 +76,7 @@ if (env === 'prod') {
     
     const wss = new ws.Server({ server: httpsServer })
     wss.on('connection', (ws, req) => {
+        console.log("client connected to chat socket")
         const token = req.url.split('?token=')[1]
         if (token) {
             jwt.verify(token, secretKey, (err, userId) => {
@@ -86,40 +88,47 @@ if (env === 'prod') {
                     ws.on('message', (message) => {
                         try {
                             const data = JSON.parse(message)
-                            const receiverUserId = data.userId
+                            const receiverUserId = data.receiverId
                             const messageText = data.message
-                            const currentDate = new Date()
 
-                            const messageToSend = {
-                                senderId: userId,
-                                message: messageText,
-                                timestamp: currentDate.toUTCString()
-                            };
-            
-                            // Send to receiver client socket if online
-                            if (clients.has(receiverUserId)) 
-                                clients.get(receiverUserId).send(JSON.stringify(messageToSend))
+                            if (!receiverUserId || !messageText) {
+                                console.log("Error in received message format")
+                            } else {
+                                const currentDate = new Date()
 
-                            // Update conversation in database
-                            Conversation.findOne({
-                                $or: [
-                                    {
-                                        'participants.userId1': userId,
-                                        'participants.userId2': receiverUserId
-                                    },
-                                    {
-                                        'participants.userId1': receiverUserId,
-                                        'participants.userId2': userId
+                                const messageToSend = {
+                                    senderId: userId,
+                                    content: messageText,
+                                    timestamp: currentDate.toUTCString()
+                                };
+                
+                                // Send to receiver client socket if online
+                                if (clients.has(receiverUserId)) 
+                                    clients.get(receiverUserId).send(JSON.stringify(messageToSend))
+    
+                                // Update conversation in database
+                                Conversation.findOne({
+                                    $or: [
+                                        {
+                                            'participants.userId1': userId,
+                                            'participants.userId2': receiverUserId
+                                        },
+                                        {
+                                            'participants.userId1': receiverUserId,
+                                            'participants.userId2': userId
+                                        }
+                                    ]
+                                }).then(conversation => {
+                                    if (!conversation)
+                                        console.log("Conversation between " + userId + " and " + receiverUserId + " not found")
+                                    else {
+                                        conversation.messages.push(messageToSend)
+                                        conversation.save()
                                     }
-                                ]
-                            }).then(conversation => {
-                                if (!conversation)
-                                    console.log("Conversation between " + userId + " and " + receiverUserId + " not found")
-                                else
-                                    conversation.messages.push(messageToSend)
-                            }).catch(error => {
-                                console.log("Error sending message to conversation in database "+ error)
-                            })
+                                }).catch(error => {
+                                    console.log("Error sending message to conversation in database "+ error)
+                                })
+                            }
                         } catch (error) {
                             console.log("Error processing message event: " + error)
                         }

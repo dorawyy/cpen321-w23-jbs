@@ -14,6 +14,6 @@ module.exports = function (app) {
     app.get(
         "/appointment",
         authJwt.verifyJwt,
-        controller.getAppointments
+        controller.getAppointment
     )
 };

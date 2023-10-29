@@ -7,7 +7,7 @@ const momenttz = require("moment-timezone")
 const User = db.user
 const Appointment = db.appointment
 
-exports.getAppointments = async (req, res) => {
+exports.getAppointment = async (req, res) => {
     var appointmentId = req.query.appointmentId
     Appointment.findById(appointmentId)
                 .then(async appt => {

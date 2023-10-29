@@ -22,4 +22,10 @@ module.exports = function (app) {
         authJwt.verifyJwt,
         controller.getUserAppointments
     )
+
+    app.put(
+        "/appointment/accept",
+        authJwt.verifyJwt,
+        controller.acceptAppointment
+    )
 };

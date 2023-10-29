@@ -66,6 +66,9 @@ exports.getPrivateProfile = (req, res) => {
 exports.editProfile = (req, res) => {
     var userId = req.userId
     var data = {...req.body}
+    if (data.password) {
+        return res.status(403).send({ message:  "not allowed to change pw." })
+    }
     User.findByIdAndUpdate(userId, {...data}, {new: true})
         .select(EXCLUDED_FIELDS)
         .then(updatedUser => {

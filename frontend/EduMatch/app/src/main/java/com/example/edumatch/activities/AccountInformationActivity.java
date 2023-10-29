@@ -3,9 +3,7 @@ package com.example.edumatch.activities;
 import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
 import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
 import static com.example.edumatch.util.ProfileHelper.putEditProfile;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,16 +11,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import com.example.edumatch.views.LabelAndEditTextView;
 import com.example.edumatch.R;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashSet;
-import java.util.Set;
 
 
 public class AccountInformationActivity extends AppCompatActivity {

@@ -49,15 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
     private Boolean newUser;
 
+    private Class nextActivity = EditProfileListActivity.class;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //TODO: this is just for testing
-//        Intent newIntent = new Intent(MainActivity.this,
-//                ChatListActivity.class);
-//        startActivity(newIntent);
 
         initSignInButton();
 
@@ -210,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
     private void goToSignUpActivity() {
         Intent newIntent = new Intent(MainActivity.this,
                 TutorOrTuteeActivity.class);
+        clearPreferences();
         SharedPreferences sharedPreferences = updatePreferences();
         printSharedPreferences(sharedPreferences);
         startActivity(newIntent);
@@ -219,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
         // todo: need to check if they are tutor or tutee
         // todo: go to right view (currently is on view I am testing)
         Intent newIntent = new Intent(MainActivity.this,
-                TutorRateActivity.class);
+                nextActivity);
         startActivity(newIntent);
     }
 
@@ -231,7 +229,11 @@ public class MainActivity extends AppCompatActivity {
 
         JSONObject jsonResponse = sendHttpRequest(apiUrl, "","POST",requestBody);
 
-        Log.d("SignInPost","response is " + jsonResponse);
+        try {
+            Log.d("SignInPost","response is " + jsonResponse.toString(4));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
         if (jsonResponse != null) {
             try {
                 if (jsonResponse.has("errorDetails")) {
@@ -284,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("jwtToken", jsonResponse.getString("jwtToken"));
                 newUser = jsonResponse.getBoolean("newUser");
-                //TODO: Add userType from response
+                editor.putString("userType", jsonResponse.getString("type"));
                 editor.commit();
                 printSharedPreferences(sharedPreferences);
                 Log.d("GooglePost", jsonResponse.toString());

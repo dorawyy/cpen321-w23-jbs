@@ -20,6 +20,7 @@
 		android:layout_height="60dp"
 		android:layout_gravity="center_horizontal"
 		android:layout_marginTop="50dp"
+		android:layout_marginBottom="12dp"
 		android:background="@drawable/big_button_container"
 		android:gravity="start"
 		android:paddingLeft="36dp"

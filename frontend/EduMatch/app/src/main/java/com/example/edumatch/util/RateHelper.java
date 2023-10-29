@@ -1,5 +1,6 @@
 package com.example.edumatch.util;
 
+import static com.example.edumatch.util.NetworkUtils.handlePutPostResponse;
 import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
 
 import android.content.Context;
@@ -17,23 +18,10 @@ public class RateHelper {
 
         JSONObject jsonResponse = sendHttpRequest(apiUrl,sharedPreferences.getString("jwtToken", ""),"POST",requestBody);
 
-        if (jsonResponse != null) {
-            try {
-                // TODO: get possible error messages/codes
-                if (jsonResponse.has("errorDetails")) {
-                    JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
-                    Log.d("RatePost", "There was an error!");
-                }
-                Log.d("RatePost", jsonResponse.toString());
+        String successMessage = "Successfully Made Rating";
+        String logTag = "RatePost";
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return false;
-            }
-        } else {
-            Log.d("RatePost","jsonResponse was NULL");
-        }
-        return true;
+        return handlePutPostResponse(context, jsonResponse,successMessage,logTag);
     }
 
     public static boolean postRatingWeight(Context context, JSONObject requestBody) {
@@ -42,22 +30,9 @@ public class RateHelper {
 
         JSONObject jsonResponse = sendHttpRequest(apiUrl,sharedPreferences.getString("jwtToken", ""),"POST",requestBody);
 
-        if (jsonResponse != null) {
-            try {
-                // TODO: get possible error messages/codes
-                if (jsonResponse.has("errorDetails")) {
-                    JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
-                    Log.d("RateWeightPost", "There was an error!");
-                }
-                Log.d("RateWeightPost", jsonResponse.toString());
+        String successMessage = "";
+        String logTag = "RateWeightPost";
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return false;
-            }
-        } else {
-            Log.d("RateWeightPost","jsonResponse was NULL");
-        }
-        return true;
+        return handlePutPostResponse(context, jsonResponse,successMessage,logTag);
     }
 }

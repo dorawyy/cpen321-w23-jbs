@@ -251,6 +251,12 @@ public class CourseRatesActivity extends AppCompatActivity {
             Set<String> tags = sharedPreferences.getStringSet("tags", new HashSet<>());
             JSONArray tagsArray = new JSONArray(tags);
             education.put("tags", tagsArray);
+            education.put("school", sharedPreferences.getString("university", ""));
+            education.put("program", sharedPreferences.getString("program", ""));
+            education.put("level", sharedPreferences.getString("yearLevel", ""));
+            Set<String> courses = sharedPreferences.getStringSet("courses", new HashSet<>());
+            JSONArray coursesArray = new JSONArray(courses);
+            education.put("courses", coursesArray);
 
             requestBody.put("education",education);
 

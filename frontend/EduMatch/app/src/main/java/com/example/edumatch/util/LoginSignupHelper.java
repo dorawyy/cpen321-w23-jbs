@@ -1,5 +1,10 @@
 package com.example.edumatch.util;
 
+import static com.example.edumatch.util.NetworkUtils.handlePutPostResponse;
+import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
+import static com.example.edumatch.util.NetworkUtils.showToastOnUiThread;
+import static com.example.edumatch.util.ProfileHelper.constructSignUpRequest;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +14,11 @@ import android.text.InputType;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.edumatch.activities.AvailabilityActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mortbay.util.ajax.JSON;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -91,6 +99,21 @@ public class LoginSignupHelper {
                 Log.d("SharedPreferencesData", "Key: " + key + ", Value: " + value.toString());
             }
         }
+    }
+
+
+
+    public static Boolean postSignUpInfo(Context context, JSONObject requestBody) {
+        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/api/auth/signup";
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+
+        JSONObject jsonResponse = sendHttpRequest(apiUrl, sharedPreferences.getString("jwtToken", ""), "POST", requestBody);
+
+        String successMessage = "Successfully Signed Up";
+        String logTag = "SignUpPost";
+
+        return handlePutPostResponse(context,jsonResponse,successMessage,logTag);
     }
 
 }

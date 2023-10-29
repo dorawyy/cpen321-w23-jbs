@@ -2,27 +2,14 @@ package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.AppointmentHelper.getAppointment;
 import static com.example.edumatch.util.AppointmentHelper.putAppointment;
-import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
-import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
-import static com.example.edumatch.util.ProfileHelper.constructSignUpRequest;
-import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
-import static com.example.edumatch.util.ProfileHelper.putEditProfile;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.edumatch.R;
-import com.example.edumatch.views.GoogleIconButtonView;
 import com.example.edumatch.views.LabelAndCommentTextView;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

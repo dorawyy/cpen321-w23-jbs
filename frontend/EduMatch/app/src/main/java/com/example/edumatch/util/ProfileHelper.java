@@ -1,5 +1,7 @@
 package com.example.edumatch.util;
+import static com.example.edumatch.util.NetworkUtils.handlePutPostResponse;
 import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
+import static com.example.edumatch.util.NetworkUtils.showToastOnUiThread;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -134,22 +136,11 @@ public class ProfileHelper {
 
         JSONObject jsonResponse = sendHttpRequest(apiUrl,sharedPreferences.getString("jwtToken", ""),"PUT",request);
 
-        if (jsonResponse != null) {
-            try {
-                if (jsonResponse.has("errorDetails")) {
-                    JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
-                   Log.d("EditProfilePut", "There was an error!");
-                }
-                Log.d("EditProfilePut", jsonResponse.toString());
+        String successMessage = "Successfully Edited Profile";
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return false;
-            }
-        } else {
-            Log.d("EditProfilePut","jsonResponse was NULL");
-        }
-        return true;
+        String logTag = "EditProfilePut";
+
+        return handlePutPostResponse(context,jsonResponse,successMessage,logTag);
     }
 
 
@@ -165,7 +156,12 @@ public class ProfileHelper {
                 Log.d("EditProfileGet", jsonResponse.toString());
                 if (jsonResponse.has("errorDetails")) {
                     JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
-                    Log.d("EditProfileGet", "There was an error!");
+                    if (errorDetails.has("message")) {
+                        String message = errorDetails.getString("message");
+                        Log.d("EditProfileGet", "There was an error: " + message);
+                        showToastOnUiThread(context, message);
+                        return false;
+                    }
                 } else {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
 

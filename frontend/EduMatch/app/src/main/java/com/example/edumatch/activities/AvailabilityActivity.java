@@ -1,8 +1,8 @@
 package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.LoginSignupHelper.isStartTimeBeforeEndTime;
+import static com.example.edumatch.util.LoginSignupHelper.postSignUpInfo;
 import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
-import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
 import static com.example.edumatch.util.ProfileHelper.constructSignUpRequest;
 import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
 import static com.example.edumatch.util.ProfileHelper.putEditProfile;
@@ -50,8 +50,6 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
-    private JSONObject jsonResponse;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +72,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
 
     private void initInvisibleFields() {
 
-        if (!sharedPreferences.getBoolean("useGoogle", false) && !sharedPreferences.getString("username","").isEmpty()) {
+        if (!sharedPreferences.getBoolean("useGoogle", false) && !sharedPreferences.getString("username", "").isEmpty()) {
             GoogleIconButtonView googleView = findViewById(R.id.google);
             googleView.setVisibility(View.GONE);
             TextView text = findViewById(R.id.automatically_set_title);
@@ -228,23 +226,16 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         updatePreferences();
         printSharedPreferences(sharedPreferences);
         if (sharedPreferences.getBoolean("isEditing", false)) {
-            //TODO: do a PUT here (make a common function)
             JSONObject request = constructEditAvailabilityRequest();
-            putEditProfile(request,AvailabilityActivity.this);
+            putEditProfile(request, AvailabilityActivity.this);
             newIntent = new Intent(AvailabilityActivity.this, EditProfileListActivity.class);
             startActivity(newIntent);
         } else {
             // TODO: this goes into the homepage
             //try posting user details
-            boolean success = postSignUpInfo();
-            if(success){
-                try {
-                    editor.putString("jwtToken",jsonResponse.getString("jwtToken"));
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-                editor.commit();
-                printSharedPreferences(sharedPreferences);
+            JSONObject requestBody = constructSignUpRequest(AvailabilityActivity.this);// Create your JSON request body
+            boolean success = postSignUpInfo(AvailabilityActivity.this,requestBody);
+            if (success) {
                 newIntent = new Intent(AvailabilityActivity.this, EditProfileListActivity.class);
                 startActivity(newIntent);
             }
@@ -273,39 +264,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         }
     }
 
-    private Boolean postSignUpInfo() {
-        JSONObject requestBody = constructSignUpRequest(AvailabilityActivity.this);// Create your JSON request body
-        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/api/auth/signup";
 
-         jsonResponse = sendHttpRequest(apiUrl,sharedPreferences.getString("jwtToken", ""), "POST", requestBody);
-
-        if (jsonResponse != null) {
-            try {
-                Log.d("SignUpPost", "Response is " +jsonResponse.toString());
-                if (jsonResponse.has("errorDetails")) {
-                    JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
-                    if (errorDetails.has("message")) {
-                        String message = errorDetails.getString("message");
-                        if ("Username already exists.".equals(message)) {
-                            Log.d("SignUpPost", "username already exists");
-                            // Handle the case where the username already exists
-                            runOnUiThread(() -> {
-                                Toast.makeText(getApplicationContext(), "Username already exists.", Toast.LENGTH_SHORT).show();
-                            });
-                            return false; // Return false to indicate failure
-                        }
-                    }
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return false;
-            }
-        } else {
-            Log.d("SignUpPost","jsonResponse was NULL");
-        }
-        return true;
-    }
 
 
     public JSONObject constructEditAvailabilityRequest() {
@@ -372,9 +331,6 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         }
 
     }
-
-
-
 
 
 }

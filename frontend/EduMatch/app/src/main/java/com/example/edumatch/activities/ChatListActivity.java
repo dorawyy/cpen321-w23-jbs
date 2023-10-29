@@ -1,6 +1,9 @@
 package com.example.edumatch.activities;
 
 
+import static com.example.edumatch.util.ConversationHelper.getConversations;
+import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +14,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import com.example.edumatch.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,18 +31,40 @@ public class ChatListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_list);
 
         initConvos();
-// Get the container where you want to add the buttons (e.g., a LinearLayout)
-
-
-// Loop through the array and create buttons
 
     }
 
     private void initConvos() {
         conversationsList = new ArrayList<>();
+        //TODO: uncomment this when backend is ready
+//        JSONObject conversations = getConversations(ChatListActivity.this);
+//
+//        if (conversations.has("conversations")) {
+//            try {
+//                JSONArray conversationArray = conversations.getJSONArray("conversations");
+//
+//                List<List<String>> conversationsList = new ArrayList<>();
+//
+//                for (int i = 0; i < conversationArray.length(); i++) {
+//                    JSONObject conversationObject = conversationArray.getJSONObject(i);
+//
+//                    String conversationId = conversationObject.getString("conversationId");
+//                    String conversationName = conversationObject.getString("conversationName");
+//
+//                    List<String> conversationInfo = new ArrayList<>();
+//                    conversationInfo.add(conversationId);
+//                    conversationInfo.add(conversationName);
+//
+//                    conversationsList.add(conversationInfo);
+//                }
+//
+//                // Now, conversationsList contains the data from the JSONArray.
+//            } catch (JSONException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
 
-// Simulate data from a GET request
-        //TODO: Replace this simulated data
+        // Simulated data from a GET request
         String[] conversationIds = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
         String[] conversationNames = {"Stanley Zhao", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan", "Arya Phan"};
 
@@ -80,57 +109,5 @@ public class ChatListActivity extends AppCompatActivity {
         startActivity(newIntent);
     }
 
-    private SharedPreferences updatePreferences() {
-        SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putBoolean("isEditing", false);
-//        editor.putBoolean("useGoogle", useGoogle);
-        editor.commit();
-        return sharedPreferences;
-    }
 
-    // TODO: create a GET all conversations function here
-//    private Boolean getConversations() {
-//        JSONObject requestBody = constructSignInRequest();// Create your JSON request body
-//        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/api/auth/login";
-//
-//        SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        JSONObject jsonResponse = getDatafrombackend...(apiUrl, requestBody, sharedPreferences.getString("jwtToken",""));
-//
-//        if (jsonResponse != null) {
-//            try {
-//                if (jsonResponse.has("errorDetails")) {
-//                    JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
-//                    if (errorDetails.has("message")) {
-//                        String message = errorDetails.getString("message");
-//                        if ("Username or password is incorrect".equals(message)) {
-//                            // Handle the case where the username already exists
-//                            runOnUiThread(() -> {
-//                                Toast.makeText(getApplicationContext(), "Username or password is incorrect", Toast.LENGTH_SHORT).show();
-//                            });
-//                            return false; // Return false to indicate failure
-//                        }
-//                    }
-//                } else {
-//                    SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//                    editor.putString("jwtToken", jsonResponse.getString("jwtToken"));
-//                    editor.putString("userType", jsonResponse.getString("type"));
-//                    editor.commit();
-//                    printSharedPreferences(sharedPreferences);
-//                    return true;
-//                }
-//                Log.d("ConversationsGet", jsonResponse.toString());
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//                return false;
-//            }
-//        } else {
-//            Log.d("ConversationsGet", "jsonResponse was NULL");
-//            return false;
-//        }
-//        return false;
-//    }
 }

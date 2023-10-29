@@ -1,6 +1,9 @@
 package com.example.edumatch.util;
 
+import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -13,7 +16,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
@@ -133,6 +135,78 @@ public class NetworkUtils {
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+
+    public static boolean handlePutPostResponse(Context context, JSONObject jsonResponse, String successMessage, String logTag) {
+        if (jsonResponse != null) {
+            try {
+                if (jsonResponse.has("errorDetails")) {
+                    JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
+                    if (errorDetails.has("message")) {
+                        String message = errorDetails.getString("message");
+                        Log.d(logTag, "There was an error: " + message);
+                        showToastOnUiThread(context, message);
+                        return false;
+                    }
+                }
+                else {
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(jsonResponse.has("jwtToken")){
+                        try {
+                            editor.putString("jwtToken", jsonResponse.getString("jwtToken"));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    if(jsonResponse.has("type")){
+                        try {
+                            editor.putString("userType", jsonResponse.getString("type"));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    editor.commit();
+                    printSharedPreferences(sharedPreferences);
+                    if(!successMessage.isEmpty()){
+                        showToastOnUiThread(context, successMessage);
+                    }
+                }
+                Log.d(logTag, jsonResponse.toString(4));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            Log.d(logTag, "jsonResponse was NULL");
+        }
+        return true;
+    }
+
+    public static JSONObject handleGetResponse(Context context, JSONObject jsonResponse, String logTag) {
+        if (jsonResponse != null) {
+            try {
+                if (jsonResponse.has("errorDetails")) {
+                    JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
+                    if (errorDetails.has("message")) {
+                        String message = errorDetails.getString("message");
+                        Log.d(logTag, "There was an error: " + message);
+                        showToastOnUiThread(context, message);
+                        return null; // Return null to indicate failure
+                    }
+                }
+                Log.d(logTag, jsonResponse.toString(4));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return jsonResponse;
+            }
+        } else {
+            Log.d(logTag, "jsonResponse was NULL");
+        }
+        return jsonResponse;
     }
 }
 

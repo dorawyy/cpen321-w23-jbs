@@ -1,9 +1,11 @@
 package com.example.edumatch.activities;
 
+import static com.example.edumatch.util.LoginSignupHelper.isStartTimeBeforeEndTime;
 import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
 import static com.example.edumatch.util.ProfileHelper.constructSignUpRequest;
 import static com.example.edumatch.util.ProfileHelper.getProfile;
 import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
+import static com.example.edumatch.util.TutorsHelper.getTuteeHome;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +13,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.edumatch.R;
@@ -20,6 +23,7 @@ import com.google.android.flexbox.FlexboxLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mortbay.util.ajax.JSON;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,11 +33,13 @@ import java.util.Set;
 public class TuteeHomeActivity extends AppCompatActivity {
     private FlexboxLayout chipContainer;
 
-    private List<String> courseList;
 
     StringBuilder apiUrlBuilder;
 
     private JSONObject jsonResponse;
+    private List<String> courseList;
+
+    String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/recommended?";
 
     //TODO: Do a GET on search?
     @Override
@@ -48,8 +54,8 @@ public class TuteeHomeActivity extends AppCompatActivity {
         getProfile(TuteeHomeActivity.this);
         SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         Set<String> courses = sharedPreferences.getStringSet("courses", new HashSet<>());
-        List<String> courseList = new ArrayList<>(courses); // Convert Set to List
-        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/recommended?";
+        courseList = new ArrayList<>(courses); // Convert Set to List
+
          apiUrlBuilder = new StringBuilder(apiUrl);
 
 
@@ -66,7 +72,6 @@ public class TuteeHomeActivity extends AppCompatActivity {
                         if (index >= 0) {
                             courseList.remove(index);
                         }
-                        //TODO: Re-GET tutors
                     }
                 });
 
@@ -80,38 +85,36 @@ public class TuteeHomeActivity extends AppCompatActivity {
             }
             //TODO: implement dynamic pagination
             apiUrlBuilder.append("&page=1");
-            boolean success = getTuteeHome();
-            if(success){
-                Toast.makeText(getApplicationContext(), "Successfully fetched tutors", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getApplicationContext(), "Couldn't get tutors!", Toast.LENGTH_SHORT).show();
-            }
+            JSONObject jsonResponse = getTuteeHome(apiUrlBuilder,TuteeHomeActivity.this);
+
+
+
+            initSearchTutorButton();
+
 
         }
 
     }
 
-    private Boolean getTuteeHome() {
-        SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+    private void initSearchTutorButton() {
 
-        jsonResponse = sendHttpRequest(apiUrlBuilder.toString(),sharedPreferences.getString("jwtToken", ""), "GET", null);
+        Button searchTutor = findViewById(R.id.search_tutors);
 
-        if (jsonResponse != null) {
-            try {
-                Log.d("TuteeHomeGet", "Response is " +jsonResponse.toString());
-                if (jsonResponse.has("errorDetails")) {
-                    JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
-                    // TODO: handle possible errors returned from BE
+        searchTutor.setOnClickListener(v -> {
+            StringBuilder newApiUrlBuilder = new StringBuilder(apiUrl);;
+            for(String course : courseList){
+
+                newApiUrlBuilder.append(course);
+                // Check if it's the last course before appending a comma
+                if (!course.equals(courseList.get(courseList.size() - 1))) {
+                    newApiUrlBuilder.append(",");
                 }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return false;
             }
-        } else {
-            Log.d("TuteeHomeGet","jsonResponse was NULL");
+            newApiUrlBuilder.append("&page=1");
+            JSONObject jsonResponse = getTuteeHome(newApiUrlBuilder,TuteeHomeActivity.this);
+
+            });
         }
-        return true;
-    }
+
 
 }

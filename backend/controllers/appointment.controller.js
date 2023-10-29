@@ -7,6 +7,46 @@ const momenttz = require("moment-timezone")
 const User = db.user
 const Appointment = db.appointment
 
+exports.getUserAppointments = async (req, res) => {
+    var userId = req.userId
+    var courses = req.query.courses ? req.query.courses.split(',') : []
+    var courseQuery = courses ? { course: { $in: courses } } : {};
+
+    var user = await User
+        .findById(userId)
+        .then(user => {
+            if (!user) {
+                return res.status(404).send({
+                    message: "The other user is not found"
+                })
+            }
+            return user
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(500).send({
+                message: err.message
+            })
+        })
+    
+    var appointments = await cleanupUserAppointments(user)
+    var appointmentIds = appointments.map(appt => appt._id)
+
+
+    var filteredAppts = await Appointment
+        .find(courseQuery)
+        .where('_id')
+        .in(appointmentIds)
+        .catch(err => {
+            console.log(err)
+            return res.status(500).send({
+                message: err.message
+            })
+        })
+
+    return res.status(200).send(filteredAppts)
+}
+
 exports.getAppointment = async (req, res) => {
     var appointmentId = req.query.appointmentId
     Appointment.findById(appointmentId)
@@ -77,11 +117,11 @@ exports.bookAppointment = async (req, res) => {
             return res.status(500).send({ message: err.message })
         })
 
-    const pstStartDatetime = toPST(req.body.pstStartDatetime)
-    const pstEndDatetime = toPST(req.body.pstEndDatetime)
+    req.body.pstStartDatetime = toPST(req.body.pstStartDatetime)
+    req.body.pstEndDatetime = toPST(req.body.pstEndDatetime)
 
-    var tutorIsAvailable = await isAvailable(tutor, pstStartDatetime, pstEndDatetime)
-    var tuteeIsAvailable = await isAvailable(tutee, pstStartDatetime, pstEndDatetime)
+    var tutorIsAvailable = await isAvailable(tutor, req.body.pstStartDatetime, req.body.pstEndDatetime)
+    var tuteeIsAvailable = await isAvailable(tutee, req.body.pstStartDatetime, req.body.pstEndDatetime)
 
     if (!tutorIsAvailable) {
         return res.status(400).send({ 
@@ -104,10 +144,8 @@ exports.bookAppointment = async (req, res) => {
                 userId: req.userId // tutee
             }
         ],
-        pstStartDatetime,
-        pstEndDatetime,
-        location: req.body.location,
-        notes: req.body.notes
+        ...req.body,
+        
     }).save()
     .catch(err => {
         console.log(err)
@@ -116,8 +154,8 @@ exports.bookAppointment = async (req, res) => {
 
     var userNewAppt = {
         _id: newAppt._id,
-        pstStartDatetime,
-        pstEndDatetime
+        pstStartDatetime: req.body.pstStartDatetime,
+        pstEndDatetime: req.body.pstEndDatetime
     }
     
     await User.findByIdAndUpdate(

@@ -9,32 +9,27 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="Changed the tutor view">
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AdminHomeActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TutorHomeActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/TutorRecommendationView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/logo-playstore.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/logo_text-playstore.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_admin_home.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_tutor_home.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/tutor_recommendation_view.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-anydpi-v26/logo.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-anydpi-v26/logo_round.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-hdpi/logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-hdpi/logo_foreground.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-hdpi/logo_round.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-mdpi/logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-mdpi/logo_foreground.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-mdpi/logo_round.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xhdpi/logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xhdpi/logo_foreground.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xhdpi/logo_round.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxhdpi/logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxhdpi/logo_foreground.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxhdpi/logo_round.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxxhdpi/logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxxhdpi/logo_foreground.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxxhdpi/logo_round.png" afterDir="false" />
+    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="ADDED ALL NECESSARY VIEWS">
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/empty_bar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-anydpi-v26/logo_text.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-anydpi-v26/logo_text_round.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-hdpi/logo_text.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-hdpi/logo_text_foreground.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-hdpi/logo_text_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-mdpi/logo_text.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-mdpi/logo_text_foreground.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-mdpi/logo_text_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xhdpi/logo_text.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xhdpi/logo_text_foreground.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xhdpi/logo_text_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxhdpi/logo_text.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxhdpi/logo_text_foreground.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxhdpi/logo_text_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxxhdpi/logo_text.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxxhdpi/logo_text_foreground.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxxhdpi/logo_text_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/logo_text_background.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_findbugs_jsr305_2_0_2.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_listenablefuture_1_0.xml" beforeDir="false" />
@@ -44,11 +39,18 @@
       <change beforePath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.unitTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.unitTest.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EduMatch/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/empty_bar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/empty_bar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/themes.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/logo_text-playstore.png" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/logo_text-playstore.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/empty_bar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_admin_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_admin_home.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_chat_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_chat_list.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_chat_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_chat_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_edit_profile_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_edit_profile_list.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_home_tutee.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_home_tutee.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_rate.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_rate.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_scheduled_appointment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_scheduled_appointment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_tutee_rate.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_tutee_rate.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-anydpi-v26/logo.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-anydpi-v26/logo.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-anydpi-v26/logo_round.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-anydpi-v26/logo_round.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,19 +105,32 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="resourceFile" />
-        <option value="Class" />
         <option value="layoutResourceFile" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="sign-up-flow" />
+        <entry key="$PROJECT_DIR$/.." value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
     <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="3cf7d05f-67b4-4a7f-a2e9-9a8457479b61" />
+        <option name="url" value="https://github.com/StanDarJeep/jbs-edumatch.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -125,29 +140,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/DayOfTheWeekView.java_SELECTED&quot;: &quot;DayOfTheWeekView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndRatingView.java_SELECTED&quot;: &quot;LabelAndRatingView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/MessageChipView.java_SELECTED&quot;: &quot;MessageChipView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipView.java_SELECTED&quot;: &quot;SubjectChipView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/TutorReviewChip.java_SELECTED&quot;: &quot;TutorReviewChip&quot;,
-    &quot;android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LabelAndEditText.java_SELECTED&quot;: &quot;LabelAndEditText&quot;,
-    &quot;android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LoginLabelAndEditText.java_SELECTED&quot;: &quot;LoginLabelAndEditText&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/ActivityBarView.java_SELECTED": "AppBarCustomView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AvailableTimesViews.java_SELECTED": "AvailableTimesViews",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/CourseRateItemView.java_SELECTED": "CourseRateItemView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/DayOfTheWeekView.java_SELECTED": "DayOfTheWeekView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndRatingView.java_SELECTED": "LabelAndRatingView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/MessageChipView.java_SELECTED": "MessageChipView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipView.java_SELECTED": "SubjectChipView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/TutorReviewChip.java_SELECTED": "TutorReviewChip",
+    "android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LabelAndEditText.java_SELECTED": "LabelAndEditText",
+    "android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LoginLabelAndEditText.java_SELECTED": "LoginLabelAndEditText",
+    "cidr.known.project.marker": "true",
+    "last_opened_file_path": "C:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="android.template.-1582889132">
       <recent name="com.example.edumatch.activities" />
       <recent name="com.example.edumatch.views" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/EduMatch/app/src/main/res/layout" />
     </key>
   </component>
   <component name="RunManager" selected="Android App.EduMatch.app">
@@ -273,7 +294,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698094547001</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="ADDED ALL NECESSARY VIEWS">
+      <created>1698606698896</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1698606698896</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -303,6 +331,7 @@
     <MESSAGE value="Fixed bug" />
     <MESSAGE value="changed things so they finally build" />
     <MESSAGE value="Changed the tutor view" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed the tutor view" />
+    <MESSAGE value="ADDED ALL NECESSARY VIEWS" />
+    <option name="LAST_COMMIT_MESSAGE" value="ADDED ALL NECESSARY VIEWS" />
   </component>
 </project>

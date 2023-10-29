@@ -8,11 +8,11 @@
 	android:layout_gravity="center_horizontal"
 	android:orientation="vertical">
 
-	<ImageView
-		android:id="@+id/emptyBar"
-		android:layout_width="match_parent"
-		android:layout_height="40dp"
-		android:background="@drawable/empty_bar"/>
+<!--	<ImageView-->
+<!--		android:id="@+id/emptyBar"-->
+<!--		android:layout_width="match_parent"-->
+<!--		android:layout_height="40dp"-->
+<!--		android:background="@drawable/empty_bar"/>-->
 
 	<androidx.appcompat.widget.AppCompatButton
 		android:id="@+id/account_info"

@@ -170,7 +170,6 @@ exports.acceptAppointment = async (req, res) => {
     var user = await User.findById(userId)
         .then(user => {
             if (!user || user.isBanned) {
-                console.log("line 173")
                 return res.status(400).send({ message: "User not found" })
             }
             return user
@@ -198,7 +197,6 @@ exports.acceptAppointment = async (req, res) => {
     var idStrings = usersApptIds.map(id => id.toString())
 
     if (!(idStrings.includes(apptId))) {
-        console.log("line 201")
         return res.status(404).send({
             message: "Appointment not found"
         })
@@ -241,7 +239,6 @@ exports.acceptAppointment = async (req, res) => {
     var tutor = await User.findById(userId)
         .then(user => {
             if (!user || user.isBanned) {
-                console.log("line 244")
                 return res.status(400).send({ message: "User not found" })
             }
             return user
@@ -259,7 +256,6 @@ exports.acceptAppointment = async (req, res) => {
     var tutee = await User.findById(tuteeId)
         .then(user => {
             if (!user || user.isBanned) {
-                console.log("line 260")
                 return res.status(400).send({ message: "User not found" })
             }
             return user

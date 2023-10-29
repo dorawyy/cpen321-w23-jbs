@@ -27,7 +27,7 @@ exports.getAppointments = async (req, res) => {
                                             message: "The other user is not found"
                                         })
                                     }
-                                    return user
+                                    return user.displayedName
                                 })
                                 .catch(err => {
                                     return res.status(500).send({
@@ -36,8 +36,10 @@ exports.getAppointments = async (req, res) => {
                                 })
                         }
                     }
-                    var ret = appt
-                    ret.otherUserName = otherUserName
+                    var ret = {
+                        ...appt.toObject(),
+                        otherUserName
+                    }
                     return res.status(200).send(ret)
                 })
                 .catch(err => {

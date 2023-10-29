@@ -1,84 +1,155 @@
 const { AppointmentStatus } = require("../constants/appointment.status");
 const db = require("../db")
-const { google } = require('googleapis');
-
-const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
-const googleClientId = process.env.GOOGLE_CLIENT_ID;
-
-const oauth2Client = new google.auth.OAuth2(googleClientId, googleClientSecret)
-
+const { getCalendarEvents } = require("../utils/google.utils");
+const momenttz = require("moment-timezone")
 
 const User = db.user
 const Appointment = db.appointment
 
 
-exports.bookAppointment = (req, res) => {
+exports.bookAppointment = async (req, res) => {
+    const tutorId = req.body.tutorId
+    var tutor = await User
+        .findById(tutorId)
+        .then(user => {
+            if (!user) {
+                return res.status(400).send({ message: "User not found." })
+            }
+            return user
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
+
+    const pstStartDatetime = toPST(req.body.pstStartDatetime)
+    const pstEndDatetime = toPST(req.body.pstEndDatetime)
+
+    var isAvailable = false
+    if (tutor.useGoogleCalendar) {
+        isAvailable = await checkTutorAvailabilityWithGoogleCalendar(
+            tutor, pstStartDatetime, pstEndDatetime
+        )
+    } else {
+        isAvailable = await checkTutorManualAvailability(
+            tutor, pstStartDatetime, pstEndDatetime
+        )
+    }
+
+    if (!isAvailable) {
+        return res.status(400).send({ 
+            message: "Tutor is unavailable during the specified time slot. "
+        })
+    }
+
+    var newAppt = await new Appointment({
+        status: AppointmentStatus.PENDING,
+        participantsInfo: [
+            {
+                userId: tutorId
+            },
+            {
+                userId: req.userId // tutee
+            }
+        ],
+        pstStartDatetime,
+        pstEndDatetime,
+        location: req.body.location,
+        notes: req.body.notes
+    }).save()
+    .catch(err => {
+        console.log(err)
+        return res.status(500).send({ message: err.message })
+    })
+
+    var userNewAppt = {
+        _id: newAppt._id,
+        pstStartDatetime,
+        pstEndDatetime
+    }
+    
+    await User.findByIdAndUpdate(
+        tutorId,
+        { $push: {appointments: userNewAppt} }
+    ).catch(err => {
+        console.log(err)
+        return res.status(500).send({ message: err.message })
+    })
+
+
+    var tutee = await User.findById(req.userId)
+                    .then(user => {
+                        if (!user) {
+                            return res.status(400).send({ message: "User not found." })
+                        }
+                        return user
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        return res.status(500).send({ message: err.message })
+                    })
+
+    await cleanupUserAppointments(tutee)
+
+    await User.findByIdAndUpdate(
+        req.userId,
+        { $push: {appointments: userNewAppt} }
+    ).catch(err => {
+        console.log(err)
+        return res.status(500).send({ message: err.message })
+    })
+    
+    return res.status(200).send(newAppt)
+
 
 }
 
 async function checkTutorManualAvailability( 
-    tutor, tutee, newAppointment
+    tutor, pstStartDatetime, pstEndDatetime
 ) {
-    // remove completed appointments. upcomingAppointments includes
-    // pending/accepted appointments
-    var upcomingAppointments = tutor.appointments.filter(
-        async appt => {await !appointmentIsCompleted(appt.id)}
-    )
+    if (tutor.appointments.length == 0) {
+        return true
+    }
 
-    var acceptedAppointments = upcomingAppointments.filter(
-        async appt => { await appointmentIsAccepted(appt.id) }
-    )
+    var upcomingAppointments = await cleanupUserAppointments(tutor)
+    if (upcomingAppointments.length == 0) {
+        return true
+    }
+
+    var acceptedAppointments = await getAcceptedAppointments(upcomingAppointments)
+    if (acceptedAppointments.length == 0) {
+        return true
+    }
     
     var conflicts = acceptedAppointments.filter(
         appt => {
-            if (newAppointment.pstEndDatetime <= appt.pstStartDatetime || 
-                newAppointment.pstStartDatetime >= appt.pstEndDatetime) {
-                // non conflicts
-                return False        
+            var newPstStart = momenttz(pstStartDatetime)
+            var newPstEnd = momenttz(pstEndDatetime)
+            var apptPstStart = momenttz(appt.pstStartDatetime)
+            var apptPstEnd = momenttz(appt.pstEndDatetime)
+
+            if (newPstEnd.isSameOrBefore(apptPstStart) ||
+                newPstStart.isSameOrAfter(apptPstEnd)) {
+                    return false
             } else {
-                return True
+                return true
             }
         } 
     )
-    
-    // if (conflicts.length === 0) {
-    //     var newAppt = await new Appointment({
-    //         status: AppointmentStatus.PENDING,
-    //         participantsInfo: [
-    //             {
-    //                 userId: tutor._id,
-    //             },
-    //             {
-    //                 userId: tutee._id
-    //             }
-    //         ],
-    //         ...newAppointment
-    //     }).save()
-        
-    //     var userNewAppt = {
-    //         id: newAppt._id,
-    //         pstStartDatetime: newAppt.pstStartDatetime,
-    //         pstEndDatetime: newAppt.pstEndDatetime
-    //     }
-    //     tutor.appointments.push(userNewAppt)
-    //     tutee.appointments.push(userNewAppt)
-        
-    //     tutor.save()
-    //     tutee.save()
-    // }
     return conflicts.length === 0
 
 }
 
-exports.appointmentIsCompleted = async (appointmentId) => {
+
+
+async function appointmentIsCompleted (appointmentId) {
     return Appointment
         .findById(appointmentId, "pstEndDatetime")
         .then(appt => {
-            var pstNow = new Date().toLocaleString("en-US", {
-                timeZone: "America/Los_Angeles"
-            })
+            var pstNow = momenttz(new Date().toISOString())
+                            .tz('America/Los_Angeles')
             
-            if (pstEndDatetime > pstNow) {
+            if (momenttz(appt.pstEndDatetime).isAfter(pstNow)) {
                 return Promise.resolve(false)
             } else {
                 return Promise.resolve(true)
@@ -86,41 +157,64 @@ exports.appointmentIsCompleted = async (appointmentId) => {
         })        
 }
 
-exports.appointmentIsAccepted = async (appointmentId) => {
-    var isCompleted = await Appointment
+async function appointmentIsAccepted(appointmentId) {
+    var isAccepted = await Appointment
         .findById(appointmentId, "status")
-        .then(appt => { return appt.status === AppointmentStatus.ACCEPTED })
-    return isCompleted
+        .then(appt => { 
+            return appt.status === AppointmentStatus.ACCEPTED 
+        })
+    
+    return isAccepted
+}
+
+// remove completed appointments. upcomingAppointments includes
+// pending/accepted appointments
+async function cleanupUserAppointments(user) {
+    var upcomingAppointments = []
+    if (user.appointments) {
+        for (appt of user.appointments) {
+            var isCompleted = await appointmentIsCompleted(appt._id)
+            if (!isCompleted) {
+                upcomingAppointments.push(appt)
+            }
+        }
+    }
+
+    return await 
+        User.findByIdAndUpdate(
+            user._id, { appointments: upcomingAppointments },
+            {new: true}
+        ).then(user => {
+            return user.appointments
+        })
+}
+
+async function getAcceptedAppointments(appointments) {
+    var acceptedAppointments = []
+    for (appt of appointments) {
+        var isAccepted = await appointmentIsAccepted(appt._id)
+        if (isAccepted) {
+            acceptedAppointments.push(appt)
+        }
+    }
+    return acceptedAppointments
 }
 
 
-
-// ChatGPT
 async function checkTutorAvailabilityWithGoogleCalendar(
     tutorUser, pstStartDatetime, pstEndDatetime
 ) {
-    oauth2Client.setCredentials({
-        access_token: tutorUser.googleOauth.accessToken,
-        refresh_token: tutorUser.googleOauth.refreshToken,
-        expiry_date: Number(tutorUser.googleOauth.expiryDate)
-    })
-
-    google.options({ auth: oauth2Client });
-    const calendar = google.calendar({ version: 'v3' });
-
-    // Specify the time range for the query
-    const timeMin = new Date(pstStartDatetime).toISOString();
-    const timeMax = new Date(pstEndDatetime).toISOString();
-
-    // Make a request to the Google Calendar API to list events within the specified time range
-    const response = await calendar.events.list({
-        calendarId: 'primary', // Assuming primary calendar for the tutor
-        timeMin,
-        timeMax,
-        timeZone: 'America/Los_Angeles', // Adjust the time zone as needed
-    });
-    const events = response.data.items;
-
-    // Check if there are any events within the specified time range
+    const events = await getCalendarEvents(
+        tutorUser, pstStartDatetime, pstEndDatetime
+    )
+   
     return events.length === 0;
 }
+
+// chatgpt
+function toPST(dateString) {
+    return momenttz(dateString).tz('America/Los_Angeles').format();
+}
+
+module.exports.appointmentIsCompleted = appointmentIsCompleted
+module.exports.appointmentIsAccepted = appointmentIsAccepted

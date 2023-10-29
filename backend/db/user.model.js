@@ -63,9 +63,9 @@ const recommendationWeightsSchema = new mongoose.Schema({
 })
 
 const appointmentSchema = new mongoose.Schema({
-    id: String, // same as Appointment db
-    pstStartDatetime: Date,
-    pstEndDatetime: Date
+    _id: mongoose.Types.ObjectId, // same as Appointment db
+    pstStartDatetime: String,
+    pstEndDatetime: String
 })
 
 const User = mongoose.model(

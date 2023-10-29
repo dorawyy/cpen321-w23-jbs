@@ -6,6 +6,8 @@ const User = db.user
 
 exports.ban = async (req, res) => {
     const admin = await User.findById(req.userId)
+    if (!admin)
+        return res.status(404).send({ message: "Could not find admin in database with provided id"})
     if (admin.type != UserType.ADMIN)
         return res.status(401).send({ message: "User is not admin and is not authorized to ban" })
 
@@ -26,6 +28,8 @@ exports.ban = async (req, res) => {
 
 exports.unban = async (req, res) => {
     const admin = await User.findById(req.userId)
+    if (!admin)
+        return res.status(404).send({ message: "Could not find admin in database with provided id"})
     if (admin.type != UserType.ADMIN)
         return res.status(401).send({ message: "User is not admin and is not authorized to unban" })
 
@@ -42,6 +46,8 @@ exports.unban = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
     const admin = await User.findById(req.userId)
+    if (!admin)
+        return res.status(404).send({ message: "Could not find admin in database with provided id"})
     if (admin.type != UserType.ADMIN)
         res.status(401).send({ message: "User is not admin and is not authorized to view user list" })
 
@@ -60,6 +66,8 @@ exports.getUsers = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
     const admin = await User.findById(req.userId)
+    if (!admin)
+        return res.status(404).send({ message: "Could not find admin in database with provided id"})
     if (admin.type != UserType.ADMIN)
         res.status(401).send({ message: "User is not admin and is not authorized to view user profile and messages" })
 

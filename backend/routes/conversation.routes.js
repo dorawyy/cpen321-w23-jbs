@@ -7,6 +7,12 @@ module.exports = function (app) {
         authJwt.verifyJwt,
         controller.getList
     );
+    
+    app.get(
+        "/conversation/get_conversation",
+        authJwt.verifyJwt,
+        controller.getConversation
+    )
 
     app.post(
         "/conversation/create",

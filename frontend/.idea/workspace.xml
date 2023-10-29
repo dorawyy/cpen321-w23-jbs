@@ -10,11 +10,45 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="Changed the tutor view">
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ScheduleAppointmentActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_schedule_appointment.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AdminHomeActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TutorHomeActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/TutorRecommendationView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/logo-playstore.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/logo_text-playstore.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_admin_home.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_tutor_home.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/tutor_recommendation_view.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-anydpi-v26/logo.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-anydpi-v26/logo_round.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-hdpi/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-hdpi/logo_foreground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-hdpi/logo_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-mdpi/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-mdpi/logo_foreground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-mdpi/logo_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xhdpi/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xhdpi/logo_foreground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xhdpi/logo_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxhdpi/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxhdpi/logo_foreground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxhdpi/logo_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxxhdpi/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxxhdpi/logo_foreground.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-xxxhdpi/logo_round.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_findbugs_jsr305_2_0_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_listenablefuture_1_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.androidTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.androidTest.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.unitTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.unitTest.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/empty_bar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/empty_bar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/themes.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,12 +64,33 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$/EduMatch/app">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="EduMatch" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="EduMatch" type="f1a62948:ProjectNode" />
+                <item name="app" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="EduMatch" type="f1a62948:ProjectNode" />
+                <item name="app" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="EduMatch" type="f1a62948:ProjectNode" />
+                <item name="app" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="other" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />

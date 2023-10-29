@@ -194,8 +194,26 @@ public class MainActivity extends AppCompatActivity {
     private void goToHomePage(){
         // todo: need to check if they are tutor or tutee
         // todo: go to right view (currently is on view I am testing)
-        Intent newIntent = new Intent(MainActivity.this,
-                nextActivity);
+        SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+
+        String userType = sharedPreferences.getString("type", ""); // Assuming the key for user type is "type"
+
+        Intent newIntent;
+        switch (userType) {
+            case "admin":
+                newIntent = new Intent(MainActivity.this, AdminHomeActivity.class);
+                break;
+            case "tutee":
+                newIntent = new Intent(MainActivity.this, TuteeHomeActivity.class);
+                break;
+            case "tutor":
+                newIntent = new Intent(MainActivity.this, TutorHomeActivity.class);
+                break;
+            default:
+                // Handle unexpected cases or errors here
+                Toast.makeText(this, "Invalid user type", Toast.LENGTH_SHORT).show();
+                return;
+        }
         startActivity(newIntent);
     }
 

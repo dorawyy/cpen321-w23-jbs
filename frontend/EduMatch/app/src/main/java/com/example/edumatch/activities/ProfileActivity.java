@@ -1,21 +1,27 @@
 package com.example.edumatch.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.edumatch.R;
 
 public class ProfileActivity extends AppCompatActivity {
+
+    private String tutorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        String tutorId = getIntent().getStringExtra("TUTOR_ID");
+
+
 
         RatingBar starRatingBar = findViewById(R.id.starRatingBar);
         float tutorRating = 4.5f; // Replace this with the actual tutor's rating

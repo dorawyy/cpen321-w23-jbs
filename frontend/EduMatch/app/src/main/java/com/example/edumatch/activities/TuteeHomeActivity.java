@@ -143,12 +143,23 @@ public class TuteeHomeActivity extends AppCompatActivity {
                // String courseCode = tutorObject.getString("courses"); // replace with your actual JSON keys
                 String tutorName = tutorObject.getString("displayedName");
                 String tutorDetails = tutorObject.getString("school");
+                String tutorID = tutorObject.getString("tutorId");
 
 
                 TutorRow tutorRow = new TutorRow(TuteeHomeActivity.this);
                // tutorRow.setCourseCode(courseCode);
                 tutorRow.setTutorName(tutorName);
                 tutorRow.setTutorDetails(tutorDetails);
+                tutorRow.setId(tutorID);
+
+                tutorRow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent profileIntent = new Intent(TuteeHomeActivity.this, ProfileActivity.class);
+                        profileIntent.putExtra("TUTOR_ID", tutorRow.id);
+                        startActivity(profileIntent);
+                    }
+                });
 
 
                 // Assuming you have a layout or container where you want to add the TutorRow

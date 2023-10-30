@@ -14,6 +14,7 @@ public class TutorRow extends LinearLayout {
     private TextView tvTutorName;
     private TextView tvTutorDetails;
     private TextView tvPrice;
+    public String id;
 
     public TutorRow(Context context) {
         super(context);
@@ -45,6 +46,10 @@ public class TutorRow extends LinearLayout {
 
     public void setPrice(String price) {
         tvPrice.setText(price);
+    }
+
+    public void setId (String tid) {
+        id = tid;
     }
 
 }

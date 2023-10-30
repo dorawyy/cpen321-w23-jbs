@@ -1,7 +1,7 @@
 const { AppointmentStatus } = require("../constants/appointment.status");
 const { UserType } = require("../constants/user.types");
 const db = require("../db")
-const { getCalendarEvents, getFreeTime, createGoogleEvent } = require("../utils/google.utils");
+const { getCalendarEvents, getFreeTime, createGoogleEvent, cancelGoogleEvent } = require("../utils/google.utils");
 const momenttz = require("moment-timezone")
 const mongoose = require("mongoose")
 
@@ -47,7 +47,7 @@ exports.cancelAppointment = async (req, res) => {
         })
     }
 
-    await Appointment.findByIdAndUpdate(
+    var canceledAppt = await Appointment.findByIdAndUpdate(
         apptId, {status: AppointmentStatus.CANCELED},
         { new: true }
     ).then(appt => {
@@ -56,6 +56,7 @@ exports.cancelAppointment = async (req, res) => {
                 message: "Appointment not found"
             })
         }
+        return appt
     })
     .catch(err => {
         console.log(err)
@@ -79,7 +80,39 @@ exports.cancelAppointment = async (req, res) => {
             })
         })
 
-    cleanupUserAppointments(user)
+    var otherUserId = canceledAppt.participantsInfo
+        .filter(user => user.userId != userId)[0].userId
+    
+    var otherUser = await User.findById(otherUserId)
+        .then(user => {
+            if (!user || user.isBanned) {
+                return res.status(400).send({ message: "User not found" })
+            }
+            return user
+        })
+        .catch(err => {
+            console.log(err)
+            return res.status(500).send({
+                message: err.message
+            })
+        })
+    
+    if (user.useGoogleCalendar) {
+        await cancelGoogleEvent(user, otherUser, canceledAppt)
+    }
+    if (otherUser.useGoogleCalendar) {
+        await cancelGoogleEvent(otherUser, user, canceledAppt)
+    }
+
+    await cleanupUserAppointments(user)
+        .catch(err => {
+            console.log(err)
+            return res.status(500).send({
+                message: err.message
+            })
+        })
+    
+    await cleanupUserAppointments(otherUser)
         .then(result => {
             return res.status(200).send({
                 message: "Canceled appointment successfully"
@@ -551,7 +584,6 @@ async function checkUserAvailabilityWithGoogleCalendar(
     const events = await getCalendarEvents(
         user, pstStartDatetime, pstEndDatetime
     )
-   
     return events.length === 0;
 }
 

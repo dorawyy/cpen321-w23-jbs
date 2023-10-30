@@ -36,7 +36,7 @@ exports.googleAuth = (req, res) => {
         return res.json({ 
             jwtToken,
             newUser: result.newUser,
-            type: result.type
+            type: result.type ? result.type : null
         })
     }).catch(err => {
         console.log(err)
@@ -123,7 +123,7 @@ async function verify(idToken, authCode) {
     const googleId = payload['sub']
 
     return User.findOne({ googleId }).then(async user => {
-        if (!user || user.hasSignedUp == false) {
+        if (!user) {
             var user = new User({
                 googleId,
                 email: payload['email'],

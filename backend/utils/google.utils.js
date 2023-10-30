@@ -12,7 +12,7 @@ const redirectUri = "https://edumatch.canadacentral.cloudapp.azure.com/redirect"
 const OAuth2Client = new google.auth.OAuth2(
     googleClientId,
     googleClientSecret,
-    redirectUri  // Use a placeholder redirect_uri
+    redirectUri 
 );
 
 exports.cancelGoogleEvent = async (
@@ -27,7 +27,6 @@ exports.cancelGoogleEvent = async (
     google.options({ auth: OAuth2Client });
     const calendar = google.calendar({ version: 'v3' });
 
-    // Make a request to the Google Calendar API to list events within the specified time range
     const response = await calendar.events.list({
         calendarId: 'primary',
         timeMin: canceledAppt.pstStartDatetime,

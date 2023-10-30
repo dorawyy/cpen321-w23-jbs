@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -113,7 +112,6 @@ public class TuteeHomeActivity extends AppCompatActivity {
             apiUrlBuilder.append("&page=1");
             JSONObject jsonResponse = getTuteeHome(apiUrlBuilder,TuteeHomeActivity.this);
 
-            initSearchTutorButton();
 
             FloatingActionButton fabChat = findViewById(R.id.fabChat);
             fabChat.setOnClickListener(new View.OnClickListener() {
@@ -164,10 +162,6 @@ public class TuteeHomeActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
     private boolean isAnyChipViewPressed() {
         for (SubjectChipView chipView : subjectChipViews) {
             if (chipView.isClicked) {
@@ -178,25 +172,6 @@ public class TuteeHomeActivity extends AppCompatActivity {
     }
 
 
-    private void initSearchTutorButton() {
-
-        Button searchTutor = findViewById(R.id.search_tutors);
-
-        searchTutor.setOnClickListener(v -> {
-            StringBuilder newApiUrlBuilder = new StringBuilder(apiUrl);;
-            for(String course : courseList){
-
-                newApiUrlBuilder.append(course);
-                // Check if it's the last course before appending a comma
-                if (!course.equals(courseList.get(courseList.size() - 1))) {
-                    newApiUrlBuilder.append(",");
-                }
-            }
-            newApiUrlBuilder.append("&page=1");
-            JSONObject jsonResponse = getTuteeHome(newApiUrlBuilder,TuteeHomeActivity.this);
-
-            });
-        }
 
 
 }

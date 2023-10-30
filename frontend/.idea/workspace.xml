@@ -9,25 +9,21 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="Changed colour of the chat button">
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/TutorRow.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/PaginationManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/rounded_border.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/tutor_row.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/values-night/styles.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/attrs_tutor_row.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/styles.xml" afterDir="false" />
+    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="added the pagination manager and also the new tasks s">
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/AdminListComponent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/AdminHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/active_button.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/active_button_background.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/button_selector.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/admin_list_component.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/ids.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.androidTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.androidTest.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/.idea/shelf/Uncommitted_changes_before_Update_at_2023-10-22_8_14_p_m__[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/.idea/shelf/Uncommitted_changes_before_Update_at_2023-10-22_8_22_p_m__[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/.idea/shelf/Uncommitted_changes_before_Update_at_2023-10-24_11_58_a_m__[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AdminHomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AdminHomeActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TuteeHomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TuteeHomeActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_admin_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_admin_home.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_home_tutee.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_home_tutee.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_profile.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/colors.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/attrs_tutor_row.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/attrs_admin_list_component.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,6 +83,7 @@
         <option value="layoutResourceFile" />
         <option value="resourceFile" />
         <option value="Class" />
+        <option value="valueResourceFile" />
       </list>
     </option>
   </component>
@@ -124,6 +121,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/AdminListComponent.java_SELECTED": "AdminListComponent",
     "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/TutorRow.java_SELECTED": "TutorRow",
     "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/ActivityBarView.java_SELECTED": "AppBarCustomView",
     "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java_SELECTED": "AppBarCustomView",
@@ -137,6 +135,7 @@
     "android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LabelAndEditText.java_SELECTED": "LabelAndEditText",
     "android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LoginLabelAndEditText.java_SELECTED": "LoginLabelAndEditText",
     "cidr.known.project.marker": "true",
+    "com.android.tools.idea.devicemanager.tab": "Physical",
     "last_opened_file_path": "C:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch",
     "memory.settings.postsync.last.time.stamp": "1698613940560",
     "project.structure.last.edited": "Modules",
@@ -224,19 +223,6 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="EduMatch.app.androidTest" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="EduMatch.app.androidTest" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="build.gradle.kts" type="KotlinStandaloneScriptRunConfigurationType" temporary="true" nameIsGenerated="true">
       <module name="frontend" />
       <option name="filePath" value="$PROJECT_DIR$/EduMatch/build.gradle.kts" />
@@ -303,7 +289,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698619500535</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="added the pagination manager and also the new tasks s">
+      <created>1698627510413</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1698627510413</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -336,6 +329,7 @@
     <MESSAGE value="ADDED ALL NECESSARY VIEWS" />
     <MESSAGE value="Linked settings and added tutee profile view" />
     <MESSAGE value="Changed colour of the chat button" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed colour of the chat button" />
+    <MESSAGE value="added the pagination manager and also the new tasks s" />
+    <option name="LAST_COMMIT_MESSAGE" value="added the pagination manager and also the new tasks s" />
   </component>
 </project>

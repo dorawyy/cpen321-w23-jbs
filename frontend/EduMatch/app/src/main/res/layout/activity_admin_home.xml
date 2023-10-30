@@ -35,41 +35,20 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"/>
 
-    <LinearLayout
+    <!-- Adding ScrollView for adminListcomponents -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/universityTextView"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/adminListComponentContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="UNIVERSITY OF BRITISH COLUMBIA"
-            android:textSize="16sp"
-            android:layout_marginBottom="4dp"/>
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/nameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mary Wong"
-            android:textSize="20sp"
-            android:layout_marginBottom="2dp"/>
+            <!-- Here you can add your adminListcomponents -->
 
-        <TextView
-            android:id="@+id/usernameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="mwong"
-            android:textSize="16sp"
-            android:layout_marginBottom="4dp"/>
-
-        <Button
-            android:id="@+id/activeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ACTIVE"
-
-            android:textColor="@android:color/white" />
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

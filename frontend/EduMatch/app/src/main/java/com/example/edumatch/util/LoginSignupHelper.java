@@ -1,5 +1,6 @@
 package com.example.edumatch.util;
 
+import static com.example.edumatch.util.NetworkUtils.handleGetResponse;
 import static com.example.edumatch.util.NetworkUtils.handlePutPostResponse;
 import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
 
@@ -98,6 +99,17 @@ public class LoginSignupHelper {
         String logTag = "SignUpPost";
 
         return handlePutPostResponse(context,jsonResponse,successMessage,logTag);
+    }
+
+
+    public static JSONObject getCourseCodes(Context context, String code) {
+        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/courses?code="+code;
+
+        JSONObject jsonResponse = sendHttpRequest(apiUrl, "", "GET", null);
+
+        String logTag = "CourseCodesGet";
+
+        return handleGetResponse(context,jsonResponse,logTag);
     }
 
 }

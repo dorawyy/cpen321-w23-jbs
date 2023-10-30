@@ -2,6 +2,7 @@ const { AppointmentStatus } = require("../constants/appointment.status")
 const db = require("../db")
 const Appointment = require("../db/appointment.model")
 const appointmentController = require("./appointment.controller")
+const apptUtils = require("../utils/appointment.utils")
 const User = db.user
 
 exports.addReview = async (req, res) => {
@@ -9,13 +10,13 @@ exports.addReview = async (req, res) => {
         return res.status(400).send({message: "appointmentId is required"})
     }
     
-    var appointmentIsAccepted = await appointmentController
+    var appointmentIsAccepted = await apptUtils
         .appointmentIsAccepted(req.body.appointmentId)
         .catch(err => {
             console.log(err)
             return res.status(500).send({message: err.message})
         })
-    var appointmentIsCompleted = await appointmentController
+    var appointmentIsCompleted = await apptUtils
         .appointmentIsCompleted(req.body.appointmentId)
         .catch(err => {
             console.log(err)

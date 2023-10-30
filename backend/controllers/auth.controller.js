@@ -76,7 +76,12 @@ exports.signup = async (req, res) => {
                 ...data,
                 recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
                 hasSignedUp: true
-            }, {new: true}).then(() => {
+            }, {new: true}).then(user => {
+                if (!user) {
+                    return res.status(404).send({
+                        message: "User not found. If manually sign up, remove Auth header."
+                    })
+                }
                 return res.status(200).send({
                     jwtToken: token
                 })

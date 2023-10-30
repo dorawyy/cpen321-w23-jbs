@@ -39,7 +39,7 @@ exports.recommended = async (req, res) => {
         })
     } else {
         // generic browse
-        if (tutee.education.courses) {
+        if (tutee.education && tutee.education.courses) {
             // filter tutors by tutee's courses if field is set
             const tutorsWithSharedCourses = await User.find({
                 'education.courses': { $in: tutee.education.courses },

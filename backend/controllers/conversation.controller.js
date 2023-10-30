@@ -47,10 +47,14 @@ exports.getConversation = async (req, res) => {
         })
     else {
         const startIndex = endIndex - 10
+        const messages = (startIndex < 0 ? conversation.messages.slice(0, endIndex) : conversation.messages.slice(startIndex, endIndex)).map(message => ({
+            ...message,
+            isYourMessage: message.senderId == req.userId
+        }))
 
         return res.status(200).json({
             otherUserId: conversation.participants.userId1 == req.userId ? conversation.participants.userId2 : conversation.participants.userId1,
-            messages: startIndex < 0 ? conversation.messages.slice(0, endIndex) : conversation.messages.slice(startIndex, endIndex)
+            messages: messages
         })
     }
 }

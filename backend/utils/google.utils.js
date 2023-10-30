@@ -12,8 +12,43 @@ const redirectUri = "https://edumatch.canadacentral.cloudapp.azure.com/redirect"
 const OAuth2Client = new google.auth.OAuth2(
     googleClientId,
     googleClientSecret,
-    redirectUri  // Use a placeholder redirect_uri
+    redirectUri 
 );
+
+exports.cancelGoogleEvent = async (
+    user, otherUser, canceledAppt
+) => {
+    OAuth2Client.setCredentials({
+        access_token: user.googleOauth.accessToken,
+        refresh_token: user.googleOauth.refreshToken,
+        expiry_date: Number(user.googleOauth.expiryDate)
+    })
+
+    google.options({ auth: OAuth2Client });
+    const calendar = google.calendar({ version: 'v3' });
+
+    const response = await calendar.events.list({
+        calendarId: 'primary',
+        timeMin: canceledAppt.pstStartDatetime,
+        timeMax: canceledAppt.pstEndDatetime,
+        timeZone: 'America/Los_Angeles',
+        q: `Appointment with ${otherUser.username}`
+    });
+    const events = response.data.items;
+
+    if (events.length > 0) {
+        await calendar.events.delete({
+            calendarId: 'primary', 
+            eventId: events[0].id,
+        });
+    }
+
+    await saveNewAccessToken(
+        user, 
+        OAuth2Client.credentials.access_token, 
+        OAuth2Client.credentials.expiry_date
+    )
+}
 
 exports.createGoogleEvent = async (
     user, otherUser, newAppt
@@ -129,12 +164,13 @@ exports.getCalendarEvents = async (
     google.options({ auth: OAuth2Client });
     const calendar = google.calendar({ version: 'v3' });
 
-    // Make a request to the Google Calendar API to list events within the specified time range
     const response = await calendar.events.list({
         calendarId: 'primary',
         timeMin,
         timeMax,
         timeZone: 'America/Los_Angeles',
+        showDeleted: false,
+        singleEvents: true
     });
 
     const events = response.data.items;
@@ -147,13 +183,13 @@ exports.getCalendarEvents = async (
 }
 
 async function saveNewAccessToken(user, newAccessToken, newExpiryDate) {
+    var newGoogleOauth = {
+        accessToken: newAccessToken,
+        refreshToken: user.googleOauth.refreshToken,
+        expiryDate: newExpiryDate
+    }
     await User.findByIdAndUpdate(
         user._id,
-        { $set: {
-            googleOauth: {
-                accessToken: newAccessToken,
-                expiryDate: newExpiryDate
-            }
-        }}
+        { googleOauth: newGoogleOauth }
     )
 }

@@ -8,17 +8,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.edumatch.R;
+import com.example.edumatch.TutorRow;
 import com.example.edumatch.views.SubjectChipView;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -81,14 +84,18 @@ public class TuteeHomeActivity extends AppCompatActivity {
                 });
                 chipContainer.addView(subjectChipView);
 
-                // Inside your loop where you instantiate the SubjectChipView
-                subjectChipView.setChipClickListener(new SubjectChipView.ChipClickListener() {
+                subjectChipView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onChipClicked(SubjectChipView chipView) {
-                        if (isAnyChipViewPressed()) {
-                            Log.d("Tutee", "hi");
+                    public void onClick(View v) {
+                        if (subjectChipView.isClicked) {
+                            subjectChipView.setBackgroundColor(Color.TRANSPARENT);
+                            subjectChipView.isClicked = false;
                         } else {
-                            // None of the SubjectChipViews are pressed
+                            subjectChipView.setBackgroundColor(Color.parseColor("#A9A9A9"));
+                            subjectChipView.isClicked = true;
+
+                            // Fetch data for the clicked course
+                            fetchCourseData(course);
                         }
                     }
                 });
@@ -123,16 +130,39 @@ public class TuteeHomeActivity extends AppCompatActivity {
     }
 
     private void fetchCourseData(String courseName) {
-        String courseApiUrl = apiUrl + "course=" + courseName + "&page=1";
+        LinearLayout tutorList = findViewById(R.id.tutorList); // Assuming you changed the ID to tutorListLayout
+        StringBuilder courseApiUrlBuilder = new StringBuilder(apiUrl);
+        courseApiUrlBuilder.append("course=").append(courseName).append("&page=1");
 
-        // Now, make an API call using the generated URL.
-        // I noticed in your code, you might be using a method named getTuteeHome to fetch data.
-        // If that's the method you use to make API calls, you can call it here:
+        jsonResponse = getTuteeHome(courseApiUrlBuilder, TuteeHomeActivity.this);
 
-        JSONObject jsonResponse = getTuteeHome(courseApiUrl, TuteeHomeActivity.this);
+        try {
+            JSONArray tutorsArray = jsonResponse.getJSONArray("tutors");
 
-        // If you need further processing on the jsonResponse, you can do it here.
+            for (int i = 0; i < tutorsArray.length(); i++) {
+                JSONObject tutorObject = tutorsArray.getJSONObject(i);
+
+               // String courseCode = tutorObject.getString("courses"); // replace with your actual JSON keys
+                String tutorName = tutorObject.getString("displayedName");
+                String tutorDetails = tutorObject.getString("school");
+
+
+                TutorRow tutorRow = new TutorRow(TuteeHomeActivity.this);
+               // tutorRow.setCourseCode(courseCode);
+                tutorRow.setTutorName(tutorName);
+                tutorRow.setTutorDetails(tutorDetails);
+
+
+                // Assuming you have a layout or container where you want to add the TutorRow
+                tutorList.addView(tutorRow);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
     }
+
 
 
 

@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         signUpButton.setOnClickListener(v -> {
             useGoogle = false;
+            clearPreferences();
             goToSignUpActivity();
         });
     }
@@ -185,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
     private void goToSignUpActivity() {
         Intent newIntent = new Intent(MainActivity.this,
                 TutorOrTuteeActivity.class);
-        clearPreferences();
         SharedPreferences sharedPreferences = updatePreferences();
         printSharedPreferences(sharedPreferences);
         startActivity(newIntent);
@@ -204,10 +204,10 @@ public class MainActivity extends AppCompatActivity {
                 newIntent = new Intent(MainActivity.this, AdminHomeActivity.class);
                 break;
             case "tutee":
-                newIntent = new Intent(MainActivity.this, TuteeHomeActivity.class);
+                newIntent = new Intent(MainActivity.this, ChatListActivity.class);
                 break;
             case "tutor":
-                newIntent = new Intent(MainActivity.this, TutorHomeActivity.class);
+                newIntent = new Intent(MainActivity.this, ChatListActivity.class);
                 break;
             default:
                 // Handle unexpected cases or errors here
@@ -275,7 +275,13 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("jwtToken", jsonResponse.getString("jwtToken"));
                 newUser = jsonResponse.getBoolean("newUser");
-                editor.putString("userType", jsonResponse.getString("type"));
+                if(jsonResponse.getString("type") == "null"){
+                    Log.d("GooglePost","NULLLL");
+                    newUser = true;
+                } else{
+                    editor.putString("userType", jsonResponse.getString("type"));
+
+                }
                 editor.apply();
                 printSharedPreferences(sharedPreferences);
                 Log.d("GooglePost", jsonResponse.toString());

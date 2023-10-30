@@ -50,7 +50,7 @@ exports.getUsers = async (req, res) => {
     if (!admin)
         return res.status(404).send({ message: "Could not find admin in database with provided id"})
     if (admin.type != UserType.ADMIN)
-        res.status(401).send({ message: "User is not admin and is not authorized to view user list" })
+        return res.status(401).send({ message: "User is not admin and is not authorized to view user list" })
 
     const users = await User.find({})
 
@@ -70,7 +70,7 @@ exports.getProfile = async (req, res) => {
     if (!admin)
         return res.status(404).send({ message: "Could not find admin in database with provided id"})
     if (admin.type != UserType.ADMIN)
-        res.status(401).send({ message: "User is not admin and is not authorized to view user profile and messages" })
+        return res.status(401).send({ message: "User is not admin and is not authorized to view user profile and messages" })
 
     if (!mongoose.Types.ObjectId.isValid(req.query.userId)) {
         return res.status(400).send({ message: "Invalid provided userId" })

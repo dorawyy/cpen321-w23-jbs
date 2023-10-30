@@ -96,7 +96,7 @@ exports.create = async (req, res) => {
         
         await newConversation.save()
 
-        res.status(200).json({
+        return res.status(200).json({
             conversationId: newConversation._id,
             conversationName: otherUser.displayedName
         })

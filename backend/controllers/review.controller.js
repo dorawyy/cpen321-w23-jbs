@@ -1,15 +1,43 @@
+const { AppointmentStatus } = require("../constants/appointment.status")
 const db = require("../db")
+const Appointment = require("../db/appointment.model")
 const appointmentController = require("./appointment.controller")
 const User = db.user
 
 exports.addReview = async (req, res) => {
-    // comment this out for now to integrate addReview cuz we havent
-    // added bookAppointment endpoint
-    // var appointmentIsCompleted = await appointmentController
-    //     .appointmentIsCompleted(req.body.appointmentId)
-    // if (!appointmentIsCompleted) {
-    //     res.status(403).send({ message: "The appointment hasn't completed" })
-    // }
+    if (!req.body.appointmentId) {
+        return res.status(400).send({message: "appointmentId is required"})
+    }
+    
+    var appointmentIsAccepted = await appointmentController
+        .appointmentIsAccepted(req.body.appointmentId)
+        .catch(err => {
+            console.log(err)
+            return res.status(500).send({message: err.message})
+        })
+    var appointmentIsCompleted = await appointmentController
+        .appointmentIsCompleted(req.body.appointmentId)
+        .catch(err => {
+            console.log(err)
+            return res.status(500).send({message: err.message})
+        })
+    
+    if (!appointmentIsAccepted) {
+        return res.status(403).send({ 
+            message: "The appointment hasn't been accepted" 
+        })
+    }
+    if (!appointmentIsCompleted) {
+        return res.status(403).send({ 
+            message: "The appointment hasn't completed" 
+        })
+    }
+
+    var appointment = await Appointment.findById(req.body.appointmentId)
+            .catch(err => {
+                console.log(err)
+                return res.status(500).send({message: err.message})
+            })
 
     var reviewerId = req.userId
     var reviewerDisplayedName = await User
@@ -47,7 +75,7 @@ exports.addReview = async (req, res) => {
     receiver.userReviews.push(userReview)
     receiver.overallRating = this.getOverallRating(receiver.userReviews)
 
-    receiver.save()
+    var ret = await receiver.save()
         .then(user => {
             if (!user || user.isBanned) {
                 return res.status(400).send({message: "user not found"})
@@ -56,11 +84,26 @@ exports.addReview = async (req, res) => {
                 overallRating: user.overallRating,
                 userReviews: user.userReviews
             }
-            return res.status(200).send(ret)
+            return ret
         }).catch(err => {
             console.log(err)
             return res.status(500).send({ message: err.message })
         })
+
+    for (var i = 0; i < 2; i++) {
+        var participant = appointment.participantsInfo[i]
+        if (participant.userId == req.body.receiverId) {
+            appointment.participantsInfo[i].noShow = req.body.noShow,
+            appointment.participantsInfo[i].late = req.body.late
+        }
+    }
+
+    appointment.save().then(result => {
+        return res.status(200).send(ret)
+    }).catch(err => {
+        console.log(err)
+        return res.status(500).send({message: err.message})
+    })
 }
 
 exports.getUserReviews = (req, res) => {
@@ -70,11 +113,9 @@ exports.getUserReviews = (req, res) => {
     }
     User.findById(userId, "userReviews").then(user => {
         if (!user) {
-            res.status(404).send({ message: "User not found" })
-            return
+            return res.status(404).send({ message: "User not found" })
         }
-        res.status(200).send(user)
-        return
+        return res.status(200).send(user)
     }).catch(err => {
         console.log(err.message)
         return res.status(500).send({ message: err.message })

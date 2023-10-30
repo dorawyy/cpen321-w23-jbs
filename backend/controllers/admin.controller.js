@@ -100,9 +100,9 @@ exports.getProfile = async (req, res) => {
     const userMessages = []
     userConversations.forEach(conversation => {
         const filteredMessages = conversation.messages.filter(message => {
-            message.senderId === req.query.userId
+            return message.senderId == req.query.userId
         })
-    
+
         userMessages.push(...filteredMessages)
     })
 

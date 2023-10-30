@@ -743,3 +743,4 @@ function toPST(dateString) {
 
 module.exports.appointmentIsCompleted = appointmentIsCompleted
 module.exports.appointmentIsAccepted = appointmentIsAccepted
+module.exports.getAppointmentStatus = getAppointmentStatus

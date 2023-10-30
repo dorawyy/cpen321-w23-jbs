@@ -219,7 +219,7 @@ public class ChatActivity extends AppCompatActivity {
             // Parse the received message as a JSONObject
             JSONObject jsonObject = new JSONObject(message);
             // Extract data from the JSONObject and use it as needed
-            String text = jsonObject.optString("message", "");
+            String text = jsonObject.optString("content", "");
 
             // Process the extracted data
             MessageChipView messageChipView = new MessageChipView(this, null);

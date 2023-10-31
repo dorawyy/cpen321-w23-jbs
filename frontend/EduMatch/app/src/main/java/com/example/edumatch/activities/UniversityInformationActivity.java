@@ -1,17 +1,17 @@
 package com.example.edumatch.activities;
 
 
+import static com.example.edumatch.util.LoginSignupHelper.getCourseCodes;
 import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
 import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
 import static com.example.edumatch.util.ProfileHelper.putEditProfile;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,8 +19,10 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.edumatch.views.CustomAutoCompleteView;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.edumatch.R;
+import com.example.edumatch.views.CustomAutoCompleteView;
 import com.example.edumatch.views.LabelAndEditTextView;
 import com.example.edumatch.views.SubjectChipView;
 import com.google.android.flexbox.FlexboxLayout;
@@ -47,6 +49,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    String[] coursesArray;
 
 
 
@@ -60,28 +63,56 @@ public class UniversityInformationActivity extends AppCompatActivity {
 
         initSharedPreferences();
 
-
+        initSuggestions(new String[]{});
 
         initUniversitySpinner();
-        String[] suggestions = initSuggestions();
         // Add an OnClickListener to the "add_button"
-        initAddButton(suggestions);
+        initAddButton();
 
         initNextButton();
 
         initFields();
+
+        initEditTextWatcher();
     }
 
-    @NonNull
+    private void initEditTextWatcher() {
+        customAutoCompleteView.getAutoCompleteTextView().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Not needed in this context
+            }
 
-    private String[] initSuggestions() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String enteredText = s.toString();
+                if (enteredText.length() == 4) {
+                    JSONObject response = getCourseCodes(UniversityInformationActivity.this,enteredText);
+
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("courses");
+                        int length = jsonArray.length();
+                        coursesArray = new String[length];
+                        for (int i = 0; i < length; i++) {
+                            coursesArray[i] = jsonArray.getString(i);
+                        }
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    initSuggestions(coursesArray);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Not needed in this context
+            }
+        });
+    }
+
+    private void initSuggestions(String[] suggestions) {
         customAutoCompleteView = findViewById(R.id.search_courses_auto_complete);
-
-        // TODO: replace this with an api call to get courses
-        String[] suggestions = new String[]{"CPEN 322", "CPEN 321", "ELEC 201", "MATH 220", "ELEC 221", "CPSC 320", "CPEN 300", "CPEN 301", "CPEN 999", "CPEN 666", "CPEN 696", "CPEN 123"};
-
         customAutoCompleteView.setSuggestions(suggestions);
-        return suggestions;
     }
 
 
@@ -91,13 +122,13 @@ public class UniversityInformationActivity extends AppCompatActivity {
         nextButton.setOnClickListener(v -> goToNewActivity());
     }
 
-    private void initAddButton(String[] suggestions) {
+    private void initAddButton() {
         Button addButton = findViewById(R.id.add_button); // Initialize the "add_button"
         addButton.setOnClickListener(view -> {
             String enteredText = customAutoCompleteView.getAutoCompleteTextView().getText().toString();
             if (!enteredText.isEmpty()) {
 
-                if (suggestions != null && !Arrays.asList(suggestions).contains(enteredText)) {
+                if (coursesArray != null && !Arrays.asList(coursesArray).contains(enteredText)) {
                     // Display an error if the entered text doesn't match any suggestion.
                     Toast.makeText(UniversityInformationActivity.this, "Invalid selection", Toast.LENGTH_SHORT).show();
 
@@ -116,6 +147,10 @@ public class UniversityInformationActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
 
     private void updateSelectedCourses(String enteredText) {
         selectedCourses.add(enteredText);
@@ -194,7 +229,6 @@ public class UniversityInformationActivity extends AppCompatActivity {
             nextClass = CourseRatesActivity.class;
         } else {
             if(sharedPreferences.getBoolean("isEditing",false)){
-                //TODO: do a PUT here (make a common function)
                 JSONObject request = constructEditUniversityInformation();
                 putEditProfile(request,UniversityInformationActivity.this);
                 nextClass =  EditProfileListActivity.class;

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.GridLayout;
@@ -15,7 +14,6 @@ import com.example.edumatch.util.LoginSignupHelper;
 
 public class LabelAndEditTextView extends GridLayout {
 
-    private TextView label;
     private EditText editText;
 
     public LabelAndEditTextView(Context context) {
@@ -42,7 +40,7 @@ public class LabelAndEditTextView extends GridLayout {
         inflater.inflate(R.layout.label_and_edit_text, this, true);
 
         // Find the TextView for the label inside the custom layout
-        label = findViewById(R.id.label);
+        TextView label = findViewById(R.id.label);
 
         // Find the EditText inside the custom layout
         editText = findViewById(R.id.edit_text);

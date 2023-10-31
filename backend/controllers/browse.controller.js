@@ -6,96 +6,123 @@ const haversine = require('haversine')
 const User = db.user
 
 exports.recommended = async (req, res) => {
-    if (req.query.page < 1)
+    try {
+        if (req.query.page < 1)
         return res.status(400).send({ message: "Page number cannot be less than 1" })
 
-    const tutee = await User.findById(req.userId)
-    if (!tutee)
-        return res.status(404).send({ message: "Could not find tutee in database with provided id"})
+        const tutee = await User.findById(req.userId)
+        if (!tutee || tutee.isBanned)
+            return res.status(404).send({ message: "Could not find tutee in database with provided id"})
 
-    if (req.query.courses) {
-        // specific course browse
-        const tutors = await User.find({
-            'education.courses': { $in: req.query.courses.split(',')},
-            'type': UserType.TUTOR
-        })
-        tutors.sort((a, b) => score(tutee, b) - score(tutee, a))
-
-        // note: the slice() method handles slicing beyond the end of the array
-        const tutorsToDisplay = tutors.slice((req.query.page - 1) * 10, req.query.page * 10)
-
-        return res.status(200).json({
-            tutors: tutorsToDisplay.map(tutor => ({
-                tutorId: tutor._id,
-                displayedName: tutor.displayedName,
-                rating: tutor.overallRating,
-                locationMode: tutor.locationMode,
-                location: tutor.location,
-                school: tutor.education.school,
-                courses: tutor.education.courses,
-                tags: tutor.education.tags,
-                pricing: tutor.subjectHourlyRate.filter(subject => req.query.courses.includes(subject.course))
-            }))
-        })
-    } else {
-        // generic browse
-        if (tutee.education.courses) {
-            // filter tutors by tutee's courses if field is set
-            const tutorsWithSharedCourses = await User.find({
-                'education.courses': { $in: tutee.education.courses },
-                'type': UserType.TUTOR
+        if (req.query.courses) {
+            // specific course browse
+            const tutors = await User.find({
+                'education.courses': { $in: req.query.courses.split(',')},
+                'type': UserType.TUTOR,
+                isBanned: false
             })
-            if (req.query.page * 10 <= tutorsWithSharedCourses.length) {
-                // the page will display only tutors with shared courses
-                tutorsWithSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
-                const tutorsToDisplay = tutorsWithSharedCourses.slice((req.query.page - 1) * 10, req.query.page * 10)
+            tutors.sort((a, b) => score(tutee, b) - score(tutee, a))
 
-                return res.status(200).json({
-                    tutors: tutorsToDisplay.map(tutor => ({
-                        tutorId: tutor._id,
-                        displayedName: tutor.displayedName,
-                        rating: tutor.overallRating,
-                        locationMode: tutor.locationMode,
-                        location: tutor.location,
-                        school: tutor.education.school,
-                        courses: tutor.education.courses,
-                        tags: tutor.education.tags,
-                    }))
-                })
-            } else if ((req.query.page - 1) * 10 < tutorsWithSharedCourses.length && 
-                        req.query.page * 10 > tutorsWithSharedCourses.length) {
-                // the page will display the bottom of the scored tutors with shared courses, and the top of the scored tutors without shared courses
-                const tutorsWithoutSharedCourses = await User.find({
-                    'education.courses': { $nin: tutee.education.courses },
-                    'type': UserType.TUTOR
-                })
-                tutorsWithSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
-                tutorsWithoutSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
-                const tutorsToDisplay = [
-                    ...tutorsWithSharedCourses.slice((req.query.page - 1) * 10, tutorsWithSharedCourses.length),
-                    ...tutorsWithoutSharedCourses.slice(0, req.query.page * 10 - tutorsWithSharedCourses.length)
-                ]
+            // note: the slice() method handles slicing beyond the end of the array
+            const tutorsToDisplay = tutors.slice((req.query.page - 1) * 10, req.query.page * 10)
 
-                return res.status(200).json({
-                    tutors: tutorsToDisplay.map(tutor => ({
-                        tutorId: tutor._id,
-                        displayedName: tutor.displayedName,
-                        rating: tutor.overallRating,
-                        locationMode: tutor.locationMode,
-                        location: tutor.location,
-                        school: tutor.education.school,
-                        courses: tutor.education.courses,
-                        tags: tutor.education.tags,
-                    }))
+            return res.status(200).json({
+                tutors: tutorsToDisplay.map(tutor => ({
+                    tutorId: tutor._id,
+                    displayedName: tutor.displayedName,
+                    rating: tutor.overallRating,
+                    locationMode: tutor.locationMode,
+                    location: tutor.location,
+                    school: tutor.education.school,
+                    courses: tutor.education.courses,
+                    tags: tutor.education.tags,
+                    pricing: tutor.subjectHourlyRate.filter(subject => req.query.courses.includes(subject.course))
+                }))
+            })
+        } else {
+            // generic browse
+            if (tutee.education && tutee.education.courses) {
+                // filter tutors by tutee's courses if field is set
+                const tutorsWithSharedCourses = await User.find({
+                    'education.courses': { $in: tutee.education.courses },
+                    'type': UserType.TUTOR,
+                    isBanned: false
                 })
-            } else if ((req.query.page - 1) * 10 >= tutorsWithSharedCourses.length) {
-                // the page will display only tutors without shared courses
-                const tutorsWithoutSharedCourses = await User.find({
-                    'education.courses': { $nin: tutee.education.courses },
-                    'type': UserType.TUTOR
+                if (req.query.page * 10 <= tutorsWithSharedCourses.length) {
+                    // the page will display only tutors with shared courses
+                    tutorsWithSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
+                    const tutorsToDisplay = tutorsWithSharedCourses.slice((req.query.page - 1) * 10, req.query.page * 10)
+
+                    return res.status(200).json({
+                        tutors: tutorsToDisplay.map(tutor => ({
+                            tutorId: tutor._id,
+                            displayedName: tutor.displayedName,
+                            rating: tutor.overallRating,
+                            locationMode: tutor.locationMode,
+                            location: tutor.location,
+                            school: tutor.education.school,
+                            courses: tutor.education.courses,
+                            tags: tutor.education.tags,
+                        }))
+                    })
+                } else if ((req.query.page - 1) * 10 < tutorsWithSharedCourses.length && 
+                            req.query.page * 10 > tutorsWithSharedCourses.length) {
+                    // the page will display the bottom of the scored tutors with shared courses, and the top of the scored tutors without shared courses
+                    const tutorsWithoutSharedCourses = await User.find({
+                        'education.courses': { $nin: tutee.education.courses },
+                        'type': UserType.TUTOR,
+                        isBanned: false
+                    })
+                    tutorsWithSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
+                    tutorsWithoutSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
+                    const tutorsToDisplay = [
+                        ...tutorsWithSharedCourses.slice((req.query.page - 1) * 10, tutorsWithSharedCourses.length),
+                        ...tutorsWithoutSharedCourses.slice(0, req.query.page * 10 - tutorsWithSharedCourses.length)
+                    ]
+
+                    return res.status(200).json({
+                        tutors: tutorsToDisplay.map(tutor => ({
+                            tutorId: tutor._id,
+                            displayedName: tutor.displayedName,
+                            rating: tutor.overallRating,
+                            locationMode: tutor.locationMode,
+                            location: tutor.location,
+                            school: tutor.education.school,
+                            courses: tutor.education.courses,
+                            tags: tutor.education.tags,
+                        }))
+                    })
+                } else if ((req.query.page - 1) * 10 >= tutorsWithSharedCourses.length) {
+                    // the page will display only tutors without shared courses
+                    const tutorsWithoutSharedCourses = await User.find({
+                        'education.courses': { $nin: tutee.education.courses },
+                        'type': UserType.TUTOR,
+                        isBanned: false
+                    })
+                    tutorsWithoutSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
+                    const tutorsToDisplay = tutorsWithoutSharedCourses.slice((req.query.page - 1) * 10, req.query.page * 10)
+                    
+                    return res.status(200).json({
+                        tutors: tutorsToDisplay.map(tutor => ({
+                            tutorId: tutor._id,
+                            displayedName: tutor.displayedName,
+                            rating: tutor.overallRating,
+                            locationMode: tutor.locationMode,
+                            location: tutor.location,
+                            school: tutor.education.school,
+                            courses: tutor.education.courses,
+                            tags: tutor.education.tags,
+                        }))
+                    })
+                }
+            } else {
+                // do not filter if courses field is not set
+                const tutors = await User.find({
+                    'type': UserType.TUTOR,
+                    isBanned: false
                 })
-                tutorsWithoutSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
-                const tutorsToDisplay = tutorsWithoutSharedCourses.slice((req.query.page - 1) * 10, req.query.page * 10)
+                tutors.sort((a, b) => score(tutee, b) - score(tutee, a))
+                const tutorsToDisplay = tutors.slice((req.query.page - 1) * 10, req.query.page * 10)
                 
                 return res.status(200).json({
                     tutors: tutorsToDisplay.map(tutor => ({
@@ -110,28 +137,12 @@ exports.recommended = async (req, res) => {
                     }))
                 })
             }
-        } else {
-            // do not filter if courses field is not set
-            const tutors = await User.find({
-                'type': UserType.TUTOR
-            })
-            tutors.sort((a, b) => score(tutee, b) - score(tutee, a))
-            const tutorsToDisplay = tutors.slice((req.query.page - 1) * 10, req.query.page * 10)
-            
-            return res.status(200).json({
-                tutors: tutorsToDisplay.map(tutor => ({
-                    tutorId: tutor._id,
-                    displayedName: tutor.displayedName,
-                    rating: tutor.overallRating,
-                    locationMode: tutor.locationMode,
-                    location: tutor.location,
-                    school: tutor.education.school,
-                    courses: tutor.education.courses,
-                    tags: tutor.education.tags,
-                }))
-            })
         }
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({ message: err.message })
     }
+    
 }
 
 // sum of individual piecewise score functions

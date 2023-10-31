@@ -3,37 +3,36 @@ const User = db.user
 
 // Source: https://www.bezkoder.com/node-js-mongodb-auth-jwt/ 
 function checkDuplicateUsernameOrEmail(req, res, next) {
-    var token = req.header('Authorization')
-    if (token) {
-        next()
-        return
-    }
-    User.findOne({
-        username: req.body.username
-    }).then(user => {
-        if (user) {
-            res.status(400).send({ message: "Username already exists."})
+    try {
+        var token = req.header('Authorization')
+        if (token) {
+            next()
             return
         }
-
         User.findOne({
-            email: req.body.email
+            username: req.body.username
         }).then(user => {
             if (user) {
-                res.status(400).send({ message: "Email already exists."})
-                return
+                return res.status(400).send({ message: "Username already exists."})
             }
-            next()
+    
+            User.findOne({
+                email: req.body.email
+            }).then(user => {
+                if (user) {
+                    return res.status(400).send({ message: "Email already exists."})
+                }
+                next()
+                return
+            })
+            
         })
-        .catch(err => {
-            res.status(500).send({ message: err })
-            return
-        })
-    })
-    .catch(err => {
-        res.status(500).send({ message: err })
-        return
-    })
+        
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({ message: err })
+    }
+    
 }
 
 const verifySignUp = {

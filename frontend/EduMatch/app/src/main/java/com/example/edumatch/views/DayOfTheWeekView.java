@@ -11,8 +11,7 @@ import com.example.edumatch.R;
 
 
 public class DayOfTheWeekView extends AppCompatButton {
-    private static final String TAG = "DayOfTheWeek";
-    private String day, dayString;
+    private String day;
 
     public interface DayOfTheWeekClickListener {
         void onDayButtonClick(String day);
@@ -27,7 +26,7 @@ public class DayOfTheWeekView extends AppCompatButton {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DayOfTheWeekButton);
 
             day = typedArray.getString(R.styleable.DayOfTheWeekButton_Day);
-            dayString = typedArray.getString(R.styleable.DayOfTheWeekButton_DayString);
+            String dayString = typedArray.getString(R.styleable.DayOfTheWeekButton_DayString);
 
             typedArray.recycle();
 
@@ -36,12 +35,7 @@ public class DayOfTheWeekView extends AppCompatButton {
             }
         }
 
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleClick();
-            }
-        });
+        setOnClickListener(v -> handleClick());
     }
 
     public void setDayOfTheWeekClickListener(DayOfTheWeekClickListener listener) {

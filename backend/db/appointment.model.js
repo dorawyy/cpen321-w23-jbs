@@ -5,6 +5,7 @@ const { AppointmentStatus } = require("../constants/appointment.status");
 
 const participantsInfoSchema = new mongoose.Schema({
     userId: String,
+    displayedName: String,
     noShow: Boolean,
     late: Boolean,
 })

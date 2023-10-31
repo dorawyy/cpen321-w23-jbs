@@ -135,6 +135,7 @@ public class TuteeHomeActivity extends AppCompatActivity {
 
         jsonResponse = getTuteeHome(courseApiUrlBuilder, TuteeHomeActivity.this);
 
+
         try {
             JSONArray tutorsArray = jsonResponse.getJSONArray("tutors");
 
@@ -166,6 +167,7 @@ public class TuteeHomeActivity extends AppCompatActivity {
                         startActivity(profileIntent);
                     }
                 });
+
 
 
                 // Assuming you have a layout or container where you want to add the TutorRow

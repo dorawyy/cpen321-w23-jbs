@@ -83,7 +83,7 @@ public class TutorRateActivity extends AppCompatActivity {
         try {
             JSONObject requestBody = new JSONObject();
             // TODO: don't use static tutorId
-            requestBody.put("tutorId", "653c328d72d322083f1d4eea");
+            requestBody.put("tutorId", "653ee267d04cba40a81fe296");
             requestBody.put("review", ratingValue);
             logRequestToConsole(requestBody, "RateWeightPost");
             return requestBody;
@@ -100,7 +100,7 @@ public class TutorRateActivity extends AppCompatActivity {
             JSONObject requestBody = new JSONObject();
             // TODO: don't use static receiverId
             // TODO: add appointmentId
-            requestBody.put("receiverId", "653ab13784ac67a095b33a97");
+            requestBody.put("receiverId", "653ee267d04cba40a81fe296");
             requestBody.put("rating", ratingValue);
             requestBody.put("noShow", noShowValue);
             requestBody.put("late", lateValue);

@@ -3,7 +3,8 @@ const { google } = require('googleapis');
 const UserType = require("../constants/user.types")
 const db = require("../db")
 const jwt = require("jsonwebtoken")
-const bcrypt = require("bcryptjs")
+const bcrypt = require("bcryptjs");
+const { getGoogleAccessTokens } = require('../utils/google.utils');
 
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
@@ -28,90 +29,110 @@ const OAuth2Client = new google.auth.OAuth2(
 const User = db.user
 
 exports.googleAuth = (req, res) => {
-    const idToken = req.body.idToken
-    const authCode = req.body.authCode
-
-    verify(idToken, authCode).then(result => {
-        const jwtToken = jwt.sign(result.userId, secretKey)
-        return res.json({ 
-            jwtToken,
-            newUser: result.newUser,
-            type: result.type
+    try {
+        const idToken = req.body.idToken
+        const authCode = req.body.authCode
+    
+        verify(idToken, authCode).then(result => {
+            if (result.isBanned) {
+                return res.status(404).send({message: "User is banned"})
+            }
+            const jwtToken = jwt.sign(result.userId, secretKey)
+            return res.json({ 
+                jwtToken,
+                newUser: result.newUser,
+                type: result.type ? result.type : null
+            })
         })
-    }).catch(err => {
+    } catch (err) {
         console.log(err)
-        return res.status(401).send({ message: err.message })
-    })
+        return res.status(500).send({ message: err.message })
+    }
+    
 }
 
 exports.signup = async (req, res) => {
-    console.log("signing up user")
-    var data = {...req.body}
-    var token = req.header('Authorization')
-    if (!token) {
-        data.password = bcrypt.hashSync(data.password)
-        new User({
-            ...data,
-            recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
-            hasSignedUp: true
-        }).save().then(user => {
-            if (!user) {
-                return res.status(500).send({ message: "Unable to create user"})
-            }
-            console.log(`new user: ${user}`)
-            const jwtToken = jwt.sign(user._id.toString(), secretKey)
-            return res.json({ jwtToken })
-        }).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
-    } else {
-        token = token.replace("Bearer ", "")
-        jwt.verify(token, secretKey, (err, userId) => {
-            if (err) {
-                console.log(err)
-                return res.status(403).send({ message: "Failed to verify JWT"}); // Forbidden
-            }
-            User.findByIdAndUpdate(userId, {
+    try {
+        console.log("signing up user")
+        var data = {...req.body}
+        if (data.type && data.type === UserType.ADMIN) {
+            return res.status(403).send({message: "Signing up as admin is not allowed"})
+        }
+        var token = req.header('Authorization')
+        if (!token) {
+            data.password = bcrypt.hashSync(data.password)
+            new User({
                 ...data,
                 recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
                 hasSignedUp: true
-            }, {new: true}).then(() => {
-                return res.status(200).send({
-                    jwtToken: token
-                })
-            }).catch(err => {
-                console.log(err)
-                return res.status(500).send({ message: err.message })
+            }).save().then(user => {
+                if (!user) {
+                    return res.status(500).send({ message: "Unable to create user"})
+                }
+                console.log(`new user: ${user}`)
+                const jwtToken = jwt.sign(user._id.toString(), secretKey)
+                return res.json({ jwtToken })
             })
-        });
+        } else {
+            token = token.replace("Bearer ", "")
+            jwt.verify(token, secretKey, (err, userId) => {
+                if (err) {
+                    console.log(err)
+                    return res.status(403).send({ message: "Failed to verify JWT"}); // Forbidden
+                }
+                User.findByIdAndUpdate(userId, {
+                    ...data,
+                    recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
+                    hasSignedUp: true
+                }, {new: true}).then(user => {
+                    if (!user || user.isBanned) {
+                        return res.status(404).send({
+                            message: "User not found. If manually signing up, remove Auth header."
+                        })
+                    }
+                    return res.status(200).send({
+                        jwtToken: token
+                    })
+                })
+            });
+        }
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({ message: err.message })
     }
+    
 }
 
 // Adapted from: https://www.bezkoder.com/node-js-mongodb-auth-jwt/ 
 exports.login = (req, res) => {
-    User.findOne({
-        username: req.body.username
-    }).then(user => {
-        if (!user) {
-            return res.status(401).send({ message: "Username or password is incorrect" })
-        }
-
-        var passwordIsValid = bcrypt.compareSync(
-            req.body.password,
-            user.password
-        )
-        
-        if (!passwordIsValid) {
-            return res.status(401).send({ message: "Username or password is incorrect" })
-        }
-
-        const jwtToken = jwt.sign(user._id.toString(), secretKey)
-        return res.status(200).send({
-            jwtToken,
-            type: user.type
+    try {
+        User.findOne({
+            username: req.body.username
+        }).then(user => {
+            if (!user || user.isBanned) {
+                return res.status(404).send({ message: "User is not found or is banned" })
+            }
+    
+            var passwordIsValid = bcrypt.compareSync(
+                req.body.password,
+                user.password
+            )
+            
+            if (!passwordIsValid) {
+                return res.status(401).send({ message: "Username or password is incorrect" })
+            }
+    
+            const jwtToken = jwt.sign(user._id.toString(), secretKey)
+            return res.status(200).send({
+                jwtToken,
+                type: user.type
+            })
         })
-    })
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({ message: err.message })
+    }
+    
 }
 
 async function verify(idToken, authCode) {
@@ -123,7 +144,7 @@ async function verify(idToken, authCode) {
     const googleId = payload['sub']
 
     return User.findOne({ googleId }).then(async user => {
-        if (!user || user.hasSignedUp == false) {
+        if (!user) {
             var user = new User({
                 googleId,
                 email: payload['email'],
@@ -144,7 +165,8 @@ async function verify(idToken, authCode) {
                 var ret = {
                     userId: savedUser._id.toString(),
                     newUser: true,
-                    type: null
+                    type: null,
+                    isBanned: savedUser.isBanned
                 }
                 return Promise.resolve(ret)
             })
@@ -152,16 +174,12 @@ async function verify(idToken, authCode) {
             var ret = {
                 userId: user._id.toString(),
                 newUser: false,
-                type: user.type
+                type: user.type,
+                isBanned: user.isBanned
             }
             return Promise.resolve(ret)
         }
     }).catch(err => {
         return Promise.reject(err)
     })
-}
-
-async function getGoogleAccessTokens(authCode) {
-    const { tokens } = await OAuth2Client.getToken(authCode)
-    return Promise.resolve(tokens)
 }

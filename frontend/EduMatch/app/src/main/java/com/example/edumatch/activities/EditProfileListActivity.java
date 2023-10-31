@@ -22,14 +22,14 @@ public class EditProfileListActivity extends AppCompatActivity {
         Button uniInfoButton = findViewById(R.id.uni_info);
         Button locationInfoButton = findViewById(R.id.location_info);
         Button availabilityInfoButton = findViewById(R.id.availability_info);
-        Button logOut = findViewById(R.id.log_out);
+
+        Button signOutButton = findViewById(R.id.sign_out);
+
 
         updatePreferences();
 
         getProfile(EditProfileListActivity.this);
         accountInfoButton.setOnClickListener(v -> {
-            // TODO: GET {API_URL}/user/profile
-
             Intent newIntent = new Intent(EditProfileListActivity.this,
                     AccountInformationActivity.class);
             startActivity(newIntent);
@@ -37,27 +37,26 @@ public class EditProfileListActivity extends AppCompatActivity {
         });
 
         uniInfoButton.setOnClickListener(v -> {
-            // TODO: GET {API_URL}/user/profile
             Intent newIntent = new Intent(EditProfileListActivity.this,
                     UniversityInformationActivity.class);
             startActivity(newIntent);
         });
 
         locationInfoButton.setOnClickListener(v -> {
-            // TODO: GET {API_URL}/user/profile
             Intent newIntent = new Intent(EditProfileListActivity.this,
                     LocationInformationActivity.class);
             startActivity(newIntent);
         });
 
         availabilityInfoButton.setOnClickListener(v -> {
-            // TODO: GET {API_URL}/user/profile
             Intent newIntent = new Intent(EditProfileListActivity.this,
                     AvailabilityActivity.class);
             startActivity(newIntent);
         });
-        logOut.setOnClickListener(v -> {
-            // TODO: GET {API_URL}/user/profile
+
+
+        signOutButton.setOnClickListener(v -> {
+            clearPreferences();
 
             Intent newIntent = new Intent(EditProfileListActivity.this,
                     MainActivity.class);
@@ -71,6 +70,15 @@ public class EditProfileListActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isEditing",true);
         editor.apply();
+    }
+
+    private void clearPreferences() {
+        Context context = getApplicationContext();
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.clear(); // Clears all the data in the SharedPreferences file
+        editor.apply(); // Apply the changes
     }
 
 }

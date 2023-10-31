@@ -14,20 +14,20 @@ public class AvailableTimesViews extends GridLayout {
 
     public AvailableTimesViews(Context context) {
         super(context);
-        init(context, null);
+        init(context);
     }
 
     public AvailableTimesViews(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
+        init(context);
     }
 
     public AvailableTimesViews(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context, attrs);
+        init(context);
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void init(Context context) {
         // Inflate the layout XML
         inflate(context, R.layout.available_time_picker, this);
 

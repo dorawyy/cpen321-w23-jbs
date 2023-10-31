@@ -1,7 +1,6 @@
 package com.example.edumatch.views;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 import com.example.edumatch.R;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class CustomAutoCompleteView extends RelativeLayout {
     private AutoCompleteTextView autoCompleteTextView;
@@ -22,17 +20,17 @@ public class CustomAutoCompleteView extends RelativeLayout {
 
     public CustomAutoCompleteView(Context context) {
         super(context);
-        init(context, null);
+        init(context);
     }
 
     public CustomAutoCompleteView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
+        init(context);
     }
 
     public CustomAutoCompleteView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context, attrs);
+        init(context);
     }
 
     public AutoCompleteTextView getAutoCompleteTextView() {
@@ -48,7 +46,7 @@ public class CustomAutoCompleteView extends RelativeLayout {
         }
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void init(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.auto_complete, this, true);
 

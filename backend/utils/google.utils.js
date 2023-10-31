@@ -1,6 +1,7 @@
 const { google } = require('googleapis');
 const db = require("../db")
 const momenttz = require("moment-timezone")
+const apptUtils = require("./appointment.utils")
 
 const User = db.user
 
@@ -106,57 +107,15 @@ exports.getFreeTime = async (
     
     const response = await calendar.freebusy.query({
         requestBody: {
-          timeMin,
-          timeMax,
-          timeZone: 'America/Los_Angeles',
-          items: [{ id: calendarId }],
+            timeMin,
+            timeMax,
+            timeZone: 'America/Los_Angeles',
+            items: [{ id: calendarId }],
         },
     });
 
     const busyTimes = response.data.calendars[calendarId].busy;
-    var freeTimes = []
-
-    if (busyTimes.length == 0) {
-        return [{
-            start: timeMin,
-            end: timeMax
-        }]
-    }
-    // Include free time before the first busy period
-    const firstBusyStart = momenttz(busyTimes[0].start)
-                            .tz('America/Los_Angeles');
-    const startDateTime = momenttz(timeMin).tz('America/Los_Angeles');
-    if (firstBusyStart.isSameOrAfter(startDateTime)) {
-        const freeStart = startDateTime.toISOString(true);
-        const freeEnd = firstBusyStart.toISOString(true);
-        freeTimes.push({ start: freeStart, end: freeEnd });
-    }
-
-    // Infer free times based on busy intervals
-    for (let i = 0; i < busyTimes.length - 1; i++) {
-        const busyEnd = momenttz(busyTimes[i].end);
-        const nextBusyStart = momenttz(busyTimes[i + 1].start);
-    
-        const freeStart = busyEnd.toISOString(true);
-        const freeEnd = nextBusyStart.toISOString(true);
-        freeTimes.push({ start: freeStart, end: freeEnd });
-    }
-
-    // Include free time after the last busy period
-    const lastBusyEnd = momenttz(busyTimes[busyTimes.length - 1].end);
-    const endDateTime = momenttz(timeMax)
-    if (lastBusyEnd.isSameOrBefore(endDateTime)) {
-        const freeStart = lastBusyEnd.toISOString(true);
-        const freeEnd = endDateTime.toISOString(true);
-        freeTimes.push({ start: freeStart, end: freeEnd });
-    }
-
-    await saveNewAccessToken(
-        user, 
-        OAuth2Client.credentials.access_token, 
-        OAuth2Client.credentials.expiry_date
-    )
-    return freeTimes
+    return apptUtils.getFreeTimeHelper(timeMin, timeMax, busyTimes, true)
 }
 
 // ChatGPT usage: Partial

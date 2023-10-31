@@ -6,9 +6,6 @@ import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences
 import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
 import static com.example.edumatch.util.ProfileHelper.putEditProfile;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,8 +19,10 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.edumatch.views.CustomAutoCompleteView;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.edumatch.R;
+import com.example.edumatch.views.CustomAutoCompleteView;
 import com.example.edumatch.views.LabelAndEditTextView;
 import com.example.edumatch.views.SubjectChipView;
 import com.google.android.flexbox.FlexboxLayout;
@@ -32,7 +31,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -112,13 +110,8 @@ public class UniversityInformationActivity extends AppCompatActivity {
         });
     }
 
-    @NonNull
-
     private void initSuggestions(String[] suggestions) {
         customAutoCompleteView = findViewById(R.id.search_courses_auto_complete);
-
-        // TODO: replace this with an api call to get courses
-
         customAutoCompleteView.setSuggestions(suggestions);
     }
 
@@ -236,7 +229,6 @@ public class UniversityInformationActivity extends AppCompatActivity {
             nextClass = CourseRatesActivity.class;
         } else {
             if(sharedPreferences.getBoolean("isEditing",false)){
-                //TODO: do a PUT here (make a common function)
                 JSONObject request = constructEditUniversityInformation();
                 putEditProfile(request,UniversityInformationActivity.this);
                 nextClass =  EditProfileListActivity.class;

@@ -1,25 +1,25 @@
 package com.example.edumatch.util;
 
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.edumatch.R;
 import com.example.edumatch.views.MessageChipView;
+
 import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
-    private List<MessageItem> messages;
+    private final List<MessageItem> messages;
 
     public MessageAdapter(List<MessageItem> messages) {
         this.messages = messages;
     }
 
+    @NonNull
     @Override
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         MessageChipView messageChipView = new MessageChipView(parent.getContext());
@@ -32,7 +32,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     }
 
     @Override
-    public void onViewRecycled(MessageViewHolder holder) {
+    public void onViewRecycled(@NonNull MessageViewHolder holder) {
         super.onViewRecycled(holder);
     }
 
@@ -42,8 +42,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         holder.bind(messageItem);
     }
 
-    public class MessageViewHolder extends RecyclerView.ViewHolder {
-        private MessageChipView messageChipView;
+    public static class MessageViewHolder extends RecyclerView.ViewHolder {
+        private final MessageChipView messageChipView;
 
         public MessageViewHolder(MessageChipView itemView) {
             super(itemView);

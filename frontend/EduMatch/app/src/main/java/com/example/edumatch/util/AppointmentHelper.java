@@ -3,13 +3,10 @@ package com.example.edumatch.util;
 import static com.example.edumatch.util.NetworkUtils.handleGetResponse;
 import static com.example.edumatch.util.NetworkUtils.handlePutPostResponse;
 import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
-import static com.example.edumatch.util.NetworkUtils.showToastOnUiThread;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AppointmentHelper {

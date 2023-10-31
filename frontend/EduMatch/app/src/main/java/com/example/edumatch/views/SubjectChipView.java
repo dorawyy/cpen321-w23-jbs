@@ -2,14 +2,13 @@ package com.example.edumatch.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.graphics.Color; // import Color class
 
 import com.example.edumatch.R;
 
@@ -55,10 +54,6 @@ public class SubjectChipView extends RelativeLayout {
         }
     }
 
-    public void hideRemoveButton() {
-            removeButton.setVisibility(View.GONE);
-    }
-
 
     public void setChipRemovedListener(OnChipRemovedListener listener) {
         this.chipRemovedListener = listener;
@@ -75,16 +70,13 @@ public class SubjectChipView extends RelativeLayout {
 
         // Set an OnClickListener for the remove button
         if (removeButton != null) {
-            removeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getParent() instanceof ViewGroup) {
-                        ViewGroup parentView = (ViewGroup) getParent();
-                        String removedCourse = textView.getText().toString();
-                        parentView.removeView(SubjectChipView.this);
-                        if (chipRemovedListener != null) {
-                            chipRemovedListener.onChipRemoved(removedCourse);
-                        }
+            removeButton.setOnClickListener(v -> {
+                if (getParent() instanceof ViewGroup) {
+                    ViewGroup parentView = (ViewGroup) getParent();
+                    String removedCourse = textView.getText().toString();
+                    parentView.removeView(SubjectChipView.this);
+                    if (chipRemovedListener != null) {
+                        chipRemovedListener.onChipRemoved(removedCourse);
                     }
                 }
             });
@@ -103,15 +95,12 @@ public class SubjectChipView extends RelativeLayout {
 
 
         // Inside your onClickListener in SubjectChipView
-        this.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Toggle the clicked state and update background color accordingly
-                isClicked = !isClicked;
-                updateBackgroundColor();
-                if(chipClickListener != null) {
-                    chipClickListener.onChipClicked(SubjectChipView.this);
-                }
+        this.setOnClickListener(v -> {
+            // Toggle the clicked state and update background color accordingly
+            isClicked = !isClicked;
+            updateBackgroundColor();
+            if(chipClickListener != null) {
+                chipClickListener.onChipClicked(SubjectChipView.this);
             }
         });
     }

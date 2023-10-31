@@ -2,25 +2,23 @@ package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.ConversationHelper.getMessages;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.edumatch.R;
 import com.example.edumatch.util.MessageAdapter;
 import com.example.edumatch.util.MessageItem;
 import com.example.edumatch.views.CustomChatInputView;
-import com.example.edumatch.views.MessageChipView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,15 +35,13 @@ import okhttp3.WebSocketListener;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private List<MessageItem> messages = new ArrayList<>();
+    private final List<MessageItem> messages = new ArrayList<>();
     private EditText messageEditText;
-    private Button sendMessageButton;
     private String conversationId;
     private String receiverId;
 
-    private WebSocketListener webSocketListener;
     private WebSocket webSocket;
-    private OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client = new OkHttpClient();
     private int oldestMessageId = 1;
 
     private MessageAdapter messageAdapter;
@@ -67,7 +63,7 @@ public class ChatActivity extends AppCompatActivity {
         CustomChatInputView inputText = findViewById(R.id.customChatInput);
         inputText.bringToFront();
         messageEditText = inputText.getEditText();
-        sendMessageButton = inputText.getSendButton();
+        Button sendMessageButton = inputText.getSendButton();
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -76,28 +72,20 @@ public class ChatActivity extends AppCompatActivity {
         messageAdapter = new MessageAdapter(messages);
         recyclerView.setAdapter(messageAdapter);
 
-        sendMessageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendMessage();
-            }
-        });
+        sendMessageButton.setOnClickListener(view -> sendMessage());
 
-        messageEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    sendMessage();
-                    return true;
-                }
-                return false;
+        messageEditText.setOnKeyListener((v, keyCode, event) -> {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                sendMessage();
+                return true;
             }
+            return false;
         });
         loadMoreMessages();
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!recyclerView.canScrollVertically(-1)) {
                     // User has scrolled to the top, load more messages
@@ -179,9 +167,9 @@ public class ChatActivity extends AppCompatActivity {
         String url = "wss://edumatch.canadacentral.cloudapp.azure.com?token=" + token;
 
         Request request = new Request.Builder().url(url).build();
-        webSocketListener = new WebSocketListener() {
+        WebSocketListener webSocketListener = new WebSocketListener() {
             @Override
-            public void onOpen(WebSocket webSocket, Response response) {
+            public void onOpen(@NonNull WebSocket webSocket, @NonNull Response response) {
                 super.onOpen(webSocket, response);
                 runOnUiThread(() -> {
                     ChatActivity.this.webSocket = webSocket;
@@ -190,7 +178,7 @@ public class ChatActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onMessage(WebSocket webSocket, String text) {
+            public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
                 super.onMessage(webSocket, text);
                 runOnUiThread(() -> handleReceivedMessage(text));
             }

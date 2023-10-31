@@ -1,6 +1,5 @@
 package com.example.edumatch.activities;
 
-import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
 import static com.example.edumatch.util.ProfileHelper.getProfile;
 
 import android.content.Context;

@@ -87,7 +87,6 @@ public class AccountInformationActivity extends AppCompatActivity {
         printSharedPreferences(sharedPreferences);
         Intent newIntent;
         if(sharedPreferences.getBoolean("isEditing",false)){
-            //todo do a PUT here (make a common function)
             JSONObject request = constructEditCourseRates();
             putEditProfile(request,AccountInformationActivity.this);
             newIntent = new Intent(AccountInformationActivity.this, EditProfileListActivity.class);

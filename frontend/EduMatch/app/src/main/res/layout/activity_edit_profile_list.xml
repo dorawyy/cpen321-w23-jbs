@@ -70,4 +70,17 @@
 		android:text="Availability Information"
 		android:textAppearance="@style/black_button_text"
 		android:textStyle="bold" />
+	<androidx.appcompat.widget.AppCompatButton
+		android:id="@+id/sign_out"
+		android:layout_width="wrap_content"
+		android:layout_height="60dp"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginBottom="12dp"
+		android:background="@drawable/big_button_container"
+		android:gravity="start"
+		android:paddingStart="36dp"
+		android:paddingTop="17dp"
+		android:text="Sign Out"
+		android:textAppearance="@style/black_button_text"
+		android:textStyle="bold" />
 </LinearLayout>

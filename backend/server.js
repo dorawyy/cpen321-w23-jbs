@@ -51,6 +51,10 @@ appointmentRoutes(app)
 adminRoutes(app)
 conversationRoutes(app)
 
+app.get("/health", (req, res) => {
+    return res.status(200).send({message: 'OK'})
+})
+
 if (env === 'prod') {
     // PRODUCTION
     const privateKeyFile = "/etc/letsencrypt/live/edumatch.canadacentral.cloudapp.azure.com/privkey.pem"

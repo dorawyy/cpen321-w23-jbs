@@ -3,4 +3,5 @@
     <solid android:color="#FFFFFF" /> <!-- White background color -->
     <corners android:radius="8dp" /> <!-- Adjust as per your requirement -->
     <stroke android:color="#000000" android:width="1dp" /> <!-- Border -->
+
 </shape>

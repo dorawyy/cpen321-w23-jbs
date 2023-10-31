@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.AppointmentListActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AdminHomeActivity"
             android:exported="false" />
         <activity
@@ -24,6 +27,9 @@
             android:exported="false" />
         <activity
             android:name=".activities.EditProfileListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".activities.ChatListActivity"
@@ -57,6 +63,9 @@
             android:exported="false" />
         <activity
             android:name=".activities.TutorOrTuteeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.BookingFlowActivity"
             android:exported="false" />
         <activity
             android:name=".activities.AvailabilityActivity"

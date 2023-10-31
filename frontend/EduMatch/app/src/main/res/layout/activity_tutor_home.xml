@@ -4,35 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvFilter"
-        android:layout_width="wrap_content"
+    <com.example.edumatch.views.AppBarCustomView
+        android:id="@+id/emptyBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Filter Your Subject"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/llFilterButtons"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvFilter">
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="ALL"/>
-
-        <!-- Add other buttons similarly for CPEN 321, MATH 342, CPEN 331... -->
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <!-- This is for the tutoring request card views, use a RecyclerView for multiple items -->
 
@@ -43,7 +23,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llFilterButtons"
+        app:layout_constraintTop_toBottomOf="@id/emptyBar"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <!-- For the FloatingActionButton -->

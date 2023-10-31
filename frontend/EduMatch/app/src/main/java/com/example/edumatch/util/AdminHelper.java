@@ -5,6 +5,7 @@ import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +30,7 @@ public class AdminHelper {
         JSONObject requestBody = new JSONObject();
         try {
             requestBody.put("userId", userId);
+            Log.d("ban", userId);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }

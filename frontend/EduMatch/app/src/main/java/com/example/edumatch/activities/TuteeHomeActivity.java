@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -151,12 +152,17 @@ public class TuteeHomeActivity extends AppCompatActivity {
                 tutorRow.setTutorName(tutorName);
                 tutorRow.setTutorDetails(tutorDetails);
                 tutorRow.setId(tutorID);
+                Log.d("tutorid", tutorID);
+                Log.d("tutorid", tutorDetails);
 
                 tutorRow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent profileIntent = new Intent(TuteeHomeActivity.this, ProfileActivity.class);
+                        Log.d("tutorid", "bitch");
+                        Log.d("tutorid",  tutorRow.id);
                         profileIntent.putExtra("TUTOR_ID", tutorRow.id);
+                        Log.d("tutorid",  tutorRow.id);
                         startActivity(profileIntent);
                     }
                 });

@@ -9,12 +9,32 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="Tutee home and Admin home done but not tested (waiting on backend)">
+    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="Changed things briefly">
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AppointmentListActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ChatButton.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/TutorHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/baseline_vert.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/ic_calendar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_appointment_list.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.androidTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.androidTest.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/TutorRow.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/TutorRow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AdminHomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AdminHomeActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/BookingFlowActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/BookingFlowActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ProfileActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ProfileActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TuteeHomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TuteeHomeActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/TutorsHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/TutorsHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/AdminHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/AdminHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/AppointmentHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/AppointmentHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/rounded_border.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/rounded_border.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_booking_flow.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_booking_flow.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_home_tutee.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_home_tutee.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_profile.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_tutor_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_tutor_home.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/empty_bar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/empty_bar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/tutor_row.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/tutor_row.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +44,7 @@
   <component name="CodeInsightWorkspaceSettings">
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/maggiegu/.android/avd/cpen_321.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/maggiegu/.android/avd/Resizable_Experimental_API_34_3.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/EduMatch">
       <ProjectState />
@@ -73,8 +93,8 @@
       <list>
         <option value="layoutResourceFile" />
         <option value="resourceFile" />
-        <option value="Class" />
         <option value="valueResourceFile" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -114,6 +134,7 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/AdminListComponent.java_SELECTED": "AdminListComponent",
     "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/TutorRow.java_SELECTED": "TutorRow",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/activities/ChatButton.java_SELECTED": "ChatButton",
     "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/ActivityBarView.java_SELECTED": "AppBarCustomView",
     "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java_SELECTED": "AppBarCustomView",
     "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AvailableTimesViews.java_SELECTED": "AvailableTimesViews",
@@ -126,7 +147,6 @@
     "android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LabelAndEditText.java_SELECTED": "LabelAndEditText",
     "android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LoginLabelAndEditText.java_SELECTED": "LoginLabelAndEditText",
     "cidr.known.project.marker": "true",
-    "com.android.tools.idea.devicemanager.tab": "Physical",
     "last_opened_file_path": "C:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch",
     "memory.settings.postsync.last.time.stamp": "1698613940560",
     "project.structure.last.edited": "Modules",
@@ -144,6 +164,7 @@
       <recent name="$PROJECT_DIR$/EduMatch/app/src/main/res/layout" />
     </key>
     <key name="android.template.511606953">
+      <recent name="com.example.edumatch.activities" />
       <recent name="com.example.edumatch" />
     </key>
   </component>
@@ -329,6 +350,7 @@
     <MESSAGE value="Changed colour of the chat button" />
     <MESSAGE value="added the pagination manager and also the new tasks s" />
     <MESSAGE value="Tutee home and Admin home done but not tested (waiting on backend)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tutee home and Admin home done but not tested (waiting on backend)" />
+    <MESSAGE value="Changed things briefly" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed things briefly" />
   </component>
 </project>

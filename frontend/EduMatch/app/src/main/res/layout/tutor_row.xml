@@ -12,7 +12,7 @@
 android:id="@+id/tv_course_code"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
-android:text="CPEN 321"
+android:text=""
 android:textSize="18sp"
 android:textStyle="bold" />
 

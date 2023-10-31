@@ -61,8 +61,8 @@ public class ChatActivity extends AppCompatActivity {
         conversationId = getIntent().getStringExtra("conversationId");
         String conversationName = getIntent().getStringExtra("conversationName");
 
-        Toast.makeText(this, "Conversation ID: " + conversationId, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, "Conversation Name: " + conversationName, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Conversation ID: " + conversationId, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Conversation Name: " + conversationName, Toast.LENGTH_SHORT).show();
 
         CustomChatInputView inputText = findViewById(R.id.customChatInput);
         inputText.bringToFront();
@@ -106,6 +106,12 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        closeWebSocket();
     }
 
 

@@ -204,10 +204,10 @@ public class MainActivity extends AppCompatActivity {
                 newIntent = new Intent(MainActivity.this, AdminHomeActivity.class);
                 break;
             case "tutee":
-                newIntent = new Intent(MainActivity.this, ChatListActivity.class);
+                newIntent = new Intent(MainActivity.this, TuteeHomeActivity.class);
                 break;
             case "tutor":
-                newIntent = new Intent(MainActivity.this, ChatListActivity.class);
+                newIntent = new Intent(MainActivity.this, TutorHomeActivity.class);
                 break;
             default:
                 // Handle unexpected cases or errors here

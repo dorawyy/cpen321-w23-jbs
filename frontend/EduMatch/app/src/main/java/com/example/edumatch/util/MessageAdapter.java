@@ -34,19 +34,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @Override
     public void onViewRecycled(MessageViewHolder holder) {
         super.onViewRecycled(holder);
-
-//        // Reset layout parameters to avoid issues with recycled views
-//        ViewGroup.LayoutParams layoutParams = holder.messageChipView.getLayoutParams();
-//
-//        // Clear any rules that might have been set previously
-//        if (layoutParams instanceof RelativeLayout.LayoutParams) {
-//            RelativeLayout.LayoutParams relativeLayoutParams = (RelativeLayout.LayoutParams) layoutParams;
-//            relativeLayoutParams.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
-//            relativeLayoutParams.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
-//        }
-//
-//        // Set the updated layout parameters
-//        holder.messageChipView.setLayoutParams(layoutParams);
     }
 
     @Override

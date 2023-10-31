@@ -9,32 +9,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="Changed things briefly">
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AppointmentListActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ChatButton.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/TutorHelper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/baseline_vert.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/ic_calendar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_appointment_list.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.androidTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.androidTest.iml" afterDir="false" />
+    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="All components are added and using">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AdminHomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AdminHomeActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/BookingFlowActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/BookingFlowActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ProfileActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ProfileActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TuteeHomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TuteeHomeActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/AdminHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/AdminHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/AppointmentHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/AppointmentHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/rounded_border.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/rounded_border.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_booking_flow.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_booking_flow.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_home_tutee.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_home_tutee.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_profile.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_tutor_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_tutor_home.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/empty_bar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/empty_bar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/tutor_row.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/tutor_row.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,10 +68,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="layoutResourceFile" />
         <option value="resourceFile" />
         <option value="valueResourceFile" />
         <option value="Class" />
+        <option value="layoutResourceFile" />
       </list>
     </option>
   </component>
@@ -315,7 +292,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698700372881</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="All components are added and using">
+      <created>1698744711258</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1698744711258</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -351,6 +335,7 @@
     <MESSAGE value="added the pagination manager and also the new tasks s" />
     <MESSAGE value="Tutee home and Admin home done but not tested (waiting on backend)" />
     <MESSAGE value="Changed things briefly" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed things briefly" />
+    <MESSAGE value="All components are added and using" />
+    <option name="LAST_COMMIT_MESSAGE" value="All components are added and using" />
   </component>
 </project>

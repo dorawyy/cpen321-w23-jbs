@@ -3,7 +3,8 @@ const { google } = require('googleapis');
 const UserType = require("../constants/user.types")
 const db = require("../db")
 const jwt = require("jsonwebtoken")
-const bcrypt = require("bcryptjs")
+const bcrypt = require("bcryptjs");
+const { getGoogleAccessTokens } = require('../utils/google.utils');
 
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
@@ -181,9 +182,4 @@ async function verify(idToken, authCode) {
     }).catch(err => {
         return Promise.reject(err)
     })
-}
-
-async function getGoogleAccessTokens(authCode) {
-    const { tokens } = await OAuth2Client.getToken(authCode)
-    return Promise.resolve(tokens)
 }

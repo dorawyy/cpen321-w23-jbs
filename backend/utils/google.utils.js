@@ -1,7 +1,6 @@
 const { google } = require('googleapis');
 const db = require("../db")
-const momenttz = require("moment-timezone")
-const apptUtils = require("./appointment.utils")
+const { getFreeTimeHelper } = require('./freetimes.utils');
 
 const User = db.user
 
@@ -115,7 +114,7 @@ exports.getFreeTime = async (
     });
 
     const busyTimes = response.data.calendars[calendarId].busy;
-    return apptUtils.getFreeTimeHelper(timeMin, timeMax, busyTimes, true)
+    return getFreeTimeHelper(timeMin, timeMax, busyTimes, true)
 }
 
 // ChatGPT usage: Partial
@@ -147,6 +146,11 @@ exports.getCalendarEvents = async (
         OAuth2Client.credentials.expiry_date
     )
     return events 
+}
+
+exports.getGoogleAccessTokens = async (authCode) => {
+    const { tokens } = await OAuth2Client.getToken(authCode)
+    return Promise.resolve(tokens)
 }
 
 async function saveNewAccessToken(user, newAccessToken, newExpiryDate) {

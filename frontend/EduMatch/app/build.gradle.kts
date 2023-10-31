@@ -67,4 +67,6 @@ dependencies {
 
 // So that we can easily control permissions
     implementation("pub.devrel:easypermissions:3.0.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("com.android.support:recyclerview-v7:23.2.0")
 }

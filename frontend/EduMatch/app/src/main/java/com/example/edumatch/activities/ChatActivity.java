@@ -3,21 +3,22 @@ package com.example.edumatch.activities;
 import static com.example.edumatch.util.ConversationHelper.getMessages;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.edumatch.R;
+import com.example.edumatch.util.MessageAdapter;
+import com.example.edumatch.util.MessageItem;
 import com.example.edumatch.views.CustomChatInputView;
 import com.example.edumatch.views.MessageChipView;
 
@@ -26,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -34,56 +34,47 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
-import okio.ByteString;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private List<List<String>> messages = new ArrayList<>();
-    private LinearLayout messageContainer;
+    private List<MessageItem> messages = new ArrayList<>();
     private EditText messageEditText;
     private Button sendMessageButton;
     private String conversationId;
-
     private String receiverId;
 
     private WebSocketListener webSocketListener;
-
     private WebSocket webSocket;
-    // Create an OkHttpClient instance
     private OkHttpClient client = new OkHttpClient();
+    private int oldestMessageId = 1;
+
+    private MessageAdapter messageAdapter;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_view);
+
         initWebSocket();
 
-         conversationId = getIntent().getStringExtra("conversationId");
+        conversationId = getIntent().getStringExtra("conversationId");
         String conversationName = getIntent().getStringExtra("conversationName");
 
         Toast.makeText(this, "Conversation ID: " + conversationId, Toast.LENGTH_SHORT).show();
         Toast.makeText(this, "Conversation Name: " + conversationName, Toast.LENGTH_SHORT).show();
-        // Initialize your views
-        messageContainer = findViewById(R.id.messageContainer);
+
         CustomChatInputView inputText = findViewById(R.id.customChatInput);
         inputText.bringToFront();
-        messageEditText = inputText.getEditText(); // Replace with your EditText's ID
-        sendMessageButton = inputText.getSendButton(); // Replace with your Button's ID
+        messageEditText = inputText.getEditText();
+        sendMessageButton = inputText.getSendButton();
 
-        callGetMessages();
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setRecycledViewPool(null);
 
-//        messages.add(Arrays.asList("receiver", "Hey, how's it going? How was your test."));
-//        messages.add(Arrays.asList("sender", "Good morning! How are you today?"));
-//        messages.add(Arrays.asList("receiver", "I'm doing well, thank you. How about you?"));
-//        messages.add(Arrays.asList("sender", "I'm great! The weather is fantastic."));
-//        messages.add(Arrays.asList("receiver", "That's awesome. I wish I could be outside right now."));
-//        messages.add(Arrays.asList("sender", "Yes, it's a perfect day for a picnic."));
-//        messages.add(Arrays.asList("sender", "I'm planning to go to the park this afternoon."));
-//        messages.add(Arrays.asList("receiver", "Sounds lovely! Don't forget to take some photos."));
-        // Add more existing messages here...
-
-        // Initialize messages
-//        initMessages();
+        messageAdapter = new MessageAdapter(messages);
+        recyclerView.setAdapter(messageAdapter);
 
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,88 +93,80 @@ public class ChatActivity extends AppCompatActivity {
                 return false;
             }
         });
-    }
-    // TODO: need to make a get request to get the messages request: conversationId
-    private void callGetMessages(){
-        JSONObject response = getMessages(ChatActivity.this,"1",conversationId);
-        try {
-            JSONArray messages = response.getJSONArray("messages");
-            receiverId = response.getString("otherUserId");
-            int length = messages.length(); // Get the length of the array
+        loadMoreMessages();
 
-            for (int i = 0; i < length; i++) {
-                JSONObject messageObject = messages.getJSONObject(i); // Get each JSON object from the array
-
-                // Extract data from the messageObject
-                String text = messageObject.optString("content", ""); // Example: Get the "text" field
-                boolean isYourMessage = messageObject.optBoolean("isYourMessage", false); // Example: Get the "isReceiver" field
-
-                // Process the extracted data
-                MessageChipView messageChipView = new MessageChipView(this, null);
-                messageChipView.setChipText(text);
-                messageChipView.setIsReceiver(!isYourMessage);
-
-                // Add the new message to the message container
-                messageContainer.addView(messageChipView);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (!recyclerView.canScrollVertically(-1)) {
+                    // User has scrolled to the top, load more messages
+                    loadMoreMessages();
+                }
             }
+        });
+
+    }
 
 
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
+    private void loadMoreMessages() {
+        if (oldestMessageId != -1) {
+            callGetMessages(String.valueOf(oldestMessageId));
         }
     }
 
-//    private void initMessages() {
-//        for (List<String> message : messages) {
-//            String sender = message.get(0);
-//            String text = message.get(1);
-//            boolean isReceiver = "receiver".equals(sender);
-//
-//            MessageChipView messageChipView = new MessageChipView(this, null);
-//            messageChipView.setChipText(text);
-//            messageChipView.setIsReceiver(isReceiver);
-//
-//            messageContainer.addView(messageChipView);
-//        }
-//    }
+    private void callGetMessages(String page) {
+        if (oldestMessageId != -1) {
+            Log.d("MessagesGet",String.valueOf(oldestMessageId));
+            JSONObject response = getMessages(ChatActivity.this, page, conversationId);
+            try {
+                JSONArray messagesArray = response.getJSONArray("messages");
+                receiverId = response.getString("otherUserId");
+                int length = messagesArray.length();
+                if (length == 0) {
+                    oldestMessageId = -1;
+                } else {
+                    for (int i = length - 1; i >= 0; i--) {
+                        JSONObject messageObject = messagesArray.getJSONObject(i);
+                        String text = messageObject.optString("content", "");
+                        boolean isYourMessage = messageObject.optBoolean("isYourMessage", false);
 
-    private void sendMessage(){
-        //TODO: need to send message to socket somehow too
+                        messages.add(0, new MessageItem(text, isYourMessage));
+                        messageAdapter.notifyItemInserted(0);
+                    }
+                    oldestMessageId++;
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
+    private void sendMessage() {
         String messageText = messageEditText.getText().toString().trim();
         if (!messageText.isEmpty()) {
-            // Create a new message with isReceiver set to false
-            MessageChipView messageChipView = new MessageChipView(this, null);
-            messageChipView.setChipText(messageText);
-            messageChipView.setIsReceiver(false);
+            // Add the message to the list
+            messages.add(new MessageItem(messageText, true));
 
-            // Add the new message to the message container
-            messageContainer.addView(messageChipView);
+            // Notify the adapter of the data change
+            messageAdapter.notifyItemInserted(messages.size() - 1);
 
-            // send message to websocket
             JSONObject message = new JSONObject();
             try {
-                message.put("receiverId",receiverId);
-                message.put("message",messageText);
+                message.put("receiverId", receiverId);
+                message.put("message", messageText);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
             sendWebSocketMessage(message);
 
-            // Clear the EditText
             messageEditText.getText().clear();
 
-            ScrollView sv = (ScrollView) findViewById(R.id.scrollView);
-            sv.scrollTo(0, sv.getBottom());
+            // Scroll to the last message sent
+            recyclerView.smoothScrollToPosition(messages.size() - 1);
         }
     }
 
-
-
-
-    // Define a WebSocketListene
-
-    // Initialize WebSocket
     private void initWebSocket() {
         SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("jwtToken", "");
@@ -194,7 +177,6 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onOpen(WebSocket webSocket, Response response) {
                 super.onOpen(webSocket, response);
-                // Handle the connection open event
                 runOnUiThread(() -> {
                     ChatActivity.this.webSocket = webSocket;
                     Toast.makeText(ChatActivity.this, "WebSocket connection opened", Toast.LENGTH_SHORT).show();
@@ -204,50 +186,41 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onMessage(WebSocket webSocket, String text) {
                 super.onMessage(webSocket, text);
-                // Handle text messages received over WebSocket
                 runOnUiThread(() -> handleReceivedMessage(text));
             }
-
-            // ... (other WebSocketListener methods)
         };
         webSocket = client.newWebSocket(request, webSocketListener);
     }
 
-    // Handle received WebSocket messages
     private void handleReceivedMessage(String message) {
         try {
-            // Parse the received message as a JSONObject
             JSONObject jsonObject = new JSONObject(message);
-            // Extract data from the JSONObject and use it as needed
             String text = jsonObject.optString("content", "");
 
-            // Process the extracted data
-            MessageChipView messageChipView = new MessageChipView(this, null);
-            messageChipView.setChipText(text);
-            messageChipView.setIsReceiver(true); // Set the value based on the JSON data
+            // Add the received message to the list
+            messages.add(new MessageItem(text, false));
 
-            // Add the new message to the message container
-            messageContainer.addView(messageChipView);
+            // Notify the adapter of the data change
+            messageAdapter.notifyItemInserted(messages.size() - 1);
+
+            // Scroll to the last message received
+            recyclerView.smoothScrollToPosition(messages.size() - 1);
         } catch (JSONException e) {
-            // Handle any JSON parsing errors
             e.printStackTrace();
         }
     }
-    // Send a text message
+
     private void sendWebSocketMessage(JSONObject message) {
         if (webSocket != null) {
             webSocket.send(message.toString());
         }
     }
 
-    // Call this method when you want to close the WebSocket connection
     private void closeWebSocket() {
         if (webSocket != null) {
             webSocket.close(1000, "WebSocket closing");
         }
     }
-
-
-
-
 }
+
+

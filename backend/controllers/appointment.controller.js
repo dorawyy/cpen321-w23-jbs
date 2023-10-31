@@ -122,12 +122,14 @@ exports.getTutorAvailability = async (req, res) => {
                     return avail.day === requestedDay 
                 })
                 var availabilities = []
-                
+                var tzOffset = momenttz()
+                    .tz('America/Los_Angeles')
+                    .format('Z')
                 for (block of dayAvailabilities) {            
-                    var start = momenttz(`${date}T${block.startTime}:00-07:00`)
+                    var start = momenttz(`${date}T${block.startTime}:00${tzOffset}`)
                         .tz('America/Los_Angeles')
                         .toISOString(true)
-                    var end = momenttz(`${date}T${block.endTime}:00-07:00`)
+                    var end = momenttz(`${date}T${block.endTime}:00${tzOffset}`)
                         .tz('America/Los_Angeles')
                         .toISOString(true)
                     var freeTimes = await apptUtils.getManualFreeTimes(
@@ -190,11 +192,15 @@ exports.acceptAppointment = async (req, res) => {
                 message: "Appointment not found"
             }) 
         }
+        var overlaps = upcomingAppointments.filter(appt => {
+            return apptUtils.isConflicted(appt, acceptedAppt)
+        })
+        var overlapsIds = overlaps.map(appt => appt._id)
     
         await Appointment.updateMany(
             {
                 _id: {
-                    $in: usersApptIds,
+                    $in: overlapsIds,
                     $ne: apptId
                 },
                 status: AppointmentStatus.PENDING
@@ -235,12 +241,11 @@ exports.acceptAppointment = async (req, res) => {
     }
 }
 
+// ChatGPT usage: Partial
 exports.getUserAppointments = async (req, res) => {
     try {
         var userId = req.userId
-        var courses = req.query.courses ? req.query.courses.split(',') : []
-        var courseQuery = courses ? { course: { $in: courses } } : {};
-    
+        var courses = req.query.courses ? req.query.courses.split(',') : []    
         var user = await User.findById(userId)
             
         if (!user || user.isBanned) {
@@ -251,12 +256,22 @@ exports.getUserAppointments = async (req, res) => {
         
         var appointments = await apptUtils.cleanupUserAppointments(user)
         var appointmentIds = appointments.map(appt => appt._id)
-    
+
+        var query =  {
+            _id: {
+                $in: appointmentIds
+            }
+        }
+        if (courses.length > 0) {
+            query.course = {
+                $in: courses
+            }
+        }
     
         var filteredAppts = await Appointment
-            .find(courseQuery)
-            .where('_id')
-            .in(appointmentIds)
+            .find({
+                ...query,
+            })
     
         return res.status(200).send(filteredAppts)
     } catch (err) {
@@ -281,15 +296,7 @@ exports.getAppointment = async (req, res) => {
                         var otherUserName = ""
                         for (user of appt.participantsInfo) {
                             if (user.userId != req.userId) {
-                                var otherUser = await User
-                                    .findById(user.userId)
-                                    
-                                if (!otherUser || otherUser.isBanned) {
-                                    return res.status(404).send({
-                                        message: "The other user is not found"
-                                    })
-                                }
-                                otherUserName = otherUser.displayedName
+                                otherUserName = user.displayedName
                             }
                         }
                         var ret = {
@@ -339,10 +346,12 @@ exports.bookAppointment = async (req, res) => {
             status: AppointmentStatus.PENDING,
             participantsInfo: [
                 {
-                    userId: tutorId
+                    userId: tutorId,
+                    displayedName: tutor.displayedName
                 },
                 {
-                    userId: req.userId // tutee
+                    userId: req.userId, // tutee
+                    displayedName: tutee.displayedName
                 }
             ],
             ...req.body,
@@ -371,70 +380,4 @@ exports.bookAppointment = async (req, res) => {
         return res.status(500).send({ message: err.message })
     }
 }
-
-
-
-async function checkUserManualAvailability( 
-    user, pstStartDatetime, pstEndDatetime
-) {
-    if (user.manualAvailability && user.type === UserType.TUTOR) {
-        var requestedDay = momenttz(pstStartDatetime).format("dddd")
-        var requestedStartTime = momenttz(
-            momenttz(pstStartDatetime).format("HH:mm"),
-            "HH:mm"
-        )
-        var requestedEndTime = momenttz(
-            momenttz(pstEndDatetime).format("HH:mm"),
-            "HH:mm"
-        )
-
-        var availabilities = user.manualAvailability.filter(avail => {
-            var availStart = momenttz(avail.startTime, "HH:mm")
-            var availEnd = momenttz(avail.endTime, "HH:mm")
-
-            return avail.day === requestedDay
-                && availStart.isSameOrBefore(requestedStartTime)
-                && availEnd.isSameOrAfter(requestedEndTime)
-        })
-        if (availabilities.length == 0) {
-            return false
-        }
-    }
-    if (user.appointments.length == 0) {
-        return true
-    }
-
-    var upcomingAppointments = await apptUtils.cleanupUserAppointments(user)
-    if (upcomingAppointments.length == 0) {
-        return true
-    }
-    
-    // TUTEE: a pending appointment is considered unavailable for the tutee
-    // TUTOR: a pending appointment is considered available for the tutor
-    var acceptedAppointments = upcomingAppointments
-    if (user.type === UserType.TUTOR) {
-        acceptedAppointments = await getAcceptedAppointments(upcomingAppointments)
-    }
-    if (acceptedAppointments.length == 0) {
-        return true
-    }
-
-    var conflicts = acceptedAppointments.filter(
-        appt => {
-            var newPstStart = momenttz(pstStartDatetime)
-            var newPstEnd = momenttz(pstEndDatetime)
-            var apptPstStart = momenttz(appt.pstStartDatetime)
-            var apptPstEnd = momenttz(appt.pstEndDatetime)
-
-            if (newPstEnd.isSameOrBefore(apptPstStart) ||
-                newPstStart.isSameOrAfter(apptPstEnd)) {
-                    return false
-            } else {
-                return true
-            }
-        } 
-    )
-    return conflicts.length === 0
-}
-
 

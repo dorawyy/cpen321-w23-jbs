@@ -23,7 +23,7 @@ exports.isAvailable = async (user, pstStartDatetime, pstEndDatetime) => {
 
 // remove completed appointments. upcomingAppointments includes
 // pending/accepted appointments
-exports.cleanupUserAppointments = async (user) => {
+async function cleanupUserAppointments(user) {
     var upcomingAppointments = []
     if (user.appointments) {
         for (appt of user.appointments) {
@@ -45,7 +45,6 @@ exports.cleanupUserAppointments = async (user) => {
         })
 }
 
-
 exports.getManualFreeTimes = async (user, timeMin, timeMax) => {
     var upcomingAppointments = await cleanupUserAppointments(user)
     var acceptedAppointments = await getAcceptedAppointments(
@@ -62,6 +61,13 @@ exports.getManualFreeTimes = async (user, timeMin, timeMax) => {
             busyTimes.push(appt)
         }
     }
+    return getFreeTimeHelper(timeMin, timeMax, busyTimes, false)
+}
+
+// ChatGPT usage: Partial
+function getFreeTimeHelper(
+    timeMin, timeMax, busyTimes, fromGoogle
+) {
     if (busyTimes.length == 0) {
         return [{
             start: timeMin,
@@ -71,8 +77,15 @@ exports.getManualFreeTimes = async (user, timeMin, timeMax) => {
     var freeTimes = []
 
     // Include free time before the first busy period
-    const firstBusyStart = momenttz(busyTimes[0].pstStartDatetime)
-    .tz('America/Los_Angeles');
+    var firstBusyStart = undefined
+    if (fromGoogle) {
+        firstBusyStart = momenttz(busyTimes[0].start)
+            .tz('America/Los_Angeles');
+    } else {
+        firstBusyStart = momenttz(busyTimes[0].pstStartDatetime)
+            .tz('America/Los_Angeles');
+    }
+    
     const startDateTime = momenttz(timeMin).tz('America/Los_Angeles')
 
     if (firstBusyStart.isSameOrAfter(startDateTime)) {
@@ -89,25 +102,38 @@ exports.getManualFreeTimes = async (user, timeMin, timeMax) => {
 
     // Infer free times based on busy intervals
     for (let i = 0; i < busyTimes.length - 1; i++) {
-        const busyEnd = momenttz(busyTimes[i].pstEndDatetime)
-                        .tz('America/Los_Angeles');
-        if (i + 1 < busyTimes.length) {
-            var nextBusyStart = momenttz(busyTimes[i + 1].pstStartDatetime)
-                                .tz('America/Los_Angeles');
+        var busyEnd = undefined
+        var nextBusyStart = undefined
+        if (fromGoogle) {
+            busyEnd = momenttz(busyTimes[i].end).tz('America/Los_Angeles');
+            nextBusyStart = momenttz(busyTimes[i + 1].start).tz('America/Los_Angeles');
         } else {
-            var nextBusyStart = momenttz(busyTimes[i].pstEndDatetime)
-                                .tz('America/Los_Angeles')
+            busyEnd = momenttz(busyTimes[i].pstEndDatetime).tz('America/Los_Angeles');
+            nextBusyStart = momenttz(busyTimes[i + 1].pstStartDatetime)
+                            .tz('America/Los_Angeles');
         }
         
-        const freeStart = busyEnd.toISOString(true);
-        const freeEnd = nextBusyStart.toISOString(true);
-        freeTimes.push({ start: freeStart, end: freeEnd });
+        const freeStart = busyEnd;
+        const freeEnd = nextBusyStart;
+        const diff = momenttz.duration(freeEnd.diff(freeStart))
+        if (diff.hours() >= 1) {
+            freeTimes.push({ 
+                start: freeStart.toISOString(true),
+                end: freeEnd.toISOString(true) 
+            });
+        }
     }
 
      // Include free time after the last busy period
-    const lastBusyEnd = momenttz(
-        busyTimes[busyTimes.length - 1].pstEndDatetime
-    ).tz('America/Los_Angeles');
+    var lastBusyEnd = undefined
+    if (fromGoogle) {
+        lastBusyEnd = momenttz(busyTimes[busyTimes.length - 1].end)
+                        .tz('America/Los_Angeles');
+    } else {
+        lastBusyEnd = momenttz(
+            busyTimes[busyTimes.length - 1].pstEndDatetime
+        ).tz('America/Los_Angeles');
+    }
     const endDateTime = momenttz(timeMax).tz('America/Los_Angeles')
 
     if (lastBusyEnd.isSameOrBefore(endDateTime)) {
@@ -171,20 +197,29 @@ async function checkUserManualAvailability(
 
     var conflicts = acceptedAppointments.filter(
         appt => {
-            var newPstStart = momenttz(pstStartDatetime)
-            var newPstEnd = momenttz(pstEndDatetime)
-            var apptPstStart = momenttz(appt.pstStartDatetime)
-            var apptPstEnd = momenttz(appt.pstEndDatetime)
-
-            if (newPstEnd.isSameOrBefore(apptPstStart) ||
-                newPstStart.isSameOrAfter(apptPstEnd)) {
-                    return false
-            } else {
-                return true
+            var newAppt = {
+                pstStartDatetime,
+                pstEndDatetime
             }
+            return isConflicted(appt, newAppt)
+            
         } 
     )
     return conflicts.length === 0
+}
+
+function isConflicted(appt1, appt2) {
+    var appt1Start = momenttz(appt1.pstStartDatetime)
+    var appt1End = momenttz(appt1.pstEndDatetime)
+
+    var appt2Start = momenttz(appt2.pstStartDatetime)
+    var appt2End = momenttz(appt2.pstEndDatetime)
+
+    if (appt1End.isSameOrBefore(appt2Start) ||
+        appt1Start.isSameOrAfter(appt2End)) {
+            return false
+    }
+    return true
 }
 
 
@@ -242,7 +277,7 @@ async function getAcceptedAppointments(appointments) {
     return acceptedAppointments
 }
 
-// chatgpt
+// ChatGPT usage: Yes
 function toPST(dateString) {
     return momenttz(dateString).tz('America/Los_Angeles').format();
 }
@@ -252,3 +287,6 @@ module.exports.appointmentIsCompleted = appointmentIsCompleted
 module.exports.appointmentIsAccepted = appointmentIsAccepted
 module.exports.getAppointmentStatus = getAppointmentStatus
 module.exports.toPST = toPST
+module.exports.getFreeTimeHelper = getFreeTimeHelper
+module.exports.cleanupUserAppointments = cleanupUserAppointments
+module.exports.isConflicted = isConflicted

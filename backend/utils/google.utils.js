@@ -1,6 +1,7 @@
 const { google } = require('googleapis');
 const db = require("../db")
 const momenttz = require("moment-timezone")
+const apptUtils = require("./appointment.utils")
 
 const User = db.user
 
@@ -15,6 +16,7 @@ const OAuth2Client = new google.auth.OAuth2(
     redirectUri 
 );
 
+// ChatGPT usage: Partial
 exports.cancelGoogleEvent = async (
     user, otherUser, canceledAppt
 ) => {
@@ -50,6 +52,7 @@ exports.cancelGoogleEvent = async (
     )
 }
 
+// ChatGPT usage: Partial
 exports.createGoogleEvent = async (
     user, otherUser, newAppt
 ) => {
@@ -77,8 +80,8 @@ exports.createGoogleEvent = async (
     };
     
     const response = await calendar.events.insert({
-            calendarId: 'primary',
-            resource: event,
+        calendarId: 'primary',
+        resource: event,
     })
 
     await saveNewAccessToken(
@@ -88,7 +91,7 @@ exports.createGoogleEvent = async (
     )
 }
 
-// chatgpt
+// ChatGPT usage: Partial
 exports.getFreeTime = async (
     user, timeMin, timeMax
 ) => {
@@ -104,54 +107,18 @@ exports.getFreeTime = async (
     
     const response = await calendar.freebusy.query({
         requestBody: {
-          timeMin,
-          timeMax,
-          timeZone: 'America/Los_Angeles',
-          items: [{ id: calendarId }],
+            timeMin,
+            timeMax,
+            timeZone: 'America/Los_Angeles',
+            items: [{ id: calendarId }],
         },
     });
 
     const busyTimes = response.data.calendars[calendarId].busy;
-    var freeTimes = []
-
-    // Include free time before the first busy period
-    const firstBusyStart = momenttz(busyTimes[0].start)
-                            .tz('America/Los_Angeles');
-    const startDateTime = momenttz(timeMin).tz('America/Los_Angeles');
-    if (firstBusyStart.isSameOrAfter(startDateTime)) {
-        const freeStart = startDateTime.toISOString(true);
-        const freeEnd = firstBusyStart.toISOString(true);
-        freeTimes.push({ start: freeStart, end: freeEnd });
-    }
-
-    // Infer free times based on busy intervals
-    for (let i = 0; i < busyTimes.length - 1; i++) {
-        const busyEnd = momenttz(busyTimes[i].end);
-        const nextBusyStart = momenttz(busyTimes[i + 1].start);
-    
-        const freeStart = busyEnd.toISOString(true);
-        const freeEnd = nextBusyStart.toISOString(true);
-        freeTimes.push({ start: freeStart, end: freeEnd });
-    }
-
-    // Include free time after the last busy period
-    const lastBusyEnd = momenttz(busyTimes[busyTimes.length - 1].end);
-    const endDateTime = momenttz(timeMax)
-    if (lastBusyEnd.isSameOrBefore(endDateTime)) {
-        const freeStart = lastBusyEnd.toISOString(true);
-        const freeEnd = endDateTime.toISOString(true);
-        freeTimes.push({ start: freeStart, end: freeEnd });
-    }
-
-    await saveNewAccessToken(
-        user, 
-        OAuth2Client.credentials.access_token, 
-        OAuth2Client.credentials.expiry_date
-    )
-    return freeTimes
+    return apptUtils.getFreeTimeHelper(timeMin, timeMax, busyTimes, true)
 }
 
-// chatgpt
+// ChatGPT usage: Partial
 exports.getCalendarEvents = async (
     user, timeMin, timeMax
 ) => {

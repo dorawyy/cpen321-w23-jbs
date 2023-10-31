@@ -105,8 +105,8 @@ exports.login = (req, res) => {
         User.findOne({
             username: req.body.username
         }).then(user => {
-            if (!user) {
-                return res.status(401).send({ message: "Username or password is incorrect" })
+            if (!user || user.isBanned) {
+                return res.status(404).send({ message: "User is not found or is banned" })
             }
     
             var passwordIsValid = bcrypt.compareSync(

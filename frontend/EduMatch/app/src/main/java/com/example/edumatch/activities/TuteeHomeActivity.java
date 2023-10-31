@@ -129,7 +129,7 @@ public class TuteeHomeActivity extends AppCompatActivity {
         // I noticed in your code, you might be using a method named getTuteeHome to fetch data.
         // If that's the method you use to make API calls, you can call it here:
 
-        JSONObject jsonResponse = getTuteeHome(courseApiUrl, TuteeHomeActivity.this);
+//        JSONObject jsonResponse = getTuteeHome(courseApiUrl, TuteeHomeActivity.this);
 
         // If you need further processing on the jsonResponse, you can do it here.
     }

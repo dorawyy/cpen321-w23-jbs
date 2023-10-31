@@ -7,7 +7,6 @@ const User = db.user
 const EXCLUDED_FIELDS = [
     "-_id",
     "-googleId",
-    "-isBanned",
     "-password",
     "-googleOauth",
     "-recommendationWeights"

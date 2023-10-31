@@ -30,14 +30,13 @@ exports.addReview = async (req, res) => {
         var appointment = await Appointment.findById(req.body.appointmentId)
     
         var reviewerId = req.userId
-        var reviewerDisplayedName = await User
-            .findById(reviewerId, ["displayedName", "-_id"])
-            .then(user => {
-                if (!user || user.isBanned) {
-                    return res.status(400).send({message: "user not found"})
-                }
-                return user.displayedName
-            })
+        var reviewer = await User
+            .findById(reviewerId)
+            
+        if (!reviewer || reviewer.isBanned) {
+            return res.status(400).send({message: "user not found"})
+        }
+        var reviewerDisplayedName = reviewer.displayedName
             
         var userReview = {
             reviewerId,
@@ -47,12 +46,10 @@ exports.addReview = async (req, res) => {
     
         var receiver = await User
             .findById(req.body.receiverId)
-            .then(user => {
-                if (!user || user.isBanned) {
-                    return res.status(400).send({message: "user not found"})
-                }
-                return user
-            })
+            
+        if (!receiver || receiver.isBanned) {
+            return res.status(400).send({message: "user not found"})
+        }
         
         receiver.userReviews.push(userReview)
         receiver.overallRating = this.getOverallRating(receiver.userReviews)
@@ -92,11 +89,15 @@ exports.getUserReviews = (req, res) => {
         if (!userId) {
             return res.status(400).send({ message: "Must specify userId" })
         }
-        User.findById(userId, "userReviews").then(user => {
-            if (!user) {
+        User.findById(userId).then(user => {
+            if (!user || user.isBanned) {
                 return res.status(404).send({ message: "User not found" })
             }
-            return res.status(200).send(user)
+            var ret = {
+                _id: user._id.toString(),
+                userReviews: user.userReviews
+            }
+            return res.status(200).send(ret)
         })
     } catch (err) {
         console.log(err.message)

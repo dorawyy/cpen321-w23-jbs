@@ -18,6 +18,9 @@ exports.ban = async (req, res) => {
         }
     
         const user = await User.findById(req.body.userId)
+        if (!user) {
+            return res.status(400).send({message: "User not found"})
+        }
     
         if (user.type == UserType.ADMIN)
             return res.status(401).send({ message: "User is admin and can't be banned" })
@@ -45,6 +48,9 @@ exports.unban = async (req, res) => {
         }
     
         const user = await User.findById(req.body.userId)
+        if (!user) {
+            return res.status(400).send({message: "User not found"})
+        }
         user.isBanned = false
         user.save()
         

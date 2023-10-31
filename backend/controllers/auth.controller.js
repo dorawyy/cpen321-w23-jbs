@@ -33,6 +33,9 @@ exports.googleAuth = (req, res) => {
         const authCode = req.body.authCode
     
         verify(idToken, authCode).then(result => {
+            if (result.isBanned) {
+                return res.status(404).send({message: "User is banned"})
+            }
             const jwtToken = jwt.sign(result.userId, secretKey)
             return res.json({ 
                 jwtToken,
@@ -81,9 +84,9 @@ exports.signup = async (req, res) => {
                     recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
                     hasSignedUp: true
                 }, {new: true}).then(user => {
-                    if (!user) {
+                    if (!user || user.isBanned) {
                         return res.status(404).send({
-                            message: "User not found. If manually sign up, remove Auth header."
+                            message: "User not found. If manually signing up, remove Auth header."
                         })
                     }
                     return res.status(200).send({
@@ -161,7 +164,8 @@ async function verify(idToken, authCode) {
                 var ret = {
                     userId: savedUser._id.toString(),
                     newUser: true,
-                    type: null
+                    type: null,
+                    isBanned: savedUser.isBanned
                 }
                 return Promise.resolve(ret)
             })
@@ -169,7 +173,8 @@ async function verify(idToken, authCode) {
             var ret = {
                 userId: user._id.toString(),
                 newUser: false,
-                type: user.type
+                type: user.type,
+                isBanned: user.isBanned
             }
             return Promise.resolve(ret)
         }

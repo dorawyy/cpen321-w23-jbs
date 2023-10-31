@@ -12,9 +12,9 @@ exports.checkedProfile = async (req, res) => {
         }
         const tutor = await User.findById(req.body.tutorId)
         const tutee = await User.findById(req.userId)
-        if (!tutor)
+        if (!tutor || tutor.isBanned)
             return res.status(404).send({ message: "Could not find tutor in database with provided id"})
-        if (!tutee)
+        if (!tutee || tutee.isBanned)
             return res.status(404).send({ message: "Could not find tutee in database with provided id"})
     
         if (tutor.rating) {
@@ -43,9 +43,9 @@ exports.contactedTutor = async (req, res) => {
         }
         const tutor = await User.findById(req.body.tutorId)
         const tutee = await User.findById(req.userId)
-        if (!tutor)
+        if (!tutor || tutor.isBanned)
             return res.status(404).send({ message: "Could not find tutor in database with provided id"})
-        if (!tutee)
+        if (!tutee || tutee.isBanned)
             return res.status(404).send({ message: "Could not find tutee in database with provided id"})
     
         if (!tutor.subjectHourlyRate || tutor.subjectHourlyRate.length != 0) {
@@ -79,9 +79,9 @@ exports.scheduledAppointment = async (req, res) => {
         }
         const tutor = await User.findById(req.body.tutorId)
         const tutee = await User.findById(req.userId)
-        if (!tutor)
+        if (!tutor || tutor.isBanned)
             return res.status(404).send({ message: "Could not find tutor in database with provided id"})
-        if (!tutee)
+        if (!tutee || tutee.isBanned)
             return res.status(404).send({ message: "Could not find tutee in database with provided id"})
     
         if (!tutor.subjectHourlyRate)
@@ -118,9 +118,9 @@ exports.reviewedTutor = async (req, res) => {
         }
         const tutor = await User.findById(req.body.tutorId)
         const tutee = await User.findById(req.userId)
-        if (!tutor)
+        if (!tutor || tutor.isBanned)
             return res.status(404).send({ message: "Could not find tutor in database with provided id"})
-        if (!tutee)
+        if (!tutee || tutee.isBanned)
             return res.status(404).send({ message: "Could not find tutee in database with provided id"})
     
         const reviewFactor = req.body.review * 0.1

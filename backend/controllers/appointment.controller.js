@@ -13,14 +13,11 @@ exports.cancelAppointment = async (req, res) => {
         var userId = req.userId
         var apptId = req.query.appointmentId
         var user = await User.findById(userId)
-            .then(user => {
-                if (!user || user.isBanned) {
-                    return res.status(400).send({
-                        message: "User not found"
-                    })
-                }
-                return user
+        if (!user || user.isBanned) {
+            return res.status(400).send({
+                message: "User not found"
             })
+        }
         var upcomingAppointments = await cleanupUserAppointments(user)
     
         if (!apptId) {
@@ -40,35 +37,29 @@ exports.cancelAppointment = async (req, res) => {
         var canceledAppt = await Appointment.findByIdAndUpdate(
             apptId, {status: AppointmentStatus.CANCELED},
             { new: true }
-        ).then(appt => {
-            if (!appt) {
-                return res.status(404).send({
-                    message: "Appointment not found"
-                })
-            }
-            return appt
-        })
+        )
+
+        if (!canceledAppt) {
+            return res.status(404).send({
+                message: "Appointment not found"
+            })
+        }
     
         user = await User.findById(userId)
-            .then(user => {
-                if (!user || user.isBanned) {
-                    return res.status(400).send({
-                        message: "User not found"
-                    })
-                }
-                return user
+            
+        if (!user || user.isBanned) {
+            return res.status(400).send({
+                message: "User not found"
             })
+        }
     
         var otherUserId = canceledAppt.participantsInfo
             .filter(user => user.userId != userId)[0].userId
         
-        var otherUser = await User.findById(otherUserId)
-            .then(user => {
-                if (!user || user.isBanned) {
-                    return res.status(400).send({ message: "User not found" })
-                }
-                return user
-            })
+        var otherUser = await User.findById(otherUserId)    
+        if (!otherUser || otherUser.isBanned) {
+            return res.status(400).send({ message: "User not found" })
+        }
         
         if (user.useGoogleCalendar) {
             await cancelGoogleEvent(user, otherUser, canceledAppt)
@@ -105,12 +96,9 @@ exports.getTutorAvailability = async (req, res) => {
             })
         }
         var tutor = await User.findById(tutorId)
-            .then(user => {
-                if (!user || user.isBanned) {
-                    return res.status(400).send({ message: "User not found" })
-                }
-                return user
-            })
+        if (!tutor || tutor.isBanned) {
+            return res.status(400).send({ message: "User not found" })
+        }
             
         var timeMin = momenttz(date)
             .tz('America/Los_Angeles')
@@ -167,12 +155,9 @@ exports.acceptAppointment = async (req, res) => {
     try {
         var userId = req.userId
         var user = await User.findById(userId)
-            .then(user => {
-                if (!user || user.isBanned) {
-                    return res.status(400).send({ message: "User not found" })
-                }
-                return user
-            })
+        if (!user || user.isBanned) {
+            return res.status(400).send({ message: "User not found" })
+        }
             
         if (user.type === UserType.TUTEE) {
             return res.status(403).send({ 
@@ -199,14 +184,12 @@ exports.acceptAppointment = async (req, res) => {
         var acceptedAppt = await Appointment.findByIdAndUpdate(
             apptId, {status: AppointmentStatus.ACCEPTED},
             { new: true }
-        ).then(appt => {
-            if (!appt) {
-                return res.status(404).send({
-                    message: "Appointment not found"
-                }) 
-            }
-            return appt
-        })
+        )
+        if (!acceptedAppt) {
+            return res.status(404).send({
+                message: "Appointment not found"
+            }) 
+        }
     
         await Appointment.updateMany(
             {
@@ -220,23 +203,17 @@ exports.acceptAppointment = async (req, res) => {
         )
     
         var tutor = await User.findById(userId)
-            .then(user => {
-                if (!user || user.isBanned) {
-                    return res.status(400).send({ message: "User not found" })
-                }
-                return user
-            })
+        if (!tutor || tutor.isBanned) {
+            return res.status(400).send({ message: "User not found" })
+        }
     
         var tuteeId = acceptedAppt.participantsInfo
             .filter(user => user.userId != userId)[0].userId
         
         var tutee = await User.findById(tuteeId)
-            .then(user => {
-                if (!user || user.isBanned) {
-                    return res.status(400).send({ message: "User not found" })
-                }
-                return user
-            })
+        if (!tutee || tutee.isBanned) {
+            return res.status(400).send({ message: "User not found" })
+        }
     
         if (tutor.useGoogleCalendar) {
             await createGoogleEvent(tutor, tutee, acceptedAppt)
@@ -264,16 +241,13 @@ exports.getUserAppointments = async (req, res) => {
         var courses = req.query.courses ? req.query.courses.split(',') : []
         var courseQuery = courses ? { course: { $in: courses } } : {};
     
-        var user = await User
-            .findById(userId)
-            .then(user => {
-                if (!user || user.isBanned) {
-                    return res.status(404).send({
-                        message: "The other user is not found"
-                    })
-                }
-                return user
+        var user = await User.findById(userId)
+            
+        if (!user || user.isBanned) {
+            return res.status(404).send({
+                message: "The other user is not found"
             })
+        }
         
         var appointments = await cleanupUserAppointments(user)
         var appointmentIds = appointments.map(appt => appt._id)
@@ -307,16 +281,15 @@ exports.getAppointment = async (req, res) => {
                         var otherUserName = ""
                         for (user of appt.participantsInfo) {
                             if (user.userId != req.userId) {
-                                otherUserName = await User
-                                    .findById(user.userId, "displayedName")
-                                    .then(user => {
-                                        if (!user || user.isBanned) {
-                                            return res.status(404).send({
-                                                message: "The other user is not found"
-                                            })
-                                        }
-                                        return user.displayedName
+                                var otherUser = await User
+                                    .findById(user.userId)
+                                    
+                                if (!otherUser || otherUser.isBanned) {
+                                    return res.status(404).send({
+                                        message: "The other user is not found"
                                     })
+                                }
+                                otherUserName = otherUser.displayedName
                             }
                         }
                         var ret = {
@@ -335,23 +308,15 @@ exports.getAppointment = async (req, res) => {
 exports.bookAppointment = async (req, res) => {
     try {
         const tutorId = req.body.tutorId
-        var tutor = await User
-            .findById(tutorId)
-            .then(user => {
-                if (!user || user.isBanned) {
-                    return res.status(400).send({ message: "User not found." })
-                }
-                return user
-            })
+        var tutor = await User.findById(tutorId)
+        if (!tutor || tutor.isBanned) {
+            return res.status(400).send({ message: "User not found." })
+        }
     
-        var tutee = await await User
-            .findById(req.userId)
-            .then(user => {
-                if (!user || user.isBanned) {
-                    return res.status(400).send({ message: "User not found." })
-                }
-                return user
-            })
+        var tutee = await User.findById(req.userId)
+        if (!tutee || tutee.isBanned) {
+            return res.status(400).send({ message: "User not found." })
+        }
     
         req.body.pstStartDatetime = toPST(req.body.pstStartDatetime)
         req.body.pstEndDatetime = toPST(req.body.pstEndDatetime)

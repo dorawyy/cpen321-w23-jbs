@@ -7,7 +7,7 @@ const Conversation = db.conversation
 exports.getList = async (req, res) => {
     try {
         const user = await User.findById(req.userId)
-        if (!user)
+        if (!user || user.isBanned)
             return res.status(404).send({ message: "Could not find user in database with provided id" })
     
         const conversationList = await Conversation.find({
@@ -35,7 +35,7 @@ exports.getConversation = async (req, res) => {
         return res.status(400).send({ message: "Page number cannot be less than 1" })
 
         const user = await User.findById(req.userId)
-        if (!user)
+        if (!user || user.isBanned)
             return res.status(404).send({ message: "Could not find user in database with provided id" })
 
         if (!mongoose.Types.ObjectId.isValid(req.query.conversationId)) {
@@ -76,14 +76,14 @@ exports.getConversation = async (req, res) => {
 exports.create = async (req, res) => {
     try {
         const user = await User.findById(req.userId)
-        if (!user)
+        if (!user || user.isBanned)
             return res.status(404).send({ message: "Could not find creating user in database with provided id" })
     
         if (!mongoose.Types.ObjectId.isValid(req.body.otherUserId)) {
             return res.status(400).send({ message: "Invalid provided userId" })
         }
         const otherUser = await User.findById(req.body.otherUserId)
-        if (!otherUser)
+        if (!otherUser || otherUser.isBanned)
             return res.status(404).send({ message: "Could not find other user in database with provided id" })
     
         const existingConversation = await Conversation.findOne({

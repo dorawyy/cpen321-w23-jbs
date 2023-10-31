@@ -100,14 +100,14 @@ exports.getTutorAvailability = async (req, res) => {
             return res.status(400).send({ message: "User not found" })
         }
             
-        var timeMin = momenttz(date)
-            .tz('America/Los_Angeles')
-            .startOf('day')
+        var tzOffset = momenttz()
+                    .tz('America/Los_Angeles')
+                    .format('Z')
+
+        var timeMin = momenttz(`${date}T08:00:00${tzOffset}`)
             .toISOString(true)
     
-        var timeMax = momenttz(date)
-            .tz('America/Los_Angeles')
-            .endOf('day')
+        var timeMax = momenttz(`${date}T19:00:00${tzOffset}`)
             .toISOString(true)
     
         if (tutor.useGoogleCalendar) {
@@ -122,9 +122,7 @@ exports.getTutorAvailability = async (req, res) => {
                     return avail.day === requestedDay 
                 })
                 var availabilities = []
-                var tzOffset = momenttz()
-                    .tz('America/Los_Angeles')
-                    .format('Z')
+                
                 for (block of dayAvailabilities) {            
                     var start = momenttz(`${date}T${block.startTime}:00${tzOffset}`)
                         .tz('America/Los_Angeles')
@@ -140,8 +138,8 @@ exports.getTutorAvailability = async (req, res) => {
                 return res.status(200).send(availabilities)
             } else {
                 var freeTimes = [{
-                    start: "00:00",
-                    end: "23:59"
+                    start: "08:00",
+                    end: "19:00"
                 }]
                 return res.status(200).send(freeTimes)
             }

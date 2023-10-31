@@ -28,95 +28,107 @@ const OAuth2Client = new google.auth.OAuth2(
 const User = db.user
 
 exports.googleAuth = (req, res) => {
-    const idToken = req.body.idToken
-    const authCode = req.body.authCode
-
-    verify(idToken, authCode).then(result => {
-        const jwtToken = jwt.sign(result.userId, secretKey)
-        return res.json({ 
-            jwtToken,
-            newUser: result.newUser,
-            type: result.type ? result.type : null
+    try {
+        const idToken = req.body.idToken
+        const authCode = req.body.authCode
+    
+        verify(idToken, authCode).then(result => {
+            const jwtToken = jwt.sign(result.userId, secretKey)
+            return res.json({ 
+                jwtToken,
+                newUser: result.newUser,
+                type: result.type ? result.type : null
+            })
         })
-    }).catch(err => {
+    } catch (err) {
         console.log(err)
-        return res.status(401).send({ message: err.message })
-    })
+        return res.status(500).send({ message: err.message })
+    }
+    
 }
 
 exports.signup = async (req, res) => {
-    console.log("signing up user")
-    var data = {...req.body}
-    var token = req.header('Authorization')
-    if (!token) {
-        data.password = bcrypt.hashSync(data.password)
-        new User({
-            ...data,
-            recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
-            hasSignedUp: true
-        }).save().then(user => {
-            if (!user) {
-                return res.status(500).send({ message: "Unable to create user"})
-            }
-            console.log(`new user: ${user}`)
-            const jwtToken = jwt.sign(user._id.toString(), secretKey)
-            return res.json({ jwtToken })
-        }).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
-    } else {
-        token = token.replace("Bearer ", "")
-        jwt.verify(token, secretKey, (err, userId) => {
-            if (err) {
-                console.log(err)
-                return res.status(403).send({ message: "Failed to verify JWT"}); // Forbidden
-            }
-            User.findByIdAndUpdate(userId, {
+    try {
+        console.log("signing up user")
+        var data = {...req.body}
+        if (data.type && data.type === UserType.ADMIN) {
+            return res.status(403).send({message: "Signing up as admin is not allowed"})
+        }
+        var token = req.header('Authorization')
+        if (!token) {
+            data.password = bcrypt.hashSync(data.password)
+            new User({
                 ...data,
                 recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
                 hasSignedUp: true
-            }, {new: true}).then(user => {
+            }).save().then(user => {
                 if (!user) {
-                    return res.status(404).send({
-                        message: "User not found. If manually sign up, remove Auth header."
-                    })
+                    return res.status(500).send({ message: "Unable to create user"})
                 }
-                return res.status(200).send({
-                    jwtToken: token
-                })
-            }).catch(err => {
-                console.log(err)
-                return res.status(500).send({ message: err.message })
+                console.log(`new user: ${user}`)
+                const jwtToken = jwt.sign(user._id.toString(), secretKey)
+                return res.json({ jwtToken })
             })
-        });
+        } else {
+            token = token.replace("Bearer ", "")
+            jwt.verify(token, secretKey, (err, userId) => {
+                if (err) {
+                    console.log(err)
+                    return res.status(403).send({ message: "Failed to verify JWT"}); // Forbidden
+                }
+                User.findByIdAndUpdate(userId, {
+                    ...data,
+                    recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
+                    hasSignedUp: true
+                }, {new: true}).then(user => {
+                    if (!user) {
+                        return res.status(404).send({
+                            message: "User not found. If manually sign up, remove Auth header."
+                        })
+                    }
+                    return res.status(200).send({
+                        jwtToken: token
+                    })
+                })
+            });
+        }
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({ message: err.message })
     }
+    
 }
 
 // Adapted from: https://www.bezkoder.com/node-js-mongodb-auth-jwt/ 
 exports.login = (req, res) => {
-    User.findOne({
-        username: req.body.username
-    }).then(user => {
-        if (!user) {
-            return res.status(401).send({ message: "Username or password is incorrect" })
-        }
-
-        var passwordIsValid = bcrypt.compareSync(
-            req.body.password,
-            user.password
-        )
-        
-        if (!passwordIsValid) {
-            return res.status(401).send({ message: "Username or password is incorrect" })
-        }
-
-        const jwtToken = jwt.sign(user._id.toString(), secretKey)
-        return res.status(200).send({
-            jwtToken,
-            type: user.type
+    try {
+        User.findOne({
+            username: req.body.username
+        }).then(user => {
+            if (!user) {
+                return res.status(401).send({ message: "Username or password is incorrect" })
+            }
+    
+            var passwordIsValid = bcrypt.compareSync(
+                req.body.password,
+                user.password
+            )
+            
+            if (!passwordIsValid) {
+                return res.status(401).send({ message: "Username or password is incorrect" })
+            }
+    
+            const jwtToken = jwt.sign(user._id.toString(), secretKey)
+            return res.status(200).send({
+                jwtToken,
+                type: user.type
+            })
         })
-    })
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({ message: err.message })
+    }
+    
 }
 
 async function verify(idToken, authCode) {

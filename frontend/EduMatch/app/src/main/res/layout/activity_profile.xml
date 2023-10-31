@@ -13,9 +13,9 @@
 
     <TextView
         android:id="@+id/name"
+        android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mary Wong"
         android:textSize="24sp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/topEmptyBar"
@@ -37,7 +37,7 @@ a
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:numStars="5"
-            android:rating="4.5"
+            android:rating="0"
             android:isIndicator="true"
             android:stepSize="0.5"/>
 
@@ -46,7 +46,6 @@ a
             android:id="@+id/ratingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4.5"
             android:textSize="18sp"
             android:layout_marginStart="4dp"/>
 
@@ -58,7 +57,7 @@ a
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@id/starRatingBar"
+        android:layout_below="@id/ratingLayout"
         android:layout_marginTop="16dp">
 
         <!-- Tutor Name -->
@@ -126,9 +125,24 @@ a
 
             <!-- Book Button -->
             <Button
+                android:id="@+id/bookButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Book"
+                android:textColor="#000000"
+                android:background="#FFFFFF"
+                android:padding="8dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:backgroundTint="#000000"
+                android:outlineSpotShadowColor="#000000"
+                android:outlineAmbientShadowColor="#000000"
+                android:stateListAnimator="@null"/>
+            <Button
+                android:id="@+id/chatButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chat"
                 android:textColor="#000000"
                 android:background="#FFFFFF"
                 android:padding="8dp"

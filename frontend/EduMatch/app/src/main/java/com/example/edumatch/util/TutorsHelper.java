@@ -20,4 +20,18 @@ public class TutorsHelper {
 
         return handleGetResponse(context,jsonResponse,logTag);
     }
+
+    public static JSONObject getTutorInfo(String id, Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+
+        String apiUrlWithUserId = "https://edumatch.canadacentral.cloudapp.azure.com" + "/user/publicProfile?userId=" + id;
+
+        JSONObject jsonResponse = sendHttpRequest(apiUrlWithUserId.toString(),sharedPreferences.getString("jwtToken", ""), "GET", null);
+
+        String logTag = "TutorInfoGet";
+
+        return handleGetResponse(context,jsonResponse,logTag);
+    }
+
+
 }

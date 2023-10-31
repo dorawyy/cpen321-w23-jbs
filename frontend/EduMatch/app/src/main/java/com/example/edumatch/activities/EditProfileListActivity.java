@@ -22,7 +22,9 @@ public class EditProfileListActivity extends AppCompatActivity {
         Button uniInfoButton = findViewById(R.id.uni_info);
         Button locationInfoButton = findViewById(R.id.location_info);
         Button availabilityInfoButton = findViewById(R.id.availability_info);
+
         Button signOutButton = findViewById(R.id.sign_out);
+
 
         updatePreferences();
 
@@ -52,8 +54,10 @@ public class EditProfileListActivity extends AppCompatActivity {
             startActivity(newIntent);
         });
 
+
         signOutButton.setOnClickListener(v -> {
             clearPreferences();
+
             Intent newIntent = new Intent(EditProfileListActivity.this,
                     MainActivity.class);
             startActivity(newIntent);

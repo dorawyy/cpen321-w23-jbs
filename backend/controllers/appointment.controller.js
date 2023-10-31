@@ -235,6 +235,7 @@ exports.acceptAppointment = async (req, res) => {
     }
 }
 
+// ChatGPT usage: Partial
 exports.getUserAppointments = async (req, res) => {
     try {
         var userId = req.userId
@@ -528,6 +529,7 @@ async function getAcceptedAppointments(appointments) {
     return acceptedAppointments
 }
 
+// ChatGPT usage: Partial
 async function getManualFreeTimes(user, timeMin, timeMax) {
     var upcomingAppointments = await cleanupUserAppointments(user)
     var acceptedAppointments = await getAcceptedAppointments(
@@ -608,7 +610,7 @@ async function getManualFreeTimes(user, timeMin, timeMax) {
     
 }
 
-// chatgpt
+// ChatGPT usage: Yes
 function toPST(dateString) {
     return momenttz(dateString).tz('America/Los_Angeles').format();
 }

@@ -15,6 +15,7 @@ const OAuth2Client = new google.auth.OAuth2(
     redirectUri 
 );
 
+// ChatGPT usage: Partial
 exports.cancelGoogleEvent = async (
     user, otherUser, canceledAppt
 ) => {
@@ -50,6 +51,7 @@ exports.cancelGoogleEvent = async (
     )
 }
 
+// ChatGPT usage: Partial
 exports.createGoogleEvent = async (
     user, otherUser, newAppt
 ) => {
@@ -77,8 +79,8 @@ exports.createGoogleEvent = async (
     };
     
     const response = await calendar.events.insert({
-            calendarId: 'primary',
-            resource: event,
+        calendarId: 'primary',
+        resource: event,
     })
 
     await saveNewAccessToken(
@@ -88,7 +90,7 @@ exports.createGoogleEvent = async (
     )
 }
 
-// chatgpt
+// ChatGPT usage: Partial
 exports.getFreeTime = async (
     user, timeMin, timeMax
 ) => {
@@ -114,6 +116,12 @@ exports.getFreeTime = async (
     const busyTimes = response.data.calendars[calendarId].busy;
     var freeTimes = []
 
+    if (busyTimes.length == 0) {
+        return [{
+            start: timeMin,
+            end: timeMax
+        }]
+    }
     // Include free time before the first busy period
     const firstBusyStart = momenttz(busyTimes[0].start)
                             .tz('America/Los_Angeles');
@@ -151,7 +159,7 @@ exports.getFreeTime = async (
     return freeTimes
 }
 
-// chatgpt
+// ChatGPT usage: Partial
 exports.getCalendarEvents = async (
     user, timeMin, timeMax
 ) => {

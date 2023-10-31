@@ -2,19 +2,16 @@ package com.example.edumatch.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.example.edumatch.R;
 
 public class MessageChipView extends RelativeLayout {
     private TextView textView;
     private RelativeLayout chipLayout; // Reference to the RelativeLayout
-
-    private boolean isUserMessage;
 
 
     public MessageChipView(Context context, AttributeSet attrs) {
@@ -45,10 +42,6 @@ public class MessageChipView extends RelativeLayout {
         chipLayout.setLayoutParams(layoutParams);
     }
 
-    public boolean getIsUserMessage() {
-        return isUserMessage;
-    }
-
     public void setIsReceiver(Boolean isReceiver) {
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -61,13 +54,11 @@ public class MessageChipView extends RelativeLayout {
             // Adjust layout parameters for received messages, e.g., gravity, margins, etc.
             layoutParams = (RelativeLayout.LayoutParams) chipLayout.getLayoutParams();
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            isUserMessage = false;
         } else {
             chipLayout.setBackgroundResource(R.drawable.sent_message);
             // Adjust layout parameters for sent messages, e.g., gravity, margins, etc.
             layoutParams = (RelativeLayout.LayoutParams) chipLayout.getLayoutParams();
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            isUserMessage = true;
         }
     }
 

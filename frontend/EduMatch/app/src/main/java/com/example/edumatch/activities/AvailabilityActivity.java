@@ -225,12 +225,24 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
             newIntent = new Intent(AvailabilityActivity.this, EditProfileListActivity.class);
             startActivity(newIntent);
         } else {
-            // TODO: this goes into the homepage
             //try posting user details
             JSONObject requestBody = constructSignUpRequest(AvailabilityActivity.this);// Create your JSON request body
             boolean success = postSignUpInfo(AvailabilityActivity.this,requestBody);
             if (success) {
-                newIntent = new Intent(AvailabilityActivity.this, EditProfileListActivity.class);
+                String userType = sharedPreferences.getString("userType", ""); // Assuming the key for user type is "type"
+
+                switch (userType) {
+                    case "tutee":
+                        newIntent = new Intent(AvailabilityActivity.this, TuteeHomeActivity.class);
+                        break;
+                    case "tutor":
+                        newIntent = new Intent(AvailabilityActivity.this, TutorHomeActivity.class);
+                        break;
+                    default:
+                        // Handle unexpected cases or errors here
+                        Toast.makeText(this, "Invalid user type", Toast.LENGTH_SHORT).show();
+                        return;
+                }
                 startActivity(newIntent);
             }
         }

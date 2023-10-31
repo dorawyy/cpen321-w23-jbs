@@ -16,17 +16,17 @@ public class CourseRateItemView extends RelativeLayout {
 
     public CourseRateItemView(Context context) {
         super(context);
-        init(context, null);
+        init(context);
     }
 
     public CourseRateItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
+        init(context);
     }
 
     public CourseRateItemView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context, attrs);
+        init(context);
     }
 
     public void setCourseText(String text) {
@@ -49,7 +49,7 @@ public class CourseRateItemView extends RelativeLayout {
         return "";
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void init(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.course_rate_item, this, true);
 

@@ -1,8 +1,8 @@
 package com.example.edumatch.util;
 
 public class MessageItem {
-    private String text;
-    private boolean isUserMessage;
+    private final String text;
+    private final boolean isUserMessage;
 
     public MessageItem(String text, boolean isUserMessage) {
         this.text = text;

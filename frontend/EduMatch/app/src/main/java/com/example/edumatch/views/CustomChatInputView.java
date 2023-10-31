@@ -5,14 +5,13 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
 import com.example.edumatch.R;
 
 public class CustomChatInputView extends RelativeLayout {
 
     private EditText editText;
-    private RelativeLayout sendLayout;
     private Button sendButton;
 
     public CustomChatInputView(Context context) {
@@ -36,7 +35,7 @@ public class CustomChatInputView extends RelativeLayout {
 
         // Find views by their IDs
         editText = findViewById(R.id.edit_text);
-        sendLayout = findViewById(R.id.send);
+        RelativeLayout sendLayout = findViewById(R.id.send);
         sendButton = findViewById(R.id.send_button);
     }
 

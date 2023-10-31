@@ -155,7 +155,6 @@ public class LocationInformationActivity extends AppCompatActivity {
         if(sharedPreferences.getBoolean("isEditing",false)){
             JSONObject request = constructEditLocationInformation();
             putEditProfile(request,LocationInformationActivity.this);
-            //TODO: do a PUT here (make a common function)
             newIntent = new Intent(LocationInformationActivity.this, EditProfileListActivity.class);
         } else {
             newIntent = new Intent(LocationInformationActivity.this, AvailabilityActivity.class);

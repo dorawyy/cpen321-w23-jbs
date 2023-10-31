@@ -14,6 +14,8 @@ public class MessageChipView extends RelativeLayout {
     private TextView textView;
     private RelativeLayout chipLayout; // Reference to the RelativeLayout
 
+    private boolean isUserMessage;
+
 
     public MessageChipView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -35,31 +37,40 @@ public class MessageChipView extends RelativeLayout {
         if (textView != null) {
             textView.setText(text);
         }
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        layoutParams.setMargins(0, 4, 0, 4);
+        chipLayout.setLayoutParams(layoutParams);
     }
 
-    public void setIsReceiver(Boolean isReceiver){
+    public boolean getIsUserMessage() {
+        return isUserMessage;
+    }
+
+    public void setIsReceiver(Boolean isReceiver) {
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        layoutParams.setMargins(0, 4, 0, 4);
+        chipLayout.setLayoutParams(layoutParams);
         if (isReceiver) {
-            // If the attribute indicates that the message is a receiver
-//            int alpha = 128; // 50% transparency
-//            int red = 173; // Red component
-//            int green = 216; // Green component
-//            int blue = 230; // Blue component
-//
-//            int color = Color.argb(alpha, red, green, blue);
-//
-//            chipLayout.setBackgroundColor(color);
             chipLayout.setBackgroundResource(R.drawable.received_message);
+            // Adjust layout parameters for received messages, e.g., gravity, margins, etc.
+            layoutParams = (RelativeLayout.LayoutParams) chipLayout.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            isUserMessage = false;
         } else {
-            // If the attribute indicates that the message is not a receiver
-            // Create new layout parameters
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) chipLayout.getLayoutParams();
-
-// Set the ALIGN_PARENT_RIGHT rule
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             chipLayout.setBackgroundResource(R.drawable.sent_message);
-
+            // Adjust layout parameters for sent messages, e.g., gravity, margins, etc.
+            layoutParams = (RelativeLayout.LayoutParams) chipLayout.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            isUserMessage = true;
         }
     }
+
 
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -69,9 +80,21 @@ public class MessageChipView extends RelativeLayout {
         textView = findViewById(R.id.text);
         chipLayout = findViewById(R.id.message_chip);
 
+        // Set the fixed width to 200dp
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT, // Replace with your dimension resource
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        // Additional parameters for message_chip
+        layoutParams.setMargins(0, 4, 0, 4);
+        chipLayout.setBackgroundResource(R.drawable.sent_message);
+
+        // Apply the layout parameters to chipLayout
+        chipLayout.setLayoutParams(layoutParams);
+
         // Retrieve and set the text attribute if it's provided
         if (attrs != null) {
-
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MessageChip);
             String text = typedArray.getString(R.styleable.MessageChip_messageText);
             typedArray.recycle();
@@ -80,7 +103,5 @@ public class MessageChipView extends RelativeLayout {
                 setChipText(text);
             }
         }
-
-
     }
 }

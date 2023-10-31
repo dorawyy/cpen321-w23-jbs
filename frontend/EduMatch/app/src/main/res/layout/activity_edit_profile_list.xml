@@ -13,6 +13,13 @@
 <!--		android:layout_width="match_parent"-->
 <!--		android:layout_height="40dp"-->
 <!--		android:background="@drawable/empty_bar"/>-->
+	<com.example.edumatch.views.AppBarCustomBackView
+		android:id="@+id/go_back"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent" />
 
 	<androidx.appcompat.widget.AppCompatButton
 		android:id="@+id/account_info"
@@ -68,6 +75,20 @@
 		android:paddingStart="36dp"
 		android:paddingTop="17dp"
 		android:text="Availability Information"
+		android:textAppearance="@style/black_button_text"
+		android:textStyle="bold" />
+
+	<androidx.appcompat.widget.AppCompatButton
+		android:id="@+id/log_out"
+		android:layout_width="wrap_content"
+		android:layout_height="60dp"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginBottom="12dp"
+		android:background="@drawable/big_button_container"
+		android:gravity="start"
+		android:paddingStart="36dp"
+		android:paddingTop="17dp"
+		android:text="Log Out"
 		android:textAppearance="@style/black_button_text"
 		android:textStyle="bold" />
 </LinearLayout>

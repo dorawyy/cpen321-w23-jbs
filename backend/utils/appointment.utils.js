@@ -145,7 +145,17 @@ async function checkUserAvailabilityWithGoogleCalendar(
     const events = await googleUtils.getCalendarEvents(
         user, pstStartDatetime, pstEndDatetime
     )
-    return events.length === 0;
+    var upcomingAppointments = await cleanupUserAppointments(user)
+    var conflicts = upcomingAppointments.filter(
+        appt => {
+            var newAppt = {
+                pstStartDatetime,
+                pstEndDatetime
+            }
+            return isConflicted(appt, newAppt)
+        } 
+    )
+    return events.length === 0 && conflicts.length === 0;
 }
 
 async function appointmentIsCompleted (appointmentId) {

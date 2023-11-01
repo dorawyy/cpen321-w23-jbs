@@ -92,7 +92,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
 
         LabelAndCommentTextView comment = findViewById(R.id.comment);
         JSONObject response = getAppointment(this ,appointmentId);
-        Log.d("appt2", response.toString());
+        Log.d("appt2", appointmentId);
         if(response != null){
             try {
                 if (response.has("otherUserName")) {

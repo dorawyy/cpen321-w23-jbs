@@ -13,17 +13,17 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
 
-
-    <View
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="40dp"
         app:layout_constraintTop_toBottomOf="@id/emptyBar"
-        android:layout_marginBottom="8dp"/>
+        android:id="@+id/spacer" />
+
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="500dp"
+        app:layout_constraintTop_toBottomOf="@id/spacer"
         android:fillViewport="true">
 
         <LinearLayout

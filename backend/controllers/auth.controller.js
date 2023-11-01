@@ -44,6 +44,9 @@ exports.googleAuth = (req, res) => {
                 newUser: result.newUser,
                 type: result.type ? result.type : null
             })
+        }).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
         })
     } catch (err) {
         console.log(err)
@@ -73,6 +76,9 @@ exports.signup = async (req, res) => {
                 console.log(`new user: ${user}`)
                 const jwtToken = jwt.sign(user._id.toString(), secretKey)
                 return res.json({ jwtToken })
+            }).catch(err => {
+                console.log(err)
+                return res.status(500).send({ message: err.message })
             })
         } else {
             token = token.replace("Bearer ", "")
@@ -94,6 +100,9 @@ exports.signup = async (req, res) => {
                     return res.status(200).send({
                         jwtToken: token
                     })
+                }).catch(err => {
+                    console.log(err)
+                    return res.status(500).send({ message: err.message })
                 })
             });
         }
@@ -128,6 +137,9 @@ exports.login = (req, res) => {
                 jwtToken,
                 type: user.type
             })
+        }).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
         })
     } catch (err) {
         console.log(err)

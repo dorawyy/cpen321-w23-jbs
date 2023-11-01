@@ -14,9 +14,17 @@ exports.addReview = async (req, res) => {
         
         var appointmentIsAccepted = await apptUtils
             .appointmentIsAccepted(req.body.appointmentId)
+            .catch(err => {
+                console.log(err)
+                return res.status(500).send({ message: err.message })
+            })
             
         var appointmentIsCompleted = await apptUtils
             .appointmentIsCompleted(req.body.appointmentId)
+            .catch(err => {
+                console.log(err)
+                return res.status(500).send({ message: err.message })
+            })
         
         if (!appointmentIsAccepted) {
             return res.status(403).send({ 
@@ -30,10 +38,18 @@ exports.addReview = async (req, res) => {
         }
     
         var appointment = await Appointment.findById(req.body.appointmentId)
+            .catch(err => {
+                console.log(err)
+                return res.status(500).send({ message: err.message })
+            })
     
         var reviewerId = req.userId
         var reviewer = await User
             .findById(reviewerId)
+            .catch(err => {
+                console.log(err)
+                return res.status(500).send({ message: err.message })
+            })
             
         if (!reviewer || reviewer.isBanned) {
             return res.status(400).send({message: "user not found"})
@@ -48,6 +64,10 @@ exports.addReview = async (req, res) => {
     
         var receiver = await User
             .findById(req.body.receiverId)
+            .catch(err => {
+                console.log(err)
+                return res.status(500).send({ message: err.message })
+            })
             
         if (!receiver || receiver.isBanned) {
             return res.status(400).send({message: "user not found"})
@@ -67,6 +87,10 @@ exports.addReview = async (req, res) => {
                 }
                 return ret
             })
+            .catch(err => {
+                console.log(err)
+                return res.status(500).send({ message: err.message })
+            })
     
         for (var i = 0; i < 2; i++) {
             var participant = appointment.participantsInfo[i]
@@ -78,6 +102,9 @@ exports.addReview = async (req, res) => {
     
         appointment.save().then(result => {
             return res.status(200).send(ret)
+        }).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
         })
     } catch (err) {
         console.log(err)
@@ -101,6 +128,9 @@ exports.getUserReviews = (req, res) => {
                 userReviews: user.userReviews
             }
             return res.status(200).send(ret)
+        }).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
         })
     } catch (err) {
         console.log(err.message)

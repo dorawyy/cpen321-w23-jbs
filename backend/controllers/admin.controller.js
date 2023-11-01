@@ -146,13 +146,19 @@ exports.getProfile = async (req, res) => {
                 '_id': 0,
                 'comment': 'userReviews.comment'
             } }
-        ])
+        ]).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
     
         const userConversations = await Conversation.find({
             $or: [
                 { 'participants.userId1': req.query.userId },
                 { 'participants.userId2': req.query.userId }
             ]
+        }).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
         })
     
         const userMessages = []

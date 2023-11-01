@@ -49,6 +49,7 @@ public class LocationInformationActivity extends AppCompatActivity {
 
     private AutocompleteSupportFragment autocompleteFragment;
 
+    // ChatGPT usage: Yes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +71,7 @@ public class LocationInformationActivity extends AppCompatActivity {
 
     }
 
+    // ChatGPT usage: Yes
     @SuppressLint("SetTextI18n")
     private void initRadioGroup() {
         RadioGroup radioGroup = findViewById(R.id.radio_group);
@@ -96,6 +98,7 @@ public class LocationInformationActivity extends AppCompatActivity {
         });
     }
 
+    // ChatGPT usage: Yes
     private void initAutoComplete() {
         autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
@@ -121,6 +124,7 @@ public class LocationInformationActivity extends AppCompatActivity {
         });
     }
 
+    // ChatGPT usage: Yes
     private void initNextButton() {
         Button nextButton = findViewById(R.id.next_button);
 
@@ -133,6 +137,7 @@ public class LocationInformationActivity extends AppCompatActivity {
         });
     }
 
+    // ChatGPT usage: Yes
     private void updatePreferences() {
 
         editor.putString("locationMode", isOnline ? "online" : "in person");
@@ -148,6 +153,7 @@ public class LocationInformationActivity extends AppCompatActivity {
 
     }
 
+    // ChatGPT usage: Yes
     private void goToNewActivity() {
         Intent newIntent;
         updatePreferences();
@@ -168,7 +174,7 @@ public class LocationInformationActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
     }
 
-
+    // ChatGPT usage: Yes
     public JSONObject constructEditLocationInformation() {
 
         try {

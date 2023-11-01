@@ -41,6 +41,7 @@ public class TutorRateActivity extends AppCompatActivity {
         initSubmitButton();
     }
 
+    // ChatGPT usage: Yes
     private void initComponents() {
         CheckBox noShowCheckBox = findViewById(R.id.no_show);
         CheckBox lateCheckBox = findViewById(R.id.late);
@@ -59,6 +60,7 @@ public class TutorRateActivity extends AppCompatActivity {
         nameTextView.setText(receiverName);
     }
 
+    // ChatGPT usage: Yes
     private void initSubmitButton() {
         Button submitButton = findViewById(R.id.submit_button);
 
@@ -79,6 +81,7 @@ public class TutorRateActivity extends AppCompatActivity {
         });
     }
 
+    // ChatGPT usage: Yes
     private JSONObject constructRatingWeightRequest() {
         try {
             JSONObject requestBody = new JSONObject();
@@ -94,7 +97,7 @@ public class TutorRateActivity extends AppCompatActivity {
     }
 
 
-
+    // ChatGPT usage: Yes
     private JSONObject constructRatingRequest() {
         try {
             JSONObject requestBody = new JSONObject();

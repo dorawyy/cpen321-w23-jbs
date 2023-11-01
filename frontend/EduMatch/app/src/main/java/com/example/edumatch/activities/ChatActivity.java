@@ -47,6 +47,7 @@ public class ChatActivity extends AppCompatActivity {
     private MessageAdapter messageAdapter;
     private RecyclerView recyclerView;
 
+    // ChatGPT usage: Yes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,19 +97,21 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    // ChatGPT usage: Yes
     @Override
     protected void onStop() {
         super.onStop();
         closeWebSocket();
     }
 
-
+    // ChatGPT usage: Yes
     private void loadMoreMessages() {
         if (oldestMessageId != -1) {
             callGetMessages(String.valueOf(oldestMessageId));
         }
     }
 
+    // ChatGPT usage: Yes
     private void callGetMessages(String page) {
         if (oldestMessageId != -1) {
             Log.d("MessagesGet",String.valueOf(oldestMessageId));
@@ -136,6 +139,7 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT usage: Yes
     private void sendMessage() {
         String messageText = messageEditText.getText().toString().trim();
         if (!messageText.isEmpty()) {
@@ -161,6 +165,7 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT usage: Yes
     private void initWebSocket() {
         SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("jwtToken", "");
@@ -186,6 +191,7 @@ public class ChatActivity extends AppCompatActivity {
         webSocket = client.newWebSocket(request, webSocketListener);
     }
 
+    // ChatGPT usage: Yes
     private void handleReceivedMessage(String message) {
         try {
             JSONObject jsonObject = new JSONObject(message);
@@ -204,12 +210,14 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT usage: Yes
     private void sendWebSocketMessage(JSONObject message) {
         if (webSocket != null) {
             webSocket.send(message.toString());
         }
     }
 
+    // ChatGPT usage: Yes
     private void closeWebSocket() {
         if (webSocket != null) {
             webSocket.close(1000, "WebSocket closing");

@@ -17,6 +17,7 @@ import java.util.Set;
 
 public class ProfileHelper {
 
+    // ChatGPT usage: Yes
     public static JSONObject constructSignUpRequest(Context context) {
         try {
             // Retrieve data from SharedPreferences
@@ -125,11 +126,12 @@ public class ProfileHelper {
         }
     }
 
+    // ChatGPT usage: Yes
     public static void logRequestToConsole(JSONObject request) {
         Log.d("RequestProfileHelper", "Request JSON: " + request.toString());
     }
 
-
+    // ChatGPT usage: Yes
     public static Boolean putEditProfile(JSONObject request, Context context) {
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/user/editProfile";
 
@@ -144,7 +146,7 @@ public class ProfileHelper {
         return handlePutPostResponse(context,jsonResponse,successMessage,logTag);
     }
 
-
+    // ChatGPT usage: Yes
     public static Boolean getProfile(Context context) {
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/user/profile";
 

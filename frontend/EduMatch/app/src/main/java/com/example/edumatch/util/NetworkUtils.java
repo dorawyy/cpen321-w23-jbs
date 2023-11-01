@@ -27,6 +27,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class NetworkUtils {
 
+    // ChatGPT usage: Yes
     private static HttpsURLConnection createConnection(String apiUrl, String accessToken, String httpMethod, JSONObject requestBody) throws IOException {
         URL url = new URL(apiUrl);
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
@@ -52,6 +53,7 @@ public class NetworkUtils {
         return connection;
     }
 
+    // ChatGPT usage: Yes
     private static JSONObject handleResponse(HttpsURLConnection connection) throws IOException, JSONException {
         int responseCode = connection.getResponseCode();
         if (responseCode == HttpsURLConnection.HTTP_OK) {
@@ -88,6 +90,7 @@ public class NetworkUtils {
         }
     }
 
+    // ChatGPT usage: Yes
     public static JSONObject sendHttpRequest(String apiUrl, String accessToken, String httpMethod, JSONObject requestBody) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         CompletableFuture<JSONObject> future = new CompletableFuture<>();
@@ -128,11 +131,12 @@ public class NetworkUtils {
         }
     }
 
+    // ChatGPT usage: Yes
     public static void showToastOnUiThread(final Context context, final String message) {
         new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(context, message, Toast.LENGTH_SHORT).show());
     }
 
-
+    // ChatGPT usage: Yes
     public static boolean handlePutPostResponse(Context context, JSONObject jsonResponse, String successMessage, String logTag) {
         if (jsonResponse != null) {
             try {
@@ -180,6 +184,7 @@ public class NetworkUtils {
         return true;
     }
 
+    // ChatGPT usage: Yes
     public static JSONObject handleGetResponse(Context context, JSONObject jsonResponse, String logTag) {
         if (jsonResponse != null) {
             try {

@@ -19,6 +19,7 @@ public class SubjectChipView extends RelativeLayout {
 
     private ChipClickListener chipClickListener;
 
+    // ChatGPT usage: Yes
     public void setChipClickListener(ChipClickListener listener) {
         this.chipClickListener = listener;
     }
@@ -30,35 +31,42 @@ public class SubjectChipView extends RelativeLayout {
 
     private OnChipRemovedListener chipRemovedListener;
 
+    // ChatGPT usage: Yes
     public interface OnChipRemovedListener {
         void onChipRemoved(String course);
     }
+
+    // ChatGPT usage: Yes
     public SubjectChipView(Context context) {
         super(context);
         init(context, null);
     }
 
+    // ChatGPT usage: Yes
     public SubjectChipView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
+    // ChatGPT usage: Yes
     public SubjectChipView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
+    // ChatGPT usage: Yes
     public void setChipText(String text) {
         if (textView != null) {
             textView.setText(text);
         }
     }
 
-
+    // ChatGPT usage: Yes
     public void setChipRemovedListener(OnChipRemovedListener listener) {
         this.chipRemovedListener = listener;
     }
 
+    // ChatGPT usage: Yes
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.subject_chip_component, this, true);
@@ -105,6 +113,7 @@ public class SubjectChipView extends RelativeLayout {
         });
     }
 
+    // ChatGPT usage: Yes
     private void updateBackgroundColor() {
         if (isClicked) {
             setBackgroundColor(Color.parseColor("#A9A9A9")); // Dark Grey color when clicked

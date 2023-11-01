@@ -42,7 +42,7 @@ public class TutorOrTuteeActivity extends AppCompatActivity {
         });
     }
 
-
+    // ChatGPT usage: Yes
     private SharedPreferences updatePreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -51,6 +51,7 @@ public class TutorOrTuteeActivity extends AppCompatActivity {
         return sharedPreferences;
     }
 
+    // ChatGPT usage: Yes
     private void goToNewActivity() {
         Intent newIntent = new Intent(TutorOrTuteeActivity.this, AccountInformationActivity.class);
         SharedPreferences sharedPreferences =  updatePreferences();

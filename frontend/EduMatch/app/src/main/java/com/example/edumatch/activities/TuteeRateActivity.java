@@ -36,6 +36,7 @@ public class TuteeRateActivity extends AppCompatActivity {
         initSubmitButton();
     }
 
+    // ChatGPT usage: Yes
     private void initComponents() {
         CheckBox noShowCheckBox = findViewById(R.id.no_show);
         CheckBox lateCheckBox = findViewById(R.id.late);
@@ -54,6 +55,7 @@ public class TuteeRateActivity extends AppCompatActivity {
         name.setText("NEED THIS INFO FROM PREVIOUS VIEW");
     }
 
+    // ChatGPT usage: Yes
     private void initSubmitButton() {
         Button submitButton = findViewById(R.id.submit_button);
 
@@ -72,7 +74,7 @@ public class TuteeRateActivity extends AppCompatActivity {
         });
     }
 
-
+    // ChatGPT usage: Yes
     private JSONObject constructRatingRequest() {
         try {
             JSONObject requestBody = new JSONObject();

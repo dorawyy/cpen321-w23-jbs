@@ -114,7 +114,10 @@ exports.getTutorAvailability = async (req, res) => {
             var freeTimes = await googleUtils.getFreeTime(
                 tutor, timeMin, timeMax
             )
-            return res.status(200).send(freeTimes)
+            var ret = {
+                availability: freeTimes
+            }
+            return res.status(200).send(ret)
         } else {
             if (tutor.manualAvailability) {
                 var requestedDay = momenttz(date).format("dddd")
@@ -135,12 +138,18 @@ exports.getTutorAvailability = async (req, res) => {
                     )
                     availabilities = availabilities.concat(freeTimes)
                 }
+                var ret = {
+                    availability: availabilities
+                }
                 return res.status(200).send(availabilities)
             } else {
                 var freeTimes = [{
                     start: "08:00",
                     end: "19:00"
                 }]
+                var ret = {
+                    availability: freeTimes
+                }
                 return res.status(200).send(freeTimes)
             }
         }

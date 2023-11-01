@@ -261,27 +261,45 @@ exports.getUserAppointments = async (req, res) => {
                 message: "The other user is not found"
             })
         }
-        
-        var appointments = await apptUtils.cleanupUserAppointments(user)
-        var appointmentIds = appointments.map(appt => appt._id)
 
-        var query =  {
-            _id: {
-                $in: appointmentIds
-            }
+        var timeMin = momenttz()
+            .tz('America/Los_Angeles')
+            .subtract(15, 'days')
+            .startOf('day')
+            .toISOString(true)
+        
+        var timeMax = momenttz()
+            .tz('America/Los_Angeles')
+            .add(15, 'days')
+            .endOf('day')
+            .toISOString(true)
+        
+
+        var query = { 
+            $or: [
+                { pstEndDatetime: { $gte: timeMin } },
+                { pstStartDatetime: { $gte: timeMin } },
+            ],
+            $or: [
+                { pstEndDatetime: { $lte: timeMax } },
+                { pstStartDatetime: { $lte: timeMax } },
+            ],
+            'participantsInfo.userId': userId,
         }
+
         if (courses.length > 0) {
             query.course = {
                 $in: courses
             }
         }
-    
-        var filteredAppts = await Appointment
+
+        var appointments = await Appointment
             .find({
-                ...query,
+                ...query
             })
-    
-        return res.status(200).send({appointments: filteredAppts})
+            .sort({ pstStartDatetime: 'asc'})
+
+        return res.status(200).send({appointments: appointments})
     } catch (err) {
         console.log(err)
         return res.status(500).send({

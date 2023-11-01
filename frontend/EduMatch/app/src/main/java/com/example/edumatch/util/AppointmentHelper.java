@@ -21,12 +21,12 @@ public class AppointmentHelper {
 
 
     public static boolean putAppointment(Context context, JSONObject requestBody, String appointmentId) {
-        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/appointment?appointmentId=" + appointmentId;
+        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/appointment/cancel?appointmentId=" + appointmentId;
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 
         JSONObject jsonResponse = sendHttpRequest(apiUrl, sharedPreferences.getString("jwtToken", ""), "PUT", requestBody);
-
+        Log.d("appt", jsonResponse.toString());
         String successMessage = "Successfully Canceled Appointment";
         String logTag = "AppointmentPut";
 
@@ -60,14 +60,13 @@ public class AppointmentHelper {
 
 
     public static JSONObject getAppointment(Context context, String appointmentId) {
-        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/appointment?appointmentID=" + appointmentId;
+        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/appointment?appointmentId=" + appointmentId;
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         Log.d("appt2", apiUrl);
 
         JSONObject jsonResponse = sendHttpRequest(apiUrl, sharedPreferences.getString("jwtToken", ""), "GET", null);
 
-        Log.d("appt2", jsonResponse.toString());
         String logTag = "AppointmentGet";
 
         return handleGetResponse(context,jsonResponse,logTag);

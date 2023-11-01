@@ -116,10 +116,18 @@ public class SubjectChipView extends RelativeLayout {
         }
     }
 
+    public String getText() {
+        if (textView != null) {
+            return textView.getText().toString();
+        }
+        return null;
+    }
+
     public void hideRemoveSubjectImageView() {
         ImageView removeImageView = findViewById(R.id.remove_subject_imageview);
         if (removeImageView != null) {
             removeImageView.setVisibility(View.GONE);
+            removeImageView = null;
         }
         TextView subjectText = findViewById(R.id.text);
         if (subjectText != null) {

@@ -110,20 +110,19 @@ a
 
             <!-- Pricing Button -->
             <Button
+                android:id="@+id/pricingButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pricing"
                 android:textColor="#000000"
                 android:background="#FFFFFF"
                 android:padding="8dp"
-                android:layout_marginEnd="8dp"
                 android:gravity="center"
                 android:backgroundTint="#000000"
                 android:outlineSpotShadowColor="#000000"
                 android:outlineAmbientShadowColor="#000000"
                 android:stateListAnimator="@null"/>
 
-            <!-- Book Button -->
             <Button
                 android:id="@+id/bookButton"
                 android:layout_width="wrap_content"

@@ -5,7 +5,6 @@ import static com.example.edumatch.util.AdminHelper.getAdminHome;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,9 +29,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         apiUrlBuilder.append("/admin/users");
 
         JSONObject jsonResponse = getAdminHome(apiUrlBuilder,AdminHomeActivity.this);
-        Log.d("admin", String.valueOf(jsonResponse));
         SharedPreferences sharedPreferences = this.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
-        Log.d("admin", sharedPreferences.getString("jwtToken", ""));
 
         try {
             JSONArray usersArray = jsonResponse.getJSONArray("users"); // assuming the key is "users"
@@ -47,6 +44,12 @@ public class AdminHomeActivity extends AppCompatActivity {
                 adminListComponent.setNameText(user.getString("displayedName"));
                 adminListComponent.setUsernameText(user.getString("username"));
                 adminListComponent.setType(user.getString("type"));
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                layoutParams.setMargins(0, 16, 0, 16); // 16dp top and bottom margins
+                adminListComponent.setLayoutParams(layoutParams);
 
                 linearLayout.addView(adminListComponent);
             }

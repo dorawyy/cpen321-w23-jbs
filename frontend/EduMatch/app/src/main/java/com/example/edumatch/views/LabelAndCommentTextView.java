@@ -34,6 +34,12 @@ public class LabelAndCommentTextView extends GridLayout {
         return content;
     }
 
+    public void setText(String text) {
+        if (content != null) {
+            content.setText(text);
+        }
+    }
+
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.label_and_comment_text, this, true);

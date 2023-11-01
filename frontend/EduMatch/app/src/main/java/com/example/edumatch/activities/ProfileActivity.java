@@ -1,5 +1,6 @@
 package com.example.edumatch.activities;
 
+import static com.example.edumatch.util.ConversationHelper.createConversation;
 import static com.example.edumatch.util.TutorsHelper.getTutorInfo;
 
 import android.content.Intent;
@@ -56,7 +57,8 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         Button bookButton = findViewById(R.id.bookButton);
-
+        Button pricingButton = findViewById(R.id.pricingButton);
+        Button chatButton = findViewById(R.id.chatButton);
         bookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,6 +72,32 @@ public class ProfileActivity extends AppCompatActivity {
                 intent.putExtra("TUTOR_ID", tutorId);
 
                 // Start the activity
+                startActivity(intent);
+            }
+        });
+        pricingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // To do: add pricing
+                // Logic for Book button click
+                Toast.makeText(ProfileActivity.this, "Book button clicked", Toast.LENGTH_SHORT).show();
+                // You can replace the Toast with your actual logic.
+
+                Intent intent = new Intent(ProfileActivity.this, BookingFlowActivity.class);
+
+                // Pass the user id to the new activity
+                intent.putExtra("TUTOR_ID", tutorId);
+
+                // Start the activity
+                startActivity(intent);
+            }
+        });
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ProfileActivity.this, "Chat button clicked", Toast.LENGTH_SHORT).show();
+                createConversation(ProfileActivity.this, tutorId);
+                Intent intent = new Intent(ProfileActivity.this, ChatListActivity.class);
                 startActivity(intent);
             }
         });

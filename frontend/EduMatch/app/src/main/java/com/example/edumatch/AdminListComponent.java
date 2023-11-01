@@ -74,7 +74,6 @@ public class AdminListComponent extends LinearLayout {
             activeButton.setText("Active");
         }
 
-        // Set the user ID as a tag on the button
         activeButton.setTag(user.getString("userId"));
     }
 
@@ -82,7 +81,7 @@ public class AdminListComponent extends LinearLayout {
         nameTextView.setText(name);
     }
     public void setType(String name) {
-        nameTextView.setText(name);
+        typeTextView.setText(name);
     }
 
     public void setUsernameText(String username) {

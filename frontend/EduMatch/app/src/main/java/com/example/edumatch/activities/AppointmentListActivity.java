@@ -4,7 +4,6 @@ import static com.example.edumatch.util.AppointmentHelper.getAppointments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class AppointmentListActivity extends AppCompatActivity {
+    String tutorName;
+    String tutorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +50,6 @@ public class AppointmentListActivity extends AppCompatActivity {
                 String course = appointmentObject.getString("course");
                 String apptId = appointmentObject.getString("_id");
                 appointmentView.setTag(apptId);
-                appointmentView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String clickedAppointmentId = (String) v.getTag();
-                        Log.d("appt", clickedAppointmentId);
-                        Intent intent = new Intent(AppointmentListActivity.this, ScheduledAppointmentActivity.class);
-                        intent.putExtra("appointmentId", clickedAppointmentId);
-                        startActivity(intent);
-                    }
-                });
 
                 String pstStartTime = appointmentObject.getString("pstStartDatetime");
                 String pstEndTime = appointmentObject.getString("pstEndDatetime");
@@ -66,10 +57,11 @@ public class AppointmentListActivity extends AppCompatActivity {
 
                 // Extracting the tutor's displayed name
                 JSONArray participantsInfo = appointmentObject.getJSONArray("participantsInfo");
-                String tutorName = "";
+
 
                 JSONObject participant = participantsInfo.getJSONObject(1);
                 tutorName = participant.getString("displayedName");
+                tutorId = participant.getString("userId");
                 TextView courseText = appointmentView.findViewById(R.id.courseCode);
                 courseText.setText(course);
                 TextView nameText = appointmentView.findViewById(R.id.tutorName);
@@ -101,6 +93,18 @@ public class AppointmentListActivity extends AppCompatActivity {
                 dateText.setText(date);
                 TextView intervalText = appointmentView.findViewById(R.id.timeInterval);
                 intervalText.setText(interval);
+
+                appointmentView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String clickedAppointmentId = (String) v.getTag();
+                        Intent intent = new Intent(AppointmentListActivity.this, ScheduledAppointmentActivity.class);
+                        intent.putExtra("appointmentId", clickedAppointmentId);
+                        intent.putExtra("tutorName", tutorName);
+                        intent.putExtra("tutorId", tutorId);
+                        startActivity(intent);
+                    }
+                });
 
                 appointmentListLayout.addView(appointmentView);
             }

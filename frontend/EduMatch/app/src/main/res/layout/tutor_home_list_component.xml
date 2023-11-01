@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/userType"
+            android:id="@+id/subject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
@@ -22,17 +22,15 @@
             android:layout_marginBottom="2dp" />
 
         <TextView
-            android:id="@+id/nameTextView"
+            android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:textStyle="bold"
-            android:textSize="22sp"
-
+            android:textSize="20sp"
             android:layout_marginBottom="2dp" />
 
         <TextView
-            android:id="@+id/usernameTextView"
+            android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
@@ -41,12 +39,25 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/activeButton"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ACTIVE"
-        android:textColor="@android:color/white"
-        android:layout_gravity="center_vertical" />
+        android:orientation="vertical"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/accept"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/accept"
+            android:layout_marginBottom="8dp"/>
+
+        <Button
+            android:id="@+id/decline"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/decline"
+            android:layout_marginTop="8dp" /> <!-- Add margin top here -->
+    </LinearLayout>
 
 </LinearLayout>

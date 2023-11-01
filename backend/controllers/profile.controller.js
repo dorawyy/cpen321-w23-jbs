@@ -42,6 +42,7 @@ exports.getPublicProfile = (req, res) => {
                 program: user.program,
                 courses: user.education.courses,
                 tags: user.education.tags,
+                subjectHourlyRate: user.subjectHourlyRate,
                 top2Ratings
             }
             return res.status(200).send(data)

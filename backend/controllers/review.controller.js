@@ -5,6 +5,7 @@ const appointmentController = require("./appointment.controller")
 const apptUtils = require("../utils/appointment.utils")
 const User = db.user
 
+// ChatGPT usage: No
 exports.addReview = async (req, res) => {
     try {
         if (!req.body.appointmentId) {
@@ -84,6 +85,7 @@ exports.addReview = async (req, res) => {
     } 
 }
 
+// ChatGPT usage: No
 exports.getUserReviews = (req, res) => {
     try {
         var userId = req.query.userId
@@ -106,6 +108,7 @@ exports.getUserReviews = (req, res) => {
     }
 }
 
+// ChatGPT usage: No
 exports.getOverallRating = (userReviews) => {
     if (userReviews.length == 0) {
         return 0
@@ -116,5 +119,3 @@ exports.getOverallRating = (userReviews) => {
     }
     return sum/userReviews.length
 }
-
-

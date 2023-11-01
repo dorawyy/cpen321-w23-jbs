@@ -8,6 +8,7 @@ const momenttz = require("moment-timezone")
 const User = db.user
 const Appointment = db.appointment
 
+// ChatGPT usage: No
 exports.cancelAppointment = async (req, res) => {
     try {
         var userId = req.userId
@@ -81,11 +82,10 @@ exports.cancelAppointment = async (req, res) => {
         return res.status(500).send({
             message: err.message
         })
-    }
-    
-    
+    }   
 }
 
+// ChatGPT usage: No
 exports.getTutorAvailability = async (req, res) => {
     try {
         var tutorId = req.query.userId
@@ -151,6 +151,7 @@ exports.getTutorAvailability = async (req, res) => {
         
 }
 
+// ChatGPT usage: No
 exports.acceptAppointment = async (req, res) => {
     try {
         var userId = req.userId
@@ -281,6 +282,7 @@ exports.getUserAppointments = async (req, res) => {
     
 }
 
+// ChatGPT usage: No
 exports.getAppointment = async (req, res) => {
     try {
         var appointmentId = req.query.appointmentId
@@ -310,6 +312,7 @@ exports.getAppointment = async (req, res) => {
     }
 }
 
+// ChatGPT usage: No
 exports.bookAppointment = async (req, res) => {
     try {
         const tutorId = req.body.tutorId
@@ -378,4 +381,3 @@ exports.bookAppointment = async (req, res) => {
         return res.status(500).send({ message: err.message })
     }
 }
-

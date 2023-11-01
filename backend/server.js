@@ -79,6 +79,8 @@ if (env === 'prod') {
     const clients = new Map() // Currently connected client sockets
     
     const wss = new ws.Server({ server: httpsServer })
+
+    // ChatGPT usage: No
     wss.on('connection', (ws, req) => {
         console.log("client connected to chat socket")
         const token = req.url.split('?token=')[1]

@@ -1,7 +1,7 @@
 const db = require("../db")
 const User = db.user
 
-
+// ChatGPT usage: No
 function verifyAccountStatus(req, res, next) {
     try {
         var userId = req.userId

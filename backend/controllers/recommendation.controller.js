@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 
 const User = db.user
 
+// ChatGPT usage: No
 exports.checkedProfile = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
@@ -33,9 +34,9 @@ exports.checkedProfile = async (req, res) => {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
+// ChatGPT usage: No
 exports.contactedTutor = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
@@ -69,9 +70,9 @@ exports.contactedTutor = async (req, res) => {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
+// ChatGPT usage: No
 exports.scheduledAppointment = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
@@ -108,9 +109,9 @@ exports.scheduledAppointment = async (req, res) => {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
+// ChatGPT usage: No
 exports.reviewedTutor = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
@@ -145,6 +146,5 @@ exports.reviewedTutor = async (req, res) => {
     } catch (err) {
         console.log(err)
         return res.status(500).send({ message: err.message })
-    }
-    
+    } 
 }

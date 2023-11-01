@@ -2,6 +2,7 @@ const axios = require("axios")
 
 const API_URL =  "https://ubcgrades.com/api/v3"
 
+// ChatGPT usage: No
 exports.getCourseCodes = async (req, res) => {
     try {
         const code = req.query.code
@@ -20,6 +21,5 @@ exports.getCourseCodes = async (req, res) => {
         return res.status(500).send({
             message: err.message
         })
-    }
-    
+    }  
 }

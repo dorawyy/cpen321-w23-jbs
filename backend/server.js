@@ -157,6 +157,10 @@ if (env === 'prod') {
     httpsServer.listen(443, () => {
         console.log('HTTPS Server running on port 443');
     });
+
+    process.on('uncaughtException', (error) => {
+        console.error('Uncaught Exception:', error)
+    });
 } else {
     // LOCAL
     app.listen(PORT, () => {

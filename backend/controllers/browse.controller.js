@@ -11,7 +11,10 @@ exports.recommended = async (req, res) => {
         if (req.query.page < 1)
         return res.status(400).send({ message: "Page number cannot be less than 1" })
 
-        const tutee = await User.findById(req.userId)
+        const tutee = await User.findById(req.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!tutee || tutee.isBanned)
             return res.status(404).send({ message: "Could not find tutee in database with provided id"})
 
@@ -21,6 +24,9 @@ exports.recommended = async (req, res) => {
                 'education.courses': { $in: req.query.courses.split(',')},
                 'type': UserType.TUTOR,
                 isBanned: false
+            }).catch(err => {
+                console.log(err)
+                return res.status(500).send({ message: err.message })
             })
             tutors.sort((a, b) => score(tutee, b) - score(tutee, a))
 
@@ -48,6 +54,9 @@ exports.recommended = async (req, res) => {
                     'education.courses': { $in: tutee.education.courses },
                     'type': UserType.TUTOR,
                     isBanned: false
+                }).catch(err => {
+                    console.log(err)
+                    return res.status(500).send({ message: err.message })
                 })
                 if (req.query.page * 10 <= tutorsWithSharedCourses.length) {
                     // the page will display only tutors with shared courses
@@ -73,6 +82,9 @@ exports.recommended = async (req, res) => {
                         'education.courses': { $nin: tutee.education.courses },
                         'type': UserType.TUTOR,
                         isBanned: false
+                    }).catch(err => {
+                        console.log(err)
+                        return res.status(500).send({ message: err.message })
                     })
                     tutorsWithSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
                     tutorsWithoutSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
@@ -99,6 +111,9 @@ exports.recommended = async (req, res) => {
                         'education.courses': { $nin: tutee.education.courses },
                         'type': UserType.TUTOR,
                         isBanned: false
+                    }).catch(err => {
+                        console.log(err)
+                        return res.status(500).send({ message: err.message })
                     })
                     tutorsWithoutSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
                     const tutorsToDisplay = tutorsWithoutSharedCourses.slice((req.query.page - 1) * 10, req.query.page * 10)
@@ -121,6 +136,9 @@ exports.recommended = async (req, res) => {
                 const tutors = await User.find({
                     'type': UserType.TUTOR,
                     isBanned: false
+                }).catch(err => {
+                    console.log(err)
+                    return res.status(500).send({ message: err.message })
                 })
                 tutors.sort((a, b) => score(tutee, b) - score(tutee, a))
                 const tutorsToDisplay = tutors.slice((req.query.page - 1) * 10, req.query.page * 10)
@@ -143,7 +161,6 @@ exports.recommended = async (req, res) => {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
 // ChatGPT usage: No

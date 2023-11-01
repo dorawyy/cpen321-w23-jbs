@@ -281,7 +281,7 @@ exports.getUserAppointments = async (req, res) => {
                 ...query,
             })
     
-        return res.status(200).send(filteredAppts)
+        return res.status(200).send({appointments: filteredAppts})
     } catch (err) {
         console.log(err)
         return res.status(500).send({

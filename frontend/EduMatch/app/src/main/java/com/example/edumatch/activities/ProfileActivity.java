@@ -1,6 +1,7 @@
 package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.ConversationHelper.createConversation;
+import static com.example.edumatch.util.RecommendationHelper.updateWhenTutorOpensConvo;
 import static com.example.edumatch.util.TutorsHelper.getTutorInfo;
 
 import android.content.Intent;
@@ -97,6 +98,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(ProfileActivity.this, "Chat button clicked", Toast.LENGTH_SHORT).show();
                 createConversation(ProfileActivity.this, tutorId);
+                updateWhenTutorOpensConvo(tutorId, ProfileActivity.this);
                 Intent intent = new Intent(ProfileActivity.this, ChatListActivity.class);
                 startActivity(intent);
             }

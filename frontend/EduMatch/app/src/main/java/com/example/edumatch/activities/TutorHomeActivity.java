@@ -37,6 +37,7 @@ public class TutorHomeActivity extends AppCompatActivity {
         } catch (JSONException e) {
             Toast.makeText(TutorHomeActivity.this, "You have no appointments yet!", Toast.LENGTH_SHORT).show();
         }
+        initializeChat();
 
     }
     private void initializeChat() {

@@ -2,6 +2,7 @@ package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.AppointmentHelper.getAvailability;
 import static com.example.edumatch.util.AppointmentHelper.setAppointment;
+import static com.example.edumatch.util.RecommendationHelper.updateWhenSchedules;
 import static com.example.edumatch.util.TutorsHelper.getTutorInfo;
 
 import android.app.DatePickerDialog;
@@ -80,7 +81,6 @@ public class BookingFlowActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectedMethod = "Online";
-
                 Log.d("SelectedMethod", selectedMethod);
             }
         });
@@ -226,6 +226,7 @@ public class BookingFlowActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Error: Booking was not able to be completed, please try again!", Toast.LENGTH_LONG).show();
         }
+        updateWhenSchedules(tutorId, selectedCourse, BookingFlowActivity.this);
     }
 
     // Function to retrieve the selected location by the user

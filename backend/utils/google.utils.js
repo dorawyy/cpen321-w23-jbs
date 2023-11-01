@@ -33,7 +33,7 @@ exports.cancelGoogleEvent = async (
         timeMin: canceledAppt.pstStartDatetime,
         timeMax: canceledAppt.pstEndDatetime,
         timeZone: 'America/Los_Angeles',
-        q: `Appointment with ${otherUser.username}`
+        q: `Appointment with ${otherUser.displayedName}`
     });
     const events = response.data.items;
 
@@ -65,7 +65,7 @@ exports.createGoogleEvent = async (
     const calendar = google.calendar({ version: 'v3' });
 
     const event = {
-        summary: `Appointment with ${otherUser.username}`,
+        summary: `Appointment with ${otherUser.displayedName}`,
         location: newAppt.location,
         description: `Course: ${newAppt.course}. Notes: ${newAppt.notes}`,
         start: { 

@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const User = db.user
 const Conversation = db.conversation
 
+// ChatGPT usage: No
 exports.getList = async (req, res) => {
     try {
         const user = await User.findById(req.userId)
@@ -26,9 +27,9 @@ exports.getList = async (req, res) => {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
+// ChatGPT usage: No
 exports.getConversation = async (req, res) => {
     try {
         if (req.query.page < 1)
@@ -70,9 +71,9 @@ exports.getConversation = async (req, res) => {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
+// ChatGPT usage: No
 exports.create = async (req, res) => {
     try {
         const user = await User.findById(req.userId)

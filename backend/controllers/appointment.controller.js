@@ -8,6 +8,7 @@ const momenttz = require("moment-timezone")
 const User = db.user
 const Appointment = db.appointment
 
+// ChatGPT usage: No
 exports.cancelAppointment = async (req, res) => {
     try {
         var userId = req.userId
@@ -81,11 +82,10 @@ exports.cancelAppointment = async (req, res) => {
         return res.status(500).send({
             message: err.message
         })
-    }
-    
-    
+    }   
 }
 
+// ChatGPT usage: No
 exports.getTutorAvailability = async (req, res) => {
     try {
         var tutorId = req.query.userId
@@ -100,21 +100,24 @@ exports.getTutorAvailability = async (req, res) => {
             return res.status(400).send({ message: "User not found" })
         }
             
-        var timeMin = momenttz(date)
-            .tz('America/Los_Angeles')
-            .startOf('day')
+        var tzOffset = momenttz()
+                    .tz('America/Los_Angeles')
+                    .format('Z')
+
+        var timeMin = momenttz(`${date}T08:00:00${tzOffset}`)
             .toISOString(true)
     
-        var timeMax = momenttz(date)
-            .tz('America/Los_Angeles')
-            .endOf('day')
+        var timeMax = momenttz(`${date}T19:00:00${tzOffset}`)
             .toISOString(true)
     
         if (tutor.useGoogleCalendar) {
             var freeTimes = await googleUtils.getFreeTime(
                 tutor, timeMin, timeMax
             )
-            return res.status(200).send(freeTimes)
+            var ret = {
+                availability: freeTimes
+            }
+            return res.status(200).send(ret)
         } else {
             if (tutor.manualAvailability) {
                 var requestedDay = momenttz(date).format("dddd")
@@ -122,9 +125,7 @@ exports.getTutorAvailability = async (req, res) => {
                     return avail.day === requestedDay 
                 })
                 var availabilities = []
-                var tzOffset = momenttz()
-                    .tz('America/Los_Angeles')
-                    .format('Z')
+                
                 for (block of dayAvailabilities) {            
                     var start = momenttz(`${date}T${block.startTime}:00${tzOffset}`)
                         .tz('America/Los_Angeles')
@@ -137,12 +138,18 @@ exports.getTutorAvailability = async (req, res) => {
                     )
                     availabilities = availabilities.concat(freeTimes)
                 }
+                var ret = {
+                    availability: availabilities
+                }
                 return res.status(200).send(availabilities)
             } else {
                 var freeTimes = [{
-                    start: "00:00",
-                    end: "23:59"
+                    start: "08:00",
+                    end: "19:00"
                 }]
+                var ret = {
+                    availability: freeTimes
+                }
                 return res.status(200).send(freeTimes)
             }
         }
@@ -153,6 +160,7 @@ exports.getTutorAvailability = async (req, res) => {
         
 }
 
+// ChatGPT usage: No
 exports.acceptAppointment = async (req, res) => {
     try {
         var userId = req.userId
@@ -253,27 +261,45 @@ exports.getUserAppointments = async (req, res) => {
                 message: "The other user is not found"
             })
         }
-        
-        var appointments = await apptUtils.cleanupUserAppointments(user)
-        var appointmentIds = appointments.map(appt => appt._id)
 
-        var query =  {
-            _id: {
-                $in: appointmentIds
-            }
+        var timeMin = momenttz()
+            .tz('America/Los_Angeles')
+            .subtract(15, 'days')
+            .startOf('day')
+            .toISOString(true)
+        
+        var timeMax = momenttz()
+            .tz('America/Los_Angeles')
+            .add(15, 'days')
+            .endOf('day')
+            .toISOString(true)
+        
+
+        var query = { 
+            $or: [
+                { pstEndDatetime: { $gte: timeMin } },
+                { pstStartDatetime: { $gte: timeMin } },
+            ],
+            $or: [
+                { pstEndDatetime: { $lte: timeMax } },
+                { pstStartDatetime: { $lte: timeMax } },
+            ],
+            'participantsInfo.userId': userId,
         }
+
         if (courses.length > 0) {
             query.course = {
                 $in: courses
             }
         }
-    
-        var filteredAppts = await Appointment
+
+        var appointments = await Appointment
             .find({
-                ...query,
+                ...query
             })
-    
-        return res.status(200).send(filteredAppts)
+            .sort({ pstStartDatetime: 'asc'})
+
+        return res.status(200).send({appointments: appointments})
     } catch (err) {
         console.log(err)
         return res.status(500).send({
@@ -283,6 +309,7 @@ exports.getUserAppointments = async (req, res) => {
     
 }
 
+// ChatGPT usage: No
 exports.getAppointment = async (req, res) => {
     try {
         var appointmentId = req.query.appointmentId
@@ -312,6 +339,7 @@ exports.getAppointment = async (req, res) => {
     }
 }
 
+// ChatGPT usage: No
 exports.bookAppointment = async (req, res) => {
     try {
         const tutorId = req.body.tutorId
@@ -380,4 +408,3 @@ exports.bookAppointment = async (req, res) => {
         return res.status(500).send({ message: err.message })
     }
 }
-

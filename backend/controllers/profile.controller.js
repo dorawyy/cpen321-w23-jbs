@@ -12,6 +12,7 @@ const EXCLUDED_FIELDS = [
     "-recommendationWeights"
 ]
 
+// ChatGPT usage: No
 exports.getPublicProfile = (req, res) => {
     try {
         var userId = req.query.userId
@@ -49,9 +50,9 @@ exports.getPublicProfile = (req, res) => {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
+// ChatGPT usage: No
 exports.getPrivateProfile = (req, res) => {
     try {
         var userId = req.userId
@@ -65,9 +66,9 @@ exports.getPrivateProfile = (req, res) => {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
+// ChatGPT usage: No
 exports.editProfile = (req, res) => {
     try {
         var userId = req.userId
@@ -89,5 +90,4 @@ exports.editProfile = (req, res) => {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }

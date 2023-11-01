@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const User = db.user
 const Conversation = db.conversation
 
+// ChatGPT usage: No
 exports.ban = async (req, res) => {
     try {
         const admin = await User.findById(req.userId)
@@ -35,6 +36,7 @@ exports.ban = async (req, res) => {
     }
 }
 
+// ChatGPT usage: No
 exports.unban = async (req, res) => {
     try {
         const admin = await User.findById(req.userId)
@@ -62,6 +64,7 @@ exports.unban = async (req, res) => {
     
 }
 
+// ChatGPT usage: No
 exports.getUsers = async (req, res) => {
     try {
         const admin = await User.findById(req.userId)
@@ -88,6 +91,7 @@ exports.getUsers = async (req, res) => {
     
 }
 
+// ChatGPT usage: No
 exports.getProfile = async (req, res) => {
     try {
         const admin = await User.findById(req.userId)

@@ -5,6 +5,7 @@ const haversine = require('haversine')
 
 const User = db.user
 
+// ChatGPT usage: No
 exports.recommended = async (req, res) => {
     try {
         if (req.query.page < 1)
@@ -145,6 +146,7 @@ exports.recommended = async (req, res) => {
     
 }
 
+// ChatGPT usage: No
 // sum of individual piecewise score functions
 function score(tutee, tutor) {
     var aggregate = 0
@@ -158,20 +160,24 @@ function score(tutee, tutor) {
     return aggregate
 }
 
+// ChatGPT usage: No
 function budgetScore(budget, subjectHourlyRate) {
     const averageHourlyRate = subjectHourlyRate.reduce((acc, subject) => acc + subject.hourlyRate) / subjectHourlyRate.length
     return averageHourlyRate < budget ? 100 - (1/3) * averageHourlyRate : 100 - (1/3) * budget - (2/3) * (averageHourlyRate - budget)
 }
 
+// ChatGPT usage: No
 function ratingScore(minRating, rating) {
     return rating > minRating ? 80 + 4 * (rating - minRating) : 80 + 40 * (rating - minRating)
 }
 
+// ChatGPT usage: No
 function locationModeScore(locationModeWeight, tuteeLocationMode, tutorLocationMode) {
     if (locationModeWeight <= 0) return 0
     return tuteeLocationMode == tutorLocationMode ? 100 * locationModeWeight : -100 * locationModeWeight
 }
 
+// ChatGPT usage: No
 function distanceScore(maxDistance, tuteeLocation, tutorLocation) {
     const distance = haversine(tutorLocation, tuteeLocation)
     return distance < maxDistance ? 100 - (1/3) * distance : 100 - (1/3) * maxDistance - (2/3) * (distance - maxDistance)

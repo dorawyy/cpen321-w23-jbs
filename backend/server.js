@@ -51,6 +51,10 @@ appointmentRoutes(app)
 adminRoutes(app)
 conversationRoutes(app)
 
+app.get("/health", (req, res) => {
+    return res.status(200).send({message: 'OK'})
+})
+
 if (env === 'prod') {
     // PRODUCTION
     const privateKeyFile = "/etc/letsencrypt/live/edumatch.canadacentral.cloudapp.azure.com/privkey.pem"
@@ -75,6 +79,8 @@ if (env === 'prod') {
     const clients = new Map() // Currently connected client sockets
     
     const wss = new ws.Server({ server: httpsServer })
+
+    // ChatGPT usage: No
     wss.on('connection', (ws, req) => {
         console.log("client connected to chat socket")
         const token = req.url.split('?token=')[1]

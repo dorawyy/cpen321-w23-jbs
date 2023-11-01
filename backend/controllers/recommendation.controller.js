@@ -91,7 +91,10 @@ exports.scheduledAppointment = async (req, res) => {
         if (!scheduledSubjectHourlyRate)
             return res.status(500).send({ message: "Unable to find hourly rate associated with subject" })
     
-        tutee.recommendationWeights.budget += (scheduledSubjectHourlyRate - tutee.recommendationWeights.budget) * (scheduledSubjectHourlyRate > tutee.recommendationWeights.budget ? 0.5 : 0.1)
+        tutee.recommendationWeights.budget += (
+            scheduledSubjectHourlyRate.hourlyRate - 
+            tutee.recommendationWeights.budget) * 
+            (scheduledSubjectHourlyRate.hourlyRate > tutee.recommendationWeights.budget ? 0.5 : 0.1)
     
         if (tutor.rating) {
             tutee.recommendationWeights.minRating -= (tutee.recommendationWeights.minRating - tutor.rating) * (tutor.rating < tutee.recommendationWeights.minRating ? 0.5 : 0.1)

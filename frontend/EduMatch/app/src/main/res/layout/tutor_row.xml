@@ -12,7 +12,7 @@
 android:id="@+id/tv_course_code"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
-android:text=""
+android:text="CPEN 321"
 android:textSize="18sp"
 android:textStyle="bold" />
 
@@ -26,14 +26,14 @@ android:textStyle="bold" />
             android:id="@+id/tutor_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="Maggie Gu"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_tutor_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="I hate this class"
             android:textSize="16sp"
             android:layout_marginStart="8dp" />
     </LinearLayout>

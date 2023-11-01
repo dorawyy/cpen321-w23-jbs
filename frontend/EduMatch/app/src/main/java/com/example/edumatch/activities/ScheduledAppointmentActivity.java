@@ -2,16 +2,18 @@ package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.AppointmentHelper.getAppointment;
 import static com.example.edumatch.util.AppointmentHelper.putAppointment;
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.edumatch.R;
 import com.example.edumatch.views.LabelAndCommentTextView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,21 +26,24 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scheduled_appointment);
-
-        initFields();
-        initCancelButton();
+        appointmentId = getIntent().getStringExtra("appointmentId");
+        Log.d("appt2", appointmentId);
+//        initFields();
+//        initCancelButton();
 
     }
 
-    @SuppressLint("SetTextI18n")
+  //  @SuppressLint("SetTextI18n")
     private void initFields() {
         TextView name = findViewById(R.id.name);
         TextView course = findViewById(R.id.course);
         TextView date = findViewById(R.id.date);
         TextView time = findViewById(R.id.time);
         TextView location = findViewById(R.id.location);
+        Log.d("appt2", "here");
         LabelAndCommentTextView comment = findViewById(R.id.comment);
-        JSONObject response = getAppointment(ScheduledAppointmentActivity.this,appointmentId);
+        JSONObject response = getAppointment(this ,appointmentId);
+        Log.d("appt2", response.toString());
         if(response != null){
             try {
                 if (response.has("otherUserName")) {
@@ -60,7 +65,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
                     comment.getContentText().setText(response.getString("additionalComments"));
                 }
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                Log.d("appt2", response.toString());
             }
         }
     }

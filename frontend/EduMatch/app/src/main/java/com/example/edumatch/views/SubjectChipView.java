@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -111,5 +114,24 @@ public class SubjectChipView extends RelativeLayout {
         } else {
             setBackgroundColor(Color.TRANSPARENT); // Reset to original or transparent color
         }
+    }
+
+    public void hideRemoveSubjectImageView() {
+        ImageView removeImageView = findViewById(R.id.remove_subject_imageview);
+        if (removeImageView != null) {
+            removeImageView.setVisibility(View.GONE);
+        }
+        TextView subjectText = findViewById(R.id.text);
+        if (subjectText != null) {
+            // Get the current layout parameters for the TextView
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) subjectText.getLayoutParams();
+            // Remove the left margin (or you can set to any value you want)
+            layoutParams.leftMargin = 20;
+            // Apply the new layout parameters to the TextView
+            subjectText.setLayoutParams(layoutParams);
+            // Center the TextView in the parent RelativeLayout
+            subjectText.setGravity(Gravity.CENTER);
+        }
+
     }
 }

@@ -9,15 +9,25 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="Added the logo as launcher">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomBackView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/back_button.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/go_back_bar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
+    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="Added some library things">
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/RecommendationHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/appointment_component.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_edit_profile_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_edit_profile_list.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/TutorRow.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/TutorRow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AppointmentListActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AppointmentListActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/BookingFlowActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/BookingFlowActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ScheduledAppointmentActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ScheduledAppointmentActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TuteeHomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TuteeHomeActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/AppointmentHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/AppointmentHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/NetworkUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/NetworkUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipView.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_account_information.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_account_information.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_appointment_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_appointment_list.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_booking_flow.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_booking_flow.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_home_tutee.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_home_tutee.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_scheduled_appointment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_scheduled_appointment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/tutor_row.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/tutor_row.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/values/colors.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,7 +37,7 @@
   <component name="CodeInsightWorkspaceSettings">
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/maggiegu/.android/avd/Resizable_Experimental_API_34_3.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/maggiegu/.android/avd/Resizable_Experimental_API_34_4.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/EduMatch">
       <ProjectState />
@@ -88,6 +98,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -110,36 +121,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/AdminListComponent.java_SELECTED": "AdminListComponent",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/TutorRow.java_SELECTED": "TutorRow",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/activities/ChatButton.java_SELECTED": "ChatButton",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/ActivityBarView.java_SELECTED": "AppBarCustomView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomBackView.java_SELECTED": "AppBarCustomBackView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java_SELECTED": "AppBarCustomView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AvailableTimesViews.java_SELECTED": "AvailableTimesViews",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/CourseRateItemView.java_SELECTED": "CourseRateItemView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/DayOfTheWeekView.java_SELECTED": "DayOfTheWeekView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndRatingView.java_SELECTED": "LabelAndRatingView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/MessageChipView.java_SELECTED": "MessageChipView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipView.java_SELECTED": "SubjectChipView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/TutorReviewChip.java_SELECTED": "TutorReviewChip",
-    "android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LabelAndEditText.java_SELECTED": "LabelAndEditText",
-    "android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LoginLabelAndEditText.java_SELECTED": "LoginLabelAndEditText",
-    "cidr.known.project.marker": "true",
-    "last_opened_file_path": "C:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch",
-    "memory.settings.postsync.last.time.stamp": "1698613940560",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "experimental"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/AdminListComponent.java_SELECTED&quot;: &quot;AdminListComponent&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/TutorRow.java_SELECTED&quot;: &quot;TutorRow&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/activities/ChatButton.java_SELECTED&quot;: &quot;ChatButton&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/ActivityBarView.java_SELECTED&quot;: &quot;AppBarCustomView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomBackView.java_SELECTED&quot;: &quot;AppBarCustomBackView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java_SELECTED&quot;: &quot;AppBarCustomView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AvailableTimesViews.java_SELECTED&quot;: &quot;AvailableTimesViews&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/CourseRateItemView.java_SELECTED&quot;: &quot;CourseRateItemView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/DayOfTheWeekView.java_SELECTED&quot;: &quot;DayOfTheWeekView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndRatingView.java_SELECTED&quot;: &quot;LabelAndRatingView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/MessageChipView.java_SELECTED&quot;: &quot;MessageChipView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipView.java_SELECTED&quot;: &quot;SubjectChipView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/TutorReviewChip.java_SELECTED&quot;: &quot;TutorReviewChip&quot;,
+    &quot;android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LabelAndEditText.java_SELECTED&quot;: &quot;LabelAndEditText&quot;,
+    &quot;android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LoginLabelAndEditText.java_SELECTED&quot;: &quot;LoginLabelAndEditText&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch&quot;,
+    &quot;memory.settings.postsync.last.time.stamp&quot;: &quot;1698613940560&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;experimental&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="android.template.-1582889132">
       <recent name="com.example.edumatch.activities" />
@@ -315,7 +326,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698745162236</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Added some library things">
+      <created>1698788123425</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1698788123425</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -353,6 +371,7 @@
     <MESSAGE value="Changed things briefly" />
     <MESSAGE value="All components are added and using" />
     <MESSAGE value="Added the logo as launcher" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added the logo as launcher" />
+    <MESSAGE value="Added some library things" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added some library things" />
   </component>
 </project>

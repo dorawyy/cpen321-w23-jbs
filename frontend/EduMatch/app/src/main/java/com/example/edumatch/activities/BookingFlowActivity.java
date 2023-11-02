@@ -262,7 +262,6 @@ public class BookingFlowActivity extends AppCompatActivity {
 
             return formattedTime;
         } catch (ParseException e) {
-            e.printStackTrace();
             return null; // or return an empty string if you prefer
         }
     }
@@ -281,7 +280,6 @@ public class BookingFlowActivity extends AppCompatActivity {
 
             return formattedDate;
         } catch (ParseException e) {
-            e.printStackTrace();
             return null; // or return the original date if you prefer
         }
     }
@@ -310,9 +308,9 @@ public class BookingFlowActivity extends AppCompatActivity {
             populateDataBasedOnAPI();
         }, year, month, day);
 
-        c.add(Calendar.DAY_OF_MONTH, 1);
+        //c.add(Calendar.DAY_OF_MONTH, 1);
         // Set the DatePickerDialog to only show today's date or future dates
-        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
+        //datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
 
         // Show the DatePickerDialog
         datePickerDialog.show();
@@ -320,9 +318,9 @@ public class BookingFlowActivity extends AppCompatActivity {
 
     public void populateDataBasedOnAPI() {
         // Fetch data from API (using Retrofit, Volley, or any other method)
-        Log.d("err", selectedDate);
+        Log.d("maryyy", selectedDate);
         JSONObject datesFromApi = getAvailability(this, tutorId, selectedDate.toString());
-        Log.d("mary", datesFromApi.toString());
+        Log.d("maryyy", datesFromApi.toString());
         try {
             if (!datesFromApi.has("availability") || datesFromApi.isNull("availability")) {
                 Toast.makeText(getApplicationContext(), "The date you selected does not have any time availability!", Toast.LENGTH_SHORT).show();
@@ -333,10 +331,11 @@ public class BookingFlowActivity extends AppCompatActivity {
                 }
                 Log.d("avail", datesFromApi.toString());
                 Map<String, String> availabilityMap = processAvailability(datesFromApi);
-                getTimesForDate(availabilityMap);
+                if (availabilityMap != null) getTimesForDate(availabilityMap);
+                else Toast.makeText(getApplicationContext(), "The date you selected does not have any time availability!", Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            Toast.makeText(getApplicationContext(), "The date you selected does not have any time availability!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -360,7 +359,7 @@ public class BookingFlowActivity extends AppCompatActivity {
                 availabilityMap.put(startTime, endTime);
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+           return null;
         }
 
         return availabilityMap;
@@ -383,9 +382,10 @@ public class BookingFlowActivity extends AppCompatActivity {
         String formatted_end = extractTime(end);
         Log.d("avail", formatted_start);
         Log.d("avail", formatted_end);
-
-        getIntervals(formatted_start, formatted_end);
-        generateTimes(formatted_start, formatted_end);
+        if (formatted_start != "" && formatted_end != "") {
+            getIntervals(formatted_start, formatted_end);
+            generateTimes(formatted_start, formatted_end);
+        }
 
     }
     private void getIntervals(String startTime, String endTime) {

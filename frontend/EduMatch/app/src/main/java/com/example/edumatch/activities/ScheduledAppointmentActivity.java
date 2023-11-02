@@ -48,11 +48,12 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
         currentDate = new Date(currentTimeMillis);
         if (!hasApptnotPassed(currentDate.toString(), apptDate)) {
             initCancelButton();
-        } else {
-            if (!reviewed) {
-                initRateTutorButton();
-            }
         }
+        
+                Log.d("appt2", "hi");
+                initRateTutorButton();
+
+
     }
 
     // dateStr1 = system time, dateStr2 = appointment time
@@ -93,7 +94,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
 
         LabelAndCommentTextView comment = findViewById(R.id.comment);
         JSONObject response = getAppointment(this ,appointmentId);
-        Log.d("appt2", appointmentId);
+        Log.d("appt2", response.toString());
         if(response != null){
             try {
                 if (response.has("otherUserName")) {
@@ -101,6 +102,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
                 }
                 if (response.has("participantsInfo")) {
                     reviewed = true;
+                    Log.d("appt2", String.valueOf(reviewed));
                 }
                 if (response.has("course")) {
                     course.setText(response.getString("course"));

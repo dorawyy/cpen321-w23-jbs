@@ -75,7 +75,9 @@ public class TutorRateActivity extends AppCompatActivity {
             JSONObject requestBody = constructRatingRequest();
             JSONObject weightRequestBody = constructRatingWeightRequest();
             Boolean weight_success = postRatingWeight(TutorRateActivity.this,weightRequestBody);
+            Log.d("appt2", String.valueOf(weight_success));
             Boolean success = postReview(TutorRateActivity.this,requestBody);
+            Log.d("appt2", String.valueOf(success));
             if(success && weight_success){
                 Toast.makeText(getApplicationContext(), "Successfully Rated Tutor!", Toast.LENGTH_SHORT).show();
                 goToNewActivity();

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +40,7 @@ public class AppointmentListActivity extends AppCompatActivity {
         } else {
             setContentView(R.layout.activity_appointment_list);
         }
+        Log.d("appt2", sharedPreferences.getString("userType","tutee"));
         JSONObject list = getAppointments(this);
         try {
             makeComponents(list.getJSONArray("appointments"));
@@ -66,8 +68,15 @@ public class AppointmentListActivity extends AppCompatActivity {
                 // Extracting the tutor's displayed name
                 JSONArray participantsInfo = appointmentObject.getJSONArray("participantsInfo");
 
-
                 JSONObject participant = participantsInfo.getJSONObject(1);
+
+                SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+                if (sharedPreferences.getString("userType","tutee").equals("tutor")){
+                     participant = participantsInfo.getJSONObject(1);
+                } else {
+                    participant = participantsInfo.getJSONObject(0);
+                }
+
                 tutorName = participant.getString("displayedName");
                 tutorId = participant.getString("userId");
                 TextView courseText = appointmentView.findViewById(R.id.courseCode);

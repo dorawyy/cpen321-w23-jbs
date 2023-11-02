@@ -134,7 +134,7 @@ exports.getTutorAvailability = async (req, res) => {
             return res.status(400).send({ message: "User not found" })
         }
             
-        var tzOffset = momenttz()
+        var tzOffset = momenttz(date)
                     .tz('America/Los_Angeles')
                     .format('Z')
 

@@ -4,6 +4,7 @@ const { LocationMode } = require("../constants/location.modes");
 const haversine = require('haversine')
 
 const User = db.user
+const PAGE_SIZE = 100
 
 // ChatGPT usage: No
 exports.recommended = async (req, res) => {
@@ -11,7 +12,10 @@ exports.recommended = async (req, res) => {
         if (req.query.page < 1)
         return res.status(400).send({ message: "Page number cannot be less than 1" })
 
-        const tutee = await User.findById(req.userId)
+        const tutee = await User.findById(req.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!tutee || tutee.isBanned)
             return res.status(404).send({ message: "Could not find tutee in database with provided id"})
 
@@ -21,11 +25,14 @@ exports.recommended = async (req, res) => {
                 'education.courses': { $in: req.query.courses.split(',')},
                 'type': UserType.TUTOR,
                 isBanned: false
+            }).catch(err => {
+                console.log(err)
+                return res.status(500).send({ message: err.message })
             })
             tutors.sort((a, b) => score(tutee, b) - score(tutee, a))
 
             // note: the slice() method handles slicing beyond the end of the array
-            const tutorsToDisplay = tutors.slice((req.query.page - 1) * 10, req.query.page * 10)
+            const tutorsToDisplay = tutors.slice((req.query.page - 1) * PAGE_SIZE, req.query.page * PAGE_SIZE)
 
             return res.status(200).json({
                 tutors: tutorsToDisplay.map(tutor => ({
@@ -48,11 +55,14 @@ exports.recommended = async (req, res) => {
                     'education.courses': { $in: tutee.education.courses },
                     'type': UserType.TUTOR,
                     isBanned: false
+                }).catch(err => {
+                    console.log(err)
+                    return res.status(500).send({ message: err.message })
                 })
-                if (req.query.page * 10 <= tutorsWithSharedCourses.length) {
+                if (req.query.page * PAGE_SIZE <= tutorsWithSharedCourses.length) {
                     // the page will display only tutors with shared courses
                     tutorsWithSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
-                    const tutorsToDisplay = tutorsWithSharedCourses.slice((req.query.page - 1) * 10, req.query.page * 10)
+                    const tutorsToDisplay = tutorsWithSharedCourses.slice((req.query.page - 1) * PAGE_SIZE, req.query.page * PAGE_SIZE)
 
                     return res.status(200).json({
                         tutors: tutorsToDisplay.map(tutor => ({
@@ -66,19 +76,22 @@ exports.recommended = async (req, res) => {
                             tags: tutor.education.tags,
                         }))
                     })
-                } else if ((req.query.page - 1) * 10 < tutorsWithSharedCourses.length && 
-                            req.query.page * 10 > tutorsWithSharedCourses.length) {
+                } else if ((req.query.page - 1) * PAGE_SIZE < tutorsWithSharedCourses.length && 
+                            req.query.page * PAGE_SIZE > tutorsWithSharedCourses.length) {
                     // the page will display the bottom of the scored tutors with shared courses, and the top of the scored tutors without shared courses
                     const tutorsWithoutSharedCourses = await User.find({
                         'education.courses': { $nin: tutee.education.courses },
                         'type': UserType.TUTOR,
                         isBanned: false
+                    }).catch(err => {
+                        console.log(err)
+                        return res.status(500).send({ message: err.message })
                     })
                     tutorsWithSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
                     tutorsWithoutSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
                     const tutorsToDisplay = [
-                        ...tutorsWithSharedCourses.slice((req.query.page - 1) * 10, tutorsWithSharedCourses.length),
-                        ...tutorsWithoutSharedCourses.slice(0, req.query.page * 10 - tutorsWithSharedCourses.length)
+                        ...tutorsWithSharedCourses.slice((req.query.page - 1) * PAGE_SIZE, tutorsWithSharedCourses.length),
+                        ...tutorsWithoutSharedCourses.slice(0, req.query.page * PAGE_SIZE - tutorsWithSharedCourses.length)
                     ]
 
                     return res.status(200).json({
@@ -93,15 +106,18 @@ exports.recommended = async (req, res) => {
                             tags: tutor.education.tags,
                         }))
                     })
-                } else if ((req.query.page - 1) * 10 >= tutorsWithSharedCourses.length) {
+                } else if ((req.query.page - 1) * PAGE_SIZE >= tutorsWithSharedCourses.length) {
                     // the page will display only tutors without shared courses
                     const tutorsWithoutSharedCourses = await User.find({
                         'education.courses': { $nin: tutee.education.courses },
                         'type': UserType.TUTOR,
                         isBanned: false
+                    }).catch(err => {
+                        console.log(err)
+                        return res.status(500).send({ message: err.message })
                     })
                     tutorsWithoutSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
-                    const tutorsToDisplay = tutorsWithoutSharedCourses.slice((req.query.page - 1) * 10, req.query.page * 10)
+                    const tutorsToDisplay = tutorsWithoutSharedCourses.slice((req.query.page - 1) * PAGE_SIZE, req.query.page * PAGE_SIZE)
                     
                     return res.status(200).json({
                         tutors: tutorsToDisplay.map(tutor => ({
@@ -121,9 +137,12 @@ exports.recommended = async (req, res) => {
                 const tutors = await User.find({
                     'type': UserType.TUTOR,
                     isBanned: false
+                }).catch(err => {
+                    console.log(err)
+                    return res.status(500).send({ message: err.message })
                 })
                 tutors.sort((a, b) => score(tutee, b) - score(tutee, a))
-                const tutorsToDisplay = tutors.slice((req.query.page - 1) * 10, req.query.page * 10)
+                const tutorsToDisplay = tutors.slice((req.query.page - 1) * PAGE_SIZE, req.query.page * PAGE_SIZE)
                 
                 return res.status(200).json({
                     tutors: tutorsToDisplay.map(tutor => ({
@@ -143,7 +162,6 @@ exports.recommended = async (req, res) => {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
 // ChatGPT usage: No

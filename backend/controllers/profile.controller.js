@@ -38,13 +38,17 @@ exports.getPublicProfile = (req, res) => {
                 displayedName: user.displayedName,
                 overallRating: ratingController.getOverallRating(ratings),
                 bio: user.bio,
-                school: user.school,
-                program: user.program,
+                school: user.education.school,
+                program: user.education.program,
                 courses: user.education.courses,
                 tags: user.education.tags,
+                subjectHourlyRate: user.subjectHourlyRate,
                 top2Ratings
             }
             return res.status(200).send(data)
+        }).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
         })
     } catch (err) {
         console.log(err)
@@ -61,6 +65,9 @@ exports.getPrivateProfile = (req, res) => {
                 return res.status(404).send({ message: "User not found."})
             }
             return res.status(200).send(user)
+        }).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
         })
     } catch (err) {
         console.log(err)
@@ -85,6 +92,9 @@ exports.editProfile = (req, res) => {
                 }
                 return res.status(200).send(updatedUser)
                 
+            }).catch(err => {
+                console.log(err)
+                return res.status(500).send({ message: err.message })
             })
     } catch (err) {
         console.log(err)

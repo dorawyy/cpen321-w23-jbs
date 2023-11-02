@@ -15,6 +15,9 @@ exports.getCourseCodes = async (req, res) => {
                         courses: data
                     }
                     return res.status(200).send(ret)
+                }).catch(err => {
+                    console.log(err)
+                    return res.status(500).send({ message: err.message })
                 })
     } catch (err) {
         console.log(err)

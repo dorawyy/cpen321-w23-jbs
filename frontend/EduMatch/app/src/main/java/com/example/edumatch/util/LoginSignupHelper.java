@@ -25,13 +25,8 @@ public class LoginSignupHelper {
         int inputTypeValue = InputType.TYPE_CLASS_TEXT; // Default value
 
         if (inputType != null) {
-            switch (inputType) {
-                case "text":
-                    break;
-                case "textPassword":
-                    inputTypeValue = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
-                    break;
-                // Add more cases for other input types as needed
+            if (inputType.equals("textPassword")) {
+                inputTypeValue = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
             }
         }
 

@@ -45,7 +45,6 @@ public class AdminHomeActivity extends AppCompatActivity {
         apiUrlBuilder.append("/admin/users");
 
         JSONObject jsonResponse = getAdminHome(apiUrlBuilder,AdminHomeActivity.this);
-        SharedPreferences sharedPreferences = this.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 
         try {
             JSONArray usersArray = jsonResponse.getJSONArray("users");

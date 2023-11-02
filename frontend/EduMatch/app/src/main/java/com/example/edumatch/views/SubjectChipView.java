@@ -16,23 +16,18 @@ import android.widget.TextView;
 import com.example.edumatch.R;
 
 public class SubjectChipView extends RelativeLayout {
-    public interface ChipClickListener {
-        void onChipClicked(SubjectChipView chipView);
-    }
 
     private ChipClickListener chipClickListener;
-
-    // ChatGPT usage: Yes
-    public void setChipClickListener(ChipClickListener listener) {
-        this.chipClickListener = listener;
-    }
-
     private TextView textView;
     public Button removeButton; // Add a reference to the remove button
 
     public boolean isClicked = false;
 
     private OnChipRemovedListener chipRemovedListener;
+
+    public interface ChipClickListener {
+        void onChipClicked(SubjectChipView chipView);
+    }
 
     // ChatGPT usage: Yes
     public interface OnChipRemovedListener {
@@ -130,25 +125,5 @@ public class SubjectChipView extends RelativeLayout {
             return textView.getText().toString();
         }
         return null;
-    }
-    // ChatGPT usage: Yes
-    public void hideRemoveSubjectImageView() {
-        ImageView removeImageView = findViewById(R.id.remove_subject_imageview);
-        if (removeImageView != null) {
-            removeImageView.setVisibility(View.GONE);
-            removeImageView = null;
-        }
-        TextView subjectText = findViewById(R.id.text);
-        if (subjectText != null) {
-            // Get the current layout parameters for the TextView
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) subjectText.getLayoutParams();
-            // Remove the left margin (or you can set to any value you want)
-            layoutParams.leftMargin = 20;
-            // Apply the new layout parameters to the TextView
-            subjectText.setLayoutParams(layoutParams);
-            // Center the TextView in the parent RelativeLayout
-            subjectText.setGravity(Gravity.CENTER);
-        }
-
     }
 }

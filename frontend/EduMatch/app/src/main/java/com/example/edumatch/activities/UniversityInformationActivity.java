@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.edumatch.R;
+import com.example.edumatch.util.CustomException;
 import com.example.edumatch.views.CustomAutoCompleteView;
 import com.example.edumatch.views.LabelAndEditTextView;
 import com.example.edumatch.views.SubjectChipView;
@@ -98,7 +99,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
                             coursesArray[i] = jsonArray.getString(i);
                         }
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        throw new CustomException("JSON parsing error");
                     }
                     initSuggestions(coursesArray);
                 }

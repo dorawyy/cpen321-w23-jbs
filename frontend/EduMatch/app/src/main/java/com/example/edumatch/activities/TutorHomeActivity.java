@@ -61,7 +61,7 @@ public class TutorHomeActivity extends AppCompatActivity {
         } catch (JSONException e) {
             Toast.makeText(TutorHomeActivity.this, "You have no appointments yet!", Toast.LENGTH_SHORT).show();
         }
-        if (appointments.isNull(0) || appointments == null) Toast.makeText(TutorHomeActivity.this, "You have no appointments yet!", Toast.LENGTH_SHORT).show();
+        if (appointments == null || appointments.isNull(0)) Toast.makeText(TutorHomeActivity.this, "You have no appointments yet!", Toast.LENGTH_SHORT).show();
 
         LinearLayout adminListComponentContainer = findViewById(R.id.adminListComponentContainer);
         try {

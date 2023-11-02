@@ -111,7 +111,7 @@ public class NetworkUtils {
                 try {
                     errorResponse.put("error", "Exception: " + e.getMessage());
                 } catch (JSONException ex) {
-                    throw new RuntimeException(ex);
+                    throw new CustomException("JSON parsing exception",ex);
                 }
                 future.complete(errorResponse);
             }
@@ -125,7 +125,7 @@ public class NetworkUtils {
             try {
                 errorResponse.put("error", "Exception: " + e.getMessage());
             } catch (JSONException ex) {
-                throw new RuntimeException(ex);
+                throw new CustomException("JSON parsing exception",ex);
             }
             return errorResponse;
         }
@@ -156,7 +156,7 @@ public class NetworkUtils {
                         try {
                             editor.putString("jwtToken", jsonResponse.getString("jwtToken"));
                         } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                            throw new CustomException("JSON parsing exception",e);
                         }
                     }
                     if(jsonResponse.has("type")){

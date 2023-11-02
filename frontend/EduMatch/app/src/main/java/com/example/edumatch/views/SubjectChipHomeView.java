@@ -16,19 +16,14 @@ public class SubjectChipHomeView extends RelativeLayout {
     }
 
     private SubjectChipHomeView.ChipClickListener chipClickListener;
+    private TextView textView;
+    public boolean isClicked = false;
+
 
     public void setChipClickListener(SubjectChipHomeView.ChipClickListener listener) {
         this.chipClickListener = listener;
     }
 
-    private TextView textView;
-    public boolean isClicked = false;
-
-    private SubjectChipHomeView.OnChipRemovedListener chipRemovedListener;
-
-    public interface OnChipRemovedListener {
-        void onChipRemoved(String course);
-    }
     public SubjectChipHomeView(Context context) {
         super(context);
         init(context, null);
@@ -50,10 +45,6 @@ public class SubjectChipHomeView extends RelativeLayout {
         }
     }
 
-
-    public void setChipRemovedListener(SubjectChipHomeView.OnChipRemovedListener listener) {
-        this.chipRemovedListener = listener;
-    }
     // ChatGPT usage: Yes
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);

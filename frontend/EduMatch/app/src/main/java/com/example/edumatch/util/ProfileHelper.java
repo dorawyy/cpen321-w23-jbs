@@ -149,119 +149,136 @@ public class ProfileHelper {
     // ChatGPT usage: Yes
     public static Boolean getProfile(Context context) {
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/user/profile";
-
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
-
-        JSONObject jsonResponse = sendHttpRequest(apiUrl,sharedPreferences.getString("jwtToken", ""),"GET",null);
+        JSONObject jsonResponse = sendHttpRequest(apiUrl, sharedPreferences.getString("jwtToken", ""), "GET", null);
 
         if (jsonResponse != null) {
-            try {
-                Log.d("EditProfileGet", jsonResponse.toString());
-                if (jsonResponse.has("errorDetails")) {
-                    JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
-                    if (errorDetails.has("message")) {
-                        String message = errorDetails.getString("message");
-                        Log.d("EditProfileGet", "There was an error: " + message);
-                        showToastOnUiThread(context, message);
-                        return false;
-                    }
-                } else {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                    // Save values from jsonResponse directly to SharedPreferences
-                    if (jsonResponse.has("displayedName")) {
-                        editor.putString("name", jsonResponse.getString("displayedName"));
-                    }
-                    if (jsonResponse.has("email")) {
-                        editor.putString("email", jsonResponse.getString("email"));
-                    }
-                    if (jsonResponse.has("phoneNumber")) {
-                        editor.putString("phoneNumber", jsonResponse.getString("phoneNumber"));
-                    }
-                    if (jsonResponse.has("username")) {
-                        editor.putString("username", jsonResponse.getString("username"));
-                    }
-                    if (jsonResponse.has("bio")) {
-                        editor.putString("bio", jsonResponse.getString("bio"));
-                    }
-
-                    // Location data
-                    if (jsonResponse.has("location")) {
-                        JSONObject locationObj = jsonResponse.getJSONObject("location");
-                        if (locationObj.has("lat")) {
-                            editor.putFloat("latitude", (float) locationObj.getDouble("lat"));
-                        }
-                        if (locationObj.has("long")) {
-                            editor.putFloat("longitude", (float) locationObj.getDouble("long"));
-                        }
-                    }
-
-                    // Education data
-                    if (jsonResponse.has("education")) {
-                        JSONObject educationObj = jsonResponse.getJSONObject("education");
-                        if (educationObj.has("school")) {
-                            editor.putString("university", educationObj.getString("school"));
-                        }
-                        if (educationObj.has("program")) {
-                            editor.putString("program", educationObj.getString("program"));
-                        }
-                        if (educationObj.has("level")) {
-                            editor.putString("yearLevel", String.valueOf(educationObj.getInt("level")));
-                        }
-                        // Courses (assuming courses is a JSONArray)
-                        if (educationObj.has("courses")) {
-                            JSONArray coursesArray = educationObj.getJSONArray("courses");
-                            Set<String> coursesSet = new HashSet<>();
-                            for (int i = 0; i < coursesArray.length(); i++) {
-                                coursesSet.add(coursesArray.getString(i));
-                            }
-                            editor.putStringSet("courses", coursesSet);
-                        }
-                        // Tags (assuming tags is a JSONArray)
-                        if (educationObj.has("tags")) {
-                            JSONArray tagsArray = educationObj.getJSONArray("tags");
-                            Set<String> tagsSet = new HashSet<>();
-                            for (int i = 0; i < tagsArray.length(); i++) {
-                                tagsSet.add(tagsArray.getString(i));
-                            }
-                            editor.putStringSet("tags", tagsSet);
-                        }
-                    }
-
-                    // Use Google Calendar
-                    if (jsonResponse.has("useGoogleCalendar")) {
-                        editor.putBoolean("useGoogleCalendar", jsonResponse.getBoolean("useGoogleCalendar"));
-                    }
-
-                    // Manual Availability
-                    if (jsonResponse.has("manualAvailability")) {
-                        JSONArray manualAvailabilityArray = jsonResponse.getJSONArray("manualAvailability");
-                        for (int i = 0; i < manualAvailabilityArray.length(); i++) {
-                            JSONObject dayAvailability = manualAvailabilityArray.getJSONObject(i);
-                            if (dayAvailability.has("day") && dayAvailability.has("startTime") && dayAvailability.has("endTime")) {
-                                String dayKey = dayAvailability.getString("day");
-                                String startTime = dayAvailability.getString("startTime");
-                                String endTime = dayAvailability.getString("endTime");
-                                // Assuming "dayKey" is one of the days: "Sunday", "Monday", etc.
-                                editor.putString(dayKey + "StartTime", startTime);
-                                editor.putString(dayKey + "EndTime", endTime);
-                            }
-                        }
-                        // Store the entire manualAvailability JSON in SharedPreferences
-                        editor.putString("manualAvailability", manualAvailabilityArray.toString());
-                    }
-
-                    editor.apply();
-                    Log.d("ProfileDataSaved", "User profile data saved to SharedPreferences");
-                }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+            return processProfileData(context, sharedPreferences, jsonResponse);
         } else {
-            Log.d("EditProfileGet","jsonResponse was NULL");
+            Log.d("EditProfileGet", "jsonResponse was NULL");
+            return false;
+        }
+    }
+
+    // ChatGPT usage: Yes
+    private static Boolean processProfileData(Context context, SharedPreferences sharedPreferences, JSONObject jsonResponse) {
+        try {
+            Log.d("EditProfileGet", jsonResponse.toString());
+
+            if (jsonResponse.has("errorDetails")) {
+                return handleErrorResponse(context, jsonResponse);
+            } else {
+                saveProfileDataToSharedPreferences(sharedPreferences, jsonResponse);
+            }
+        } catch (JSONException e) {
+            throw new CustomException("JSON parsing exception", e);
         }
         return true;
     }
 
+    // ChatGPT usage: Yes
+    private static Boolean handleErrorResponse(Context context, JSONObject jsonResponse) throws JSONException {
+        JSONObject errorDetails = new JSONObject(jsonResponse.getString("errorDetails"));
+        if (errorDetails.has("message")) {
+            String message = errorDetails.getString("message");
+            Log.d("EditProfileGet", "There was an error: " + message);
+            showToastOnUiThread(context, message);
+            return false;
+        }
+        return true;
+    }
 
+    // ChatGPT usage: Yes
+    private static void saveProfileDataToSharedPreferences(SharedPreferences sharedPreferences, JSONObject jsonResponse) throws JSONException {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Save values from jsonResponse directly to SharedPreferences
+        if (jsonResponse.has("displayedName")) {
+            editor.putString("name", jsonResponse.getString("displayedName"));
+        }
+        if (jsonResponse.has("email")) {
+            editor.putString("email", jsonResponse.getString("email"));
+        }
+        if (jsonResponse.has("phoneNumber")) {
+            editor.putString("phoneNumber", jsonResponse.getString("phoneNumber"));
+        }
+        if (jsonResponse.has("username")) {
+            editor.putString("username", jsonResponse.getString("username"));
+        }
+        if (jsonResponse.has("bio")) {
+            editor.putString("bio", jsonResponse.getString("bio"));
+        }
+
+        if (jsonResponse.has("location")) {
+            JSONObject locationObj = jsonResponse.getJSONObject("location");
+            if (locationObj.has("lat")) {
+                editor.putFloat("latitude", (float) locationObj.getDouble("lat"));
+            }
+            if (locationObj.has("long")) {
+                editor.putFloat("longitude", (float) locationObj.getDouble("long"));
+            }
+        }
+
+        if (jsonResponse.has("education")) {
+            JSONObject educationObj = jsonResponse.getJSONObject("education");
+            if (educationObj.has("school")) {
+                editor.putString("university", educationObj.getString("school"));
+            }
+            if (educationObj.has("program")) {
+                editor.putString("program", educationObj.getString("program"));
+            }
+            if (educationObj.has("level")) {
+                editor.putString("yearLevel", String.valueOf(educationObj.getInt("level")));
+            }
+
+            // Courses (assuming courses is a JSONArray)
+            if (educationObj.has("courses")) {
+                JSONArray coursesArray = educationObj.getJSONArray("courses");
+                Set<String> coursesSet = new HashSet<>();
+                for (int i = 0; i < coursesArray.length(); i++) {
+                    coursesSet.add(coursesArray.getString(i));
+                }
+                editor.putStringSet("courses", coursesSet);
+            }
+
+            // Tags (assuming tags is a JSONArray)
+            if (educationObj.has("tags")) {
+                JSONArray tagsArray = educationObj.getJSONArray("tags");
+                Set<String> tagsSet = new HashSet<>();
+                for (int i = 0; i < tagsArray.length(); i++) {
+                    tagsSet.add(tagsArray.getString(i));
+                }
+                editor.putStringSet("tags", tagsSet);
+            }
+        }
+
+        if (jsonResponse.has("useGoogleCalendar")) {
+            editor.putBoolean("useGoogleCalendar", jsonResponse.getBoolean("useGoogleCalendar"));
+        }
+
+        if (jsonResponse.has("manualAvailability")) {
+            JSONArray manualAvailabilityArray = jsonResponse.getJSONArray("manualAvailability");
+            for (int i = 0; i < manualAvailabilityArray.length(); i++) {
+                JSONObject dayAvailability = manualAvailabilityArray.getJSONObject(i);
+                if (dayAvailability.has("day") && dayAvailability.has("startTime") && dayAvailability.has("endTime")) {
+                    String dayKey = dayAvailability.getString("day");
+                    String startTime = dayAvailability.getString("startTime");
+                    String endTime = dayAvailability.getString("endTime");
+                    // Assuming "dayKey" is one of the days: "Sunday", "Monday", etc.
+                    editor.putString(dayKey + "StartTime", startTime);
+                    editor.putString(dayKey + "EndTime", endTime);
+                }
+            }
+            // Store the entire manualAvailability JSON in SharedPreferences
+            editor.putString("manualAvailability", manualAvailabilityArray.toString());
+        }
+
+        if (jsonResponse.has("subjectHourlyRate")) {
+            JSONArray subjectHourlyRateArray = jsonResponse.getJSONArray("subjectHourlyRate");
+            editor.putString("coursePricePairs", subjectHourlyRateArray.toString());
+        }
+
+        editor.apply();
+        Log.d("ProfileDataSaved", "User profile data saved to SharedPreferences");
+    }
 }

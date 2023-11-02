@@ -131,7 +131,7 @@ public class SubjectChipView extends RelativeLayout {
         }
         return null;
     }
-
+    // ChatGPT usage: Yes
     public void hideRemoveSubjectImageView() {
         ImageView removeImageView = findViewById(R.id.remove_subject_imageview);
         if (removeImageView != null) {

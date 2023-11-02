@@ -3,8 +3,11 @@ package com.example.edumatch.activities;
 import static com.example.edumatch.util.AdminHelper.getAdminHome;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+// ChatGPT usage: Yes
 public class AdminHomeActivity extends AppCompatActivity {
     StringBuilder apiUrlBuilder;
     String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com";
@@ -25,6 +29,18 @@ public class AdminHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_home);
 
+        Button logOut = findViewById(R.id.logOut);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearPreferences();
+                Intent newIntent = new Intent(AdminHomeActivity.this,
+                        MainActivity.class);
+                startActivity(newIntent);
+
+            }
+        });
+
         apiUrlBuilder = new StringBuilder(apiUrl);
         apiUrlBuilder.append("/admin/users");
 
@@ -32,9 +48,9 @@ public class AdminHomeActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = this.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 
         try {
-            JSONArray usersArray = jsonResponse.getJSONArray("users"); // assuming the key is "users"
+            JSONArray usersArray = jsonResponse.getJSONArray("users");
 
-            LinearLayout linearLayout = findViewById(R.id.adminListComponentContainer); // replace with your LinearLayout's ID
+            LinearLayout linearLayout = findViewById(R.id.adminListComponentContainer);
 
             for (int i = 0; i < usersArray.length(); i++) {
                 JSONObject user = usersArray.getJSONObject(i);
@@ -48,7 +64,7 @@ public class AdminHomeActivity extends AppCompatActivity {
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
-                layoutParams.setMargins(0, 16, 0, 16); // 16dp top and bottom margins
+                layoutParams.setMargins(0, 16, 0, 16);
                 adminListComponent.setLayoutParams(layoutParams);
 
                 linearLayout.addView(adminListComponent);
@@ -57,6 +73,15 @@ public class AdminHomeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+    // ChatGPT usage: Yes
+    private void clearPreferences() {
+        Context context = getApplicationContext();
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.clear();
+        editor.apply();
     }
 
 

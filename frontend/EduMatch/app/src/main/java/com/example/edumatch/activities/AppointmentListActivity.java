@@ -46,8 +46,8 @@ public class AppointmentListActivity extends AppCompatActivity {
             Toast.makeText(this, "You have no appointments!", Toast.LENGTH_SHORT).show();
         }
 
-
     }
+    // ChatGPT usage: Yes
     private void makeComponents(JSONArray appointments) {
         LinearLayout appointmentListLayout = findViewById(R.id.appointmentList);
         try {
@@ -63,9 +63,7 @@ public class AppointmentListActivity extends AppCompatActivity {
                 String pstEndTime = appointmentObject.getString("pstEndDatetime");
                 String status = appointmentObject.getString("status");
 
-                // Extracting the tutor's displayed name
                 JSONArray participantsInfo = appointmentObject.getJSONArray("participantsInfo");
-
 
                 JSONObject participant = participantsInfo.getJSONObject(1);
                 tutorName = participant.getString("displayedName");
@@ -87,14 +85,12 @@ public class AppointmentListActivity extends AppCompatActivity {
                     Toast.makeText(this, "Cannot find day", Toast.LENGTH_SHORT).show();
                 }
 
-
-                // Extracting Date, Start Time, and End Time
                 SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd");
                 SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm");
 
-                String date = dateSdf.format(startDate); // Date
-                String startTime = timeSdf.format(startDate); // Start Time
-                String endTime = timeSdf.format(endDate); // End Time
+                String date = dateSdf.format(startDate);
+                String startTime = timeSdf.format(startDate);
+                String endTime = timeSdf.format(endDate);
                 String interval = startTime + " - " + endTime;
 
                 TextView dateText = appointmentView.findViewById(R.id.date);

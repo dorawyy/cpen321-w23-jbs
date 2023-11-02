@@ -1,23 +1,21 @@
 package com.example.edumatch.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.edumatch.R;
 import com.example.edumatch.util.ProfileHelper;
-
-import org.w3c.dom.Text;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class TuteeProfileActivity extends AppCompatActivity {
-
+    // ChatGPT usage: Yes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

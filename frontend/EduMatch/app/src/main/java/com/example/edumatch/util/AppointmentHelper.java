@@ -32,6 +32,7 @@ public class AppointmentHelper {
 
         return handlePutPostResponse(context, jsonResponse,successMessage,logTag);
     }
+    // ChatGPT usage: Yes
     public static boolean setAppointment(Context context, JSONObject requestBody) {
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/appointment/bookAppointment";
 
@@ -45,7 +46,7 @@ public class AppointmentHelper {
 
         return handlePutPostResponse(context, jsonResponse,successMessage,logTag);
     }
-
+    // ChatGPT usage: Yes
     public static JSONObject getAppointments(Context context) {
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/appointments";
 
@@ -85,7 +86,7 @@ public class AppointmentHelper {
 
         return handleGetResponse(context,jsonResponse,logTag);
     }
-
+    // ChatGPT usage: Yes
     public static String convertDateFormat(String oldFormatDate) {
         try {
             SimpleDateFormat oldDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());

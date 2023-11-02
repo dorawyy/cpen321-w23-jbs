@@ -8,9 +8,6 @@ import android.widget.TextView;
 
 import com.example.edumatch.R;
 
-/**
- * TODO: document your custom view class.
- */
 public class TutorRow extends LinearLayout {
     private TextView tvCourseCode;
     private TextView tvTutorName;

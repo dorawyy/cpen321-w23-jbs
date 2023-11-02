@@ -27,7 +27,7 @@ public class AppBarCustomTutorBackView extends LinearLayout {
         super(context, attrs, defStyleAttr);
         init(context);
     }
-
+    // ChatGPT usage: Yes
     private void init(Context context) {
         // Inflating the custom app bar layout
         LayoutInflater.from(context).inflate(R.layout.go_back_bar, this, true);

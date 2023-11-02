@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 public class TutorHelper {
     static public String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com";
+    // ChatGPT usage: Yes
     public static JSONObject fetchTutorAppointments(String id, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 
@@ -21,6 +22,7 @@ public class TutorHelper {
 
         return handleGetResponse(context,jsonResponse,logTag);
     }
+    // ChatGPT usage: Yes
     public static JSONObject acceptAppointment(String id, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 
@@ -32,6 +34,7 @@ public class TutorHelper {
 
         return handleGetResponse(context,jsonResponse,logTag);
     }
+    // ChatGPT usage: Yes
     public static JSONObject declineAppointment(String id, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 

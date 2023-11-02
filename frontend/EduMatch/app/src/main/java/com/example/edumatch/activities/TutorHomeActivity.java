@@ -35,11 +35,11 @@ public class TutorHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_home);
-
         initializeChat();
         makeComponents();
 
     }
+    // ChatGPT usage: Yes
     private void initializeChat() {
         FloatingActionButton fabChat = findViewById(R.id.fabChat);
         fabChat.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +50,7 @@ public class TutorHomeActivity extends AppCompatActivity {
             }
         });
     }
-
+    // ChatGPT usage: Yes
     private void makeComponents() {
         clearLinearLayout();
         JSONObject appointmentss = getAppointments(TutorHomeActivity.this);

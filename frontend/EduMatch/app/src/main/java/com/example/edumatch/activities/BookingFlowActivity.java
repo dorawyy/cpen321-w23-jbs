@@ -9,6 +9,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.edumatch.R;
@@ -29,6 +31,8 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -72,7 +76,6 @@ public class BookingFlowActivity extends AppCompatActivity {
         RadioButton inPersonOption = findViewById(R.id.inPersonOption);
         RadioButton onlineOption = findViewById(R.id.onlineOption);
 
-
         inPersonOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,7 +94,7 @@ public class BookingFlowActivity extends AppCompatActivity {
 
 
     }
-
+    // ChatGPT usage: Yes
     public String convertToDesiredFormat(String selectedDate, String selectedTime)  {
 
             SimpleDateFormat inputDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
@@ -102,14 +105,14 @@ public class BookingFlowActivity extends AppCompatActivity {
             date = null;
         }
 
-        // Format the parsed date to desired format
             SimpleDateFormat outputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            outputDateFormat.setTimeZone(TimeZone.getTimeZone("GMT-7")); // Set timezone to GMT-07:00
+            outputDateFormat.setTimeZone(TimeZone.getTimeZone("GMT-7"));
 
-            return outputDateFormat.format(date) + "-07:00"; // Append the timezone offset
+            return outputDateFormat.format(date) + "-07:00";
 
     }
 
+    // ChatGPT usage: Yes
     private void generateCourses() throws JSONException {
         LinearLayout intervalContainer = findViewById(R.id.courseContainer);
 
@@ -142,7 +145,7 @@ public class BookingFlowActivity extends AppCompatActivity {
             intervalContainer.addView(timeButton);
         }
     }
-
+    // ChatGPT usage: Yes
     private String addIntervalToStartTime(String selectedStart, String selectedInterval) {
         try {
             String[] startParts = selectedStart.split(":");
@@ -194,7 +197,7 @@ public class BookingFlowActivity extends AppCompatActivity {
     }
 
 
-
+    // ChatGPT usage: Yes
     // Function to handle the booking logic
     private void handleBooking() {
         // Get selected location
@@ -234,6 +237,7 @@ public class BookingFlowActivity extends AppCompatActivity {
         updateWhenSchedules(tutorId, selectedCourse, BookingFlowActivity.this);
     }
 
+    // ChatGPT usage: Yes
     // Function to retrieve the selected location by the user
     private void retrieveSelectedLocation() {
         RadioGroup locationGroup = findViewById(R.id.locationGroup);
@@ -242,12 +246,14 @@ public class BookingFlowActivity extends AppCompatActivity {
         selectedLocation = selectedRadioButton.getText().toString();
     }
 
+    // ChatGPT usage: Yes
     // Function to retrieve the notes entered by the user
     private void retrieveUserNotes() {
         EditText notesEditText = findViewById(R.id.notesEditText);
         userNotes = notesEditText.getText().toString();
     }
 
+    // ChatGPT usage: Yes
     private String extractTime(String originalDateTime) {
         try {
             // Define the original and target date formats
@@ -267,6 +273,7 @@ public class BookingFlowActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT usage: Yes
     private String convertDateFormat(String originalDate) {
         try {
             // Define the original and target date formats
@@ -292,6 +299,7 @@ public class BookingFlowActivity extends AppCompatActivity {
         return hours * 3600 + minutes * 60;
     }
 
+    // ChatGPT usage: Yes
     // Function for Date Selector
     public void showDatePicker(View view) {
         // Get the current date
@@ -319,7 +327,6 @@ public class BookingFlowActivity extends AppCompatActivity {
     }
 
     public void populateDataBasedOnAPI() {
-        // Fetch data from API (using Retrofit, Volley, or any other method)
         Log.d("err", selectedDate);
         JSONObject datesFromApi = getAvailability(this, tutorId, selectedDate.toString());
         Log.d("mary", datesFromApi.toString());
@@ -340,6 +347,8 @@ public class BookingFlowActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT usage: Yes
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private static Map<String, String> processAvailability(JSONObject jsonObject) {
         Map<String, String> availabilityMap = new HashMap<>();
 
@@ -351,6 +360,9 @@ public class BookingFlowActivity extends AppCompatActivity {
             }
             JSONArray availabilityArray = jsonObject.getJSONArray("availability");
 
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            ZoneId pstZoneId = ZoneId.of("America/Los_Angeles");
+            ZoneId localZoneId = ZoneId.systemDefault();
             for (int i = 0; i < availabilityArray.length(); i++) {
                 JSONObject availabilityObject = availabilityArray.getJSONObject(i);
 
@@ -376,7 +388,7 @@ public class BookingFlowActivity extends AppCompatActivity {
             if (key.contains(date)) {
                 start = key;
                 end = availabilityMap.get(key);
-            }
+            } else break;
         }
 
         String formatted_start = extractTime(start);
@@ -388,6 +400,7 @@ public class BookingFlowActivity extends AppCompatActivity {
         generateTimes(formatted_start, formatted_end);
 
     }
+    // ChatGPT usage: Yes
     private void getIntervals(String startTime, String endTime) {
         LinearLayout intervalContainer = findViewById(R.id.intervalContainer);
         intervalContainer.removeAllViews();
@@ -443,6 +456,7 @@ public class BookingFlowActivity extends AppCompatActivity {
             intervalContainer.addView(intervalButton);
         }
     }
+    // ChatGPT usage: Yes
     private void generateTimes(String startTime, String endTime) {
         LinearLayout intervalContainer = findViewById(R.id.timeContainer);
 

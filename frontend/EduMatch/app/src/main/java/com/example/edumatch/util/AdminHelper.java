@@ -23,7 +23,7 @@ public class AdminHelper {
 
         return handleGetResponse(context,jsonResponse,logTag);
     }
-
+    // ChatGPT usage: Yes
     public static void banUser(String userId, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/admin/ban";
@@ -40,7 +40,7 @@ public class AdminHelper {
         String logTag = "BanUser";
 
     }
-
+    // ChatGPT usage: Yes
     public static void unbanUser(String userId, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/admin/unban";

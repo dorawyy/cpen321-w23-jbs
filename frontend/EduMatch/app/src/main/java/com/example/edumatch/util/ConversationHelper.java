@@ -37,6 +37,7 @@ public class ConversationHelper {
 
         return handleGetResponse(context,jsonResponse,logTag);
     }
+    // ChatGPT usage: Yes
     public static JSONObject createConversation(Context context, String userId) {
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/conversation/create";
         JSONObject jsonObject = new JSONObject();

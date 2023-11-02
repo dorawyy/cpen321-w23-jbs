@@ -37,7 +37,7 @@ public class AdminListComponent extends LinearLayout {
         super(context, attrs, defStyleAttr);
         init(context);
     }
-
+    // ChatGPT usage: Yes
     private void init(Context context) {
         // Inflate the layout
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -60,6 +60,7 @@ public class AdminListComponent extends LinearLayout {
                 if ("ACTIVE".equalsIgnoreCase(currentStatus)) {
                     button.setText("BANNED");
                     banUser(userId, context);
+
                 } else {
                     button.setText("ACTIVE");
                     unbanUser(userId, context);

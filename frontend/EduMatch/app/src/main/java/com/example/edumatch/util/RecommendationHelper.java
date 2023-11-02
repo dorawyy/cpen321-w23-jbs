@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RecommendationHelper {
+    // ChatGPT usage: Yes
     public static boolean updateWhenTuteeChecksTutor(String id, Context context) {
         Log.d("mag", "maggie");
         String url = "https://edumatch.canadacentral.cloudapp.azure.com/user_action/checked_profile";
@@ -29,7 +30,7 @@ public class RecommendationHelper {
 
         return handlePutPostResponse(context, jsonResponse,successMessage,logTag);
     }
-
+    // ChatGPT usage: Yes
     public static boolean updateWhenTutorOpensConvo(String id, Context context) {
         String url = "https://edumatch.canadacentral.cloudapp.azure.com/user_action/contacted_tutor";
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
@@ -46,7 +47,7 @@ public class RecommendationHelper {
 
         return handlePutPostResponse(context, jsonResponse,successMessage,logTag);
     }
-
+    // ChatGPT usage: Yes
     public static boolean updateWhenSchedules(String id, String subject, Context context) {
         String url = "https://edumatch.canadacentral.cloudapp.azure.com/user_action/scheduled_appointment";
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);

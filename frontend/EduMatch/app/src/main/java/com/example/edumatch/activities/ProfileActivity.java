@@ -24,7 +24,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private String tutorId;
     private String coursesList;
-
+    // ChatGPT usage: Yes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

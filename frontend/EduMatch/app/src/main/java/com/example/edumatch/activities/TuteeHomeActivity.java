@@ -44,7 +44,7 @@ public class TuteeHomeActivity extends AppCompatActivity {
 
 
     String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/recommended?";
-
+    // ChatGPT usage: Yes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +73,7 @@ public class TuteeHomeActivity extends AppCompatActivity {
             }
         });
     }
-
+    // ChatGPT usage: Yes
     private void initializeCourseTags(Set<String> courses) {
         courseList = new ArrayList<>(courses);
         if (courses != null) {
@@ -110,6 +110,7 @@ public class TuteeHomeActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT usage: Yes
     private void fetchAllData() {
         LinearLayout tutorList = findViewById(R.id.tutorList);
         clearTutorList();
@@ -167,6 +168,7 @@ public class TuteeHomeActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT usage: Yes
     private void fetchCourseData(String courseName) {
         clearTutorList();
         LinearLayout tutorList = findViewById(R.id.tutorList); // Assuming you changed the ID to tutorListLayout
@@ -234,7 +236,7 @@ public class TuteeHomeActivity extends AppCompatActivity {
         tutorList.removeAllViews();
     }
 
-
+    // ChatGPT usage: Yes
     private boolean isAnyChipViewPressed() {
         for (SubjectChipHomeView chipView : subjectChipViews) {
             if (chipView.isClicked) {

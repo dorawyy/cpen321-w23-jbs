@@ -54,7 +54,7 @@ public class SubjectChipHomeView extends RelativeLayout {
     public void setChipRemovedListener(SubjectChipHomeView.OnChipRemovedListener listener) {
         this.chipRemovedListener = listener;
     }
-
+    // ChatGPT usage: Yes
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.subject_chip_home, this, true);
@@ -85,7 +85,7 @@ public class SubjectChipHomeView extends RelativeLayout {
             }
         });
     }
-
+    // ChatGPT usage: Yes
     private void updateBackgroundColor() {
         if (isClicked) {
             setBackgroundColor(Color.parseColor("#A9A9A9")); // Dark Grey color when clicked

@@ -9,7 +9,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="Tutor View is done" />
+    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="Fixed the going back to Tutee issue as a Tutor" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -68,8 +68,8 @@
         <option value="resourceFile" />
         <option value="valueResourceFile" />
         <option value="layoutResourceFile" />
-        <option value="Class" />
         <option value="layoutResourceFile_vertical" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -102,39 +102,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/AdminListComponent.java_SELECTED&quot;: &quot;AdminListComponent&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/TutorRow.java_SELECTED&quot;: &quot;TutorRow&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/activities/ChatButton.java_SELECTED&quot;: &quot;ChatButton&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/ActivityBarView.java_SELECTED&quot;: &quot;AppBarCustomView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomBackView.java_SELECTED&quot;: &quot;AppBarCustomBackView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java_SELECTED&quot;: &quot;AppBarCustomView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AvailableTimesViews.java_SELECTED&quot;: &quot;AvailableTimesViews&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/CourseRateItemView.java_SELECTED&quot;: &quot;CourseRateItemView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/DayOfTheWeekView.java_SELECTED&quot;: &quot;DayOfTheWeekView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndCommentTextView.java_SELECTED&quot;: &quot;LabelAndCommentTextView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndRatingView.java_SELECTED&quot;: &quot;LabelAndRatingView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndTextView.java_SELECTED&quot;: &quot;LabelAndTextView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/MessageChipView.java_SELECTED&quot;: &quot;MessageChipView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipHomeView.java_SELECTED&quot;: &quot;SubjectChipHomeView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipView.java_SELECTED&quot;: &quot;SubjectChipView&quot;,
-    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/TutorReviewChip.java_SELECTED&quot;: &quot;TutorReviewChip&quot;,
-    &quot;android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LabelAndEditText.java_SELECTED&quot;: &quot;LabelAndEditText&quot;,
-    &quot;android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LoginLabelAndEditText.java_SELECTED&quot;: &quot;LoginLabelAndEditText&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch&quot;,
-    &quot;memory.settings.postsync.last.time.stamp&quot;: &quot;1698613940560&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;experimental&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/AdminListComponent.java_SELECTED": "AdminListComponent",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/TutorRow.java_SELECTED": "TutorRow",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/activities/ChatButton.java_SELECTED": "ChatButton",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/ActivityBarView.java_SELECTED": "AppBarCustomView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomBackView.java_SELECTED": "AppBarCustomBackView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomTutorBackView.java_SELECTED": "AppBarCustomTutorBackView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java_SELECTED": "AppBarCustomView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AvailableTimesViews.java_SELECTED": "AvailableTimesViews",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/CourseRateItemView.java_SELECTED": "CourseRateItemView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/DayOfTheWeekView.java_SELECTED": "DayOfTheWeekView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndCommentTextView.java_SELECTED": "LabelAndCommentTextView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndRatingView.java_SELECTED": "LabelAndRatingView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndTextView.java_SELECTED": "LabelAndTextView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/MessageChipView.java_SELECTED": "MessageChipView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipHomeView.java_SELECTED": "SubjectChipHomeView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipView.java_SELECTED": "SubjectChipView",
+    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/TutorReviewChip.java_SELECTED": "TutorReviewChip",
+    "android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LabelAndEditText.java_SELECTED": "LabelAndEditText",
+    "android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LoginLabelAndEditText.java_SELECTED": "LoginLabelAndEditText",
+    "cidr.known.project.marker": "true",
+    "last_opened_file_path": "C:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch",
+    "memory.settings.postsync.last.time.stamp": "1698613940560",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "experimental"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="android.template.-1582889132">
       <recent name="com.example.edumatch.activities" />
@@ -345,7 +346,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698894751379</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Fixed the going back to Tutee issue as a Tutor">
+      <created>1698895621896</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1698895621896</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -388,6 +396,7 @@
     <MESSAGE value="Need to add the listeners for confirm and decline appointments for tutors. Also there is major UI issue with TuteeHomeActivity" />
     <MESSAGE value="Recommendation helpers are set for all onClick function" />
     <MESSAGE value="Tutor View is done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tutor View is done" />
+    <MESSAGE value="Fixed the going back to Tutee issue as a Tutor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed the going back to Tutee issue as a Tutor" />
   </component>
 </project>

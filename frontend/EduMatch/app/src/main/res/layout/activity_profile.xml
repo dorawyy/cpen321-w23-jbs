@@ -20,7 +20,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/topEmptyBar"
         android:layout_marginTop="16dp"/>
-a
+
     <!-- RatingBar and Rating TextView -->
     <LinearLayout
         android:id="@+id/ratingLayout"
@@ -121,7 +121,6 @@ a
             android:id="@+id/tutorDescription"
             android:layout_width="370dp"
             android:layout_height="wrap_content"
-            android:minHeight="200dp"
             android:layout_marginTop="12dp"
             android:layout_centerHorizontal="true"
             android:text="The tutor does not have a bio. :("

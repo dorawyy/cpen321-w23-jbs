@@ -1,9 +1,12 @@
 package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.AppointmentHelper.getAppointments;
+import static com.example.edumatch.util.TutorHelper.acceptAppointment;
+import static com.example.edumatch.util.TutorHelper.declineAppointment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -27,17 +30,14 @@ import java.util.Date;
 public class TutorHomeActivity extends AppCompatActivity {
 
     String tutorId;
+    String apt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_home);
-        JSONObject appointments = getAppointments(TutorHomeActivity.this);
-        try {
-            makeComponents(appointments.getJSONArray("appointments"));
-        } catch (JSONException e) {
-            Toast.makeText(TutorHomeActivity.this, "You have no appointments yet!", Toast.LENGTH_SHORT).show();
-        }
+
         initializeChat();
+        makeComponents();
 
     }
     private void initializeChat() {
@@ -51,20 +51,39 @@ public class TutorHomeActivity extends AppCompatActivity {
         });
     }
 
-    private void makeComponents(JSONArray appointments) {
+    private void makeComponents() {
+        clearLinearLayout();
+        JSONObject appointmentss = getAppointments(TutorHomeActivity.this);
+        Log.d("maryyy", appointmentss.toString());
+        JSONArray appointments = null;
+        try {
+            appointments = appointmentss.getJSONArray("appointments");
+        } catch (JSONException e) {
+            Toast.makeText(TutorHomeActivity.this, "You have no appointments yet!", Toast.LENGTH_SHORT).show();
+        }
+        if (appointments.isNull(0) || appointments == null) Toast.makeText(TutorHomeActivity.this, "You have no appointments yet!", Toast.LENGTH_SHORT).show();
+
         LinearLayout adminListComponentContainer = findViewById(R.id.adminListComponentContainer);
         try {
             for (int i = 0; i < appointments.length(); i++) {
                 JSONObject appointmentObject = appointments.getJSONObject(i);
+                if (!"pending".equals(appointmentObject.getString("status"))) {
+                    continue;
+                }
                 LayoutInflater inflater = LayoutInflater.from(this);
                 View adminListComponent = inflater.inflate(R.layout.tutor_home_list_component, null);
                 String apptId = appointmentObject.getString("_id");
                 adminListComponent.setTag(apptId);
+                Log.d("maryy", apptId);
                 String pstStartTime = appointmentObject.getString("pstStartDatetime");
+                Log.d("mary", pstStartTime);
                 String pstEndTime = appointmentObject.getString("pstEndDatetime");
+                Log.d("mary", pstEndTime);
                 String status = appointmentObject.getString("status");
+                Log.d("mary", status);
                 JSONArray participantsInfo = appointmentObject.getJSONArray("participantsInfo");
-                JSONObject participant = participantsInfo.getJSONObject(2);
+                JSONObject participant = participantsInfo.getJSONObject(1);
+                Log.d("mary", participant.toString());
                 String tutorName = participant.getString("displayedName");
                 tutorId = participant.getString("userId");
                 String course = appointmentObject.getString("course");
@@ -87,7 +106,7 @@ public class TutorHomeActivity extends AppCompatActivity {
                 String date = dateSdf.format(startDate); // Date
                 String startTime = timeSdf.format(startDate); // Start Time
                 String endTime = timeSdf.format(endDate); // End Time
-                String interval = date + startTime + " - " + endTime;
+                String interval = date + " " + startTime + " - " + endTime;
 
                 TextView dateText = adminListComponent.findViewById(R.id.date);
                 dateText.setText(interval);
@@ -96,37 +115,41 @@ public class TutorHomeActivity extends AppCompatActivity {
 
                 Button acceptButton = adminListComponent.findViewById(R.id.accept);
                 Button declineButton = adminListComponent.findViewById(R.id.decline);
+                acceptButton.setTag(apptId);
                 acceptButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Handle the accept button click here
-                        // For example, you can display a message:
-                        Toast.makeText(TutorHomeActivity.this, "Accept button clicked!", Toast.LENGTH_SHORT).show();
-
-                        // Additional code for accepting...
+                        acceptAppointment((String) v.getTag(), TutorHomeActivity.this);
+                        Toast.makeText(TutorHomeActivity.this, "Accepted appointment!", Toast.LENGTH_SHORT).show();
+                        clearLinearLayout();
+                        makeComponents();
                     }
                 });
 
                 declineButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Handle the decline button click here
-                        // For example, you can display a message:
+                        declineAppointment((String) v.getTag(), TutorHomeActivity.this);
                         Toast.makeText(TutorHomeActivity.this, "Decline button clicked!", Toast.LENGTH_SHORT).show();
-
+                        clearLinearLayout();
+                        makeComponents();
                     }
                 });
-
-
-
 
                 adminListComponentContainer.addView(adminListComponent);
 
 
             }
         } catch (JSONException e) {
-            Toast.makeText(this, "You have no appointments!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "An error may have occured!", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void clearLinearLayout() {
+        LinearLayout linearLayout = findViewById(R.id.adminListComponentContainer);
+        linearLayout.removeAllViews();
+    }
+
+
 
 }

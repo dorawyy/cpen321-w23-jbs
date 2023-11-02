@@ -8,6 +8,7 @@ import static com.example.edumatch.util.TutorsHelper.getTutorInfo;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,6 +51,8 @@ public class BookingFlowActivity extends AppCompatActivity {
     private Button previousCourseSelection = null;
     private Button previousTimeSelection = null;
     private Button previousIntervalSelection = null;
+    Drawable originalBackground;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,7 @@ public class BookingFlowActivity extends AppCompatActivity {
 
         RadioButton inPersonOption = findViewById(R.id.inPersonOption);
         RadioButton onlineOption = findViewById(R.id.onlineOption);
+
 
         inPersonOption.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,12 +123,13 @@ public class BookingFlowActivity extends AppCompatActivity {
             String course = courses.getString(i);
 
             Button timeButton = new Button(this);
+            originalBackground = timeButton.getBackground();
             timeButton.setText(course);
             timeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (previousCourseSelection != null) {
-                        previousCourseSelection.setBackgroundColor(Color.TRANSPARENT);
+                        previousCourseSelection.setBackground(originalBackground);
                     }
 
                     v.setBackgroundColor(Color.GRAY);
@@ -317,6 +322,7 @@ public class BookingFlowActivity extends AppCompatActivity {
         // Fetch data from API (using Retrofit, Volley, or any other method)
         Log.d("err", selectedDate);
         JSONObject datesFromApi = getAvailability(this, tutorId, selectedDate.toString());
+        Log.d("mary", datesFromApi.toString());
         try {
             if (!datesFromApi.has("availability") || datesFromApi.isNull("availability")) {
                 Toast.makeText(getApplicationContext(), "The date you selected does not have any time availability!", Toast.LENGTH_SHORT).show();

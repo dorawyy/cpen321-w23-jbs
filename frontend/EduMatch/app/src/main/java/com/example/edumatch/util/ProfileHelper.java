@@ -12,7 +12,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ProfileHelper {
@@ -239,31 +241,56 @@ public class ProfileHelper {
     private static void saveEducationData(SharedPreferences.Editor editor, JSONObject jsonResponse) throws JSONException {
         if (jsonResponse.has("education")) {
             JSONObject educationObj = jsonResponse.getJSONObject("education");
-            if (educationObj.has("school")) {
-                editor.putString("university", educationObj.getString("school"));
+            saveSchool(editor, educationObj);
+            saveProgram(editor, educationObj);
+            saveLevel(editor, educationObj);
+            saveCourses(editor, educationObj);
+            saveTags(editor, educationObj);
+        }
+    }
+
+    // ChatGPT usage: Yes
+    private static void saveSchool(SharedPreferences.Editor editor, JSONObject educationObj) throws JSONException {
+        if (educationObj.has("school")) {
+            editor.putString("university", educationObj.getString("school"));
+        }
+    }
+
+    // ChatGPT usage: Yes
+    private static void saveProgram(SharedPreferences.Editor editor, JSONObject educationObj) throws JSONException {
+        if (educationObj.has("program")) {
+            editor.putString("program", educationObj.getString("program"));
+        }
+    }
+
+    // ChatGPT usage: Yes
+    private static void saveLevel(SharedPreferences.Editor editor, JSONObject educationObj) throws JSONException {
+        if (educationObj.has("level")) {
+            editor.putString("yearLevel", String.valueOf(educationObj.getInt("level")));
+        }
+    }
+
+    // ChatGPT usage: Yes
+    private static void saveCourses(SharedPreferences.Editor editor, JSONObject educationObj) throws JSONException {
+        if (educationObj.has("courses")) {
+            JSONArray coursesArray = educationObj.getJSONArray("courses");
+            Set<String> coursesSet = new HashSet<>();
+            for (int i = 0; i < coursesArray.length(); i++) {
+                coursesSet.add(coursesArray.getString(i));
             }
-            if (educationObj.has("program")) {
-                editor.putString("program", educationObj.getString("program"));
+            editor.putStringSet("courses", coursesSet);
+        }
+    }
+
+    // ChatGPT usage: Yes
+    private static void saveTags(SharedPreferences.Editor editor, JSONObject educationObj) throws JSONException {
+        if (educationObj.has("tags")) {
+            JSONArray tagsArray = educationObj.getJSONArray("tags");
+            Set<String> tagsSet = new HashSet<>();
+            for (int i = 0; i < tagsArray.length(); i++) {
+                tagsSet.add(tagsArray.getString(i));
             }
-            if (educationObj.has("level")) {
-                editor.putString("yearLevel", String.valueOf(educationObj.getInt("level")));
-            }
-            if (educationObj.has("courses")) {
-                JSONArray coursesArray = educationObj.getJSONArray("courses");
-                Set<String> coursesSet = new HashSet<>();
-                for (int i = 0; i < coursesArray.length(); i++) {
-                    coursesSet.add(coursesArray.getString(i));
-                }
-                editor.putStringSet("courses", coursesSet);
-            }
-            if (educationObj.has("tags")) {
-                JSONArray tagsArray = educationObj.getJSONArray("tags");
-                Set<String> tagsSet = new HashSet<>();
-                for (int i = 0; i < tagsArray.length(); i++) {
-                    tagsSet.add(tagsArray.getString(i));
-                }
-                editor.putStringSet("tags", tagsSet);
-            }
+            editor.putStringSet("tags", tagsSet);
         }
     }
 
@@ -278,16 +305,30 @@ public class ProfileHelper {
     private static void saveManualAvailabilityData(SharedPreferences.Editor editor, JSONObject jsonResponse) throws JSONException {
         if (jsonResponse.has("manualAvailability")) {
             JSONArray manualAvailabilityArray = jsonResponse.getJSONArray("manualAvailability");
+
+            // Create a map to store the day key, start time, and end time
+            Map<String, String[]> availabilityData = new HashMap<>();
+
+            // Extract day, start time, and end time data
             for (int i = 0; i < manualAvailabilityArray.length(); i++) {
                 JSONObject dayAvailability = manualAvailabilityArray.getJSONObject(i);
                 if (dayAvailability.has("day") && dayAvailability.has("startTime") && dayAvailability.has("endTime")) {
                     String dayKey = dayAvailability.getString("day");
                     String startTime = dayAvailability.getString("startTime");
                     String endTime = dayAvailability.getString("endTime");
-                    editor.putString(dayKey + "StartTime", startTime);
-                    editor.putString(dayKey + "EndTime", endTime);
+                    availabilityData.put(dayKey, new String[]{startTime, endTime});
                 }
             }
+
+            // Save individual day key, start time, and end time
+            for (Map.Entry<String, String[]> entry : availabilityData.entrySet()) {
+                String dayKey = entry.getKey();
+                String[] times = entry.getValue();
+                editor.putString(dayKey + "StartTime", times[0]);
+                editor.putString(dayKey + "EndTime", times[1]);
+            }
+
+            // Store the entire manualAvailability JSON in SharedPreferences
             editor.putString("manualAvailability", manualAvailabilityArray.toString());
         }
     }

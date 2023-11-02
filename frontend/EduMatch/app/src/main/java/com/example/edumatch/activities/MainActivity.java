@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // ChatGPT usage: Yes
     private void googleSignIn() {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             }
     );
 
-
+    // ChatGPT usage: Yes
     private void handleGoogleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    // ChatGPT usage: Yes
     private void handleSignInClick() {
         LabelAndEditTextView username = findViewById(R.id.username);
         EditText usernameEditText = username.getEnterUserEditText();
@@ -163,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT usage: Yes
     private void clearPreferences() {
         Context context = getApplicationContext();
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
@@ -213,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(newIntent);
     }
 
-
+    // ChatGPT usage: Yes
     private Boolean postSignIn() {
         clearPreferences();
         JSONObject requestBody = constructSignInRequest();// Create your JSON request body
@@ -255,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-
+    // ChatGPT usage: Yes
     private Boolean postGoogleAuth() {
         clearPreferences();
         JSONObject requestBody = constructGoogleRequest();// Create your JSON request body
@@ -292,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    // ChatGPT usage: Yes
     private JSONObject constructSignInRequest() {
         try {
             JSONObject requestBody = new JSONObject();
@@ -307,6 +309,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT usage: Yes
     private JSONObject constructGoogleRequest() {
         try {
             JSONObject requestBody = new JSONObject();

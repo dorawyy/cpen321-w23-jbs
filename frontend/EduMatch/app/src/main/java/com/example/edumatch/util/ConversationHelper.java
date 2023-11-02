@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 public class ConversationHelper {
 
+    // ChatGPT usage: Yes
     public static JSONObject getConversations(Context context) {
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/conversation/get_list";
 
@@ -24,6 +25,7 @@ public class ConversationHelper {
         return handleGetResponse(context,jsonResponse,logTag);
     }
 
+    // ChatGPT usage: Yes
     public static JSONObject getMessages(Context context, String page, String conversationId) {
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/conversation/get_conversation?conversationId=" + conversationId +"&page=" + page;
 

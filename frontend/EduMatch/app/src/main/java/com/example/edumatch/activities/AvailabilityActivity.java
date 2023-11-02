@@ -79,6 +79,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         }
     }
 
+    // ChatGPT usage: Yes
     private void initializeSetTimeButton() {
         Button setTimeButton = availableTimesViews.getSetTimesButton();
 
@@ -103,6 +104,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         });
     }
 
+    // ChatGPT usage: Yes
     private void initializeDayButtons() {
         int[] buttonIds = {
                 R.id.sunday_button,
@@ -126,6 +128,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         }
     }
 
+    // ChatGPT usage: Yes
     @Override
     public void onDayButtonClick(String day) {
         Log.w(TAG, "Day " + day);
@@ -143,7 +146,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         availableTimesViews.setVisibility(View.VISIBLE);
     }
 
-
+    // ChatGPT usage: Yes
     @SuppressLint("SetTextI18n")
     private void updateAvailability(String day) {
         TextView dayText = findViewById(R.id.selected_day);
@@ -160,6 +163,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         dayText.setText("Selected Day: " + day);
     }
 
+    // ChatGPT usage: Yes
     public void showTimePicker(View view) {
         boolean isStartTime = "start_time".equals(view.getTag());
 
@@ -193,7 +197,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         });
     }
 
-
+    // ChatGPT usage: Yes
     private void updatePreferences() {
 
         editor.putBoolean("useGoogleCalendar", useGoogleCalendar);
@@ -211,10 +215,9 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
 
         // Commit the changes to SharedPreferences
         editor.commit();
-
-
     }
 
+    // ChatGPT usage: Yes
     private void goToNewActivity() {
         Intent newIntent;
         updatePreferences();
@@ -255,6 +258,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         editor = sharedPreferences.edit();
     }
 
+    // ChatGPT usage: Yes
     private void initFields() {
         // Initialize the availability for each day
         for (String day : availabilityMap.keySet()) {
@@ -270,9 +274,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
         }
     }
 
-
-
-
+    // ChatGPT usage: Yes
     public JSONObject constructEditAvailabilityRequest() {
 
         try {

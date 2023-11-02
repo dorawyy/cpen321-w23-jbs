@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.edumatch.views.AppBarCustomView
+    <com.example.edumatch.views.AppBarCustomTutorBackView
         android:id="@+id/emptyBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

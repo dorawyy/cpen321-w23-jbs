@@ -21,6 +21,8 @@ public class AdminListComponent extends LinearLayout {
     private TextView usernameTextView;
     private Button activeButton;
 
+    public String apptId;
+
     public AdminListComponent(Context context) {
         super(context);
         init(context);
@@ -88,6 +90,9 @@ public class AdminListComponent extends LinearLayout {
         usernameTextView.setText(username);
     }
 
+    public void setIdAsField(String id) {
+        apptId = id;
+    }
     public void setActiveButtonText(String text) {
         activeButton.setText(text);
     }

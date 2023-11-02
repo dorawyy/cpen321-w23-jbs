@@ -60,31 +60,73 @@ a
         android:layout_below="@id/ratingLayout"
         android:layout_marginTop="16dp">
 
-        <!-- Tutor Name -->
         <TextView
-            android:id="@+id/tutorDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_centerHorizontal="true"
+            android:text="Education"
+            android:textStyle="bold"
             android:textSize="18sp"/>
         <TextView
             android:id="@+id/majorDescripion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_centerHorizontal="true"
-            android:textSize="18sp"/>
+            android:text="Unknown"
+            android:textSize="17sp"/>
         <TextView
-            android:id="@+id/selectedCourses"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:text="@string/your_selected_courses"
-            android:textAppearance="@style/label_text"
+            android:layout_centerHorizontal="true"
+            android:text="Courses"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/majorDescripion" />
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/courses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"
+            android:text="Unknown"
+            android:textSize="18sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"
+            android:text="Pricing"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/pricingList"
+            android:layout_width="370dp"
+            android:layout_height="wrap_content"
+            android:minHeight="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"
+            android:text="No pricing listed"
+            android:textSize="16sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"
+            android:text="Bio"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/tutorDescription"
+            android:layout_width="370dp"
+            android:layout_height="wrap_content"
+            android:minHeight="200dp"
+            android:layout_marginTop="12dp"
+            android:layout_centerHorizontal="true"
+            android:text="The tutor does not have a bio. :("
+            android:textSize="17sp"/>
+
 
 
 
@@ -108,20 +150,6 @@ a
             android:orientation="horizontal"
             android:gravity="center">
 
-            <!-- Pricing Button -->
-            <Button
-                android:id="@+id/pricingButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pricing"
-                android:textColor="#000000"
-                android:background="#FFFFFF"
-                android:padding="8dp"
-                android:gravity="center"
-                android:backgroundTint="#000000"
-                android:outlineSpotShadowColor="#000000"
-                android:outlineAmbientShadowColor="#000000"
-                android:stateListAnimator="@null"/>
 
             <Button
                 android:id="@+id/bookButton"

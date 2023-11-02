@@ -9,13 +9,17 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="Need to add the listeners for confirm and decline appointments for tutors. Also there is major UI issue with TuteeHomeActivity">
+    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="Recommendation helpers are set for all onClick function">
+      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ScheduledAppointmentActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ScheduledAppointmentActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TutorHomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TutorHomeActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/RecommendationHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/RecommendationHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_tutor_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_tutor_home.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/BookingFlowActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/BookingFlowActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ProfileActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ProfileActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TuteeHomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TuteeHomeActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/TutorRow.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/TutorRow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/rounded_border.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/drawable/rounded_border.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_home_tutee.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_home_tutee.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_profile.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/tutor_row.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/tutor_row.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +29,7 @@
   <component name="CodeInsightWorkspaceSettings">
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/maggiegu/.android/avd/Resizable_Experimental_API_34_4.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/maggiegu/.android/avd/Resizable_Experimental_API_34_6.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/EduMatch">
       <ProjectState />
@@ -339,7 +343,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698841986198</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Recommendation helpers are set for all onClick function">
+      <created>1698870253031</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1698870253031</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -380,6 +391,7 @@
     <MESSAGE value="Added some library things" />
     <MESSAGE value="Got the booking appointments and showing appointments going smoothly - need to work on cancel" />
     <MESSAGE value="Need to add the listeners for confirm and decline appointments for tutors. Also there is major UI issue with TuteeHomeActivity" />
-    <option name="LAST_COMMIT_MESSAGE" value="Need to add the listeners for confirm and decline appointments for tutors. Also there is major UI issue with TuteeHomeActivity" />
+    <MESSAGE value="Recommendation helpers are set for all onClick function" />
+    <option name="LAST_COMMIT_MESSAGE" value="Recommendation helpers are set for all onClick function" />
   </component>
 </project>

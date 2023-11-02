@@ -296,21 +296,42 @@ public class BookingFlowActivity extends AppCompatActivity {
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(BookingFlowActivity.this, (datePicker, selectedYear, selectedMonth, selectedDay) -> {
+            // Format the selected date and set it to the EditText
             selectedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d", selectedMonth + 1, selectedDay, selectedYear); // +1 because Calendar.MONTH starts from 0 for January
 
             EditText datePickerEditText = findViewById(R.id.datePickerEditText);
-            datePickerEditText.setText(selectedDate);;
+            datePickerEditText.setText(selectedDate);
 
             populateDataBasedOnAPI();
         }, year, month, day);
+
+        c.add(Calendar.DAY_OF_MONTH, 1);
+        // Set the DatePickerDialog to only show today's date or future dates
+        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
+
+        // Show the DatePickerDialog
         datePickerDialog.show();
     }
+
     public void populateDataBasedOnAPI() {
         // Fetch data from API (using Retrofit, Volley, or any other method)
+        Log.d("err", selectedDate);
         JSONObject datesFromApi = getAvailability(this, tutorId, selectedDate.toString());
-        Log.d("avail", datesFromApi.toString());
-        Map<String, String> availabilityMap = processAvailability(datesFromApi);
-        getTimesForDate(availabilityMap);
+        try {
+            if (!datesFromApi.has("availability") || datesFromApi.isNull("availability")) {
+                Toast.makeText(getApplicationContext(), "The date you selected does not have any time availability!", Toast.LENGTH_SHORT).show();
+            } else {
+                JSONArray dates = datesFromApi.getJSONArray("availability");
+                if(dates.length() == 0){
+                    Toast.makeText(getApplicationContext(), "The date you selected does not have any time availability!", Toast.LENGTH_SHORT).show();
+                }
+                Log.d("avail", datesFromApi.toString());
+                Map<String, String> availabilityMap = processAvailability(datesFromApi);
+                getTimesForDate(availabilityMap);
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static Map<String, String> processAvailability(JSONObject jsonObject) {

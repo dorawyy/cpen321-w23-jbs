@@ -39,6 +39,8 @@ public class TuteeHomeActivity extends AppCompatActivity {
     private List<String> courseList;
     private List<SubjectChipHomeView> subjectChipViews;
     private String selectedCourse;
+    private String courses;
+    private String uni;
 
 
     String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/recommended?";
@@ -58,61 +60,6 @@ public class TuteeHomeActivity extends AppCompatActivity {
         subjectChipViews = new ArrayList<>();
         apiUrlBuilder = new StringBuilder(apiUrl);
         initializeCourseTags(courses);
-
-//
-//        if (courses != null) {
-//            for (String course : courseList) {
-//                // Perform an action on each course, for example, print it to the log
-//                SubjectChipView subjectChipView = new SubjectChipView(TuteeHomeActivity.this);
-//                subjectChipView.setChipText(course);
-//                subjectChipViews.add(subjectChipView);
-//                subjectChipView.hideRemoveSubjectImageView();
-//                int padding = (int) (4 * getResources().getDisplayMetrics().density);  // Convert 8dp to pixels
-//                subjectChipView.setPadding(padding, padding, padding, padding);
-//
-//                subjectChipView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        clearTutorList();
-//                        if (subjectChipView.isClicked) {
-//                            subjectChipView.setBackgroundColor(Color.TRANSPARENT);
-//                            subjectChipView.isClicked = false;
-//                        } else {
-//                            // Clear all other chip's clicked state
-//                            for (SubjectChipView chip : subjectChipViews) {
-//                                chip.setBackgroundColor(Color.TRANSPARENT);
-//                                chip.isClicked = false;
-//                            }
-//                            // Set this chip as clicked
-//                            subjectChipView.setBackgroundColor(Color.parseColor("#A9A9A9"));
-//                            subjectChipView.isClicked = true;
-//
-//                            // Fetch data for the clicked course
-//                            fetchCourseData(course);
-//                        }
-//
-//                        if (!isAnyChipViewPressed()) {
-//                            // Fetch all data when no chips are clicked
-//                            fetchAllData();
-//                        }
-//                    }
-//                });
-//
-//                chipContainer.addView(subjectChipView);
-//                // Append the course to the API URL
-//                apiUrlBuilder.append(course);
-//
-//                // Check if it's the last course before appending a comma
-//                if (!course.equals(courseList.get(courseList.size() - 1))) {
-//                    apiUrlBuilder.append(",");
-//                }
-//            }
-//            //TODO: implement dynamic pagination
-//            apiUrlBuilder.append("&page=1");
-//            JSONObject jsonResponse = getTuteeHome(apiUrlBuilder,TuteeHomeActivity.this);
-//            fetchAllData();
-//
-//        }
 
     }
 
@@ -177,17 +124,30 @@ public class TuteeHomeActivity extends AppCompatActivity {
             for (int i = 0; i < tutorsArray.length(); i++) {
                 JSONObject tutorObject = tutorsArray.getJSONObject(i);
 
-                // String courseCode = tutorObject.getString("courses"); // replace with your actual JSON keys
                 String tutorName = tutorObject.getString("displayedName");
                 String tutorDetails = tutorObject.getString("school");
                 String tutorID = tutorObject.getString("tutorId");
+                JSONArray tutorCourses = tutorObject.getJSONArray("courses");
+                String tutorRating = tutorObject.getString("rating");
+                courses = "";
+                for (int j = 0; j < tutorCourses.length(); j++) {
+                    String course;
+                    try {
+                        course = tutorCourses.getString(j).trim();
+                    } catch (JSONException e) {
+                        course = "";
+                    }
+                    courses = courses + " " + course;
+                }
 
 
                 TutorRow tutorRow = new TutorRow(TuteeHomeActivity.this);
-                // tutorRow.setCourseCode(courseCode);
                 tutorRow.setTutorName(tutorName);
                 tutorRow.setTutorDetails(tutorDetails);
                 tutorRow.setId(tutorID);
+                tutorRow.setCourses(courses.trim());
+                tutorRow.setCourseCode(courses.trim());
+                tutorRow.setPrice("Rating: " + tutorRating);
 
                 tutorRow.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -195,6 +155,8 @@ public class TuteeHomeActivity extends AppCompatActivity {
                         updateWhenTuteeChecksTutor(tutorRow.id, TuteeHomeActivity.this);
                         Intent profileIntent = new Intent(TuteeHomeActivity.this, ProfileActivity.class);
                         profileIntent.putExtra("TUTOR_ID", tutorRow.id);
+                        profileIntent.putExtra("COURSES", tutorRow.courses);
+                        Log.d("mag", tutorRow.courses);
                         startActivity(profileIntent);
                     }
                 });
@@ -212,24 +174,38 @@ public class TuteeHomeActivity extends AppCompatActivity {
         courseApiUrlBuilder.append("course=").append(courseName).append("&page=1");
 
         jsonResponse = getTuteeHome(courseApiUrlBuilder, TuteeHomeActivity.this);
-        Log.d("mag", jsonResponse.toString());
-
 
         try {
             JSONArray tutorsArray = jsonResponse.getJSONArray("tutors");
 
             for (int i = 0; i < tutorsArray.length(); i++) {
                 JSONObject tutorObject = tutorsArray.getJSONObject(i);
-
+                Log.d("response", tutorObject.toString());
                 String tutorName = tutorObject.getString("displayedName");
                 String tutorDetails = tutorObject.getString("school");
                 String tutorID = tutorObject.getString("tutorId");
+                JSONArray tutorCourses = tutorObject.getJSONArray("courses");
+                String tutorRating = tutorObject.getString("rating");
+                courses = "";
+                for (int j = 0; j < tutorCourses.length(); j++) {
+                    String course;
+                    try {
+                        course = tutorCourses.getString(j).trim();
+                    } catch (JSONException e) {
+                        course = "";
+                    }
+                    courses = courses + " " + course;
+                }
 
 
                 TutorRow tutorRow = new TutorRow(TuteeHomeActivity.this);
                 tutorRow.setTutorName(tutorName);
                 tutorRow.setTutorDetails(tutorDetails);
                 tutorRow.setId(tutorID);
+                tutorRow.setCourses(courses.trim());
+                tutorRow.setCourseCode(courses.trim());
+                tutorRow.setPrice("Rating: " + tutorRating);
+
 
 
                 tutorRow.setOnClickListener(new View.OnClickListener() {
@@ -239,6 +215,8 @@ public class TuteeHomeActivity extends AppCompatActivity {
                         updateWhenTuteeChecksTutor(tutorRow.id, TuteeHomeActivity.this);
                         Intent profileIntent = new Intent(TuteeHomeActivity.this, ProfileActivity.class);
                         profileIntent.putExtra("TUTOR_ID", tutorRow.id);
+                        profileIntent.putExtra("COURSES", tutorRow.courses);
+                        Log.d("mag", tutorRow.courses);
                         startActivity(profileIntent);
                     }
                 });

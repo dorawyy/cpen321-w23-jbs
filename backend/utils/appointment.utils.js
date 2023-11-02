@@ -62,7 +62,11 @@ exports.getManualFreeTimes = async (user, timeMin, timeMax) => {
             busyTimes.push(appt)
         }
     }
-    return getFreeTimeHelper(timeMin, timeMax, busyTimes, false)
+    return getFreeTimeHelper(
+        timeMin.toISOString(true), 
+        timeMax.toISOString(true), 
+        busyTimes, false
+    )
 }
 
 

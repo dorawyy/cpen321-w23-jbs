@@ -139,9 +139,11 @@ exports.getTutorAvailability = async (req, res) => {
                     .format('Z')
 
         var timeMin = momenttz(`${date}T08:00:00${tzOffset}`)
+            .tz('America/Los_Angeles')
             .toISOString(true)
     
         var timeMax = momenttz(`${date}T19:00:00${tzOffset}`)
+            .tz('America/Los_Angeles')
             .toISOString(true)
     
         if (tutor.useGoogleCalendar) {
@@ -181,7 +183,7 @@ exports.getTutorAvailability = async (req, res) => {
                 var ret = {
                     availability: availabilities
                 }
-                return res.status(200).send(availabilities)
+                return res.status(200).send(ret)
             } else {
                 var freeTimes = [{
                     start: "08:00",
@@ -190,7 +192,7 @@ exports.getTutorAvailability = async (req, res) => {
                 var ret = {
                     availability: freeTimes
                 }
-                return res.status(200).send(freeTimes)
+                return res.status(200).send(ret)
             }
         }
     } catch (err) {

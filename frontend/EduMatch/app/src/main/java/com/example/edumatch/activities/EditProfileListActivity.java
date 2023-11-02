@@ -14,6 +14,7 @@ import com.example.edumatch.R;
 
 public class EditProfileListActivity extends AppCompatActivity {
 
+    // ChatGPT usage: Yes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +73,7 @@ public class EditProfileListActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    // ChatGPT usage: Yes
     private void clearPreferences() {
         Context context = getApplicationContext();
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);

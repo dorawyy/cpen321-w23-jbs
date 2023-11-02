@@ -18,25 +18,30 @@ public class CustomAutoCompleteView extends RelativeLayout {
     private AutoCompleteTextView autoCompleteTextView;
     private String[] suggestionsArray;
 
+    // ChatGPT usage: Yes
     public CustomAutoCompleteView(Context context) {
         super(context);
         init(context);
     }
 
+    // ChatGPT usage: Yes
     public CustomAutoCompleteView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
+    // ChatGPT usage: Yes
     public CustomAutoCompleteView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
+    // ChatGPT usage: Yes
     public AutoCompleteTextView getAutoCompleteTextView() {
         return autoCompleteTextView;
     }
 
+    // ChatGPT usage: Yes
     public void setSuggestions(String[] suggestions) {
         this.suggestionsArray = suggestions;
 
@@ -46,6 +51,7 @@ public class CustomAutoCompleteView extends RelativeLayout {
         }
     }
 
+    // ChatGPT usage: Yes
     private void init(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.auto_complete, this, true);

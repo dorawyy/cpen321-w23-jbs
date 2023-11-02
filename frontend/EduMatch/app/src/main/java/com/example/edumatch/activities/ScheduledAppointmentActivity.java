@@ -81,6 +81,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
         return true;
     }
 
+    // ChatGPT usage: Yes
     @SuppressLint("SetTextI18n")
     private void initFields() {
         Log.d("appt2", "here");
@@ -163,7 +164,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
         }
     }
 
-
+    // ChatGPT usage: Yes
     public JSONObject constructCancelAppointmentRequest() {
         try {
             // TODO: verify that these are the request params needed

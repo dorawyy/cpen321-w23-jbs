@@ -19,7 +19,7 @@ public class AppointmentHelper {
 
     public static String api = "https://edumatch.canadacentral.cloudapp.azure.com/";
 
-
+    // ChatGPT usage: Yes
     public static boolean putAppointment(Context context, JSONObject requestBody, String appointmentId) {
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/appointment/cancel?appointmentId=" + appointmentId;
 
@@ -58,7 +58,7 @@ public class AppointmentHelper {
         return handleGetResponse(context,jsonResponse,logTag);
     }
 
-
+    // ChatGPT usage: Yes
     public static JSONObject getAppointment(Context context, String appointmentId) {
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/appointment?appointmentId=" + appointmentId;
 
@@ -72,6 +72,7 @@ public class AppointmentHelper {
         return handleGetResponse(context,jsonResponse,logTag);
     }
 
+    // ChatGPT usage: Yes
     public static JSONObject getAvailability(Context context, String userId, String date) {
         String apiUrl = api + "user/availability?userId=" + userId + "&date=" + convertDateFormat(date);
 

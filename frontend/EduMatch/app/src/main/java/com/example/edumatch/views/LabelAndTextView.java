@@ -43,7 +43,15 @@ public class LabelAndTextView extends GridLayout {
         return content;
     }
 
+
     // ChatGPT usage: Yes
+
+    public void setText(String text) {
+        if (content != null) {
+            content.setText(text);
+        }
+    }
+
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.label_and_text_view, this, true);

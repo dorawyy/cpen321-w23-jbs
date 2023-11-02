@@ -5,9 +5,13 @@ const mongoose = require('mongoose')
 const User = db.user
 const Conversation = db.conversation
 
+// ChatGPT usage: No
 exports.ban = async (req, res) => {
     try {
-        const admin = await User.findById(req.userId)
+        const admin = await User.findById(req.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!admin)
             return res.status(404).send({ message: "Could not find admin in database with provided id"})
         if (admin.type != UserType.ADMIN)
@@ -17,7 +21,10 @@ exports.ban = async (req, res) => {
             return res.status(400).send({ message: "Invalid provided userId" })
         }
     
-        const user = await User.findById(req.body.userId)
+        const user = await User.findById(req.body.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!user) {
             return res.status(400).send({message: "User not found"})
         }
@@ -26,7 +33,10 @@ exports.ban = async (req, res) => {
             return res.status(401).send({ message: "User is admin and can't be banned" })
     
         user.isBanned = true
-        user.save()
+        await user.save().catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         
         return res.status(200).send({ message: "User with id " + user._id + " was banned successfully" })
     } catch (err) {
@@ -35,9 +45,13 @@ exports.ban = async (req, res) => {
     }
 }
 
+// ChatGPT usage: No
 exports.unban = async (req, res) => {
     try {
-        const admin = await User.findById(req.userId)
+        const admin = await User.findById(req.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!admin)
             return res.status(404).send({ message: "Could not find admin in database with provided id"})
         if (admin.type != UserType.ADMIN)
@@ -47,12 +61,18 @@ exports.unban = async (req, res) => {
             return res.status(400).send({ message: "Invalid provided userId" })
         }
     
-        const user = await User.findById(req.body.userId)
+        const user = await User.findById(req.body.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!user) {
             return res.status(400).send({message: "User not found"})
         }
         user.isBanned = false
-        user.save()
+        await user.save().catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         
         return res.status(200).send({ message: "User with id " + user._id + " was unbanned successfully" })
     } catch (err) {
@@ -62,15 +82,22 @@ exports.unban = async (req, res) => {
     
 }
 
+// ChatGPT usage: No
 exports.getUsers = async (req, res) => {
     try {
-        const admin = await User.findById(req.userId)
+        const admin = await User.findById(req.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!admin)
             return res.status(404).send({ message: "Could not find admin in database with provided id"})
         if (admin.type != UserType.ADMIN)
             return res.status(401).send({ message: "User is not admin and is not authorized to view user list" })
     
-        const users = await User.find({})
+        const users = await User.find({}).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
     
         return res.status(200).json({
             users: users.map(user => ({
@@ -88,9 +115,13 @@ exports.getUsers = async (req, res) => {
     
 }
 
+// ChatGPT usage: No
 exports.getProfile = async (req, res) => {
     try {
-        const admin = await User.findById(req.userId)
+        const admin = await User.findById(req.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!admin)
             return res.status(404).send({ message: "Could not find admin in database with provided id"})
         if (admin.type != UserType.ADMIN)
@@ -99,7 +130,10 @@ exports.getProfile = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(req.query.userId)) {
             return res.status(400).send({ message: "Invalid provided userId" })
         }
-        const user = await User.findById(req.query.userId)
+        const user = await User.findById(req.query.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
     
         if (!user) {
             return res.status(400).send({ message: "Could not find user in database with provided id" })
@@ -112,13 +146,19 @@ exports.getProfile = async (req, res) => {
                 '_id': 0,
                 'comment': 'userReviews.comment'
             } }
-        ])
+        ]).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
     
         const userConversations = await Conversation.find({
             $or: [
                 { 'participants.userId1': req.query.userId },
                 { 'participants.userId2': req.query.userId }
             ]
+        }).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
         })
     
         const userMessages = []

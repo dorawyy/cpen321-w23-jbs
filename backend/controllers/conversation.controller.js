@@ -4,9 +4,13 @@ const mongoose = require('mongoose')
 const User = db.user
 const Conversation = db.conversation
 
+// ChatGPT usage: No
 exports.getList = async (req, res) => {
     try {
-        const user = await User.findById(req.userId)
+        const user = await User.findById(req.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!user || user.isBanned)
             return res.status(404).send({ message: "Could not find user in database with provided id" })
     
@@ -15,6 +19,9 @@ exports.getList = async (req, res) => {
                 { 'participants.displayedName1': user.displayedName },
                 { 'participants.displayedName2': user.displayedName }
             ]
+        }).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
         })
         return res.status(200).json({
             conversations: conversationList.map(conversation => ({
@@ -26,15 +33,18 @@ exports.getList = async (req, res) => {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
+// ChatGPT usage: No
 exports.getConversation = async (req, res) => {
     try {
         if (req.query.page < 1)
         return res.status(400).send({ message: "Page number cannot be less than 1" })
 
-        const user = await User.findById(req.userId)
+        const user = await User.findById(req.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!user || user.isBanned)
             return res.status(404).send({ message: "Could not find user in database with provided id" })
 
@@ -42,7 +52,10 @@ exports.getConversation = async (req, res) => {
             return res.status(400).send({ message: "Invalid provided conversationId" })
         }
 
-        const conversation = await Conversation.findById(req.query.conversationId)
+        const conversation = await Conversation.findById(req.query.conversationId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!conversation)
             return res.status(404).send({ message: "Conversation not found" })
 
@@ -70,19 +83,25 @@ exports.getConversation = async (req, res) => {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
+// ChatGPT usage: No
 exports.create = async (req, res) => {
     try {
-        const user = await User.findById(req.userId)
+        const user = await User.findById(req.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!user || user.isBanned)
             return res.status(404).send({ message: "Could not find creating user in database with provided id" })
     
         if (!mongoose.Types.ObjectId.isValid(req.body.otherUserId)) {
             return res.status(400).send({ message: "Invalid provided userId" })
         }
-        const otherUser = await User.findById(req.body.otherUserId)
+        const otherUser = await User.findById(req.body.otherUserId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!otherUser || otherUser.isBanned)
             return res.status(404).send({ message: "Could not find other user in database with provided id" })
     
@@ -97,6 +116,9 @@ exports.create = async (req, res) => {
                     'participants.userId2': req.userId
                 }
             ]
+        }).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
         })
     
         if (existingConversation) {
@@ -113,7 +135,10 @@ exports.create = async (req, res) => {
                 messages: []
             })
             
-            await newConversation.save()
+            await newConversation.save().catch(err => {
+                console.log(err)
+                return res.status(500).send({ message: err.message })
+            })
     
             return res.status(200).json({
                 conversationId: newConversation._id,

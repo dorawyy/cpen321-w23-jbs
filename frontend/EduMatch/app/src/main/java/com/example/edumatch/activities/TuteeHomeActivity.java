@@ -1,12 +1,12 @@
 package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.ProfileHelper.getProfile;
+import static com.example.edumatch.util.RecommendationHelper.updateWhenTuteeChecksTutor;
 import static com.example.edumatch.util.TutorsHelper.getTuteeHome;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,8 +15,8 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.edumatch.R;
-import com.example.edumatch.TutorRow;
-import com.example.edumatch.views.SubjectChipView;
+import com.example.edumatch.views.SubjectChipHomeView;
+import com.example.edumatch.views.TutorRow;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -37,70 +37,68 @@ public class TuteeHomeActivity extends AppCompatActivity {
 
     private JSONObject jsonResponse;
     private List<String> courseList;
-    private List<SubjectChipView> subjectChipViews;
+    private List<SubjectChipHomeView> subjectChipViews;
+    private String selectedCourse;
+    private String courses;
+    private String uni;
 
 
     String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/recommended?";
 
-    //TODO: Do a GET on search?
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_tutee);
 
-        Bundle userData = getIntent().getExtras();
-
         chipContainer = findViewById(R.id.chipContainer);
+        initializeChat();
 
         getProfile(TuteeHomeActivity.this);
         SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         Set<String> courses = sharedPreferences.getStringSet("courses", new HashSet<>());
-        courseList = new ArrayList<>(courses); // Convert Set to List
-        courseList.add("ALL");
+        courseList = new ArrayList<>(courses);
         subjectChipViews = new ArrayList<>();
+        apiUrlBuilder = new StringBuilder(apiUrl);
+        initializeCourseTags(courses);
 
-         apiUrlBuilder = new StringBuilder(apiUrl);
+    }
 
+    private void initializeChat() {
+        FloatingActionButton fabChat = findViewById(R.id.fabChat);
+        fabChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TuteeHomeActivity.this, ChatListActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 
+    private void initializeCourseTags(Set<String> courses) {
+        courseList = new ArrayList<>(courses);
         if (courses != null) {
             for (String course : courseList) {
-                // Perform an action on each course, for example, print it to the log
-                SubjectChipView subjectChipView = new SubjectChipView(TuteeHomeActivity.this);
+                SubjectChipHomeView subjectChipView = new SubjectChipHomeView(TuteeHomeActivity.this);
                 subjectChipView.setChipText(course);
                 subjectChipViews.add(subjectChipView);
-
-                subjectChipView.setOnClickListener(new View.OnClickListener() {
+                int padding = (int) (4 * getResources().getDisplayMetrics().density);  // Convert 8dp to pixels
+                subjectChipView.setPadding(padding, padding, padding, padding);
+                subjectChipView.setChipClickListener(new SubjectChipHomeView.ChipClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        if (subjectChipView.isClicked) {
-                            // Assuming you've added the isClicked boolean in SubjectChipView
-                            subjectChipView.setBackgroundColor(Color.TRANSPARENT);  // or your default color
-                            subjectChipView.isClicked = false;
+                    public void onChipClicked(SubjectChipHomeView chipView) {
+                        clearTutorList();
+                        selectedCourse = chipView.getText();
+                        if (!isAnyChipViewPressed()) {
+                            Log.d("mag", "all");
+                            fetchAllData();
                         } else {
-                            subjectChipView.setBackgroundColor(Color.parseColor("#A9A9A9"));
-                            subjectChipView.isClicked = true;
+                            Log.d("mag", selectedCourse);
+                            fetchCourseData(selectedCourse);
                         }
                     }
                 });
+
                 chipContainer.addView(subjectChipView);
-
-                subjectChipView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (subjectChipView.isClicked) {
-                            subjectChipView.setBackgroundColor(Color.TRANSPARENT);
-                            subjectChipView.isClicked = false;
-                        } else {
-                            subjectChipView.setBackgroundColor(Color.parseColor("#A9A9A9"));
-                            subjectChipView.isClicked = true;
-
-                            // Fetch data for the clicked course
-                            fetchCourseData(course);
-                        }
-                    }
-                });
-
-
                 // Append the course to the API URL
                 apiUrlBuilder.append(course);
 
@@ -109,30 +107,14 @@ public class TuteeHomeActivity extends AppCompatActivity {
                     apiUrlBuilder.append(",");
                 }
             }
-            //TODO: implement dynamic pagination
-            apiUrlBuilder.append("&page=1");
-            JSONObject jsonResponse = getTuteeHome(apiUrlBuilder,TuteeHomeActivity.this);
-
-
-            FloatingActionButton fabChat = findViewById(R.id.fabChat);
-            fabChat.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(TuteeHomeActivity.this, ChatListActivity.class);
-                    startActivity(intent);
-                }
-            });
-
-
         }
-
     }
 
-    private void fetchCourseData(String courseName) {
-        LinearLayout tutorList = findViewById(R.id.tutorList); // Assuming you changed the ID to tutorListLayout
+    private void fetchAllData() {
+        LinearLayout tutorList = findViewById(R.id.tutorList);
+        clearTutorList();
         StringBuilder courseApiUrlBuilder = new StringBuilder(apiUrl);
-        courseApiUrlBuilder.append("course=").append(courseName).append("&page=1");
-
+        courseApiUrlBuilder.append("course=").append("&page=1");
         jsonResponse = getTuteeHome(courseApiUrlBuilder, TuteeHomeActivity.this);
 
 
@@ -142,35 +124,103 @@ public class TuteeHomeActivity extends AppCompatActivity {
             for (int i = 0; i < tutorsArray.length(); i++) {
                 JSONObject tutorObject = tutorsArray.getJSONObject(i);
 
-               // String courseCode = tutorObject.getString("courses"); // replace with your actual JSON keys
                 String tutorName = tutorObject.getString("displayedName");
                 String tutorDetails = tutorObject.getString("school");
                 String tutorID = tutorObject.getString("tutorId");
+                JSONArray tutorCourses = tutorObject.getJSONArray("courses");
+                String tutorRating = tutorObject.getString("rating");
+                courses = "";
+                for (int j = 0; j < tutorCourses.length(); j++) {
+                    String course;
+                    try {
+                        course = tutorCourses.getString(j).trim();
+                    } catch (JSONException e) {
+                        course = "";
+                    }
+                    courses = courses + " " + course;
+                }
 
 
                 TutorRow tutorRow = new TutorRow(TuteeHomeActivity.this);
-               // tutorRow.setCourseCode(courseCode);
                 tutorRow.setTutorName(tutorName);
                 tutorRow.setTutorDetails(tutorDetails);
                 tutorRow.setId(tutorID);
-                Log.d("tutorid", tutorID);
-                Log.d("tutorid", tutorDetails);
+                tutorRow.setCourses(courses.trim());
+                tutorRow.setCourseCode(courses.trim());
+                tutorRow.setPrice("Rating: " + tutorRating);
 
                 tutorRow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        updateWhenTuteeChecksTutor(tutorRow.id, TuteeHomeActivity.this);
                         Intent profileIntent = new Intent(TuteeHomeActivity.this, ProfileActivity.class);
-                        Log.d("tutorid", "bitch");
-                        Log.d("tutorid",  tutorRow.id);
                         profileIntent.putExtra("TUTOR_ID", tutorRow.id);
-                        Log.d("tutorid",  tutorRow.id);
+                        profileIntent.putExtra("COURSES", tutorRow.courses);
+                        Log.d("mag", tutorRow.courses);
+                        startActivity(profileIntent);
+                    }
+                });
+                tutorList.addView(tutorRow);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchCourseData(String courseName) {
+        clearTutorList();
+        LinearLayout tutorList = findViewById(R.id.tutorList); // Assuming you changed the ID to tutorListLayout
+        StringBuilder courseApiUrlBuilder = new StringBuilder(apiUrl);
+        courseApiUrlBuilder.append("course=").append(courseName).append("&page=1");
+
+        jsonResponse = getTuteeHome(courseApiUrlBuilder, TuteeHomeActivity.this);
+
+        try {
+            JSONArray tutorsArray = jsonResponse.getJSONArray("tutors");
+
+            for (int i = 0; i < tutorsArray.length(); i++) {
+                JSONObject tutorObject = tutorsArray.getJSONObject(i);
+                Log.d("response", tutorObject.toString());
+                String tutorName = tutorObject.getString("displayedName");
+                String tutorDetails = tutorObject.getString("school");
+                String tutorID = tutorObject.getString("tutorId");
+                JSONArray tutorCourses = tutorObject.getJSONArray("courses");
+                String tutorRating = tutorObject.getString("rating");
+                courses = "";
+                for (int j = 0; j < tutorCourses.length(); j++) {
+                    String course;
+                    try {
+                        course = tutorCourses.getString(j).trim();
+                    } catch (JSONException e) {
+                        course = "";
+                    }
+                    courses = courses + " " + course;
+                }
+
+
+                TutorRow tutorRow = new TutorRow(TuteeHomeActivity.this);
+                tutorRow.setTutorName(tutorName);
+                tutorRow.setTutorDetails(tutorDetails);
+                tutorRow.setId(tutorID);
+                tutorRow.setCourses(courses.trim());
+                tutorRow.setCourseCode(courses.trim());
+                tutorRow.setPrice("Rating: " + tutorRating);
+
+
+
+                tutorRow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("mag", tutorRow.id);
+                        updateWhenTuteeChecksTutor(tutorRow.id, TuteeHomeActivity.this);
+                        Intent profileIntent = new Intent(TuteeHomeActivity.this, ProfileActivity.class);
+                        profileIntent.putExtra("TUTOR_ID", tutorRow.id);
+                        profileIntent.putExtra("COURSES", tutorRow.courses);
+                        Log.d("mag", tutorRow.courses);
                         startActivity(profileIntent);
                     }
                 });
 
-
-
-                // Assuming you have a layout or container where you want to add the TutorRow
                 tutorList.addView(tutorRow);
             }
         } catch (JSONException e) {
@@ -179,10 +229,14 @@ public class TuteeHomeActivity extends AppCompatActivity {
 
 
     }
+    private void clearTutorList() {
+        LinearLayout tutorList = findViewById(R.id.tutorList);
+        tutorList.removeAllViews();
+    }
 
 
     private boolean isAnyChipViewPressed() {
-        for (SubjectChipView chipView : subjectChipViews) {
+        for (SubjectChipHomeView chipView : subjectChipViews) {
             if (chipView.isClicked) {
                 return true;
             }

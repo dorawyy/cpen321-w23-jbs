@@ -1,51 +1,56 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/rounded_border"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <!-- Course Code -->
-
-<TextView
-android:id="@+id/tv_course_code"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text=""
-android:textSize="18sp"
-android:textStyle="bold" />
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
+        android:background="@drawable/rounded_border"
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
-            android:id="@+id/tutor_name"
+            android:id="@+id/tv_course_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:textSize="16sp" />
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/tutor_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Maggie Gu"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_tutor_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bio not found."
+                android:textSize="16sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_tutor_details"
+            android:id="@+id/tv_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text=""
             android:textSize="16sp"
-            android:layout_marginStart="8dp" />
+            android:textStyle="bold" />
     </LinearLayout>
-
-
-    <!-- Price -->
-<TextView
-android:id="@+id/tv_price"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text=""
-android:textSize="16sp"
-android:textStyle="bold"
-android:layout_marginTop="8dp" />
-    </LinearLayout>
+</androidx.cardview.widget.CardView>

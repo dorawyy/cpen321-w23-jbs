@@ -3,6 +3,7 @@ package com.example.edumatch.activities;
 import static com.example.edumatch.util.RateHelper.postRatingWeight;
 import static com.example.edumatch.util.RateHelper.postReview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -26,15 +27,19 @@ public class TutorRateActivity extends AppCompatActivity {
 
     private String commentValue;
 
-    private String receiverId; // TODO: Get this value from the previous view
-    private String receiverName; // TODO: Get this value from the previous view
+    private String receiverId;
+    private String receiverName;
 
-    private String appointmentId; // TODO: Get this from previous view
+    private String appointmentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rate);
+        Intent intent = getIntent();
+        appointmentId = intent.getStringExtra("appointmentId");
+        receiverName = intent.getStringExtra("tutorName");
+        receiverId = intent.getStringExtra("tutorId");
 
         initName();
         initComponents();
@@ -85,8 +90,7 @@ public class TutorRateActivity extends AppCompatActivity {
     private JSONObject constructRatingWeightRequest() {
         try {
             JSONObject requestBody = new JSONObject();
-            // TODO: don't use static tutorId
-            requestBody.put("tutorId", "653ee267d04cba40a81fe296");
+            requestBody.put("tutorId", receiverId);
             requestBody.put("review", ratingValue);
             logRequestToConsole(requestBody, "RateWeightPost");
             return requestBody;
@@ -101,14 +105,12 @@ public class TutorRateActivity extends AppCompatActivity {
     private JSONObject constructRatingRequest() {
         try {
             JSONObject requestBody = new JSONObject();
-            // TODO: don't use static receiverId
-            // TODO: add appointmentId
-            requestBody.put("receiverId", "653ee267d04cba40a81fe296");
+            requestBody.put("receiverId", receiverId);
             requestBody.put("rating", ratingValue);
             requestBody.put("noShow", noShowValue);
             requestBody.put("late", lateValue);
             requestBody.put("comment",commentValue);
-            // requestBody.put("appointmentId",appointmentId);
+            requestBody.put("appointmentId",appointmentId);
             // Add any other fields you need in the request.
 
             logRequestToConsole(requestBody, "TutorRatePost");
@@ -120,8 +122,8 @@ public class TutorRateActivity extends AppCompatActivity {
     }
 
     private void goToNewActivity() {
-
-        // TODO: Go back to list of scheduled appointments
+        Intent intent = new Intent(TutorRateActivity.this, AppointmentListActivity.class);
+        startActivity(intent);
     }
 
     private void logRequestToConsole(JSONObject request, String tag) {

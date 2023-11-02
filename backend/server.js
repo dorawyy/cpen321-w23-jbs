@@ -79,6 +79,8 @@ if (env === 'prod') {
     const clients = new Map() // Currently connected client sockets
     
     const wss = new ws.Server({ server: httpsServer })
+
+    // ChatGPT usage: No
     wss.on('connection', (ws, req) => {
         console.log("client connected to chat socket")
         const token = req.url.split('?token=')[1]
@@ -154,6 +156,10 @@ if (env === 'prod') {
 
     httpsServer.listen(443, () => {
         console.log('HTTPS Server running on port 443');
+    });
+
+    process.on('uncaughtException', (error) => {
+        console.error('Uncaught Exception:', error)
     });
 } else {
     // LOCAL

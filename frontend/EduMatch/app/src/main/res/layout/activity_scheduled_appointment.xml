@@ -3,13 +3,14 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	style="@style/GridLayout"
 	android:layout_gravity="top"
+	android:paddingBottom="10dp"
 	app:columnCount="1"
 	app:rowCount="4">
-<!--	<ImageView-->
-<!--		android:id="@+id/emptyBar"-->
-<!--		android:layout_width="match_parent"-->
-<!--		android:layout_height="40dp"-->
-<!--		android:background="@drawable/empty_bar"/>-->
+
+	<Space
+		android:layout_width="match_parent"
+		android:layout_height="16dp"
+		app:layout_gravity="fill_horizontal" />
 
 	<TextView
 		android:id="@+id/name"
@@ -53,6 +54,14 @@
 		style="@style/WhiteButton"
 		app:layout_gravity="center"
 		android:layout_marginTop="24dp"
+		android:visibility="invisible"
 		android:text="Cancel" />
+	<androidx.appcompat.widget.AppCompatButton
+		android:id="@+id/review_button"
+		style="@style/WhiteButton"
+		app:layout_gravity="center"
+		android:layout_marginTop="24dp"
+		android:visibility="invisible"
+		android:text="Rate Tutor" />
 
 </androidx.gridlayout.widget.GridLayout>

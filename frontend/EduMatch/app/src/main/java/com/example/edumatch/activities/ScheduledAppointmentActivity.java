@@ -2,48 +2,105 @@ package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.AppointmentHelper.getAppointment;
 import static com.example.edumatch.util.AppointmentHelper.putAppointment;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.edumatch.R;
 import com.example.edumatch.views.LabelAndCommentTextView;
+import com.example.edumatch.views.LabelAndTextView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 public class ScheduledAppointmentActivity extends AppCompatActivity {
-    //TODO: Integrate GET {API_URL}/appointment?appointmentID=123
-    //TODO: Integrate PUT {API_URL}/appointment?appointmentID=123 to change status to canceled when user clicks cancel
-    //TODO: Get appointmentId from previous view
     String appointmentId;
+    String apptDate;
+    Date currentDate;
+    String tutorName;
+    String tutorId;
+    Boolean reviewed = false;
+
+    String set_Time;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scheduled_appointment);
-
+        Intent intent = getIntent();
+        appointmentId = intent.getStringExtra("appointmentId");
+        tutorName = intent.getStringExtra("tutorName");
+        tutorId = intent.getStringExtra("tutorId");
         initFields();
-        initCancelButton();
+        long currentTimeMillis = System.currentTimeMillis();
+        currentDate = new Date(currentTimeMillis);
+        if (!hasApptnotPassed(currentDate.toString(), apptDate)) {
+            initCancelButton();
+        } else {
+            if (!reviewed) {
+                initRateTutorButton();
+            }
+        }
+    }
 
+    // dateStr1 = system time, dateStr2 = appointment time
+    private boolean hasApptnotPassed(String dateStr1, String dateStr2) {
+
+        SimpleDateFormat format1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+
+        format2.setTimeZone(TimeZone.getTimeZone("PST"));
+
+        try {
+            // Parse the date strings into Date objects
+            Date date1 = format1.parse(dateStr1);
+            Date date2 = format2.parse(dateStr2);
+
+            // Compare the two Date objects
+            if (date1.compareTo(date2) < 0) {
+                return false;
+            } else if (date1.compareTo(date2) >= 0) {
+                return true;
+            }
+        } catch (ParseException e) {
+            return true;
+        }
+
+        return true;
     }
 
     // ChatGPT usage: Yes
     @SuppressLint("SetTextI18n")
     private void initFields() {
+        Log.d("appt2", "here");
         TextView name = findViewById(R.id.name);
-        TextView course = findViewById(R.id.course);
-        TextView date = findViewById(R.id.date);
-        TextView time = findViewById(R.id.time);
-        TextView location = findViewById(R.id.location);
+        LabelAndTextView course = findViewById(R.id.course);
+        LabelAndTextView date = findViewById(R.id.date);
+        LabelAndTextView time = findViewById(R.id.time);
+        LabelAndTextView location = findViewById(R.id.location);
+
         LabelAndCommentTextView comment = findViewById(R.id.comment);
-        JSONObject response = getAppointment(ScheduledAppointmentActivity.this,appointmentId);
+        JSONObject response = getAppointment(this ,appointmentId);
+        Log.d("appt2", appointmentId);
         if(response != null){
             try {
                 if (response.has("otherUserName")) {
                     name.setText(response.getString("otherUserName"));
+                }
+                if (response.has("participantsInfo")) {
+                    reviewed = true;
                 }
                 if (response.has("course")) {
                     course.setText(response.getString("course"));
@@ -51,34 +108,58 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
                 if(response.has("date")){
                     date.setText(response.getString("date"));
                 }
-                if(response.has("startTime") && response.has("endTime")){
-                    time.setText(response.getString("startTime") + "-" + response.getString("endTime"));
+                if(response.has("status")){
+                    String status = response.getString("status");
+                }
+                if(response.has("pstStartDatetime") && response.has("pstEndDatetime")){
+                    String pstStartTime = response.getString("pstStartDatetime");
+                    String pstEndTime = response.getString("pstEndDatetime");
+                    apptDate = pstEndTime;
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    Date startDate = null;
+                    Date endDate = null;
+                    try {
+                        startDate = sdf.parse(pstStartTime);
+                        endDate = sdf.parse(pstEndTime);
+                    } catch (ParseException e) {
+                        Toast.makeText(this, "Cannot find day", Toast.LENGTH_SHORT).show();
+                    }
+                    SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm");
+
+                    date.setText(dateSdf.format(startDate));
+                    String startTime = timeSdf.format(startDate); // Start Time
+                    String endTime = timeSdf.format(endDate); // End Time
+                    time.setText(startTime + " - " + endTime);
                 }
                 if(response.has("location")){
                     location.setText(response.getString("location"));
                 }
-                if(response.has("additionalComments")){
-                    comment.getContentText().setText(response.getString("additionalComments"));
+                if(response.has("notes")){
+                    comment.setText(response.getString("notes"));
                 }
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                Log.d("appt2", response.toString());
             }
         }
     }
 
     private void initCancelButton() {
         Button cancelButton = findViewById(R.id.cancel_button);
-        cancelButton.setOnClickListener(v -> goToNewActivity());
-    }
 
+            cancelButton.setVisibility(View.VISIBLE);
+            cancelButton.setOnClickListener(v -> goToNewActivity());
+
+    }
 
 
     private void goToNewActivity() {
         JSONObject requestBody = constructCancelAppointmentRequest();
+        Log.d("appt", requestBody.toString());
         boolean success = putAppointment(ScheduledAppointmentActivity.this,requestBody,appointmentId);
+        Log.d("appt", String.valueOf(success));
         if (success) {
-            // TODO: this goes to list of scheduled appointments
-            Intent newIntent = new Intent(ScheduledAppointmentActivity.this, EditProfileListActivity.class);
+            Intent newIntent = new Intent(ScheduledAppointmentActivity.this, AppointmentListActivity.class);
             startActivity(newIntent);
         }
     }
@@ -96,4 +177,17 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
         }
 
     }
+    private void initRateTutorButton() {
+        Button rateTutorButton = findViewById(R.id.review_button);
+            rateTutorButton.setVisibility(View.VISIBLE);
+            rateTutorButton.setOnClickListener(v -> {
+                Intent intent = new Intent(ScheduledAppointmentActivity.this, TutorRateActivity.class);
+                intent.putExtra("appointmentId", appointmentId);
+                intent.putExtra("tutorName", tutorName);
+                intent.putExtra("tutorId", tutorId);
+                startActivity(intent);
+            });
+        }
+
+
 }

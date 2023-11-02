@@ -1,6 +1,7 @@
 const db = require("../db")
 const User = db.user
 
+// ChatGPT usage: No
 // Source: https://www.bezkoder.com/node-js-mongodb-auth-jwt/ 
 function checkDuplicateUsernameOrEmail(req, res, next) {
     try {
@@ -25,14 +26,12 @@ function checkDuplicateUsernameOrEmail(req, res, next) {
                 next()
                 return
             })
-            
         })
         
     } catch (err) {
         console.log(err)
         return res.status(500).send({ message: err })
     }
-    
 }
 
 const verifySignUp = {

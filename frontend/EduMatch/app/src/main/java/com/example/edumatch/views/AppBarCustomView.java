@@ -3,6 +3,7 @@ package com.example.edumatch.views;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -33,6 +34,7 @@ public class AppBarCustomView extends LinearLayout {
 
         ImageButton appointmentsButton = findViewById(R.id.appointments);
         appointmentsButton.setOnClickListener(v -> {
+            Log.d("mag", "error");
             Context context2 = v.getContext();
             Intent intent = new Intent(context2, AppointmentListActivity.class);
             context2.startActivity(intent);

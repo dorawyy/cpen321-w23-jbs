@@ -4,6 +4,7 @@ const User = db.user
 
 const secretKey = process.env.SECRET_KEY
 
+// ChatGPT usage: No
 function verifyJwt(req, res, next) {
     try {
         var token = req.header('Authorization')
@@ -26,7 +27,6 @@ function verifyJwt(req, res, next) {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
 const authJwt = {

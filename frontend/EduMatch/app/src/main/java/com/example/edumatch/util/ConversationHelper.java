@@ -5,7 +5,9 @@ import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ConversationHelper {
@@ -32,6 +34,24 @@ public class ConversationHelper {
         JSONObject jsonResponse = sendHttpRequest(apiUrl, sharedPreferences.getString("jwtToken", ""), "GET", null);
 
         String logTag = "MessagesGet";
+
+        return handleGetResponse(context,jsonResponse,logTag);
+    }
+    public static JSONObject createConversation(Context context, String userId) {
+        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/conversation/create";
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("otherUserId", userId);
+        } catch (JSONException e) {
+            Log.d("mag", "cant make chat");
+        }
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+
+        JSONObject jsonResponse = sendHttpRequest(apiUrl, sharedPreferences.getString("jwtToken", ""), "POST", jsonObject);
+
+        String logTag = "ConvoCreate";
 
         return handleGetResponse(context,jsonResponse,logTag);
     }

@@ -5,13 +5,20 @@ const mongoose = require('mongoose')
 
 const User = db.user
 
+// ChatGPT usage: No
 exports.checkedProfile = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
             return res.status(400).send({ message: "Invalid provided tutorId" })
         }
-        const tutor = await User.findById(req.body.tutorId)
-        const tutee = await User.findById(req.userId)
+        const tutor = await User.findById(req.body.tutorId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
+        const tutee = await User.findById(req.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!tutor || tutor.isBanned)
             return res.status(404).send({ message: "Could not find tutor in database with provided id"})
         if (!tutee || tutee.isBanned)
@@ -27,22 +34,31 @@ exports.checkedProfile = async (req, res) => {
             tutee.recommendationWeights.maxDistance += (distance - tutee.recommendationWeights.maxDistance) * (distance > tutee.recommendationWeights.maxDistance ? 0.15 : 0.02)
         }
     
-        tutee.save()
+        await tutee.save().catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         return res.status(200).send({ message: "Adjusted weights based on checked profile"})
     } catch (err) {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
+// ChatGPT usage: No
 exports.contactedTutor = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
             return res.status(400).send({ message: "Invalid provided tutorId" })
         }
-        const tutor = await User.findById(req.body.tutorId)
-        const tutee = await User.findById(req.userId)
+        const tutor = await User.findById(req.body.tutorId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
+        const tutee = await User.findById(req.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!tutor || tutor.isBanned)
             return res.status(404).send({ message: "Could not find tutor in database with provided id"})
         if (!tutee || tutee.isBanned)
@@ -63,22 +79,31 @@ exports.contactedTutor = async (req, res) => {
             tutee.recommendationWeights.maxDistance += (distance - tutee.recommendationWeights.maxDistance) * (distance > tutee.recommendationWeights.maxDistance ? 0.2 : 0.02)
         }
     
-        tutee.save()
+        await tutee.save().catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         return res.status(200).send({ message: "Adjusted weights based on contacted tutor"})
     } catch (err) {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
+// ChatGPT usage: No
 exports.scheduledAppointment = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
             return res.status(400).send({ message: "Invalid provided tutorId" })
         }
-        const tutor = await User.findById(req.body.tutorId)
-        const tutee = await User.findById(req.userId)
+        const tutor = await User.findById(req.body.tutorId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
+        const tutee = await User.findById(req.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!tutor || tutor.isBanned)
             return res.status(404).send({ message: "Could not find tutor in database with provided id"})
         if (!tutee || tutee.isBanned)
@@ -90,7 +115,10 @@ exports.scheduledAppointment = async (req, res) => {
         if (!scheduledSubjectHourlyRate)
             return res.status(500).send({ message: "Unable to find hourly rate associated with subject" })
     
-        tutee.recommendationWeights.budget += (scheduledSubjectHourlyRate - tutee.recommendationWeights.budget) * (scheduledSubjectHourlyRate > tutee.recommendationWeights.budget ? 0.5 : 0.1)
+        tutee.recommendationWeights.budget += (
+            scheduledSubjectHourlyRate.hourlyRate - 
+            tutee.recommendationWeights.budget) * 
+            (scheduledSubjectHourlyRate.hourlyRate > tutee.recommendationWeights.budget ? 0.5 : 0.1)
     
         if (tutor.rating) {
             tutee.recommendationWeights.minRating -= (tutee.recommendationWeights.minRating - tutor.rating) * (tutor.rating < tutee.recommendationWeights.minRating ? 0.5 : 0.1)
@@ -102,22 +130,31 @@ exports.scheduledAppointment = async (req, res) => {
             tutee.recommendationWeights.maxDistance += (distance - tutee.recommendationWeights.maxDistance) * (distance > tutee.recommendationWeights.maxDistance ? 0.4 : 0.1)
         }
     
-        tutee.save()
+        await tutee.save().catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         return res.status(200).send({ message: "Adjusted weights based on scheduled appointment"})
     } catch (err) {
         console.log(err)
         return res.status(500).send({ message: err.message })
     }
-    
 }
 
+// ChatGPT usage: No
 exports.reviewedTutor = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
             return res.status(400).send({ message: "Invalid provided tutorId" })
         }
-        const tutor = await User.findById(req.body.tutorId)
-        const tutee = await User.findById(req.userId)
+        const tutor = await User.findById(req.body.tutorId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
+        const tutee = await User.findById(req.userId).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         if (!tutor || tutor.isBanned)
             return res.status(404).send({ message: "Could not find tutor in database with provided id"})
         if (!tutee || tutee.isBanned)
@@ -140,11 +177,13 @@ exports.reviewedTutor = async (req, res) => {
             tutee.recommendationWeights.maxDistance += (distance - tutee.recommendationWeights.maxDistance) * (distance > tutee.recommendationWeights.maxDistance ? 0.2 : 0.02) * reviewFactor
         }
     
-        tutee.save()
+        await tutee.save().catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
+        })
         return res.status(200).send({ message: "Adjusted weights based on reviewed tutor"})
     } catch (err) {
         console.log(err)
         return res.status(500).send({ message: err.message })
-    }
-    
+    } 
 }

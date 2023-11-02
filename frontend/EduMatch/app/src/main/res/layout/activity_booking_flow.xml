@@ -42,11 +42,34 @@
 </RelativeLayout>
 
 
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Select Course" />
+  <HorizontalScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:scrollbars="horizontal">
+
+    <LinearLayout
+        android:id="@+id/courseContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+      <!-- Dynamic times will be added here -->
+
+    </LinearLayout>
+  </HorizontalScrollView>
     <!-- Available Time Date Section -->
   <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="Choose Available Time Date" />
+  <HorizontalScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:scrollbars="horizontal">
 
   <LinearLayout
       android:id="@+id/timeContainer"
@@ -57,12 +80,17 @@
     <!-- Dynamic times will be added here -->
 
   </LinearLayout>
+  </HorizontalScrollView>
 
   <!-- Time Interval Section -->
   <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="Select Time Interval" />
+  <HorizontalScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:scrollbars="horizontal">
 
   <LinearLayout
       android:id="@+id/intervalContainer"
@@ -73,6 +101,7 @@
     <!-- Dynamic intervals will be added here -->
 
   </LinearLayout>
+  </HorizontalScrollView>
 
   <!-- Location -->
   <TextView
@@ -99,6 +128,14 @@
         android:text="Online" />
 
   </RadioGroup>
+  <!-- Location Details -->
+  <EditText
+      android:id="@+id/locationDetailsEditText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="Enter location details..."
+      android:visibility="gone" />
+
 
   <!-- Notes Section -->
   <TextView

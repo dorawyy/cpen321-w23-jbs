@@ -9,23 +9,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2">
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/peopleTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="People"
+            android:text="Users"
+            android:gravity="center"
             android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/messagesTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Messages"
-            android:textSize="18sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/messagesTextView"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="Messages"-->
+<!--            android:textSize="18sp" />-->
     </LinearLayout>
 
     <View
@@ -35,7 +36,6 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"/>
 
-    <!-- Adding ScrollView for adminListcomponents -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -47,7 +47,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Here you can add your adminListcomponents -->
 
         </LinearLayout>
     </ScrollView>

@@ -2,7 +2,9 @@ package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.AppointmentHelper.getAppointments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +32,13 @@ public class AppointmentListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_appointment_list);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+        if (sharedPreferences.getString("userType","tutee").equals("tutor")){
+            setContentView(R.layout.activity_appointment_list_tutor);
+        } else {
+            setContentView(R.layout.activity_appointment_list);
+        }
         JSONObject list = getAppointments(this);
         try {
             makeComponents(list.getJSONArray("appointments"));

@@ -46,12 +46,10 @@ public class AdminHelper {
         try {
             requestBody.put("userId", userId);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("Error processing JSON data", e);
         }
 
-        JSONObject jsonResponse = sendHttpRequest(apiUrl,sharedPreferences.getString("jwtToken", ""), "PUT", requestBody);
-
-        String logTag = "BanUser";
+        sendHttpRequest(apiUrl,sharedPreferences.getString("jwtToken", ""), "PUT", requestBody);
 
     }
 }

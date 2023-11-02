@@ -163,7 +163,7 @@ public class NetworkUtils {
                         try {
                             editor.putString("userType", jsonResponse.getString("type"));
                         } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                            throw new CustomException("JSON parsing exception",e);
                         }
                     }
                     editor.apply();

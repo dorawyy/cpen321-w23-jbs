@@ -151,7 +151,7 @@ public class ChatActivity extends AppCompatActivity {
                 message.put("receiverId", receiverId);
                 message.put("message", messageText);
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new CustomException("Error processing JSON data", e);
             }
             sendWebSocketMessage(message);
 

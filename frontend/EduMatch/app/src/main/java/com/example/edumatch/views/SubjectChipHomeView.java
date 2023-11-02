@@ -11,14 +11,14 @@ import android.widget.TextView;
 import com.example.edumatch.R;
 
 public class SubjectChipHomeView extends RelativeLayout {
-    public interface ChipClickListener {
-        void onChipClicked(SubjectChipHomeView chipView);
-    }
 
     private SubjectChipHomeView.ChipClickListener chipClickListener;
     private TextView textView;
     public boolean isClicked = false;
 
+    public interface ChipClickListener {
+        void onChipClicked(SubjectChipHomeView chipView);
+    }
 
     public void setChipClickListener(SubjectChipHomeView.ChipClickListener listener) {
         this.chipClickListener = listener;

@@ -24,10 +24,8 @@ public class LoginSignupHelper {
     public static int getInputTypeFromString(String inputType) {
         int inputTypeValue = InputType.TYPE_CLASS_TEXT; // Default value
 
-        if (inputType != null) {
-            if (inputType.equals("textPassword")) {
-                inputTypeValue = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
-            }
+        if (inputType != null && inputType.equals("textPassword")) {
+            inputTypeValue = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
         }
 
         return inputTypeValue;
@@ -95,18 +93,18 @@ public class LoginSignupHelper {
         String successMessage = "Successfully Signed Up";
         String logTag = "SignUpPost";
 
-        return handlePutPostResponse(context,jsonResponse,successMessage,logTag);
+        return handlePutPostResponse(context, jsonResponse, successMessage, logTag);
     }
 
     // ChatGPT usage: Yes
     public static JSONObject getCourseCodes(Context context, String code) {
-        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/courses?code="+code;
+        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/courses?code=" + code;
 
         JSONObject jsonResponse = sendHttpRequest(apiUrl, "", "GET", null);
 
         String logTag = "CourseCodesGet";
 
-        return handleGetResponse(context,jsonResponse,logTag);
+        return handleGetResponse(context, jsonResponse, logTag);
     }
 
 }

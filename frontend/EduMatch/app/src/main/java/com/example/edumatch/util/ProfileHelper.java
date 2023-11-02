@@ -192,7 +192,19 @@ public class ProfileHelper {
     private static void saveProfileDataToSharedPreferences(SharedPreferences sharedPreferences, JSONObject jsonResponse) throws JSONException {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        // Save values from jsonResponse directly to SharedPreferences
+        saveBasicProfileData(editor, jsonResponse);
+        saveLocationData(editor, jsonResponse);
+        saveEducationData(editor, jsonResponse);
+        saveGoogleCalendarData(editor, jsonResponse);
+        saveManualAvailabilityData(editor, jsonResponse);
+        saveSubjectHourlyRateData(editor, jsonResponse);
+
+        editor.apply();
+        Log.d("ProfileDataSaved", "User profile data saved to SharedPreferences");
+    }
+
+    // ChatGPT usage: Yes
+    private static void saveBasicProfileData(SharedPreferences.Editor editor, JSONObject jsonResponse) throws JSONException {
         if (jsonResponse.has("displayedName")) {
             editor.putString("name", jsonResponse.getString("displayedName"));
         }
@@ -208,7 +220,10 @@ public class ProfileHelper {
         if (jsonResponse.has("bio")) {
             editor.putString("bio", jsonResponse.getString("bio"));
         }
+    }
 
+    // ChatGPT usage: Yes
+    private static void saveLocationData(SharedPreferences.Editor editor, JSONObject jsonResponse) throws JSONException {
         if (jsonResponse.has("location")) {
             JSONObject locationObj = jsonResponse.getJSONObject("location");
             if (locationObj.has("lat")) {
@@ -218,7 +233,10 @@ public class ProfileHelper {
                 editor.putFloat("longitude", (float) locationObj.getDouble("long"));
             }
         }
+    }
 
+    // ChatGPT usage: Yes
+    private static void saveEducationData(SharedPreferences.Editor editor, JSONObject jsonResponse) throws JSONException {
         if (jsonResponse.has("education")) {
             JSONObject educationObj = jsonResponse.getJSONObject("education");
             if (educationObj.has("school")) {
@@ -230,8 +248,6 @@ public class ProfileHelper {
             if (educationObj.has("level")) {
                 editor.putString("yearLevel", String.valueOf(educationObj.getInt("level")));
             }
-
-            // Courses (assuming courses is a JSONArray)
             if (educationObj.has("courses")) {
                 JSONArray coursesArray = educationObj.getJSONArray("courses");
                 Set<String> coursesSet = new HashSet<>();
@@ -240,8 +256,6 @@ public class ProfileHelper {
                 }
                 editor.putStringSet("courses", coursesSet);
             }
-
-            // Tags (assuming tags is a JSONArray)
             if (educationObj.has("tags")) {
                 JSONArray tagsArray = educationObj.getJSONArray("tags");
                 Set<String> tagsSet = new HashSet<>();
@@ -251,11 +265,17 @@ public class ProfileHelper {
                 editor.putStringSet("tags", tagsSet);
             }
         }
+    }
 
+    // ChatGPT usage: Yes
+    private static void saveGoogleCalendarData(SharedPreferences.Editor editor, JSONObject jsonResponse) throws JSONException {
         if (jsonResponse.has("useGoogleCalendar")) {
             editor.putBoolean("useGoogleCalendar", jsonResponse.getBoolean("useGoogleCalendar"));
         }
+    }
 
+    // ChatGPT usage: Yes
+    private static void saveManualAvailabilityData(SharedPreferences.Editor editor, JSONObject jsonResponse) throws JSONException {
         if (jsonResponse.has("manualAvailability")) {
             JSONArray manualAvailabilityArray = jsonResponse.getJSONArray("manualAvailability");
             for (int i = 0; i < manualAvailabilityArray.length(); i++) {
@@ -264,21 +284,19 @@ public class ProfileHelper {
                     String dayKey = dayAvailability.getString("day");
                     String startTime = dayAvailability.getString("startTime");
                     String endTime = dayAvailability.getString("endTime");
-                    // Assuming "dayKey" is one of the days: "Sunday", "Monday", etc.
                     editor.putString(dayKey + "StartTime", startTime);
                     editor.putString(dayKey + "EndTime", endTime);
                 }
             }
-            // Store the entire manualAvailability JSON in SharedPreferences
             editor.putString("manualAvailability", manualAvailabilityArray.toString());
         }
+    }
 
+    // ChatGPT usage: Yes
+    private static void saveSubjectHourlyRateData(SharedPreferences.Editor editor, JSONObject jsonResponse) throws JSONException {
         if (jsonResponse.has("subjectHourlyRate")) {
             JSONArray subjectHourlyRateArray = jsonResponse.getJSONArray("subjectHourlyRate");
             editor.putString("coursePricePairs", subjectHourlyRateArray.toString());
         }
-
-        editor.apply();
-        Log.d("ProfileDataSaved", "User profile data saved to SharedPreferences");
     }
 }

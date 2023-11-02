@@ -16,25 +16,30 @@ public class LabelAndCommentEditTextView extends GridLayout {
 
     private EditText editText;
 
+    // ChatGPT usage: Yes
     public LabelAndCommentEditTextView(Context context) {
         super(context);
         init(context, null);
     }
 
+    // ChatGPT usage: Yes
     public LabelAndCommentEditTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
+    // ChatGPT usage: Yes
     public LabelAndCommentEditTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
+    // ChatGPT usage: Yes
     public EditText getEnterUserEditText() {
         return editText;
     }
 
+    // ChatGPT usage: Yes
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.label_and_comment_edit_text, this, true);

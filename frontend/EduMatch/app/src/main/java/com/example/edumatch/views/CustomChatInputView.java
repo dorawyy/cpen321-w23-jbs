@@ -14,21 +14,25 @@ public class CustomChatInputView extends RelativeLayout {
     private EditText editText;
     private Button sendButton;
 
+    // ChatGPT usage: Yes
     public CustomChatInputView(Context context) {
         super(context);
         init(context);
     }
 
+    // ChatGPT usage: Yes
     public CustomChatInputView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
+    // ChatGPT usage: Yes
     public CustomChatInputView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
+    // ChatGPT usage: Yes
     private void init(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.chat_input_component, this, true);
@@ -39,10 +43,12 @@ public class CustomChatInputView extends RelativeLayout {
         sendButton = findViewById(R.id.send_button);
     }
 
+    // ChatGPT usage: Yes
     public EditText getEditText() {
         return editText;
     }
 
+    // ChatGPT usage: Yes
     public Button getSendButton() {
         return sendButton;
     }

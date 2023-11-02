@@ -32,6 +32,7 @@ public class ChatListActivity extends AppCompatActivity {
 
     }
 
+    // ChatGPT usage: Yes
     private void initConvos() {
         conversationsList = new ArrayList<>();
         JSONObject conversations = getConversations(ChatListActivity.this);
@@ -61,7 +62,7 @@ public class ChatListActivity extends AppCompatActivity {
         initConvoComponents();
     }
 
-
+    // ChatGPT usage: Yes
     private void initConvoComponents() {
         LinearLayout buttonContainer = findViewById(R.id.messageContainer); // Replace with your container ID
         for (List<String> conversation : conversationsList) {

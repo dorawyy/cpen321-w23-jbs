@@ -19,6 +19,7 @@ public class DayOfTheWeekView extends AppCompatButton {
 
     private DayOfTheWeekClickListener clickListener;
 
+    // ChatGPT usage: Yes
     public DayOfTheWeekView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -38,14 +39,17 @@ public class DayOfTheWeekView extends AppCompatButton {
         setOnClickListener(v -> handleClick());
     }
 
+    // ChatGPT usage: Yes
     public void setDayOfTheWeekClickListener(DayOfTheWeekClickListener listener) {
         this.clickListener = listener;
     }
 
+    // ChatGPT usage: Yes
     public String getDay() {
         return day;
     }
 
+    // ChatGPT usage: Yes
     private void handleClick() {
         if (clickListener != null) {
             clickListener.onDayButtonClick(day);

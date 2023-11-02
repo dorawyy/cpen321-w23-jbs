@@ -12,6 +12,7 @@ import com.example.edumatch.R;
 public class GoogleIconButtonView extends GridLayout {
     private AppCompatButton signInButton;
 
+    // ChatGPT usage: Yes
     public GoogleIconButtonView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -32,6 +33,7 @@ public class GoogleIconButtonView extends GridLayout {
         }
     }
 
+    // ChatGPT usage: Yes
     public AppCompatButton getButton() {
         return signInButton;
     }

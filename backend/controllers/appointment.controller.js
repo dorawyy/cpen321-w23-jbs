@@ -492,8 +492,7 @@ exports.bookAppointment = async (req, res) => {
         }
         
         await User.findByIdAndUpdate(
-            tutorId,
-            { $push: {appointments: userNewAppt} }
+            tutorId, { $push: {appointments: userNewAppt} }
         ).catch(err => {
             console.log(err)
             return res.status(500).send({ message: err.message })

@@ -260,7 +260,7 @@ exports.acceptAppointment = async (req, res) => {
     
         await Appointment.updateMany(
             { _id: { $in: overlapsIds, $ne: apptId }, status: AppointmentStatus.PENDING },
-            { $set: { status: AppointmentStatus.CANCELED} },
+            { status: AppointmentStatus.CANCELED },
         ).catch(err => {
             console.log(err)
             return res.status(500).send({ message: err.message })

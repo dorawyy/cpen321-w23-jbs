@@ -10,8 +10,7 @@ function verifyAccountStatus(req, res, next) {
                 if (!user || user.isBanned) {
                     return res.status(403).send({ message: "User is not found or banned"}); // Forbidden 
                 }
-                next()
-                return
+                return next()
             })
     } catch (err) {
         console.log(err)

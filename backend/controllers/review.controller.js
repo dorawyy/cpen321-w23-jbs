@@ -1,7 +1,5 @@
-const { AppointmentStatus } = require("../constants/appointment.status")
 const db = require("../db")
 const Appointment = require("../db/appointment.model")
-const appointmentController = require("./appointment.controller")
 const apptUtils = require("../utils/appointment.utils")
 const User = db.user
 
@@ -95,7 +93,7 @@ exports.addReview = async (req, res) => {
         for (var i = 0; i < 2; i++) {
             var participant = appointment.participantsInfo[i]
             if (participant.userId == req.body.receiverId) {
-                appointment.participantsInfo[i].noShow = req.body.noShow,
+                appointment.participantsInfo[i].noShow = req.body.noShow
                 appointment.participantsInfo[i].late = req.body.late
             }
         }
@@ -140,11 +138,11 @@ exports.getUserReviews = (req, res) => {
 
 // ChatGPT usage: No
 exports.getOverallRating = (userReviews) => {
-    if (userReviews.length == 0) {
+    if (userReviews.length === 0) {
         return 0
     }
     var sum = 0
-    for (reviews of userReviews) {
+    for (var reviews of userReviews) {
         sum += reviews.rating
     }
     return sum/userReviews.length

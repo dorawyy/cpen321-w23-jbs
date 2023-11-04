@@ -64,7 +64,7 @@ exports.contactedTutor = async (req, res) => {
         if (!tutee || tutee.isBanned)
             return res.status(404).send({ message: "Could not find tutee in database with provided id"})
     
-        if (!tutor.subjectHourlyRate || tutor.subjectHourlyRate.length != 0) {
+        if (!tutor.subjectHourlyRate || tutor.subjectHourlyRate.length !== 0) {
             const averageHourlyRate = tutor.subjectHourlyRate.reduce((acc, subject) => acc + subject.hourlyRate, 0) / tutor.subjectHourlyRate.length
             tutee.recommendationWeights.budget += (averageHourlyRate - tutee.recommendationWeights.budget) * (averageHourlyRate > tutee.recommendationWeights.budget ? 0.15 : 0.05)
         }

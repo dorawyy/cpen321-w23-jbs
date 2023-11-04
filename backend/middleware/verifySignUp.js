@@ -23,8 +23,7 @@ function checkDuplicateUsernameOrEmail(req, res, next) {
                 if (user) {
                     return res.status(400).send({ message: "Email already exists."})
                 }
-                next()
-                return
+                return next()
             })
         })
         

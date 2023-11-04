@@ -18,7 +18,7 @@ const conversationRoutes = require("./routes/conversation.routes")
 
 const mongoUrl = process.env.MONGODB_URI
 const env = process.env.ENV
-PORT = 80
+const PORT = 80
 
 db.mongoose
     .connect(mongoUrl, {
@@ -69,7 +69,7 @@ if (env === 'prod') {
     const credentials = {
         key: privateKey,
         cert: certificate,
-        ca: ca
+        ca
     };
     // Starting both http & https servers
     const httpServer = http.createServer(app);

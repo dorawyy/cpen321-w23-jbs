@@ -149,8 +149,8 @@ exports.getCalendarEvents = async (
 }
 
 exports.getGoogleAccessTokens = async (authCode) => {
-    const { tokens } = await OAuth2Client.getToken(authCode)
-    return Promise.resolve(tokens)
+    const response = await OAuth2Client.getToken(authCode)
+    return Promise.resolve(response.tokens)
 }
 
 async function saveNewAccessToken(user, newAccessToken, newExpiryDate) {

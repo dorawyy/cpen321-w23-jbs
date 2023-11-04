@@ -10,7 +10,7 @@ const PAGE_SIZE = 100
 exports.recommended = async (req, res) => {
     try {
         if (req.query.page < 1)
-        return res.status(400).send({ message: "Page number cannot be less than 1" })
+            return res.status(400).send({ message: "Page number cannot be less than 1" })
 
         const tutee = await User.findById(req.userId).catch(err => {
             console.log(err)

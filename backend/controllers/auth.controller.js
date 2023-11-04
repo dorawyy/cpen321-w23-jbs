@@ -158,7 +158,7 @@ async function verify(idToken, authCode) {
 
     return User.findOne({ googleId }).then(async user => {
         if (!user) {
-            var user = new User({
+            var newUser = new User({
                 googleId,
                 email: payload['email'],
                 displayedName: payload['name']
@@ -166,15 +166,15 @@ async function verify(idToken, authCode) {
 
             const tokens = await getGoogleAccessTokens(authCode)
             if (tokens) {
-                user.googleOauth = {
+                newUser.googleOauth = {
                     accessToken: tokens.access_token,
                     refreshToken: tokens.refresh_token,
                     expiryDate: tokens.expiry_date
                 }
-                user.useGoogleCalendar = true
+                newUser.useGoogleCalendar = true
             }
 
-            return user.save().then(savedUser => {
+            return newUser.save().then(savedUser => {
                 var ret = {
                     userId: savedUser._id.toString(),
                     newUser: true,

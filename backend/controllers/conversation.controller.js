@@ -76,7 +76,7 @@ exports.getConversation = async (req, res) => {
 
             return res.status(200).json({
                 otherUserId: conversation.participants.userId1 == req.userId ? conversation.participants.userId2 : conversation.participants.userId1,
-                messages: messages
+                messages
             })
         }
     } catch (err) {

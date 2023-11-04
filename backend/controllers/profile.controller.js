@@ -1,6 +1,4 @@
-const { UserType } = require("../constants/user.types")
 const db = require("../db")
-const jwt = require("jsonwebtoken")
 const ratingController = require("./review.controller")
 
 const User = db.user

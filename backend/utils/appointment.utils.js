@@ -27,7 +27,7 @@ exports.isAvailable = async (user, pstStartDatetime, pstEndDatetime) => {
 async function cleanupUserAppointments(user) {
     var upcomingAppointments = []
     if (user.appointments) {
-        for (appt of user.appointments) {
+        for (var appt of user.appointments) {
             var status = await getAppointmentStatus(appt._id)
             var isCompleted = await appointmentIsCompleted(appt._id)
 
@@ -54,7 +54,7 @@ exports.getManualFreeTimes = async (user, timeMin, timeMax) => {
     var busyTimes = []
     timeMin = momenttz(timeMin).tz('America/Los_Angeles')
     timeMax = momenttz(timeMax).tz('America/Los_Angeles')
-    for (appt of acceptedAppointments) {
+    for (var appt of acceptedAppointments) {
         var apptStart = momenttz(appt.pstStartDatetime).tz('America/Los_Angeles');
         var apptEnd = momenttz(appt.pstEndDatetime).tz('America/Los_Angeles')
         if (apptStart.isSameOrAfter(timeMin) && 
@@ -92,11 +92,11 @@ async function checkUserManualAvailability(
                 && availStart.isSameOrBefore(requestedStartTime)
                 && availEnd.isSameOrAfter(requestedEndTime)
         })
-        if (availabilities.length == 0) {
+        if (availabilities.length === 0) {
             return false
         }
     }
-    if (user.appointments.length == 0) {
+    if (user.appointments.length === 0) {
         return true
     }
 
@@ -111,7 +111,7 @@ async function checkUserManualAvailability(
     if (user.type === UserType.TUTOR) {
         acceptedAppointments = await getAcceptedAppointments(upcomingAppointments)
     }
-    if (acceptedAppointments.length == 0) {
+    if (acceptedAppointments.length === 0) {
         return true
     }
 
@@ -143,9 +143,7 @@ function isConflicted(appt1, appt2) {
 }
 
 
-async function checkUserAvailabilityWithGoogleCalendar(
-    user, pstStartDatetime, pstEndDatetime
-) {
+async function checkUserAvailabilityWithGoogleCalendar(user, pstStartDatetime, pstEndDatetime) {
     const events = await googleUtils.getCalendarEvents(
         user, pstStartDatetime, pstEndDatetime
     )
@@ -198,7 +196,7 @@ async function getAppointmentStatus(appointmentId) {
 
 async function getAcceptedAppointments(appointments) {
     var acceptedAppointments = []
-    for (appt of appointments) {
+    for (var appt of appointments) {
         var isAccepted = await appointmentIsAccepted(appt._id)
         if (isAccepted) {
             acceptedAppointments.push(appt)

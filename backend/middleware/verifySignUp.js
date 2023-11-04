@@ -7,8 +7,7 @@ function checkDuplicateUsernameOrEmail(req, res, next) {
     try {
         var token = req.header('Authorization')
         if (token) {
-            next()
-            return
+            return next()
         }
         User.findOne({
             username: req.body.username

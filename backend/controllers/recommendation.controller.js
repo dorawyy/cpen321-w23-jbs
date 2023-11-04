@@ -162,7 +162,7 @@ exports.reviewedTutor = async (req, res) => {
     
         const reviewFactor = req.body.review * 0.1
     
-        if (!tutor.subjectHourlyRate || tutor.subjectHourlyRate.length != 0) {
+        if (!tutor.subjectHourlyRate || tutor.subjectHourlyRate.length !== 0) {
             const averageHourlyRate = tutor.subjectHourlyRate.reduce((acc, subject) => acc + subject.hourlyRate, 0) / tutor.subjectHourlyRate.length
             tutee.recommendationWeights.budget += (averageHourlyRate - tutee.recommendationWeights.budget) * (averageHourlyRate > tutee.recommendationWeights.budget ? 0.15 : 0.05) * reviewFactor
         }

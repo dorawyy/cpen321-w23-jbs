@@ -78,7 +78,7 @@ exports.createGoogleEvent = async (
         },
     };
     
-    const response = await calendar.events.insert({
+    await calendar.events.insert({
         calendarId: 'primary',
         resource: event,
     })

@@ -154,7 +154,8 @@ async function checkUserAvailabilityWithGoogleCalendar(user, pstStartDatetime, p
                 pstStartDatetime,
                 pstEndDatetime
             }
-            return isConflicted(appt, newAppt)
+            return isConflicted(appt, newAppt) 
+                    && appt.status === AppointmentStatus.ACCEPTED
         } 
     )
     return events.length === 0 && conflicts.length === 0;

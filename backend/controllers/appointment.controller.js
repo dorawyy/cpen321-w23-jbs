@@ -257,9 +257,14 @@ exports.acceptAppointment = async (req, res) => {
             return apptUtils.isConflicted(appt, acceptedAppt)
         })
         var overlapsIds = overlaps.map(appt => appt._id)
+
+        var query = {
+            _id: { $in: overlapsIds, $ne: apptId }, 
+            status: AppointmentStatus.PENDING,
+        }
     
         await Appointment.updateMany(
-            { _id: { $in: overlapsIds, $ne: apptId }, status: AppointmentStatus.PENDING },
+            query,
             { status: AppointmentStatus.CANCELED },
         ).catch(err => {
             console.log(err)

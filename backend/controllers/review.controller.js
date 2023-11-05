@@ -8,6 +8,8 @@ exports.addReview = async (req, res) => {
     console.log("add review")
 
     try {
+        console.log("")
+        
         if (!req.body.appointmentId) {
             return res.status(400).send({message: "appointmentId is required"})
         }

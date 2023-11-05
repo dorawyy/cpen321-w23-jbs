@@ -76,7 +76,8 @@ exports.getConversation = async (req, res) => {
         else {
             const startIndex = endIndex - 10
             const messages = (startIndex < 0 ? 
-                conversation.messages.slice(0, endIndex) : conversation.messages.slice(startIndex, endIndex)).map(message =>
+                conversation.messages.slice(0, endIndex) :
+                conversation.messages.slice(startIndex, endIndex)).map(message =>
                 ({
                     senderId: message.senderId,
                     content: message.content,

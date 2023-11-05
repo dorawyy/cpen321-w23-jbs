@@ -8,7 +8,8 @@ const PAGE_SIZE = 100
 
 // ChatGPT usage: No
 exports.recommended = async (req, res) => {
-    console.log("")
+    console.log("recommended")
+
     try {
         if (req.query.page < 1)
             return res.status(400).send({ message: "Page number cannot be less than 1" })

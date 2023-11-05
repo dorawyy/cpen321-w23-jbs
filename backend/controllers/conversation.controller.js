@@ -6,7 +6,8 @@ const Conversation = db.conversation
 
 // ChatGPT usage: No
 exports.getList = async (req, res) => {
-    console.log("")
+    console.log("get list")
+
     try {
         const user = await User.findById(req.userId).catch(err => {
             console.log(err)

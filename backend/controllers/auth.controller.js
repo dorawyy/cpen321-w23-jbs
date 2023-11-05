@@ -56,9 +56,9 @@ exports.googleAuth = (req, res) => {
 
 // ChatGPT usage: No
 exports.signup = async (req, res) => {
-    console.log("")
+    console.log("signing up user")
+
     try {
-        console.log("signing up user")
         var data = {...req.body}
         if (data.type && data.type === UserType.ADMIN) {
             return res.status(403).send({

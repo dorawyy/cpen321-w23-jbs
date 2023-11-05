@@ -13,14 +13,18 @@ function checkDuplicateUsernameOrEmail(req, res, next) {
             username: req.body.username
         }).then(user => {
             if (user) {
-                return res.status(400).send({ message: "Username already exists."})
+                return res.status(400).send({ 
+                    message: "Username already exists."
+                })
             }
     
             User.findOne({
                 email: req.body.email
             }).then(user => {
                 if (user) {
-                    return res.status(400).send({ message: "Email already exists."})
+                    return res.status(400).send({ 
+                        message: "Email already exists."
+                    })
                 }
                 return next()
             })

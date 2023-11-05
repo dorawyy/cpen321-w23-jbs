@@ -42,11 +42,13 @@ exports.getFreeTimeHelper = (
         var nextBusyStart
         if (fromGoogle) {
             busyEnd = momenttz(busyTimes[i].end).tz('America/Los_Angeles');
-            nextBusyStart = momenttz(busyTimes[i + 1].start).tz('America/Los_Angeles');
+            nextBusyStart = momenttz(busyTimes[i + 1].start)
+                .tz('America/Los_Angeles');
         } else {
-            busyEnd = momenttz(busyTimes[i].pstEndDatetime).tz('America/Los_Angeles');
+            busyEnd = momenttz(busyTimes[i].pstEndDatetime)
+                .tz('America/Los_Angeles');
             nextBusyStart = momenttz(busyTimes[i + 1].pstStartDatetime)
-                            .tz('America/Los_Angeles');
+                .tz('America/Los_Angeles');
         }
         
         const freeStart = busyEnd;

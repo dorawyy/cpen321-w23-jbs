@@ -126,7 +126,11 @@ if (env === 'prod') {
                                     ]
                                 }).then(conversation => {
                                     if (!conversation)
-                                        console.log("Conversation between " + userId + " and " + receiverUserId + " not found")
+                                        console.log(
+                                            "Conversation between " + 
+                                            userId + " and " + 
+                                            receiverUserId + " not found"
+                                        )
                                     else {
                                         conversation.messages.push(messageToSend)
                                         conversation.save()

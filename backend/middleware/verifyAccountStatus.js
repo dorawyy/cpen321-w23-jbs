@@ -8,7 +8,9 @@ function verifyAccountStatus(req, res, next) {
         User.findById(userId)
             .then(user => {
                 if (!user || user.isBanned) {
-                    return res.status(403).send({ message: "User is not found or banned"}); // Forbidden 
+                    return res.status(403).send({ 
+                        message: "User is not found or banned"
+                    }); // Forbidden 
                 }
                 return next()
             })

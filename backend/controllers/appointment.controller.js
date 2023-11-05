@@ -442,13 +442,19 @@ exports.bookAppointment = async (req, res) => {
         req.body.pstStartDatetime = apptUtils.toPST(req.body.pstStartDatetime)
         req.body.pstEndDatetime = apptUtils.toPST(req.body.pstEndDatetime)
     
-        var tutorIsAvailable = await apptUtils.isAvailable(tutor, req.body.pstStartDatetime, req.body.pstEndDatetime)
+        var tutorIsAvailable = await apptUtils
+            .isAvailable(
+                tutor, req.body.pstStartDatetime, req.body.pstEndDatetime
+            )
             .catch(err => {
                 console.log(err)
                 return res.status(500).send({ message: err.message })
             })
         
-        var tuteeIsAvailable = await apptUtils.isAvailable(tutee, req.body.pstStartDatetime, req.body.pstEndDatetime)
+        var tuteeIsAvailable = await apptUtils
+            .isAvailable(
+                tutee, req.body.pstStartDatetime, req.body.pstEndDatetime
+            )
             .catch(err => {
                 console.log(err)
                 return res.status(500).send({ message: err.message })

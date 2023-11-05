@@ -55,8 +55,10 @@ exports.getManualFreeTimes = async (user, timeMin, timeMax) => {
     timeMin = momenttz(timeMin).tz('America/Los_Angeles')
     timeMax = momenttz(timeMax).tz('America/Los_Angeles')
     for (var appt of acceptedAppointments) {
-        var apptStart = momenttz(appt.pstStartDatetime).tz('America/Los_Angeles');
-        var apptEnd = momenttz(appt.pstEndDatetime).tz('America/Los_Angeles')
+        var apptStart = momenttz(appt.pstStartDatetime)
+            .tz('America/Los_Angeles');
+        var apptEnd = momenttz(appt.pstEndDatetime)
+            .tz('America/Los_Angeles')
         if (apptStart.isSameOrAfter(timeMin) && 
             apptEnd.isSameOrBefore(timeMax)) {
             busyTimes.push(appt)
@@ -109,7 +111,9 @@ async function checkUserManualAvailability(
     // TUTOR: a pending appointment is considered available for the tutor
     var acceptedAppointments = upcomingAppointments
     if (user.type === UserType.TUTOR) {
-        acceptedAppointments = await getAcceptedAppointments(upcomingAppointments)
+        acceptedAppointments = await getAcceptedAppointments(
+            upcomingAppointments
+        )
     }
     if (acceptedAppointments.length === 0) {
         return true

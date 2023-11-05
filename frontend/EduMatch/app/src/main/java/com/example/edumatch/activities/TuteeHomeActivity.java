@@ -40,8 +40,6 @@ public class TuteeHomeActivity extends AppCompatActivity {
     private List<SubjectChipHomeView> subjectChipViews;
     private String selectedCourse;
     private String courses;
-    private String uni;
-
 
     String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/recommended?";
     // ChatGPT usage: Yes

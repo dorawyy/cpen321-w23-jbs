@@ -10,6 +10,8 @@ const Appointment = db.appointment
 
 // ChatGPT usage: No
 exports.cancelAppointment = async (req, res) => {
+    console.log("cancel appt")
+
     try {
         var userId = req.userId
         var apptId = req.query.appointmentId
@@ -165,34 +167,33 @@ exports.getTutorAvailability = async (req, res) => {
                 })
                 var availabilities = []
                 
-                for (block of dayAvailabilities) {            
+                for (var block of dayAvailabilities) {            
                     var start = momenttz(`${date}T${block.startTime}:00${tzOffset}`)
                         .tz('America/Los_Angeles')
                         .toISOString(true)
                     var end = momenttz(`${date}T${block.endTime}:00${tzOffset}`)
                         .tz('America/Los_Angeles')
                         .toISOString(true)
-                    var freeTimes = await apptUtils.getManualFreeTimes(
+                    var availability = await apptUtils.getManualFreeTimes(
                         tutor, start, end
                     ).catch(err => {
                         console.log(err)
                         return res.status(500).send({ message: err.message })
                     })
-                    availabilities = availabilities.concat(freeTimes)
+                    availabilities = availabilities.concat(availability)
                 }
-                var ret = {
+
+                return res.status(200).send({
                     availability: availabilities
-                }
-                return res.status(200).send(ret)
+                })
             } else {
-                var freeTimes = [{
+                var defaultFreetimes = [{
                     start: "08:00",
                     end: "19:00"
                 }]
-                var ret = {
-                    availability: freeTimes
-                }
-                return res.status(200).send(ret)
+                return res.status(200).send({
+                    availability: defaultFreetimes
+                })
             }
         }
     } catch (err) {
@@ -258,16 +259,15 @@ exports.acceptAppointment = async (req, res) => {
             return apptUtils.isConflicted(appt, acceptedAppt)
         })
         var overlapsIds = overlaps.map(appt => appt._id)
+
+        var query = {
+            _id: { $in: overlapsIds, $ne: apptId }, 
+            status: AppointmentStatus.PENDING,
+        }
     
         await Appointment.updateMany(
-            {
-                _id: {
-                    $in: overlapsIds,
-                    $ne: apptId
-                },
-                status: AppointmentStatus.PENDING
-            },
-            { $set: { status: AppointmentStatus.CANCELED} },
+            query,
+            { status: AppointmentStatus.CANCELED },
         ).catch(err => {
             console.log(err)
             return res.status(500).send({ message: err.message })
@@ -310,10 +310,10 @@ exports.acceptAppointment = async (req, res) => {
         await apptUtils.cleanupUserAppointments(tutor).then(result => {
             return res.status(200).send({
                 message: "Accepted appointment successfully"
-            }).catch(err => {
-                console.log(err)
-                return res.status(500).send({ message: err.message })
             })
+        }).catch(err => {
+            console.log(err)
+            return res.status(500).send({ message: err.message })
         })
     } catch (err) {
         console.log(err)
@@ -354,12 +354,8 @@ exports.getUserAppointments = async (req, res) => {
 
         var query = { 
             $or: [
-                { pstEndDatetime: { $gte: timeMin } },
-                { pstStartDatetime: { $gte: timeMin } },
-            ],
-            $or: [
-                { pstEndDatetime: { $lte: timeMax } },
-                { pstStartDatetime: { $lte: timeMax } },
+                { pstEndDatetime: { $gte: timeMin, $lte: timeMax } },
+                { pstStartDatetime: { $gte: timeMin, $lte: timeMax } },
             ],
             'participantsInfo.userId': userId,
         }
@@ -380,7 +376,7 @@ exports.getUserAppointments = async (req, res) => {
                 return res.status(500).send({ message: err.message })
             })
 
-        return res.status(200).send({appointments: appointments})
+        return res.status(200).send({appointments})
     } catch (err) {
         console.log(err)
         return res.status(500).send({
@@ -402,7 +398,7 @@ exports.getAppointment = async (req, res) => {
                             })
                         }
                         var otherUserName = ""
-                        for (user of appt.participantsInfo) {
+                        for (var user of appt.participantsInfo) {
                             if (user.userId != req.userId) {
                                 otherUserName = user.displayedName
                             }
@@ -448,13 +444,19 @@ exports.bookAppointment = async (req, res) => {
         req.body.pstStartDatetime = apptUtils.toPST(req.body.pstStartDatetime)
         req.body.pstEndDatetime = apptUtils.toPST(req.body.pstEndDatetime)
     
-        var tutorIsAvailable = await apptUtils.isAvailable(tutor, req.body.pstStartDatetime, req.body.pstEndDatetime)
+        var tutorIsAvailable = await apptUtils
+            .isAvailable(
+                tutor, req.body.pstStartDatetime, req.body.pstEndDatetime
+            )
             .catch(err => {
                 console.log(err)
                 return res.status(500).send({ message: err.message })
             })
         
-        var tuteeIsAvailable = await apptUtils.isAvailable(tutee, req.body.pstStartDatetime, req.body.pstEndDatetime)
+        var tuteeIsAvailable = await apptUtils
+            .isAvailable(
+                tutee, req.body.pstStartDatetime, req.body.pstEndDatetime
+            )
             .catch(err => {
                 console.log(err)
                 return res.status(500).send({ message: err.message })
@@ -497,8 +499,7 @@ exports.bookAppointment = async (req, res) => {
         }
         
         await User.findByIdAndUpdate(
-            tutorId,
-            { $push: {appointments: userNewAppt} }
+            tutorId, { $push: {appointments: userNewAppt} }
         ).catch(err => {
             console.log(err)
             return res.status(500).send({ message: err.message })

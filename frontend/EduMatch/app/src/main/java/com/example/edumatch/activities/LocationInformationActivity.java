@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.edumatch.BuildConfig;
 import com.example.edumatch.R;
+import com.example.edumatch.util.CustomException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -119,7 +120,7 @@ public class LocationInformationActivity extends AppCompatActivity {
 
             @Override
             public void onError(@NonNull Status status) {
-                throw new RuntimeException("Google Place API Error");
+                throw new CustomException("Google Place API Error");
             }
         });
     }

@@ -10,11 +10,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.edumatch.R;
+import com.example.edumatch.util.CustomException;
 import com.example.edumatch.views.LabelAndCommentTextView;
 import com.example.edumatch.views.LabelAndTextView;
 
@@ -95,54 +95,53 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
         LabelAndCommentTextView comment = findViewById(R.id.comment);
         JSONObject response = getAppointment(this ,appointmentId);
         Log.d("appt2", response.toString());
-        if(response != null){
-            try {
-                if (response.has("otherUserName")) {
-                    name.setText(response.getString("otherUserName"));
-                }
-                if (response.has("participantsInfo")) {
-                    reviewed = true;
-                    Log.d("appt2", String.valueOf(reviewed));
-                }
-                if (response.has("course")) {
-                    course.setText(response.getString("course"));
-                }
-                if(response.has("date")){
-                    date.setText(response.getString("date"));
-                }
-                if(response.has("status")){
-                    String status = response.getString("status");
-                }
-                if(response.has("pstStartDatetime") && response.has("pstEndDatetime")){
-                    String pstStartTime = response.getString("pstStartDatetime");
-                    String pstEndTime = response.getString("pstEndDatetime");
-                    apptDate = pstEndTime;
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                    Date startDate = null;
-                    Date endDate = null;
-                    try {
-                        startDate = sdf.parse(pstStartTime);
-                        endDate = sdf.parse(pstEndTime);
-                    } catch (ParseException e) {
-                        Toast.makeText(this, "Cannot find day", Toast.LENGTH_SHORT).show();
-                    }
-                    SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd");
-                    SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm");
-
-                    date.setText(dateSdf.format(startDate));
-                    String startTime = timeSdf.format(startDate); // Start Time
-                    String endTime = timeSdf.format(endDate); // End Time
-                    time.setText(startTime + " - " + endTime);
-                }
-                if(response.has("location")){
-                    location.setText(response.getString("location"));
-                }
-                if(response.has("notes")){
-                    comment.setText(response.getString("notes"));
-                }
-            } catch (JSONException e) {
-                Log.d("appt2", response.toString());
+        try {
+            if (response.has("otherUserName")) {
+                name.setText(response.getString("otherUserName"));
             }
+
+            if (response.has("participantsInfo")) {
+                reviewed = true;
+                Log.d("appt2", String.valueOf(reviewed));
+            }
+
+            if (response.has("course")) {
+                course.setText(response.getString("course"));
+            }
+
+            if (response.has("date")) {
+                date.setText(response.getString("date"));
+            }
+
+            if (response.has("pstStartDatetime") && response.has("pstEndDatetime")) {
+                String pstStartTime = response.getString("pstStartDatetime");
+                String pstEndTime = response.getString("pstEndDatetime");
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                Date startDate = sdf.parse(pstStartTime);
+                Date endDate = sdf.parse(pstEndTime);
+
+                SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm");
+
+                date.setText(dateSdf.format(startDate));
+                String startTime = timeSdf.format(startDate); // Start Time
+                String endTime = timeSdf.format(endDate); // End Time
+                time.setText(startTime + " - " + endTime);
+            }
+
+            if (response.has("location")) {
+                location.setText(response.getString("location"));
+            }
+
+            if (response.has("notes")) {
+                comment.setText(response.getString("notes"));
+            }
+        } catch (JSONException e) {
+            Log.d("ScheduledAppointmentActivity", response.toString());
+            throw new CustomException("Error processing JSON data",e);
+        } catch (ParseException e) {
+            throw new CustomException("Error parsing date", e);
         }
     }
 
@@ -169,7 +168,6 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
     // ChatGPT usage: Yes
     public JSONObject constructCancelAppointmentRequest() {
         try {
-            // TODO: verify that these are the request params needed
             JSONObject requestBody = new JSONObject();
             requestBody.put("status","canceled");
             return requestBody;

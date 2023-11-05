@@ -25,7 +25,7 @@ public class TutorsHelper {
 
         String apiUrlWithUserId = "https://edumatch.canadacentral.cloudapp.azure.com" + "/user/publicProfile?userId=" + id;
 
-        JSONObject jsonResponse = sendHttpRequest(apiUrlWithUserId.toString(),sharedPreferences.getString("jwtToken", ""), "GET", null);
+        JSONObject jsonResponse = sendHttpRequest(apiUrlWithUserId,sharedPreferences.getString("jwtToken", ""), "GET", null);
 
         String logTag = "TutorInfoGet";
 

@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.edumatch.R;
+import com.example.edumatch.util.CustomException;
 import com.example.edumatch.util.MessageAdapter;
 import com.example.edumatch.util.MessageItem;
 import com.example.edumatch.views.CustomChatInputView;
@@ -56,10 +57,6 @@ public class ChatActivity extends AppCompatActivity {
         initWebSocket();
 
         conversationId = getIntent().getStringExtra("conversationId");
-        String conversationName = getIntent().getStringExtra("conversationName");
-
-//        Toast.makeText(this, "Conversation ID: " + conversationId, Toast.LENGTH_SHORT).show();
-//        Toast.makeText(this, "Conversation Name: " + conversationName, Toast.LENGTH_SHORT).show();
 
         CustomChatInputView inputText = findViewById(R.id.customChatInput);
         inputText.bringToFront();
@@ -134,7 +131,7 @@ public class ChatActivity extends AppCompatActivity {
                     oldestMessageId++;
                 }
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new CustomException("Error processing JSON data", e);
             }
         }
     }
@@ -154,7 +151,7 @@ public class ChatActivity extends AppCompatActivity {
                 message.put("receiverId", receiverId);
                 message.put("message", messageText);
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new CustomException("Error processing JSON data", e);
             }
             sendWebSocketMessage(message);
 

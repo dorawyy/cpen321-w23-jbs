@@ -39,7 +39,6 @@ public class CustomChatInputView extends RelativeLayout {
 
         // Find views by their IDs
         editText = findViewById(R.id.edit_text);
-        RelativeLayout sendLayout = findViewById(R.id.send);
         sendButton = findViewById(R.id.send_button);
     }
 

@@ -1,6 +1,4 @@
-const { UserType } = require("../constants/user.types")
 const db = require("../db")
-const jwt = require("jsonwebtoken")
 const ratingController = require("./review.controller")
 
 const User = db.user
@@ -10,6 +8,17 @@ const EXCLUDED_FIELDS = [
     "-password",
     "-googleOauth",
     "-recommendationWeights"
+]
+
+const ALLOWED_TO_CHANGE = [
+    "displayedName",
+    "phoneNumber",
+    "education",
+    "subjectHourlyRate",
+    "manualAvailability",
+    "locationMode",
+    "location",
+    "bio",
 ]
 
 // ChatGPT usage: No
@@ -80,9 +89,15 @@ exports.editProfile = (req, res) => {
     try {
         var userId = req.userId
         var data = {...req.body}
-        if (data.password) {
-            return res.status(403).send({ message:  "not allowed to change pw." })
+        var keys = Object.keys(data)
+        for (var key of keys) {
+            if (!ALLOWED_TO_CHANGE.includes(key)) {
+                return res.status(403).send({ 
+                    message: `User is not allowed to change ${key}.` 
+                })
+            }
         }
+
         User.findByIdAndUpdate(userId, {...data}, {new: true})
             .select(EXCLUDED_FIELDS)
             .then(updatedUser => {

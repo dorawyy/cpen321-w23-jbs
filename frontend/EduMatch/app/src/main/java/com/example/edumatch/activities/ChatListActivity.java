@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.edumatch.R;
+import com.example.edumatch.util.CustomException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +57,7 @@ public class ChatListActivity extends AppCompatActivity {
 
                 // Now, conversationsList contains the data from the JSONArray.
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new CustomException("Error processing JSON data", e);
             }
         }
         initConvoComponents();

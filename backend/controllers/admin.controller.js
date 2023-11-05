@@ -7,6 +7,8 @@ const Conversation = db.conversation
 
 // ChatGPT usage: No
 exports.ban = async (req, res) => {
+    console.log("ban user")
+
     try {
         const admin = await User.findById(req.userId).catch(err => {
             console.log(err)
@@ -138,18 +140,16 @@ exports.getProfile = async (req, res) => {
         if (!user) {
             return res.status(400).send({ message: "Could not find user in database with provided id" })
         }
-    
-        const userReviews = await User.aggregate([
-            { $unwind: '$userReviews' },
-            { $match: { 'userReviews.reviewerId': req.query.userId } },
-            { $project: { 
+        const userReviews = await User.aggregate()
+            .unwind('$userReviews')
+            .match({'userReviews.reviewerId': req.query.userId})
+            .project({ 
                 '_id': 0,
-                'comment': 'userReviews.comment'
-            } }
-        ]).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
+                'comment': '$userReviews.comment'
+            }).catch(err => {
+                console.log(err)
+                return res.status(500).send({ message: err.message })
+            })
     
         const userConversations = await Conversation.find({
             $or: [

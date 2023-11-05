@@ -1,8 +1,5 @@
 const controller = require("../controllers/review.controller")
-const { authJwt, verifySignUp, account  } = require("../middleware")
-const db = require("../db")
-
-const User = db.user
+const { authJwt, account  } = require("../middleware")
 
 module.exports = function (app) {
     app.post(

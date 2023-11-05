@@ -23,7 +23,7 @@ import org.json.JSONObject;
 public class ProfileActivity extends AppCompatActivity {
 
     private String tutorId;
-    private String coursesList;
+
     // ChatGPT usage: Yes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         tutorId = getIntent().getStringExtra("TUTOR_ID");
-        coursesList = getIntent().getStringExtra("COURSES");
+        String coursesList = getIntent().getStringExtra("COURSES");
 
         JSONObject jsonResponse = getTutorInfo(tutorId,ProfileActivity.this);
         Log.d("response", String.valueOf(jsonResponse));

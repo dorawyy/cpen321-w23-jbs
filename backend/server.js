@@ -18,7 +18,7 @@ const conversationRoutes = require("./routes/conversation.routes")
 
 const mongoUrl = process.env.MONGODB_URI
 const env = process.env.ENV
-PORT = 80
+const PORT = 80
 
 db.mongoose
     .connect(mongoUrl, {
@@ -30,7 +30,7 @@ db.mongoose
     })
     .catch(err => {
         console.error("Connection error", err)
-        process.exit()
+        throw err
     })
 
 const app = express();
@@ -69,7 +69,7 @@ if (env === 'prod') {
     const credentials = {
         key: privateKey,
         cert: certificate,
-        ca: ca
+        ca
     };
     // Starting both http & https servers
     const httpServer = http.createServer(app);
@@ -126,7 +126,11 @@ if (env === 'prod') {
                                     ]
                                 }).then(conversation => {
                                     if (!conversation)
-                                        console.log("Conversation between " + userId + " and " + receiverUserId + " not found")
+                                        console.log(
+                                            "Conversation between " + 
+                                            userId + " and " + 
+                                            receiverUserId + " not found"
+                                        )
                                     else {
                                         conversation.messages.push(messageToSend)
                                         conversation.save()

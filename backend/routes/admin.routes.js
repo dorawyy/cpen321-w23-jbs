@@ -1,5 +1,5 @@
 const controller = require("../controllers/admin.controller")
-const { authJwt, verifySignUp } = require("../middleware")
+const { authJwt } = require("../middleware")
 
 module.exports = function (app) {
     app.put(

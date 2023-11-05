@@ -31,8 +31,6 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -227,7 +225,7 @@ public class BookingFlowActivity extends AppCompatActivity {
         }
 
         Boolean success =  setAppointment(this, bookingDetails);
-        if (success == true) {
+        if (success) {
             Toast.makeText(this, "Booking done for: " + selectedDate + ", " + selectedTime + ",", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(BookingFlowActivity.this, TuteeHomeActivity.class);
             startActivity(intent);
@@ -330,7 +328,7 @@ public class BookingFlowActivity extends AppCompatActivity {
         // Fetch data from API (using Retrofit, Volley, or any other method)
         Log.d("maryyy", selectedDate);
         Log.d("err", selectedDate);
-        JSONObject datesFromApi = getAvailability(this, tutorId, selectedDate.toString());
+        JSONObject datesFromApi = getAvailability(this, tutorId, selectedDate);
         Log.d("maryyy", datesFromApi.toString());
         try {
             if (!datesFromApi.has("availability") || datesFromApi.isNull("availability")) {
@@ -362,10 +360,6 @@ public class BookingFlowActivity extends AppCompatActivity {
                 return availabilityMap; // Return empty map or you can throw an exception if desired
             }
             JSONArray availabilityArray = jsonObject.getJSONArray("availability");
-
-            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-            ZoneId pstZoneId = ZoneId.of("America/Los_Angeles");
-            ZoneId localZoneId = ZoneId.systemDefault();
             for (int i = 0; i < availabilityArray.length(); i++) {
                 JSONObject availabilityObject = availabilityArray.getJSONObject(i);
 
@@ -398,7 +392,7 @@ public class BookingFlowActivity extends AppCompatActivity {
         String formatted_end = extractTime(end);
         Log.d("avail", formatted_start);
         Log.d("avail", formatted_end);
-        if (formatted_start != "" && formatted_end != "") {
+        if (!formatted_start.equals("") && !formatted_end.equals("")) {
             getIntervals(formatted_start, formatted_end);
             generateTimes(formatted_start, formatted_end);
         }

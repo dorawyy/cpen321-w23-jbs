@@ -56,6 +56,7 @@ exports.googleAuth = (req, res) => {
 
 // ChatGPT usage: No
 exports.signup = async (req, res) => {
+    console.log("")
     try {
         console.log("signing up user")
         var data = {...req.body}

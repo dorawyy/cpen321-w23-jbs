@@ -7,6 +7,7 @@ const Conversation = db.conversation
 
 // ChatGPT usage: No
 exports.ban = async (req, res) => {
+    console.log("")
     try {
         const admin = await User.findById(req.userId).catch(err => {
             console.log(err)

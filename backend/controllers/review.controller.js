@@ -5,6 +5,7 @@ const User = db.user
 
 // ChatGPT usage: No
 exports.addReview = async (req, res) => {
+    console.log("")
     try {
         if (!req.body.appointmentId) {
             return res.status(400).send({message: "appointmentId is required"})

@@ -30,7 +30,8 @@ exports.getList = async (req, res) => {
                 ({
                     conversationId: conversation._id,
                     conversationName: conversation.participants.displayedName1 == user.displayedName ?
-                        conversation.participants.displayedName2 : conversation.participants.displayedName1
+                        conversation.participants.displayedName2 :
+                        conversation.participants.displayedName1
                 })
             )
         })
@@ -68,7 +69,8 @@ exports.getConversation = async (req, res) => {
         if (endIndex < 0)
             return res.status(200).json({
                 otherUserId: conversation.participants.userId1 == req.userId ?
-                    conversation.participants.userId2 : conversation.participants.userId1,
+                    conversation.participants.userId2 :
+                    conversation.participants.userId1,
                 messages: []
             })
         else {
@@ -85,7 +87,8 @@ exports.getConversation = async (req, res) => {
 
             return res.status(200).json({
                 otherUserId: conversation.participants.userId1 == req.userId ?
-                    conversation.participants.userId2 : conversation.participants.userId1,
+                    conversation.participants.userId2 :
+                    conversation.participants.userId1,
                 messages
             })
         }

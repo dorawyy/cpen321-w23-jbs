@@ -77,9 +77,11 @@ exports.contactedTutor = async (req, res) => {
     
         if (tutor.rating) {
             tutee.recommendationWeights.minRating -= (tutee.recommendationWeights.minRating - tutor.rating) *
-                (tutor.rating < tutee.recommendationWeights.minRating ? 0.3 : 0.05)
+                (tutor.rating < tutee.recommendationWeights.minRating ? 0.3 :0.05)
             tutee.recommendationWeights.locationModeWeight -= (tutor.locationMode != tutee.locationMode ?
-                0.05 : -0.01)
+                0.05 :
+                -0.01
+            )
         }
     
         if (tutee.locationMode == LocationMode.IN_PERSON && tutor.location) {
@@ -134,7 +136,9 @@ exports.scheduledAppointment = async (req, res) => {
             tutee.recommendationWeights.minRating -= (tutee.recommendationWeights.minRating - tutor.rating) *
                 (tutor.rating < tutee.recommendationWeights.minRating ? 0.5 : 0.1)
             tutee.recommendationWeights.locationModeWeight -= (tutor.locationMode != tutee.locationMode ?
-                0.1 : -0.02)
+                0.1 :
+                -0.0
+            )
         }
     
         if (tutee.locationMode == LocationMode.IN_PERSON && tutor.location) {
@@ -187,7 +191,9 @@ exports.reviewedTutor = async (req, res) => {
             tutee.recommendationWeights.minRating -= (tutee.recommendationWeights.minRating - tutor.rating) *
                 (tutor.rating < tutee.recommendationWeights.minRating ? 0.3 : 0.05) * reviewFactor
             tutee.recommendationWeights.locationModeWeight -= (tutor.locationMode != tutee.locationMode ?
-                0.05 : -0.01) * reviewFactor
+                0.05 :
+                -0.01
+            ) * reviewFactor
         }
         
         if (tutee.locationMode == LocationMode.IN_PERSON && tutor.location) {

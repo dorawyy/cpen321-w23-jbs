@@ -80,7 +80,8 @@ exports.recommended = async (req, res) => {
                     })
                 } else if ((req.query.page - 1) * PAGE_SIZE < tutorsWithSharedCourses.length && 
                             req.query.page * PAGE_SIZE > tutorsWithSharedCourses.length) {
-                    // the page will display the bottom of the scored tutors with shared courses, and the top of the scored tutors without shared courses
+                    // the page will display the bottom of the scored tutors with shared courses,
+                    // and the top of the scored tutors without shared courses
                     const tutorsWithoutSharedCourses = await User.find({
                         'education.courses': { $nin: tutee.education.courses },
                         'type': UserType.TUTOR,
@@ -119,7 +120,8 @@ exports.recommended = async (req, res) => {
                         return res.status(500).send({ message: err.message })
                     })
                     tutorsWithoutSharedCourses.sort((a, b) => score(tutee, b) - score(tutee, a))
-                    const tutorsToDisplay = tutorsWithoutSharedCourses.slice((req.query.page - 1) * PAGE_SIZE, req.query.page * PAGE_SIZE)
+                    const tutorsToDisplay = tutorsWithoutSharedCourses.slice((req.query.page - 1) * PAGE_SIZE, 
+                        req.query.page * PAGE_SIZE)
                     
                     return res.status(200).json({
                         tutors: tutorsToDisplay.map(tutor => ({

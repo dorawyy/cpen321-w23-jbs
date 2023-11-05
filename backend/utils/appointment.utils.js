@@ -1,14 +1,14 @@
-const { AppointmentStatus } = require("../constants/appointment.status");
-const { UserType } = require("../constants/user.types");
-const db = require("../db")
-const googleUtils = require("../utils/google.utils");
-const momenttz = require("moment-timezone");
-const { getFreeTimeHelper } = require("./freetimes.utils");
+import AppointmentStatus from "../constants/appointment.status.js";
+import UserType from "../constants/user.types.js";
+import db from "../db/index.js";
+import * as googleUtils from "../utils/google.utils.js";
+import momenttz from "moment-timezone";
+import {getFreeTimeHelper} from "./freetimes.utils.js";
 
 const User = db.user
 const Appointment = db.appointment
 
-exports.isAvailable = async (user, pstStartDatetime, pstEndDatetime) => {
+export async function isAvailable(user, pstStartDatetime, pstEndDatetime) {
     var isAvailable = false
     if (user.useGoogleCalendar) {
         isAvailable = await checkUserAvailabilityWithGoogleCalendar(
@@ -24,7 +24,7 @@ exports.isAvailable = async (user, pstStartDatetime, pstEndDatetime) => {
 
 // remove completed appointments. upcomingAppointments includes
 // pending/accepted appointments
-async function cleanupUserAppointments(user) {
+export async function cleanupUserAppointments(user) {
     var upcomingAppointments = []
     if (user.appointments) {
         for (var appt of user.appointments) {
@@ -46,7 +46,7 @@ async function cleanupUserAppointments(user) {
         })
 }
 
-exports.getManualFreeTimes = async (user, timeMin, timeMax) => {
+export async function getManualFreeTimes(user, timeMin, timeMax) {
     var upcomingAppointments = await cleanupUserAppointments(user)
     var acceptedAppointments = await getAcceptedAppointments(
         upcomingAppointments
@@ -128,7 +128,7 @@ async function checkUserManualAvailability(
     return conflicts.length === 0
 }
 
-function isConflicted(appt1, appt2) {
+export function isConflicted(appt1, appt2) {
     var appt1Start = momenttz(appt1.pstStartDatetime)
     var appt1End = momenttz(appt1.pstEndDatetime)
 
@@ -161,7 +161,7 @@ async function checkUserAvailabilityWithGoogleCalendar(user, pstStartDatetime, p
     return events.length === 0 && conflicts.length === 0;
 }
 
-async function appointmentIsCompleted (appointmentId) {
+export async function appointmentIsCompleted (appointmentId) {
     return Appointment
         .findById(appointmentId, "pstEndDatetime")
         .then(appt => {
@@ -176,7 +176,7 @@ async function appointmentIsCompleted (appointmentId) {
         })        
 }
 
-async function appointmentIsAccepted(appointmentId) {
+export async function appointmentIsAccepted(appointmentId) {
     var isAccepted = await Appointment
         .findById(appointmentId, "status")
         .then(appt => { 
@@ -186,7 +186,7 @@ async function appointmentIsAccepted(appointmentId) {
     return isAccepted
 }
 
-async function getAppointmentStatus(appointmentId) {
+export async function getAppointmentStatus(appointmentId) {
     var status = await Appointment
         .findById(appointmentId, "status")
         .then(appt => { 
@@ -207,14 +207,14 @@ async function getAcceptedAppointments(appointments) {
 }
 
 // ChatGPT usage: Yes
-function toPST(dateString) {
+export function toPST(dateString) {
     return momenttz(dateString).tz('America/Los_Angeles').format();
 }
 
 
-module.exports.appointmentIsCompleted = appointmentIsCompleted
-module.exports.appointmentIsAccepted = appointmentIsAccepted
-module.exports.getAppointmentStatus = getAppointmentStatus
-module.exports.toPST = toPST
-module.exports.cleanupUserAppointments = cleanupUserAppointments
-module.exports.isConflicted = isConflicted
+// export {appointmentIsCompleted};
+// export {appointmentIsAccepted};
+// export {getAppointmentStatus};
+// export {toPST};
+// export {cleanupUserAppointments};
+// export {isConflicted};

@@ -1,28 +1,28 @@
-const controller = require("../controllers/admin.controller")
-const { authJwt } = require("../middleware")
+import * as controller from "../controllers/admin.controller.js";
+import middleware from "../middleware/index.js";
 
-module.exports = function (app) {
+export default function (app) {
     app.put(
         "/admin/ban",
-        authJwt.verifyJwt,
+        middleware.authJwt.verifyJwt,
         controller.ban
     );
 
     app.put(
         "/admin/unban",
-        authJwt.verifyJwt,
+        middleware.authJwt.verifyJwt,
         controller.unban
     );
 
     app.get(
         "/admin/users",
-        authJwt.verifyJwt,
+        middleware.authJwt.verifyJwt,
         controller.getUsers
     );
 
     app.get(
         "/admin/profile",
-        authJwt.verifyJwt,
+        middleware.authJwt.verifyJwt,
         controller.getProfile
     );
-}
+};

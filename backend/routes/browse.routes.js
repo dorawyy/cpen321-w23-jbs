@@ -1,11 +1,11 @@
-const controller = require("../controllers/browse.controller")
-const { authJwt, account } = require("../middleware")
+import * as controller from "../controllers/browse.controller.js";
+import middleware from "../middleware/index.js";
 
-module.exports = function (app) {
+export default function (app) {
     app.get(
         "/recommended",
-        authJwt.verifyJwt,
-        account.verifyAccountStatus,
+        middleware.authJwt.verifyJwt,
+        middleware.account.verifyAccountStatus,
         controller.recommended
     );
-}
+};

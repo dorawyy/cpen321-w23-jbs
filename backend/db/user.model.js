@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const { UserType } = require("../constants/user.types");
-const { LocationMode } = require("../constants/location.modes");
+import mongoose from "mongoose";
+import UserType from "../constants/user.types.js";
+import LocationMode from "../constants/location.modes.js";
 
 const educationSchema = new mongoose.Schema({
     school: String,
@@ -129,4 +129,4 @@ const User = mongoose.model(
     })
 )
 
-module.exports = User
+export default User;

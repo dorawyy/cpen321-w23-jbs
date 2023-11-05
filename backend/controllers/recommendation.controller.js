@@ -1,12 +1,12 @@
-const db = require("../db")
-const { LocationMode } = require("../constants/location.modes");
-const haversine = require('haversine')
-const mongoose = require('mongoose')
+import db from "../db/index.js";
+import LocationMode from "../constants/location.modes.js";
+import haversine from 'haversine';
+import mongoose from 'mongoose';
 
 const User = db.user
 
 // ChatGPT usage: No
-exports.checkedProfile = async (req, res) => {
+export async function checkedProfile(req, res) {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
             return res.status(400).send({ message: "Invalid provided tutorId" })
@@ -46,7 +46,7 @@ exports.checkedProfile = async (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.contactedTutor = async (req, res) => {
+export async function contactedTutor(req, res) {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
             return res.status(400).send({ message: "Invalid provided tutorId" })
@@ -91,7 +91,7 @@ exports.contactedTutor = async (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.scheduledAppointment = async (req, res) => {
+export async function scheduledAppointment(req, res) {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
             return res.status(400).send({ message: "Invalid provided tutorId" })
@@ -142,7 +142,7 @@ exports.scheduledAppointment = async (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.reviewedTutor = async (req, res) => {
+export async function reviewedTutor(req, res) {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
             return res.status(400).send({ message: "Invalid provided tutorId" })

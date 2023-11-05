@@ -1,25 +1,25 @@
-const controller = require("../controllers/conversation.controller")
-const { authJwt, account  } = require("../middleware")
+import * as controller from "../controllers/conversation.controller.js";
+import middleware from "../middleware/index.js";
 
-module.exports = function (app) {
+export default function (app) {
     app.get(
         "/conversation/get_list",
-        authJwt.verifyJwt,
-        account.verifyAccountStatus, 
+        middleware.authJwt.verifyJwt,
+        middleware.account.verifyAccountStatus, 
         controller.getList
     );
     
     app.get(
         "/conversation/get_conversation",
-        authJwt.verifyJwt,
-        account.verifyAccountStatus, 
+        middleware.authJwt.verifyJwt,
+        middleware.account.verifyAccountStatus, 
         controller.getConversation
     )
 
     app.post(
         "/conversation/create",
-        authJwt.verifyJwt,
-        account.verifyAccountStatus, 
+        middleware.authJwt.verifyJwt,
+        middleware.account.verifyAccountStatus, 
         controller.create
     );
-}
+};

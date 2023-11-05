@@ -1,10 +1,12 @@
 
-const { google } = require('googleapis');
-const UserType = require("../constants/user.types")
-const db = require("../db")
-const jwt = require("jsonwebtoken")
-const bcrypt = require("bcryptjs");
-const { getGoogleAccessTokens } = require('../utils/google.utils');
+import {google} from 'googleapis';
+import UserType from "../constants/user.types.js";
+import db from "../db/index.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import {getGoogleAccessTokens} from '../utils/google.utils.js';
+import "../envLoader.js"
+
 
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
@@ -29,7 +31,7 @@ const OAuth2Client = new google.auth.OAuth2(
 const User = db.user
 
 // ChatGPT usage: No
-exports.googleAuth = (req, res) => {
+export function googleAuth(req, res) {
     try {
         const idToken = req.body.idToken
         const authCode = req.body.authCode
@@ -55,7 +57,7 @@ exports.googleAuth = (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.signup = async (req, res) => {
+export async function signup(req, res) {
     try {
         console.log("signing up user")
         var data = {...req.body}
@@ -114,7 +116,7 @@ exports.signup = async (req, res) => {
 
 // ChatGPT usage: No
 // Adapted from: https://www.bezkoder.com/node-js-mongodb-auth-jwt/ 
-exports.login = (req, res) => {
+export function login(req, res) {
     try {
         User.findOne({
             username: req.body.username

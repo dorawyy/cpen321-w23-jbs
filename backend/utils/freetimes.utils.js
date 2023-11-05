@@ -1,9 +1,7 @@
-const momenttz = require("moment-timezone")
+import momenttz from "moment-timezone";
 
 // ChatGPT usage: Partial
-exports.getFreeTimeHelper = (
-    timeMin, timeMax, busyTimes, fromGoogle
-) => {
+export function getFreeTimeHelper(timeMin, timeMax, busyTimes, fromGoogle) {
     if (busyTimes.length === 0) {
         return [{
             start: timeMin,

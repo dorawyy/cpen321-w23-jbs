@@ -1,4 +1,4 @@
-const db = require("../db")
+import db from "../db/index.js";
 const User = db.user
 
 // ChatGPT usage: No
@@ -36,4 +36,4 @@ const verifySignUp = {
     checkDuplicateUsernameOrEmail
 }
 
-module.exports = verifySignUp
+export default verifySignUp;

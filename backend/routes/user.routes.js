@@ -1,22 +1,22 @@
-const profileController = require("../controllers/profile.controller")
-const apptController = require("../controllers/appointment.controller")
-const courseController = require("../controllers/courses.controller")
-const { authJwt, account } = require("../middleware")
+import * as profileController from "../controllers/profile.controller.js";
+import * as apptController from "../controllers/appointment.controller.js";
+import * as courseController from "../controllers/courses.controller.js";
+import middleware from "../middleware/index.js";
 
-module.exports = function (app) {
+export default function (app) {
     app.get("/user/publicProfile", profileController.getPublicProfile)
 
     app.get(
         "/user/profile", 
-        authJwt.verifyJwt, 
-        account.verifyAccountStatus,  
+        middleware.authJwt.verifyJwt,
+        middleware.account.verifyAccountStatus, 
         profileController.getPrivateProfile
     )
 
     app.put(
         "/user/editProfile", 
-        authJwt.verifyJwt, 
-        account.verifyAccountStatus,  
+        middleware.authJwt.verifyJwt,
+        middleware.account.verifyAccountStatus, 
         profileController.editProfile
     )
 

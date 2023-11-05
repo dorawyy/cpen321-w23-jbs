@@ -1,13 +1,13 @@
-const db = require("../db")
-const { UserType } = require("../constants/user.types");
-const { LocationMode } = require("../constants/location.modes");
-const haversine = require('haversine')
+import db from "../db/index.js";
+import UserType from "../constants/user.types.js";
+import LocationMode from "../constants/location.modes.js";
+import haversine from 'haversine';
 
 const User = db.user
 const PAGE_SIZE = 100
 
 // ChatGPT usage: No
-exports.recommended = async (req, res) => {
+export async function recommended(req, res) {
     try {
         if (req.query.page < 1)
             return res.status(400).send({ message: "Page number cannot be less than 1" })

@@ -1,4 +1,6 @@
-const jwt = require("jsonwebtoken")
+import jwt from "jsonwebtoken";
+import "../envLoader.js"
+
 const secretKey = process.env.SECRET_KEY
 
 // ChatGPT usage: No
@@ -29,4 +31,4 @@ const authJwt = {
     verifyJwt
 }
 
-module.exports = authJwt
+export default authJwt;

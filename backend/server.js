@@ -1,21 +1,24 @@
-const express = require("express");
-const path = require("path")
-require('dotenv').config({ path: path.join(__dirname, '.env') })
-const http = require("http")
-const https = require("https")
-const fs = require("fs")
-const ws = require('ws')
-const jwt = require("jsonwebtoken")
-const db = require("./db")
-const authRoutes = require("./routes/auth.routes")
-const userRoutes = require("./routes/user.routes")
-const recommendationRoutes = require("./routes/recommendation.routes")
-const browseRoutes = require("./routes/browse.routes")
-const reviewRoutes = require("./routes/review.routes")
-const appointmentRoutes = require("./routes/appointment.routes")
-const adminRoutes = require("./routes/admin.routes")
-const conversationRoutes = require("./routes/conversation.routes")
+import express from "express";
+import path from "path";
+import { fileURLToPath } from 'url';
+import "./envLoader.js"
+import http from "http";
+import https from "https";
+import fs from "fs";
+import ws from 'ws';
+import jwt from "jsonwebtoken";
+import db from "./db/index.js";
+import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
+import recommendationRoutes from "./routes/recommendation.routes.js";
+import browseRoutes from "./routes/browse.routes.js";
+import reviewRoutes from "./routes/review.routes.js";
+import appointmentRoutes from "./routes/appointment.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
+import conversationRoutes from "./routes/conversation.routes.js";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const mongoUrl = process.env.MONGODB_URI
 const env = process.env.ENV
 const PORT = 80

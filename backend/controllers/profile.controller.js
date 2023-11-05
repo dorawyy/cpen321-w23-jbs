@@ -1,5 +1,5 @@
-const db = require("../db")
-const ratingController = require("./review.controller")
+import db from "../db/index.js";
+import * as ratingController from "./review.controller.js";
 
 const User = db.user
 const EXCLUDED_FIELDS = [
@@ -11,7 +11,7 @@ const EXCLUDED_FIELDS = [
 ]
 
 // ChatGPT usage: No
-exports.getPublicProfile = (req, res) => {
+export function getPublicProfile(req, res) {
     try {
         var userId = req.query.userId
         if (!userId) {
@@ -55,7 +55,7 @@ exports.getPublicProfile = (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.getPrivateProfile = (req, res) => {
+export function getPrivateProfile(req, res) {
     try {
         var userId = req.userId
         User.findById(userId).select(EXCLUDED_FIELDS).then(user => {
@@ -74,7 +74,7 @@ exports.getPrivateProfile = (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.editProfile = (req, res) => {
+export function editProfile(req, res) {
     try {
         var userId = req.userId
         var data = {...req.body}

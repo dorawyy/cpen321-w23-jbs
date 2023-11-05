@@ -1,11 +1,11 @@
-const controller = require("../controllers/review.controller")
-const { authJwt, account  } = require("../middleware")
+import * as controller from "../controllers/review.controller.js";
+import middleware from "../middleware/index.js";
 
-module.exports = function (app) {
+export default function (app) {
     app.post(
         "/review/addReview", 
-        authJwt.verifyJwt,
-        account.verifyAccountStatus, 
+        middleware.authJwt.verifyJwt,
+        middleware.account.verifyAccountStatus, 
         controller.addReview
     )
 

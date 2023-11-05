@@ -1,11 +1,11 @@
-const db = require("../db")
-const mongoose = require('mongoose')
+import db from "../db/index.js";
+import mongoose from 'mongoose';
 
 const User = db.user
 const Conversation = db.conversation
 
 // ChatGPT usage: No
-exports.getList = async (req, res) => {
+export async function getList(req, res) {
     try {
         const user = await User.findById(req.userId).catch(err => {
             console.log(err)
@@ -36,7 +36,7 @@ exports.getList = async (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.getConversation = async (req, res) => {
+export async function getConversation(req, res) {
     try {
         if (req.query.page < 1)
         return res.status(400).send({ message: "Page number cannot be less than 1" })
@@ -86,7 +86,7 @@ exports.getConversation = async (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.create = async (req, res) => {
+export async function create(req, res) {
     try {
         const user = await User.findById(req.userId).catch(err => {
             console.log(err)

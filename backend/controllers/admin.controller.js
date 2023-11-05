@@ -1,12 +1,12 @@
-const db = require("../db")
-const { UserType } = require("../constants/user.types");
-const mongoose = require('mongoose')
+import db from "../db/index.js";
+import UserType from "../constants/user.types.js";
+import mongoose from 'mongoose';
 
 const User = db.user
 const Conversation = db.conversation
 
 // ChatGPT usage: No
-exports.ban = async (req, res) => {
+export async function ban(req, res) {
     try {
         const admin = await User.findById(req.userId).catch(err => {
             console.log(err)
@@ -46,7 +46,7 @@ exports.ban = async (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.unban = async (req, res) => {
+export async function unban(req, res) {
     try {
         const admin = await User.findById(req.userId).catch(err => {
             console.log(err)
@@ -83,7 +83,7 @@ exports.unban = async (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.getUsers = async (req, res) => {
+export async function getUsers(req, res) {
     try {
         const admin = await User.findById(req.userId).catch(err => {
             console.log(err)
@@ -116,7 +116,7 @@ exports.getUsers = async (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.getProfile = async (req, res) => {
+export async function getProfile(req, res) {
     try {
         const admin = await User.findById(req.userId).catch(err => {
             console.log(err)

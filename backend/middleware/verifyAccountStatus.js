@@ -1,4 +1,4 @@
-const db = require("../db")
+import db from "../db/index.js";
 const User = db.user
 
 // ChatGPT usage: No
@@ -23,4 +23,4 @@ const account = {
     verifyAccountStatus
 }
 
-module.exports = account
+export default account;

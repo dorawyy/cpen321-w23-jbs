@@ -1,6 +1,7 @@
-const { google } = require('googleapis');
-const db = require("../db")
-const { getFreeTimeHelper } = require('./freetimes.utils');
+import {google} from 'googleapis';
+import db from "../db/index.js";
+import {getFreeTimeHelper} from './freetimes.utils.js';
+import "../envLoader.js"
 
 const User = db.user
 
@@ -16,9 +17,7 @@ const OAuth2Client = new google.auth.OAuth2(
 );
 
 // ChatGPT usage: Partial
-exports.cancelGoogleEvent = async (
-    user, otherUser, canceledAppt
-) => {
+export async function cancelGoogleEvent(user, otherUser, canceledAppt) {
     OAuth2Client.setCredentials({
         access_token: user.googleOauth.accessToken,
         refresh_token: user.googleOauth.refreshToken,
@@ -52,9 +51,7 @@ exports.cancelGoogleEvent = async (
 }
 
 // ChatGPT usage: Partial
-exports.createGoogleEvent = async (
-    user, otherUser, newAppt
-) => {
+export async function createGoogleEvent(user, otherUser, newAppt) {
     OAuth2Client.setCredentials({
         access_token: user.googleOauth.accessToken,
         refresh_token: user.googleOauth.refreshToken,
@@ -91,9 +88,7 @@ exports.createGoogleEvent = async (
 }
 
 // ChatGPT usage: Partial
-exports.getFreeTime = async (
-    user, timeMin, timeMax
-) => {
+export async function getFreeTime(user, timeMin, timeMax) {
     OAuth2Client.setCredentials({
         access_token: user.googleOauth.accessToken,
         refresh_token: user.googleOauth.refreshToken,
@@ -118,9 +113,7 @@ exports.getFreeTime = async (
 }
 
 // ChatGPT usage: Partial
-exports.getCalendarEvents = async (
-    user, timeMin, timeMax
-) => {
+export async function getCalendarEvents(user, timeMin, timeMax) {
     OAuth2Client.setCredentials({
         access_token: user.googleOauth.accessToken,
         refresh_token: user.googleOauth.refreshToken,
@@ -148,7 +141,7 @@ exports.getCalendarEvents = async (
     return events 
 }
 
-exports.getGoogleAccessTokens = async (authCode) => {
+export async function getGoogleAccessTokens(authCode) {
     const response = await OAuth2Client.getToken(authCode)
     return Promise.resolve(response.tokens)
 }

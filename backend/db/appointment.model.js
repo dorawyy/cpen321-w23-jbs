@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const { AppointmentStatus } = require("../constants/appointment.status");
+import mongoose from "mongoose";
+import AppointmentStatus from "../constants/appointment.status.js";
 
 const participantsInfoSchema = new mongoose.Schema({
     userId: String,
@@ -34,4 +34,4 @@ const Appointment = mongoose.model(
     }, { timestamps: true })
 )
 
-module.exports = Appointment
+export default Appointment;

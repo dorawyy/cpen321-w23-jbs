@@ -1,10 +1,10 @@
-const db = require("../db")
-const Appointment = require("../db/appointment.model")
-const apptUtils = require("../utils/appointment.utils")
+import db from "../db/index.js";
+import Appointment from "../db/appointment.model.js";
+import * as apptUtils from "../utils/appointment.utils.js";
 const User = db.user
 
 // ChatGPT usage: No
-exports.addReview = async (req, res) => {
+export async function addReview(req, res) {
     try {
         if (!req.body.appointmentId) {
             return res.status(400).send({message: "appointmentId is required"})
@@ -111,7 +111,7 @@ exports.addReview = async (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.getUserReviews = (req, res) => {
+export function getUserReviews(req, res) {
     try {
         var userId = req.query.userId
         if (!userId) {
@@ -137,7 +137,7 @@ exports.getUserReviews = (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.getOverallRating = (userReviews) => {
+export function getOverallRating(userReviews) {
     if (userReviews.length === 0) {
         return 0
     }

@@ -1,32 +1,32 @@
-const controller = require("../controllers/recommendation.controller")
-const { authJwt, account } = require("../middleware")
+import * as controller from "../controllers/recommendation.controller.js";
+import middleware from "../middleware/index.js";
 
-module.exports = function (app) {
+export default function (app) {
     app.post(
         "/user_action/checked_profile",
-        authJwt.verifyJwt,
-        account.verifyAccountStatus, 
+        middleware.authJwt.verifyJwt,
+        middleware.account.verifyAccountStatus, 
         controller.checkedProfile
     );
     
     app.post(
         "/user_action/contacted_tutor",
-        authJwt.verifyJwt,
-        account.verifyAccountStatus, 
+        middleware.authJwt.verifyJwt,
+        middleware.account.verifyAccountStatus, 
         controller.contactedTutor
     );
     
     app.post(
         "/user_action/scheduled_appointment",
-        authJwt.verifyJwt,
-        account.verifyAccountStatus, 
+        middleware.authJwt.verifyJwt,
+        middleware.account.verifyAccountStatus,  
         controller.scheduledAppointment
     );
     
     app.post(
         "/user_action/reviewed_tutor",
-        authJwt.verifyJwt,
-        account.verifyAccountStatus, 
+        middleware.authJwt.verifyJwt,
+        middleware.account.verifyAccountStatus, 
         controller.reviewedTutor
     );
-}
+};

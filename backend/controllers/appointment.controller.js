@@ -1,15 +1,15 @@
-const { AppointmentStatus } = require("../constants/appointment.status");
-const { UserType } = require("../constants/user.types");
-const db = require("../db")
-const googleUtils = require("../utils/google.utils")
-const apptUtils = require("../utils/appointment.utils")
-const momenttz = require("moment-timezone")
+import AppointmentStatus from "../constants/appointment.status.js";
+import UserType from "../constants/user.types.js";
+import db from "../db/index.js";
+import * as googleUtils from "../utils/google.utils.js";
+import * as apptUtils from "../utils/appointment.utils.js";
+import momenttz from "moment-timezone";
 
 const User = db.user
 const Appointment = db.appointment
 
 // ChatGPT usage: No
-exports.cancelAppointment = async (req, res) => {
+export async function cancelAppointment(req, res) {
     try {
         var userId = req.userId
         var apptId = req.query.appointmentId
@@ -117,7 +117,7 @@ exports.cancelAppointment = async (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.getTutorAvailability = async (req, res) => {
+export async function getTutorAvailability(req, res) {
     try {
         var tutorId = req.query.userId
         var date = req.query.date
@@ -202,7 +202,7 @@ exports.getTutorAvailability = async (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.acceptAppointment = async (req, res) => {
+export async function acceptAppointment(req, res) {
     try {
         var userId = req.userId
         var user = await User.findById(userId).catch(err => {
@@ -322,7 +322,7 @@ exports.acceptAppointment = async (req, res) => {
 }
 
 // ChatGPT usage: Partial
-exports.getUserAppointments = async (req, res) => {
+export async function getUserAppointments(req, res) {
     try {
         var userId = req.userId
         var courses = req.query.courses ? req.query.courses.split(',') : []    
@@ -385,7 +385,7 @@ exports.getUserAppointments = async (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.getAppointment = async (req, res) => {
+export async function getAppointment(req, res) {
     try {
         var appointmentId = req.query.appointmentId
         Appointment.findById(appointmentId)
@@ -418,7 +418,7 @@ exports.getAppointment = async (req, res) => {
 }
 
 // ChatGPT usage: No
-exports.bookAppointment = async (req, res) => {
+export async function bookAppointment(req, res) {
     try {
         const tutorId = req.body.tutorId
         var tutor = await User.findById(tutorId)

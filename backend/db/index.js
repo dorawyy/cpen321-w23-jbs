@@ -1,11 +1,14 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import User from './user.model.js';
+import Appointment from './appointment.model.js';
+import Conversation from './conversation.model.js';
 mongoose.Promise = global.Promise;
 
 const db = {};
 
 db.mongoose = mongoose;
-db.user = require("./user.model");
-db.appointment = require("./appointment.model")
-db.conversation = require("./conversation.model")
+db.user = User
+db.appointment = Appointment
+db.conversation = Conversation
 
-module.exports = db;
+export default db;

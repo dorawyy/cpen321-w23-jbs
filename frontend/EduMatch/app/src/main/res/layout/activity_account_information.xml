@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/GridLayout"
     android:paddingTop="50dp"
+    android:id="@+id/activity_account_information"
     app:columnCount="1"
     app:rowCount="6">
 

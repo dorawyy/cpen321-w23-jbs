@@ -1,3 +1,5 @@
+import org.gradle.internal.classpath.Instrumented.systemProperties
+import org.gradle.internal.classpath.Instrumented.systemProperty
 import java.util.Properties
 plugins {
     id("com.android.application")
@@ -56,7 +58,16 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    testImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation("org.robolectric:robolectric:4.6.1")
+    implementation("net.bytebuddy:byte-buddy:1.14.9")
+    testImplementation("net.bytebuddy:byte-buddy-agent:1.14.9")
+    testImplementation("org.objenesis:objenesis:3.3")
+    testImplementation("org.mockito:mockito-core:5.7.0")
+    androidTestImplementation("org.mockito:mockito-android:5.7.0")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
 
     // To avoid conflicts in libraries
     implementation("com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava")
@@ -68,5 +79,7 @@ dependencies {
 // So that we can easily control permissions
     implementation("pub.devrel:easypermissions:3.0.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.3.0")
     implementation("com.android.support:recyclerview-v7:23.2.0")
 }

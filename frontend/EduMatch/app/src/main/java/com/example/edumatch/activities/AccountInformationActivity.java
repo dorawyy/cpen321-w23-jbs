@@ -35,7 +35,7 @@ public class AccountInformationActivity extends AppCompatActivity {
 
         initFields();
 
-        initInvisibleFields();
+        initInvisibleFields(sharedPreferences);
 
         initNextButton();
 
@@ -43,14 +43,19 @@ public class AccountInformationActivity extends AppCompatActivity {
 
 
     // ChatGPT usage: Yes
-    private void initInvisibleFields() {
+    public void initInvisibleFields(SharedPreferences sharedPreferences) {
 
         if (sharedPreferences.getBoolean("useGoogle", false) || sharedPreferences.getBoolean("isEditing", false)) {
             int[] viewIds = {R.id.create_userName, R.id.create_password};
 
             for (int viewId : viewIds) {
-                LabelAndEditTextView view = findViewById(viewId);
-                view.setVisibility(View.GONE);
+                final LabelAndEditTextView view = findViewById(viewId);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.setVisibility(View.GONE);
+                    }
+                });
             }
         }
     }

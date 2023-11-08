@@ -1,8 +1,5 @@
 const controller = require("../controllers/auth.controller")
-const { authJwt, verifySignUp } = require("../middleware")
-const db = require("../db")
-
-const User = db.user
+const { verifySignUp } = require("../middleware")
 
 module.exports = function (app) {
     // authenticate through google

@@ -23,7 +23,7 @@ public class AdminHelper {
 
         return handleGetResponse(context,jsonResponse,logTag);
     }
-
+    // ChatGPT usage: Yes
     public static void banUser(String userId, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/admin/ban";
@@ -32,15 +32,13 @@ public class AdminHelper {
             requestBody.put("userId", userId);
             Log.d("ban", userId);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("JSON parsing exception",e);
         }
 
-        JSONObject jsonResponse = sendHttpRequest(apiUrl,sharedPreferences.getString("jwtToken", ""), "PUT", requestBody);
-
-        String logTag = "BanUser";
+        sendHttpRequest(apiUrl,sharedPreferences.getString("jwtToken", ""), "PUT", requestBody);
 
     }
-
+    // ChatGPT usage: Yes
     public static void unbanUser(String userId, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/admin/unban";
@@ -48,12 +46,10 @@ public class AdminHelper {
         try {
             requestBody.put("userId", userId);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("Error processing JSON data", e);
         }
 
-        JSONObject jsonResponse = sendHttpRequest(apiUrl,sharedPreferences.getString("jwtToken", ""), "PUT", requestBody);
-
-        String logTag = "BanUser";
+        sendHttpRequest(apiUrl,sharedPreferences.getString("jwtToken", ""), "PUT", requestBody);
 
     }
 }

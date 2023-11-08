@@ -1,10 +1,7 @@
 const profileController = require("../controllers/profile.controller")
 const apptController = require("../controllers/appointment.controller")
 const courseController = require("../controllers/courses.controller")
-const { authJwt, verifySignUp, account } = require("../middleware")
-const db = require("../db")
-
-const User = db.user
+const { authJwt, account } = require("../middleware")
 
 module.exports = function (app) {
     app.get("/user/publicProfile", profileController.getPublicProfile)

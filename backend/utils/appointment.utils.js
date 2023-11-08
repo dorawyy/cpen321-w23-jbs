@@ -27,7 +27,7 @@ exports.isAvailable = async (user, pstStartDatetime, pstEndDatetime) => {
 async function cleanupUserAppointments(user) {
     var upcomingAppointments = []
     if (user.appointments) {
-        for (appt of user.appointments) {
+        for (var appt of user.appointments) {
             var status = await getAppointmentStatus(appt._id)
             var isCompleted = await appointmentIsCompleted(appt._id)
 
@@ -54,15 +54,21 @@ exports.getManualFreeTimes = async (user, timeMin, timeMax) => {
     var busyTimes = []
     timeMin = momenttz(timeMin).tz('America/Los_Angeles')
     timeMax = momenttz(timeMax).tz('America/Los_Angeles')
-    for (appt of acceptedAppointments) {
-        var apptStart = momenttz(appt.pstStartDatetime).tz('America/Los_Angeles');
-        var apptEnd = momenttz(appt.pstEndDatetime).tz('America/Los_Angeles')
+    for (var appt of acceptedAppointments) {
+        var apptStart = momenttz(appt.pstStartDatetime)
+            .tz('America/Los_Angeles');
+        var apptEnd = momenttz(appt.pstEndDatetime)
+            .tz('America/Los_Angeles')
         if (apptStart.isSameOrAfter(timeMin) && 
             apptEnd.isSameOrBefore(timeMax)) {
             busyTimes.push(appt)
         }
     }
-    return getFreeTimeHelper(timeMin, timeMax, busyTimes, false)
+    return getFreeTimeHelper(
+        timeMin.toISOString(true), 
+        timeMax.toISOString(true), 
+        busyTimes, false
+    )
 }
 
 
@@ -88,11 +94,11 @@ async function checkUserManualAvailability(
                 && availStart.isSameOrBefore(requestedStartTime)
                 && availEnd.isSameOrAfter(requestedEndTime)
         })
-        if (availabilities.length == 0) {
+        if (availabilities.length === 0) {
             return false
         }
     }
-    if (user.appointments.length == 0) {
+    if (user.appointments.length === 0) {
         return true
     }
 
@@ -105,9 +111,11 @@ async function checkUserManualAvailability(
     // TUTOR: a pending appointment is considered available for the tutor
     var acceptedAppointments = upcomingAppointments
     if (user.type === UserType.TUTOR) {
-        acceptedAppointments = await getAcceptedAppointments(upcomingAppointments)
+        acceptedAppointments = await getAcceptedAppointments(
+            upcomingAppointments
+        )
     }
-    if (acceptedAppointments.length == 0) {
+    if (acceptedAppointments.length === 0) {
         return true
     }
 
@@ -139,9 +147,7 @@ function isConflicted(appt1, appt2) {
 }
 
 
-async function checkUserAvailabilityWithGoogleCalendar(
-    user, pstStartDatetime, pstEndDatetime
-) {
+async function checkUserAvailabilityWithGoogleCalendar(user, pstStartDatetime, pstEndDatetime) {
     const events = await googleUtils.getCalendarEvents(
         user, pstStartDatetime, pstEndDatetime
     )
@@ -152,7 +158,8 @@ async function checkUserAvailabilityWithGoogleCalendar(
                 pstStartDatetime,
                 pstEndDatetime
             }
-            return isConflicted(appt, newAppt)
+            return isConflicted(appt, newAppt) 
+                    && appt.status === AppointmentStatus.ACCEPTED
         } 
     )
     return events.length === 0 && conflicts.length === 0;
@@ -194,7 +201,7 @@ async function getAppointmentStatus(appointmentId) {
 
 async function getAcceptedAppointments(appointments) {
     var acceptedAppointments = []
-    for (appt of appointments) {
+    for (var appt of appointments) {
         var isAccepted = await appointmentIsAccepted(appt._id)
         if (isAccepted) {
             acceptedAppointments.push(appt)

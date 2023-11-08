@@ -20,23 +20,18 @@ import java.util.Set;
 public class LoginSignupHelper {
     private final static String TAG = "LoginSignupHelper";
 
+    // ChatGPT usage: Yes
     public static int getInputTypeFromString(String inputType) {
         int inputTypeValue = InputType.TYPE_CLASS_TEXT; // Default value
 
-        if (inputType != null) {
-            switch (inputType) {
-                case "text":
-                    break;
-                case "textPassword":
-                    inputTypeValue = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
-                    break;
-                // Add more cases for other input types as needed
-            }
+        if (inputType != null && inputType.equals("textPassword")) {
+            inputTypeValue = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD;
         }
 
         return inputTypeValue;
     }
 
+    // ChatGPT usage: Yes
     public static boolean isStartTimeBeforeEndTime(String startTimeString, String endTimeString) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -58,6 +53,7 @@ public class LoginSignupHelper {
         }
     }
 
+    // ChatGPT usage: Yes
     public static void printSharedPreferences(SharedPreferences sharedPreferences) {
         Map<String, ?> allEntries = sharedPreferences.getAll();
 
@@ -86,8 +82,7 @@ public class LoginSignupHelper {
         }
     }
 
-
-
+    // ChatGPT usage: Yes
     public static Boolean postSignUpInfo(Context context, JSONObject requestBody) {
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/api/auth/signup";
 
@@ -98,18 +93,18 @@ public class LoginSignupHelper {
         String successMessage = "Successfully Signed Up";
         String logTag = "SignUpPost";
 
-        return handlePutPostResponse(context,jsonResponse,successMessage,logTag);
+        return handlePutPostResponse(context, jsonResponse, successMessage, logTag);
     }
 
-
+    // ChatGPT usage: Yes
     public static JSONObject getCourseCodes(Context context, String code) {
-        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/courses?code="+code;
+        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/courses?code=" + code;
 
         JSONObject jsonResponse = sendHttpRequest(apiUrl, "", "GET", null);
 
         String logTag = "CourseCodesGet";
 
-        return handleGetResponse(context,jsonResponse,logTag);
+        return handleGetResponse(context, jsonResponse, logTag);
     }
 
 }

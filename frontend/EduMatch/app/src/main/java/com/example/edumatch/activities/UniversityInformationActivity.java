@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.edumatch.R;
+import com.example.edumatch.util.CustomException;
 import com.example.edumatch.views.CustomAutoCompleteView;
 import com.example.edumatch.views.LabelAndEditTextView;
 import com.example.edumatch.views.SubjectChipView;
@@ -76,6 +77,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
         initEditTextWatcher();
     }
 
+    // ChatGPT usage: Yes
     private void initEditTextWatcher() {
         customAutoCompleteView.getAutoCompleteTextView().addTextChangedListener(new TextWatcher() {
             @Override
@@ -97,7 +99,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
                             coursesArray[i] = jsonArray.getString(i);
                         }
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        throw new CustomException("JSON parsing error");
                     }
                     initSuggestions(coursesArray);
                 }
@@ -110,6 +112,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
         });
     }
 
+    // ChatGPT usage: Yes
     private void initSuggestions(String[] suggestions) {
         customAutoCompleteView = findViewById(R.id.search_courses_auto_complete);
         customAutoCompleteView.setSuggestions(suggestions);
@@ -122,6 +125,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
         nextButton.setOnClickListener(v -> goToNewActivity());
     }
 
+    // ChatGPT usage: Yes
     private void initAddButton() {
         Button addButton = findViewById(R.id.add_button); // Initialize the "add_button"
         addButton.setOnClickListener(view -> {
@@ -148,10 +152,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
         });
     }
 
-
-
-
-
+    // ChatGPT usage: Yes
     private void updateSelectedCourses(String enteredText) {
         selectedCourses.add(enteredText);
         SubjectChipView subjectChipView = new SubjectChipView(UniversityInformationActivity.this);
@@ -173,6 +174,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
         customAutoCompleteView.getAutoCompleteTextView().setText("");
     }
 
+    // ChatGPT usage: Yes
     private void initUniversitySpinner() {
         Spinner universitySpinner = findViewById(R.id.select_university_spinner);
 
@@ -200,6 +202,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
         });
     }
 
+    // ChatGPT usage: Yes
     private void updatePreferences() {
 
         // Store the relevant data in SharedPreferences
@@ -221,6 +224,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    // ChatGPT usage: Yes
     private void goToNewActivity() {
         Class nextClass;
         updatePreferences();
@@ -240,13 +244,12 @@ public class UniversityInformationActivity extends AppCompatActivity {
         startActivity(newIntent);
     }
 
-
-
     private void initSharedPreferences() {
         sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }
 
+    // ChatGPT usage: Yes
     private void initFields() {
         // Initialize University Spinner
         Spinner universitySpinner = findViewById(R.id.select_university_spinner);
@@ -278,7 +281,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
         }
     }
 
-
+    // ChatGPT usage: Yes
     public JSONObject constructEditUniversityInformation() {
         try {
             // Retrieve data from SharedPreferences

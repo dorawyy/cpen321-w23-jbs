@@ -8,6 +8,8 @@ import static com.example.edumatch.util.TutorsHelper.getTutorInfo;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.edumatch.R;
@@ -50,6 +53,8 @@ public class BookingFlowActivity extends AppCompatActivity {
     private Button previousCourseSelection = null;
     private Button previousTimeSelection = null;
     private Button previousIntervalSelection = null;
+    Drawable originalBackground;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +92,7 @@ public class BookingFlowActivity extends AppCompatActivity {
 
 
     }
-
+    // ChatGPT usage: Yes
     public String convertToDesiredFormat(String selectedDate, String selectedTime)  {
 
             SimpleDateFormat inputDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
@@ -98,14 +103,14 @@ public class BookingFlowActivity extends AppCompatActivity {
             date = null;
         }
 
-        // Format the parsed date to desired format
             SimpleDateFormat outputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            outputDateFormat.setTimeZone(TimeZone.getTimeZone("GMT-7")); // Set timezone to GMT-07:00
+            outputDateFormat.setTimeZone(TimeZone.getTimeZone("GMT-7"));
 
-            return outputDateFormat.format(date) + "-07:00"; // Append the timezone offset
+            return outputDateFormat.format(date) + "-07:00";
 
     }
 
+    // ChatGPT usage: Yes
     private void generateCourses() throws JSONException {
         LinearLayout intervalContainer = findViewById(R.id.courseContainer);
 
@@ -119,12 +124,13 @@ public class BookingFlowActivity extends AppCompatActivity {
             String course = courses.getString(i);
 
             Button timeButton = new Button(this);
+            originalBackground = timeButton.getBackground();
             timeButton.setText(course);
             timeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (previousCourseSelection != null) {
-                        previousCourseSelection.setBackgroundColor(Color.TRANSPARENT);
+                        previousCourseSelection.setBackground(originalBackground);
                     }
 
                     v.setBackgroundColor(Color.GRAY);
@@ -137,7 +143,7 @@ public class BookingFlowActivity extends AppCompatActivity {
             intervalContainer.addView(timeButton);
         }
     }
-
+    // ChatGPT usage: Yes
     private String addIntervalToStartTime(String selectedStart, String selectedInterval) {
         try {
             String[] startParts = selectedStart.split(":");
@@ -189,7 +195,7 @@ public class BookingFlowActivity extends AppCompatActivity {
     }
 
 
-
+    // ChatGPT usage: Yes
     // Function to handle the booking logic
     private void handleBooking() {
         // Get selected location
@@ -219,7 +225,7 @@ public class BookingFlowActivity extends AppCompatActivity {
         }
 
         Boolean success =  setAppointment(this, bookingDetails);
-        if (success == true) {
+        if (success) {
             Toast.makeText(this, "Booking done for: " + selectedDate + ", " + selectedTime + ",", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(BookingFlowActivity.this, TuteeHomeActivity.class);
             startActivity(intent);
@@ -229,6 +235,7 @@ public class BookingFlowActivity extends AppCompatActivity {
         updateWhenSchedules(tutorId, selectedCourse, BookingFlowActivity.this);
     }
 
+    // ChatGPT usage: Yes
     // Function to retrieve the selected location by the user
     private void retrieveSelectedLocation() {
         RadioGroup locationGroup = findViewById(R.id.locationGroup);
@@ -237,12 +244,14 @@ public class BookingFlowActivity extends AppCompatActivity {
         selectedLocation = selectedRadioButton.getText().toString();
     }
 
+    // ChatGPT usage: Yes
     // Function to retrieve the notes entered by the user
     private void retrieveUserNotes() {
         EditText notesEditText = findViewById(R.id.notesEditText);
         userNotes = notesEditText.getText().toString();
     }
 
+    // ChatGPT usage: Yes
     private String extractTime(String originalDateTime) {
         try {
             // Define the original and target date formats
@@ -262,6 +271,7 @@ public class BookingFlowActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT usage: Yes
     private String convertDateFormat(String originalDate) {
         try {
             // Define the original and target date formats
@@ -287,6 +297,7 @@ public class BookingFlowActivity extends AppCompatActivity {
         return hours * 3600 + minutes * 60;
     }
 
+    // ChatGPT usage: Yes
     // Function for Date Selector
     public void showDatePicker(View view) {
         // Get the current date
@@ -296,23 +307,49 @@ public class BookingFlowActivity extends AppCompatActivity {
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(BookingFlowActivity.this, (datePicker, selectedYear, selectedMonth, selectedDay) -> {
+            // Format the selected date and set it to the EditText
             selectedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d", selectedMonth + 1, selectedDay, selectedYear); // +1 because Calendar.MONTH starts from 0 for January
 
             EditText datePickerEditText = findViewById(R.id.datePickerEditText);
-            datePickerEditText.setText(selectedDate);;
+            datePickerEditText.setText(selectedDate);
 
             populateDataBasedOnAPI();
         }, year, month, day);
+
+        c.add(Calendar.DAY_OF_MONTH, 1);
+        // Set the DatePickerDialog to only show today's date or future dates
+        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
+
+        // Show the DatePickerDialog
         datePickerDialog.show();
     }
+
     public void populateDataBasedOnAPI() {
         // Fetch data from API (using Retrofit, Volley, or any other method)
-        JSONObject datesFromApi = getAvailability(this, tutorId, selectedDate.toString());
-        Log.d("avail", datesFromApi.toString());
-        Map<String, String> availabilityMap = processAvailability(datesFromApi);
-        getTimesForDate(availabilityMap);
+        Log.d("maryyy", selectedDate);
+        Log.d("err", selectedDate);
+        JSONObject datesFromApi = getAvailability(this, tutorId, selectedDate);
+        Log.d("maryyy", datesFromApi.toString());
+        try {
+            if (!datesFromApi.has("availability") || datesFromApi.isNull("availability")) {
+                Toast.makeText(getApplicationContext(), "The date you selected does not have any time availability!", Toast.LENGTH_SHORT).show();
+            } else {
+                JSONArray dates = datesFromApi.getJSONArray("availability");
+                if(dates.length() == 0){
+                    Toast.makeText(getApplicationContext(), "The date you selected does not have any time availability!", Toast.LENGTH_SHORT).show();
+                }
+                Log.d("avail", datesFromApi.toString());
+                Map<String, String> availabilityMap = processAvailability(datesFromApi);
+                if (availabilityMap != null) getTimesForDate(availabilityMap);
+                else Toast.makeText(getApplicationContext(), "The date you selected does not have any time availability!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            Toast.makeText(getApplicationContext(), "The date you selected does not have any time availability!", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    // ChatGPT usage: Yes
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private static Map<String, String> processAvailability(JSONObject jsonObject) {
         Map<String, String> availabilityMap = new HashMap<>();
 
@@ -323,7 +360,6 @@ public class BookingFlowActivity extends AppCompatActivity {
                 return availabilityMap; // Return empty map or you can throw an exception if desired
             }
             JSONArray availabilityArray = jsonObject.getJSONArray("availability");
-
             for (int i = 0; i < availabilityArray.length(); i++) {
                 JSONObject availabilityObject = availabilityArray.getJSONObject(i);
 
@@ -333,7 +369,7 @@ public class BookingFlowActivity extends AppCompatActivity {
                 availabilityMap.put(startTime, endTime);
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+           return null;
         }
 
         return availabilityMap;
@@ -349,18 +385,20 @@ public class BookingFlowActivity extends AppCompatActivity {
             if (key.contains(date)) {
                 start = key;
                 end = availabilityMap.get(key);
-            }
+            } else break;
         }
 
         String formatted_start = extractTime(start);
         String formatted_end = extractTime(end);
         Log.d("avail", formatted_start);
         Log.d("avail", formatted_end);
-
-        getIntervals(formatted_start, formatted_end);
-        generateTimes(formatted_start, formatted_end);
+        if (!formatted_start.equals("") && !formatted_end.equals("")) {
+            getIntervals(formatted_start, formatted_end);
+            generateTimes(formatted_start, formatted_end);
+        }
 
     }
+    // ChatGPT usage: Yes
     private void getIntervals(String startTime, String endTime) {
         LinearLayout intervalContainer = findViewById(R.id.intervalContainer);
         intervalContainer.removeAllViews();
@@ -416,6 +454,7 @@ public class BookingFlowActivity extends AppCompatActivity {
             intervalContainer.addView(intervalButton);
         }
     }
+    // ChatGPT usage: Yes
     private void generateTimes(String startTime, String endTime) {
         LinearLayout intervalContainer = findViewById(R.id.timeContainer);
 

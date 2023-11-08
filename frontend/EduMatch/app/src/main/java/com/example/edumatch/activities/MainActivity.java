@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.edumatch.R;
+import com.example.edumatch.util.CustomException;
 import com.example.edumatch.views.GoogleIconButtonView;
 import com.example.edumatch.views.LabelAndEditTextView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -37,11 +38,21 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     final static String TAG = "MainActivity";
 
-    private String userInput, passwordInput;
+    private String userInput;
+    private String passwordInput;
 
-    private String authCode, idToken;
+    private String authCode;
+    private String idToken;
 
     private Boolean newUser;
+
+    ActivityResultLauncher<Intent> googleSignInActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                handleGoogleSignInResult(task);
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // ChatGPT usage: Yes
     private void googleSignIn() {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -102,8 +114,6 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         // Handle sign-out error
                         Log.e("GoogleSignIn","Problem Signing Out");
-                        throw new RuntimeException();
-
                     }
                 });
 
@@ -112,15 +122,7 @@ public class MainActivity extends AppCompatActivity {
         googleSignInActivityResultLauncher.launch(signInIntent);
     }
 
-    ActivityResultLauncher<Intent> googleSignInActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
-                handleGoogleSignInResult(task);
-            }
-    );
-
-
+    // ChatGPT usage: Yes
     private void handleGoogleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
@@ -145,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    // ChatGPT usage: Yes
     private void handleSignInClick() {
         LabelAndEditTextView username = findViewById(R.id.username);
         EditText usernameEditText = username.getEnterUserEditText();
@@ -163,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT usage: Yes
     private void clearPreferences() {
         Context context = getApplicationContext();
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
@@ -213,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(newIntent);
     }
 
-
+    // ChatGPT usage: Yes
     private Boolean postSignIn() {
         clearPreferences();
         JSONObject requestBody = constructSignInRequest();// Create your JSON request body
@@ -224,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             Log.d("SignInPost","response is " + jsonResponse.toString(4));
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("Error processing JSON data", e);
         }
         try {
             if (jsonResponse.has("errorDetails")) {
@@ -255,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-
+    // ChatGPT usage: Yes
     private Boolean postGoogleAuth() {
         clearPreferences();
         JSONObject requestBody = constructGoogleRequest();// Create your JSON request body
@@ -292,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    // ChatGPT usage: Yes
     private JSONObject constructSignInRequest() {
         try {
             JSONObject requestBody = new JSONObject();
@@ -307,6 +310,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // ChatGPT usage: Yes
     private JSONObject constructGoogleRequest() {
         try {
             JSONObject requestBody = new JSONObject();

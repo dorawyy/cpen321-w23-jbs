@@ -2,8 +2,11 @@ package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.AppointmentHelper.getAppointments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +33,14 @@ public class AppointmentListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_appointment_list);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+        if (sharedPreferences.getString("userType","tutee").equals("tutor")){
+            setContentView(R.layout.activity_appointment_list_tutor);
+        } else {
+            setContentView(R.layout.activity_appointment_list);
+        }
+        Log.d("appt2", sharedPreferences.getString("userType","tutee"));
         JSONObject list = getAppointments(this);
         try {
             makeComponents(list.getJSONArray("appointments"));
@@ -38,8 +48,8 @@ public class AppointmentListActivity extends AppCompatActivity {
             Toast.makeText(this, "You have no appointments!", Toast.LENGTH_SHORT).show();
         }
 
-
     }
+    // ChatGPT usage: Yes
     private void makeComponents(JSONArray appointments) {
         LinearLayout appointmentListLayout = findViewById(R.id.appointmentList);
         try {
@@ -55,11 +65,17 @@ public class AppointmentListActivity extends AppCompatActivity {
                 String pstEndTime = appointmentObject.getString("pstEndDatetime");
                 String status = appointmentObject.getString("status");
 
-                // Extracting the tutor's displayed name
                 JSONArray participantsInfo = appointmentObject.getJSONArray("participantsInfo");
 
-
                 JSONObject participant = participantsInfo.getJSONObject(1);
+
+                SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+                if (sharedPreferences.getString("userType","tutee").equals("tutor")){
+                     participant = participantsInfo.getJSONObject(1);
+                } else {
+                    participant = participantsInfo.getJSONObject(0);
+                }
+
                 tutorName = participant.getString("displayedName");
                 tutorId = participant.getString("userId");
                 TextView courseText = appointmentView.findViewById(R.id.courseCode);
@@ -79,14 +95,12 @@ public class AppointmentListActivity extends AppCompatActivity {
                     Toast.makeText(this, "Cannot find day", Toast.LENGTH_SHORT).show();
                 }
 
-
-                // Extracting Date, Start Time, and End Time
                 SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd");
                 SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm");
 
-                String date = dateSdf.format(startDate); // Date
-                String startTime = timeSdf.format(startDate); // Start Time
-                String endTime = timeSdf.format(endDate); // End Time
+                String date = dateSdf.format(startDate);
+                String startTime = timeSdf.format(startDate);
+                String endTime = timeSdf.format(endDate);
                 String interval = startTime + " - " + endTime;
 
                 TextView dateText = appointmentView.findViewById(R.id.date);

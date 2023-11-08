@@ -1,5 +1,5 @@
 const controller = require("../controllers/recommendation.controller")
-const { authJwt, verifySignUp, account } = require("../middleware")
+const { authJwt, account } = require("../middleware")
 
 module.exports = function (app) {
     app.post(

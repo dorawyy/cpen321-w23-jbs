@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 public class TutorHelper {
     static public String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com";
+    // ChatGPT usage: Yes
     public static JSONObject fetchTutorAppointments(String id, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 
@@ -21,23 +22,25 @@ public class TutorHelper {
 
         return handleGetResponse(context,jsonResponse,logTag);
     }
+    // ChatGPT usage: Yes
     public static JSONObject acceptAppointment(String id, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 
-        String url = apiUrl + "/appointments/accept?appointmentId=" + id;
+        String url = apiUrl + "/appointment/accept?appointmentId=" + id;
 
-        JSONObject jsonResponse = sendHttpRequest(url,sharedPreferences.getString("jwtToken", ""), "GET", null);
+        JSONObject jsonResponse = sendHttpRequest(url,sharedPreferences.getString("jwtToken", ""), "PUT", null);
 
         String logTag = "TutorConfirm";
 
         return handleGetResponse(context,jsonResponse,logTag);
     }
+    // ChatGPT usage: Yes
     public static JSONObject declineAppointment(String id, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 
-        String url = apiUrl + "/appointments/cancel?appointmentId=" + id;
+        String url = apiUrl + "/appointment/cancel?appointmentId=" + id;
 
-        JSONObject jsonResponse = sendHttpRequest(url,sharedPreferences.getString("jwtToken", ""), "GET", null);
+        JSONObject jsonResponse = sendHttpRequest(url,sharedPreferences.getString("jwtToken", ""), "PUT", null);
 
         String logTag = "TutorDecline";
 

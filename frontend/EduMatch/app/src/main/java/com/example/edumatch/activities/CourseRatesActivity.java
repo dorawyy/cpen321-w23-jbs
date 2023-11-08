@@ -57,6 +57,7 @@ public class CourseRatesActivity extends AppCompatActivity {
         initFields();
     }
 
+    // ChatGPT usage: Yes
     private void initAddButton() {
         Button addButton = findViewById(R.id.add_button);
 
@@ -95,6 +96,7 @@ public class CourseRatesActivity extends AppCompatActivity {
         nextButton.setOnClickListener(v -> goToNewActivity());
     }
 
+    // ChatGPT usage: Yes
     private void updatePreferences() {
         editor.remove("coursePricePairs");
 
@@ -108,9 +110,8 @@ public class CourseRatesActivity extends AppCompatActivity {
                 String course = courseRateItemView.getCourseText();
                 String courseRate = courseRateItemView.getRateText();
                 double courseRateNumber = 0;
-                if(!courseRate.isEmpty())
-                    try
-                    {
+                if (!courseRate.isEmpty())
+                    try {
                         courseRateNumber = Double.parseDouble(courseRate);
                         // it means it is double
                     } catch (Exception e1) {
@@ -141,14 +142,15 @@ public class CourseRatesActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    // ChatGPT usage: Yes
     private void goToNewActivity() {
         Intent newIntent;
         updatePreferences();
         printSharedPreferences(sharedPreferences);
-        if(sharedPreferences.getBoolean("isEditing",false)){
+        if (sharedPreferences.getBoolean("isEditing", false)) {
             JSONObject request = constructEditCourseRates();
             Boolean success = putEditProfile(request, CourseRatesActivity.this);
-            if(success){
+            if (success) {
                 newIntent = new Intent(CourseRatesActivity.this, EditProfileListActivity.class);
                 startActivity(newIntent);
             } else {
@@ -167,7 +169,7 @@ public class CourseRatesActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
     }
 
-
+    // ChatGPT usage: Yes
     private void initFields() {
         // Initialize Courses
         Set<String> defaultCourses = Collections.emptySet();
@@ -221,7 +223,7 @@ public class CourseRatesActivity extends AppCompatActivity {
         }
     }
 
-
+    // ChatGPT usage: Yes
     public JSONObject constructEditCourseRates() {
         try {
             // Retrieve data from SharedPreferences
@@ -241,7 +243,7 @@ public class CourseRatesActivity extends AppCompatActivity {
             JSONArray coursesArray = new JSONArray(courses);
             education.put("courses", coursesArray);
 
-            requestBody.put("education",education);
+            requestBody.put("education", education);
 
             String subjectHourlyRateJson = sharedPreferences.getString("coursePricePairs", "");
 

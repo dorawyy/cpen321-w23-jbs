@@ -6,6 +6,8 @@ const Conversation = db.conversation
 
 // ChatGPT usage: No
 exports.getList = async (req, res) => {
+    console.log("get list")
+
     try {
         const user = await User.findById(req.userId).catch(err => {
             console.log(err)
@@ -24,10 +26,14 @@ exports.getList = async (req, res) => {
             return res.status(500).send({ message: err.message })
         })
         return res.status(200).json({
-            conversations: conversationList.map(conversation => ({
-                conversationId: conversation._id,
-                conversationName: conversation.participants.displayedName1 == user.displayedName ? conversation.participants.displayedName2 : conversation.participants.displayedName1
-            }))
+            conversations: conversationList.map(conversation => 
+                ({
+                    conversationId: conversation._id,
+                    conversationName: conversation.participants.displayedName1 == user.displayedName ?
+                        conversation.participants.displayedName2 :
+                        conversation.participants.displayedName1
+                })
+            )
         })
     } catch (err) {
         console.log(err)
@@ -62,21 +68,29 @@ exports.getConversation = async (req, res) => {
         const endIndex = conversation.messages.length - (req.query.page - 1) * 10
         if (endIndex < 0)
             return res.status(200).json({
-                otherUserId: conversation.participants.userId1 == req.userId ? conversation.participants.userId2 : conversation.participants.userId1,
+                otherUserId: conversation.participants.userId1 == req.userId ?
+                    conversation.participants.userId2 :
+                    conversation.participants.userId1,
                 messages: []
             })
         else {
             const startIndex = endIndex - 10
-            const messages = (startIndex < 0 ? conversation.messages.slice(0, endIndex) : conversation.messages.slice(startIndex, endIndex)).map(message => ({
-                senderId: message.senderId,
-                content: message.content,
-                timestamp: message.timestamp,
-                isYourMessage: message.senderId == req.userId
-            }))
+            const messages = (startIndex < 0 ? 
+                conversation.messages.slice(0, endIndex) :
+                conversation.messages.slice(startIndex, endIndex)).map(message =>
+                ({
+                    senderId: message.senderId,
+                    content: message.content,
+                    timestamp: message.timestamp,
+                    isYourMessage: message.senderId == req.userId
+                })
+            )
 
             return res.status(200).json({
-                otherUserId: conversation.participants.userId1 == req.userId ? conversation.participants.userId2 : conversation.participants.userId1,
-                messages: messages
+                otherUserId: conversation.participants.userId1 == req.userId ?
+                    conversation.participants.userId2 :
+                    conversation.participants.userId1,
+                messages
             })
         }
     } catch (err) {

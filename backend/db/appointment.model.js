@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const { UserType } = require("../constants/user.types");
-const { LocationMode } = require("../constants/location.modes");
 const { AppointmentStatus } = require("../constants/appointment.status");
 
 const participantsInfoSchema = new mongoose.Schema({

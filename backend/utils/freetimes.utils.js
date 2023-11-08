@@ -4,7 +4,7 @@ const momenttz = require("moment-timezone")
 exports.getFreeTimeHelper = (
     timeMin, timeMax, busyTimes, fromGoogle
 ) => {
-    if (busyTimes.length == 0) {
+    if (busyTimes.length === 0) {
         return [{
             start: timeMin,
             end: timeMax
@@ -13,7 +13,7 @@ exports.getFreeTimeHelper = (
     var freeTimes = []
 
     // Include free time before the first busy period
-    var firstBusyStart = undefined
+    var firstBusyStart
     if (fromGoogle) {
         firstBusyStart = momenttz(busyTimes[0].start)
             .tz('America/Los_Angeles');
@@ -38,15 +38,17 @@ exports.getFreeTimeHelper = (
 
     // Infer free times based on busy intervals
     for (let i = 0; i < busyTimes.length - 1; i++) {
-        var busyEnd = undefined
-        var nextBusyStart = undefined
+        var busyEnd
+        var nextBusyStart
         if (fromGoogle) {
             busyEnd = momenttz(busyTimes[i].end).tz('America/Los_Angeles');
-            nextBusyStart = momenttz(busyTimes[i + 1].start).tz('America/Los_Angeles');
+            nextBusyStart = momenttz(busyTimes[i + 1].start)
+                .tz('America/Los_Angeles');
         } else {
-            busyEnd = momenttz(busyTimes[i].pstEndDatetime).tz('America/Los_Angeles');
+            busyEnd = momenttz(busyTimes[i].pstEndDatetime)
+                .tz('America/Los_Angeles');
             nextBusyStart = momenttz(busyTimes[i + 1].pstStartDatetime)
-                            .tz('America/Los_Angeles');
+                .tz('America/Los_Angeles');
         }
         
         const freeStart = busyEnd;
@@ -61,7 +63,7 @@ exports.getFreeTimeHelper = (
     }
 
      // Include free time after the last busy period
-    var lastBusyEnd = undefined
+    var lastBusyEnd
     if (fromGoogle) {
         lastBusyEnd = momenttz(busyTimes[busyTimes.length - 1].end)
                         .tz('America/Los_Angeles');

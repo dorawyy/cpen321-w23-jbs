@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 public class RateHelper {
 
+    // ChatGPT usage: Yes
     public static boolean postReview(Context context, JSONObject requestBody) {
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/review/addReview";
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
@@ -22,6 +23,7 @@ public class RateHelper {
         return handlePutPostResponse(context, jsonResponse,successMessage,logTag);
     }
 
+    // ChatGPT usage: Yes
     public static boolean postRatingWeight(Context context, JSONObject requestBody) {
         String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/user_action/reviewed_tutor";
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);

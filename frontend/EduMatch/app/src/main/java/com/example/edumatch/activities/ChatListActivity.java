@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.edumatch.R;
+import com.example.edumatch.util.CustomException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +33,7 @@ public class ChatListActivity extends AppCompatActivity {
 
     }
 
+    // ChatGPT usage: Yes
     private void initConvos() {
         conversationsList = new ArrayList<>();
         JSONObject conversations = getConversations(ChatListActivity.this);
@@ -55,13 +57,13 @@ public class ChatListActivity extends AppCompatActivity {
 
                 // Now, conversationsList contains the data from the JSONArray.
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                throw new CustomException("Error processing JSON data", e);
             }
         }
         initConvoComponents();
     }
 
-
+    // ChatGPT usage: Yes
     private void initConvoComponents() {
         LinearLayout buttonContainer = findViewById(R.id.messageContainer); // Replace with your container ID
         for (List<String> conversation : conversationsList) {

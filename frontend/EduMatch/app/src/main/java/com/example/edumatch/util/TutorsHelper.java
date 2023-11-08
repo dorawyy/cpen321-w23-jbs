@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 public class TutorsHelper {
 
-
     public static JSONObject getTuteeHome(StringBuilder apiUrl, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 
@@ -20,13 +19,13 @@ public class TutorsHelper {
 
         return handleGetResponse(context,jsonResponse,logTag);
     }
-
+    // ChatGPT usage: Yes
     public static JSONObject getTutorInfo(String id, Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 
         String apiUrlWithUserId = "https://edumatch.canadacentral.cloudapp.azure.com" + "/user/publicProfile?userId=" + id;
 
-        JSONObject jsonResponse = sendHttpRequest(apiUrlWithUserId.toString(),sharedPreferences.getString("jwtToken", ""), "GET", null);
+        JSONObject jsonResponse = sendHttpRequest(apiUrlWithUserId,sharedPreferences.getString("jwtToken", ""), "GET", null);
 
         String logTag = "TutorInfoGet";
 

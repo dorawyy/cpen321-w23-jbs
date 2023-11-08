@@ -21,6 +21,8 @@ public class AdminListComponent extends LinearLayout {
     private TextView usernameTextView;
     private Button activeButton;
 
+    public String apptId;
+
     public AdminListComponent(Context context) {
         super(context);
         init(context);
@@ -35,7 +37,7 @@ public class AdminListComponent extends LinearLayout {
         super(context, attrs, defStyleAttr);
         init(context);
     }
-
+    // ChatGPT usage: Yes
     private void init(Context context) {
         // Inflate the layout
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -58,6 +60,7 @@ public class AdminListComponent extends LinearLayout {
                 if ("ACTIVE".equalsIgnoreCase(currentStatus)) {
                     button.setText("BANNED");
                     banUser(userId, context);
+
                 } else {
                     button.setText("ACTIVE");
                     unbanUser(userId, context);
@@ -88,6 +91,9 @@ public class AdminListComponent extends LinearLayout {
         usernameTextView.setText(username);
     }
 
+    public void setIdAsField(String id) {
+        apptId = id;
+    }
     public void setActiveButtonText(String text) {
         activeButton.setText(text);
     }

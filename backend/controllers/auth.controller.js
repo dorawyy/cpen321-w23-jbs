@@ -56,11 +56,14 @@ exports.googleAuth = (req, res) => {
 
 // ChatGPT usage: No
 exports.signup = async (req, res) => {
+    console.log("signing up user")
+
     try {
-        console.log("signing up user")
         var data = {...req.body}
         if (data.type && data.type === UserType.ADMIN) {
-            return res.status(403).send({message: "Signing up as admin is not allowed"})
+            return res.status(403).send({
+                message: "Signing up as admin is not allowed"
+            })
         }
         var token = req.header('Authorization')
         if (!token) {
@@ -71,7 +74,9 @@ exports.signup = async (req, res) => {
                 hasSignedUp: true
             }).save().then(user => {
                 if (!user) {
-                    return res.status(500).send({ message: "Unable to create user"})
+                    return res.status(500).send({ 
+                        message: "Unable to create user"
+                    })
                 }
                 console.log(`new user: ${user}`)
                 const jwtToken = jwt.sign(user._id.toString(), secretKey)
@@ -120,7 +125,9 @@ exports.login = (req, res) => {
             username: req.body.username
         }).then(user => {
             if (!user || user.isBanned) {
-                return res.status(404).send({ message: "User is not found or is banned" })
+                return res.status(404).send({
+                    message: "User is not found or is banned"
+                })
             }
     
             var passwordIsValid = bcrypt.compareSync(
@@ -129,7 +136,9 @@ exports.login = (req, res) => {
             )
             
             if (!passwordIsValid) {
-                return res.status(401).send({ message: "Username or password is incorrect" })
+                return res.status(401).send({ 
+                    message: "Username or password is incorrect" 
+                })
             }
     
             const jwtToken = jwt.sign(user._id.toString(), secretKey)
@@ -158,7 +167,7 @@ async function verify(idToken, authCode) {
 
     return User.findOne({ googleId }).then(async user => {
         if (!user) {
-            var user = new User({
+            var newUser = new User({
                 googleId,
                 email: payload['email'],
                 displayedName: payload['name']
@@ -166,15 +175,15 @@ async function verify(idToken, authCode) {
 
             const tokens = await getGoogleAccessTokens(authCode)
             if (tokens) {
-                user.googleOauth = {
+                newUser.googleOauth = {
                     accessToken: tokens.access_token,
                     refreshToken: tokens.refresh_token,
                     expiryDate: tokens.expiry_date
                 }
-                user.useGoogleCalendar = true
+                newUser.useGoogleCalendar = true
             }
 
-            return user.save().then(savedUser => {
+            return newUser.save().then(savedUser => {
                 var ret = {
                     userId: savedUser._id.toString(),
                     newUser: true,

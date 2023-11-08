@@ -13,23 +13,25 @@ public class MessageChipView extends RelativeLayout {
     private TextView textView;
     private RelativeLayout chipLayout; // Reference to the RelativeLayout
 
-
+    // ChatGPT usage: Yes
     public MessageChipView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
+    // ChatGPT usage: Yes
     public MessageChipView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
+    // ChatGPT usage: Yes
     public MessageChipView(Context context) {
         super(context);
         init(context, null);
     }
 
-
+    // ChatGPT usage: Yes
     public void setChipText(String text) {
         if (textView != null) {
             textView.setText(text);
@@ -42,6 +44,7 @@ public class MessageChipView extends RelativeLayout {
         chipLayout.setLayoutParams(layoutParams);
     }
 
+    // ChatGPT usage: Yes
     public void setIsReceiver(Boolean isReceiver) {
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -62,7 +65,7 @@ public class MessageChipView extends RelativeLayout {
         }
     }
 
-
+    // ChatGPT usage: Yes
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.chat_chip_component, this, true);

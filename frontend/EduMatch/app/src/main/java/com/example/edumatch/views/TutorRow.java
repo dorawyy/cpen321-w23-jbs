@@ -8,15 +8,13 @@ import android.widget.TextView;
 
 import com.example.edumatch.R;
 
-/**
- * TODO: document your custom view class.
- */
 public class TutorRow extends LinearLayout {
     private TextView tvCourseCode;
     private TextView tvTutorName;
     private TextView tvTutorDetails;
     private TextView tvPrice;
     public String id;
+    public String courses;
 
     public TutorRow(Context context) {
         super(context);
@@ -52,6 +50,10 @@ public class TutorRow extends LinearLayout {
 
     public void setId (String tid) {
         id = tid;
+    }
+
+    public void setCourses(String c) {
+        courses = c;
     }
 
 }

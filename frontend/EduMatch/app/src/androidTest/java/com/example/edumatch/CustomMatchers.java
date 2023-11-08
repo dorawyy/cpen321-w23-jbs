@@ -1,6 +1,7 @@
 package com.example.edumatch;
 
 import android.view.View;
+import android.view.ViewParent;
 
 import androidx.test.espresso.matcher.ViewMatchers;
 import org.hamcrest.Description;
@@ -19,6 +20,30 @@ public class CustomMatchers {
             @Override
             public void describeTo(Description description) {
                 description.appendText("view is not displayed on the screen");
+            }
+        };
+    }
+
+    public static Matcher<View> withAncestor(final int ancestorId, final int targetId) {
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with ancestor with ID " + ancestorId);
+            }
+
+            @Override
+            protected boolean matchesSafely(View view) {
+                ViewParent parent = view.getParent();
+                while (parent != null) {
+                    if (parent instanceof View) {
+                        View ancestorView = (View) parent;
+                        if (ancestorView.getId() == ancestorId) {
+                            return view.getId() == targetId;
+                        }
+                    }
+                    parent = parent.getParent();
+                }
+                return false;
             }
         };
     }

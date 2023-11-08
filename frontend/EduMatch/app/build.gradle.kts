@@ -4,6 +4,7 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("jacoco")
 }
 
 android {
@@ -35,13 +36,33 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            enableAndroidTestCoverage = true
         }
+        debug {
+            enableAndroidTestCoverage = true
+        }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
+
+    buildTypes {
+        getByName("debug") {
+            enableAndroidTestCoverage = true // Enable test coverage for the debug build type
+        }
+        // ...
+    }
 }
+
+
 
 dependencies {
     implementation("com.google.oauth-client:google-oauth-client-jetty:1.23.0")
@@ -69,6 +90,11 @@ dependencies {
     androidTestImplementation("org.mockito:mockito-android:5.7.0")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
 
+    testImplementation("org.powermock:powermock-module-junit4-rule:2.0.0-beta.5")
+    testImplementation("org.powermock:powermock-core:2.0.0-beta.5")
+    testImplementation("org.powermock:powermock-module-junit4:2.0.0-beta.5")
+    testImplementation("org.powermock:powermock-api-mockito2:2.0.0-beta.5")
+
     // To avoid conflicts in libraries
     implementation("com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava")
 
@@ -82,4 +108,10 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.3.0")
     implementation("com.android.support:recyclerview-v7:23.2.0")
+    testImplementation("org.json:json:20140107")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.0")
+}
+
+jacoco {
+    toolVersion = "0.8.11" // Use the appropriate version
 }

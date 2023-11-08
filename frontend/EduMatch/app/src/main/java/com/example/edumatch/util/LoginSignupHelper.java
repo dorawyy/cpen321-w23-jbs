@@ -3,12 +3,14 @@ package com.example.edumatch.util;
 import static com.example.edumatch.util.NetworkUtils.handleGetResponse;
 import static com.example.edumatch.util.NetworkUtils.handlePutPostResponse;
 import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
+import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.InputType;
 import android.util.Log;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
@@ -105,6 +107,24 @@ public class LoginSignupHelper {
         String logTag = "CourseCodesGet";
 
         return handleGetResponse(context, jsonResponse, logTag);
+    }
+
+    public static JSONObject constructEditCourseRates(SharedPreferences sharedPreferences) {
+        JSONObject requestBody = new JSONObject();
+        try {
+            // Retrieve data from SharedPreferences
+
+            // For education
+            requestBody.put("displayedName", sharedPreferences.getString("name", ""));
+            requestBody.put("email", sharedPreferences.getString("email", ""));
+            requestBody.put("phoneNumber", sharedPreferences.getString("phoneNumber", ""));
+            requestBody.put("bio", sharedPreferences.getString("bio", ""));
+            logRequestToConsole(requestBody);
+            return requestBody;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

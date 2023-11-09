@@ -7,7 +7,7 @@ const User = db.user
 
 // ChatGPT usage: No
 exports.checkedProfile = async (req, res) => {
-    console.log("")
+    console.log("");
     try {
         if (!mongoose.Types.ObjectId.isValid(req.body.tutorId)) {
             return res.status(400).send({ message: "Invalid provided tutorId" })

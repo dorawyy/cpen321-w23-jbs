@@ -7,11 +7,11 @@ const Conversation = db.conversation
 
 // ChatGPT usage: No
 exports.ban = async (req, res) => {
-    console.log("ban user")
+    console.log("ban user");
 
     try {
         const admin = await User.findById(req.userId).catch(err => {
-            console.log(err)
+            console.log(err);
             return res.status(500).send({ message: err.message })
         })
         if (!admin)
@@ -24,7 +24,7 @@ exports.ban = async (req, res) => {
         }
     
         const user = await User.findById(req.body.userId).catch(err => {
-            console.log(err)
+            console.log(err);
             return res.status(500).send({ message: err.message })
         })
         if (!user) {
@@ -42,7 +42,7 @@ exports.ban = async (req, res) => {
         
         return res.status(200).send({ message: "User with id " + user._id + " was banned successfully" })
     } catch (err) {
-        console.log(err)
+        console.log(err);
         return res.status(500).send({ message: err.message })
     }
 }

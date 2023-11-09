@@ -10,7 +10,7 @@ const Appointment = db.appointment
 
 // ChatGPT usage: No
 exports.cancelAppointment = async (req, res) => {
-    console.log("cancel appt")
+    console.log("cancel appt");
 
     try {
         var userId = req.userId

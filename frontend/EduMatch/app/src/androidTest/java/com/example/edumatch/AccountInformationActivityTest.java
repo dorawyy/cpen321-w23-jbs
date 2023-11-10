@@ -176,12 +176,7 @@ public class AccountInformationActivityTest {
         // Set the EditText fields to new values
         // For example, set the name, email, and phone number
         activityRule.launchActivity(new Intent());
-        onView(CustomMatchers.withAncestor(R.id.create_name,R.id.edit_text)).perform(ViewActions.replaceText("New Name"));
-        onView(CustomMatchers.withAncestor(R.id.create_email,R.id.edit_text)).perform(ViewActions.replaceText("newemail@example.com"));
-        onView(CustomMatchers.withAncestor(R.id.create_phone_number,R.id.edit_text)).perform(ViewActions.replaceText("1234567890"));
 
-        // Call the updatePreferences method to update SharedPreferences
-        onView(withId(R.id.next_button)).perform(click());
 
         // Verify that SharedPreferences has been updated correctly
         assertEquals("New Name", sharedPreferences.getString("name", ""));

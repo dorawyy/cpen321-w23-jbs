@@ -1,0 +1,16 @@
+name: Run backend tests
+run-name: ${{ github.actor }} is testing backend
+on: [push]
+jobs:
+  run-be-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm run test

@@ -184,7 +184,7 @@ function score(tutee, tutor) {
 
 // ChatGPT usage: No
 function budgetScore(budget, subjectHourlyRate) {
-    if (!subjectHourlyRate || subjectHourlyRate.length == 0) {
+    if (!subjectHourlyRate || subjectHourlyRate.length === 0) {
         return 0
     }
     const averageHourlyRate = subjectHourlyRate.reduce((acc, subject) => acc + subject.hourlyRate) / subjectHourlyRate.length

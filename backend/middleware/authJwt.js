@@ -5,7 +5,7 @@ const secretKey = process.env.SECRET_KEY
 function verifyJwt(req, res, next) {
     try {
         var token = req.header('Authorization')
-
+        
         if (!token) {
             return res.status(403).send({ message: "No token provided"})
         }

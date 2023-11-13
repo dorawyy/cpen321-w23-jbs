@@ -4,9 +4,10 @@ SERVER_PUBLIC_IP="20.151.90.36"
 BACKEND_DIR="backend/*"
 
 rm -rf backend/node_modules
+rm -rf backend/coverage
 echo "move files"
 echo "scp -i $PRIVATE_KEY -r $BACKEND_DIR azureuser@${SERVER_PUBLIC_IP}:backend/"
-scp -i $PRIVATE_KEY -r $BACKEND_DIR azureuser@${SERVER_PUBLIC_IP}:backend/
+GLOBIGNORE='backend/tests/*' scp -i $PRIVATE_KEY -r $BACKEND_DIR azureuser@${SERVER_PUBLIC_IP}:backend/
 
 # recover node_modules
 pushd backend/

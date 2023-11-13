@@ -1,6 +1,6 @@
 
 const { google } = require('googleapis');
-const UserType = require("../constants/user.types")
+const {UserType} = require("../constants/user.types")
 const db = require("../db")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs");

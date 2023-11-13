@@ -35,6 +35,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
     Boolean reviewed = false;
 
     String set_Time;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,12 +47,12 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
         initFields();
         long currentTimeMillis = System.currentTimeMillis();
         currentDate = new Date(currentTimeMillis);
-        if (!hasApptnotPassed(currentDate.toString(), apptDate)) {
+        if (apptDate != null && !hasApptnotPassed(currentDate.toString(), apptDate)) {
             initCancelButton();
         }
-        
-                Log.d("appt2", "hi");
-                initRateTutorButton();
+
+        Log.d("appt2", "hi");
+        initRateTutorButton();
 
 
     }
@@ -93,7 +94,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
         LabelAndTextView location = findViewById(R.id.location);
 
         LabelAndCommentTextView comment = findViewById(R.id.comment);
-        JSONObject response = getAppointment(this ,appointmentId);
+        JSONObject response = getAppointment(this, appointmentId);
         Log.d("appt2", response.toString());
         try {
             if (response.has("otherUserName")) {
@@ -111,6 +112,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
 
             if (response.has("date")) {
                 date.setText(response.getString("date"));
+                apptDate = response.getString("date");
             }
 
             if (response.has("pstStartDatetime") && response.has("pstEndDatetime")) {
@@ -139,7 +141,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
             }
         } catch (JSONException e) {
             Log.d("ScheduledAppointmentActivity", response.toString());
-            throw new CustomException("Error processing JSON data",e);
+            throw new CustomException("Error processing JSON data", e);
         } catch (ParseException e) {
             throw new CustomException("Error parsing date", e);
         }
@@ -148,8 +150,8 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
     private void initCancelButton() {
         Button cancelButton = findViewById(R.id.cancel_button);
 
-            cancelButton.setVisibility(View.VISIBLE);
-            cancelButton.setOnClickListener(v -> goToNewActivity());
+        cancelButton.setVisibility(View.VISIBLE);
+        cancelButton.setOnClickListener(v -> goToNewActivity());
 
     }
 
@@ -157,7 +159,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
     private void goToNewActivity() {
         JSONObject requestBody = constructCancelAppointmentRequest();
         Log.d("appt", requestBody.toString());
-        boolean success = putAppointment(ScheduledAppointmentActivity.this,requestBody,appointmentId);
+        boolean success = putAppointment(ScheduledAppointmentActivity.this, requestBody, appointmentId);
         Log.d("appt", String.valueOf(success));
         if (success) {
             Intent newIntent = new Intent(ScheduledAppointmentActivity.this, AppointmentListActivity.class);
@@ -169,7 +171,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
     public JSONObject constructCancelAppointmentRequest() {
         try {
             JSONObject requestBody = new JSONObject();
-            requestBody.put("status","canceled");
+            requestBody.put("status", "canceled");
             return requestBody;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -177,17 +179,18 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
         }
 
     }
+
     private void initRateTutorButton() {
         Button rateTutorButton = findViewById(R.id.review_button);
-            rateTutorButton.setVisibility(View.VISIBLE);
-            rateTutorButton.setOnClickListener(v -> {
-                Intent intent = new Intent(ScheduledAppointmentActivity.this, TutorRateActivity.class);
-                intent.putExtra("appointmentId", appointmentId);
-                intent.putExtra("tutorName", tutorName);
-                intent.putExtra("tutorId", tutorId);
-                startActivity(intent);
-            });
-        }
+        rateTutorButton.setVisibility(View.VISIBLE);
+        rateTutorButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ScheduledAppointmentActivity.this, TutorRateActivity.class);
+            intent.putExtra("appointmentId", appointmentId);
+            intent.putExtra("tutorName", tutorName);
+            intent.putExtra("tutorId", tutorId);
+            startActivity(intent);
+        });
+    }
 
 
 }

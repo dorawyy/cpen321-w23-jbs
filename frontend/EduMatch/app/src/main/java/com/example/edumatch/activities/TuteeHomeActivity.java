@@ -4,6 +4,7 @@ import static com.example.edumatch.util.ProfileHelper.getProfile;
 import static com.example.edumatch.util.RecommendationHelper.updateWhenTuteeChecksTutor;
 import static com.example.edumatch.util.TutorsHelper.getTuteeHome;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -60,6 +61,8 @@ public class TuteeHomeActivity extends AppCompatActivity {
         initializeCourseTags(courses);
 
     }
+
+
 
     private void initializeChat() {
         FloatingActionButton fabChat = findViewById(R.id.fabChat);

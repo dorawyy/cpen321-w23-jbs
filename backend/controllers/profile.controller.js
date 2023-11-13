@@ -88,13 +88,11 @@ exports.getPrivateProfile = (req, res) => {
 exports.editProfile = (req, res) => {
     try {
         var userId = req.userId
-        var data = {...req.body}
-        var keys = Object.keys(data)
+        var data = {}
+        var keys = Object.keys(req.body)
         for (var key of keys) {
-            if (!ALLOWED_TO_CHANGE.includes(key)) {
-                return res.status(403).send({ 
-                    message: `User is not allowed to change ${key}.` 
-                })
+            if (ALLOWED_TO_CHANGE.includes(key)) {
+                data[key] = req.body[key]
             }
         }
 

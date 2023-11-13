@@ -30,28 +30,24 @@ const User = db.user
 
 // ChatGPT usage: No
 exports.googleAuth = (req, res) => {
-    try {
-        const idToken = req.body.idToken
-        const authCode = req.body.authCode
-    
-        verify(idToken, authCode).then(result => {
-            if (result.isBanned) {
-                return res.status(404).send({message: "User is banned"})
-            }
-            const jwtToken = jwt.sign(result.userId, secretKey)
-            return res.json({ 
-                jwtToken,
-                newUser: result.newUser,
-                type: result.type ? result.type : null
-            })
-        }).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
+    const idToken = req.body.idToken
+    const authCode = req.body.authCode
+
+    verify(idToken, authCode).then(result => {
+        if (result.isBanned) {
+            return res.status(404).send({message: "User is banned"})
+        }
+        const jwtToken = jwt.sign(result.userId, secretKey)
+        return res.json({ 
+            jwtToken,
+            newUser: result.newUser,
+            type: result.type ? result.type : null
         })
-    } catch (err) {
+    }).catch(err => {
         console.log(err)
         return res.status(500).send({ message: err.message })
-    }
+    })
+    
 }
 
 // ChatGPT usage: No
@@ -120,40 +116,35 @@ exports.signup = async (req, res) => {
 // ChatGPT usage: No
 // Adapted from: https://www.bezkoder.com/node-js-mongodb-auth-jwt/ 
 exports.login = (req, res) => {
-    try {
-        User.findOne({
-            username: req.body.username
-        }).then(user => {
-            if (!user || user.isBanned) {
-                return res.status(404).send({
-                    message: "User is not found or is banned"
-                })
-            }
-    
-            var passwordIsValid = bcrypt.compareSync(
-                req.body.password,
-                user.password
-            )
-            
-            if (!passwordIsValid) {
-                return res.status(401).send({ 
-                    message: "Username or password is incorrect" 
-                })
-            }
-    
-            const jwtToken = jwt.sign(user._id.toString(), secretKey)
-            return res.status(200).send({
-                jwtToken,
-                type: user.type
+    User.findOne({
+        username: req.body.username
+    }).then(user => {
+        if (!user || user.isBanned) {
+            return res.status(404).send({
+                message: "User is not found or is banned"
             })
-        }).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
+        }
+        var passwordIsValid = bcrypt.compareSync(
+            req.body.password,
+            user.password
+        )
+        
+        if (!passwordIsValid) {
+            return res.status(401).send({ 
+                message: "Username or password is incorrect" 
+            })
+        }
+
+        const jwtToken = jwt.sign(user._id.toString(), secretKey)
+        return res.status(200).send({
+            jwtToken,
+            type: user.type
         })
-    } catch (err) {
+    }).catch(err => {
         console.log(err)
         return res.status(500).send({ message: err.message })
-    }
+    })
+    
 }
 
 // ChatGPT usage: No
@@ -205,3 +196,5 @@ async function verify(idToken, authCode) {
         return Promise.reject(err)
     })
 }
+
+module.exports.DEFAULT_RECOMMENDATION_WEIGHTS = DEFAULT_RECOMMENDATION_WEIGHTS

@@ -1,9 +1,10 @@
 const axios = require("axios")
 const request = require('supertest');
-const { getCourseCodes } = require("../../controllers/courses.controller")
-const { initReqResMock, app } = require("../utils/express.mock.utils");
+const { app } = require("../../utils/express.mock.utils");
 
+const ENDPOINT = "/courses"
 jest.mock('axios')
+
 
 // Interface GET https://edumatch.canadacentral.cloudapp.azure.com/courses
 describe("Get course codes", () => {
@@ -51,7 +52,7 @@ describe("Get course codes", () => {
         }
         axios.get.mockResolvedValue(mockUbcGradesResponse)
         const res = await request(app)
-            .get("/courses")
+            .get(ENDPOINT)
             .query({ code })
         
         expect(res.status).toBe(200)
@@ -67,7 +68,7 @@ describe("Get course codes", () => {
     // Expected output: a message saying `code` is required
     test("Empty query", async () => {
         const res = await request(app)
-            .get("/courses")
+            .get(ENDPOINT)
 
         expect(res.status).toBe(400);
         expect(res.body).toEqual({ 
@@ -84,7 +85,7 @@ describe("Get course codes", () => {
         const errorMessage = 'Internal Server Error';
         axios.get.mockRejectedValue(new Error(errorMessage));
         const res = await request(app)
-            .get("/courses")
+            .get(ENDPOINT)
             .query({ code: "invalid code" })
             
         expect(res.status).toBe(500);

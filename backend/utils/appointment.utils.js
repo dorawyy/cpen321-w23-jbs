@@ -1,4 +1,4 @@
-const { AppointmentStatus } = require("../constants/appointment.status");
+const { AppointmentStatus, PST_TIMEZONE } = require("../constants/appointment.status");
 const { UserType } = require("../constants/user.types");
 const db = require("../db")
 const googleUtils = require("../utils/google.utils");
@@ -52,13 +52,13 @@ exports.getManualFreeTimes = async (user, timeMin, timeMax) => {
         upcomingAppointments
     )
     var busyTimes = []
-    timeMin = momenttz(timeMin).tz('America/Los_Angeles')
-    timeMax = momenttz(timeMax).tz('America/Los_Angeles')
+    timeMin = momenttz(timeMin).tz(PST_TIMEZONE)
+    timeMax = momenttz(timeMax).tz(PST_TIMEZONE)
     for (var appt of acceptedAppointments) {
         var apptStart = momenttz(appt.pstStartDatetime)
-            .tz('America/Los_Angeles');
+            .tz(PST_TIMEZONE);
         var apptEnd = momenttz(appt.pstEndDatetime)
-            .tz('America/Los_Angeles')
+            .tz(PST_TIMEZONE)
         if (apptStart.isSameOrAfter(timeMin) && 
             apptEnd.isSameOrBefore(timeMax)) {
             busyTimes.push(appt)
@@ -170,14 +170,14 @@ async function appointmentIsCompleted (appointmentId) {
         .findById(appointmentId, "pstEndDatetime")
         .then(appt => {
             var pstNow = momenttz(new Date().toISOString(true))
-                            .tz('America/Los_Angeles')
+                            .tz(PST_TIMEZONE)
             
             if (momenttz(appt.pstEndDatetime).isAfter(pstNow)) {
                 return Promise.resolve(false)
             } else {
                 return Promise.resolve(true)
             }
-        })        
+        })      
 }
 
 async function appointmentIsAccepted(appointmentId) {
@@ -212,7 +212,7 @@ async function getAcceptedAppointments(appointments) {
 
 // ChatGPT usage: Yes
 function toPST(dateString) {
-    return momenttz(dateString).tz('America/Los_Angeles').format();
+    return momenttz(dateString).tz(PST_TIMEZONE).format();
 }
 
 

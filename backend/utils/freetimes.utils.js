@@ -1,4 +1,5 @@
 const momenttz = require("moment-timezone")
+const { PST_TIMEZONE } = require("../constants/appointment.status")
 
 // ChatGPT usage: Partial
 exports.getFreeTimeHelper = (
@@ -16,13 +17,13 @@ exports.getFreeTimeHelper = (
     var firstBusyStart
     if (fromGoogle) {
         firstBusyStart = momenttz(busyTimes[0].start)
-            .tz('America/Los_Angeles');
+            .tz(PST_TIMEZONE);
     } else {
         firstBusyStart = momenttz(busyTimes[0].pstStartDatetime)
-            .tz('America/Los_Angeles');
+            .tz(PST_TIMEZONE);
     }
     
-    const startDateTime = momenttz(timeMin).tz('America/Los_Angeles')
+    const startDateTime = momenttz(timeMin).tz(PST_TIMEZONE)
 
     if (firstBusyStart.isSameOrAfter(startDateTime)) {
         const freeStart = startDateTime;
@@ -41,14 +42,14 @@ exports.getFreeTimeHelper = (
         var busyEnd
         var nextBusyStart
         if (fromGoogle) {
-            busyEnd = momenttz(busyTimes[i].end).tz('America/Los_Angeles');
+            busyEnd = momenttz(busyTimes[i].end).tz(PST_TIMEZONE);
             nextBusyStart = momenttz(busyTimes[i + 1].start)
-                .tz('America/Los_Angeles');
+                .tz(PST_TIMEZONE);
         } else {
             busyEnd = momenttz(busyTimes[i].pstEndDatetime)
-                .tz('America/Los_Angeles');
+                .tz(PST_TIMEZONE);
             nextBusyStart = momenttz(busyTimes[i + 1].pstStartDatetime)
-                .tz('America/Los_Angeles');
+                .tz(PST_TIMEZONE);
         }
         
         const freeStart = busyEnd;
@@ -66,13 +67,13 @@ exports.getFreeTimeHelper = (
     var lastBusyEnd
     if (fromGoogle) {
         lastBusyEnd = momenttz(busyTimes[busyTimes.length - 1].end)
-                        .tz('America/Los_Angeles');
+                        .tz(PST_TIMEZONE);
     } else {
         lastBusyEnd = momenttz(
             busyTimes[busyTimes.length - 1].pstEndDatetime
-        ).tz('America/Los_Angeles');
+        ).tz(PST_TIMEZONE);
     }
-    const endDateTime = momenttz(timeMax).tz('America/Los_Angeles')
+    const endDateTime = momenttz(timeMax).tz(PST_TIMEZONE)
 
     if (lastBusyEnd.isSameOrBefore(endDateTime)) {
         const freeStart = lastBusyEnd;

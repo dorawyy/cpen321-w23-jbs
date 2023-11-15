@@ -3,3 +3,5 @@ exports.AppointmentStatus = {
     ACCEPTED: 'accepted',
     PENDING: 'pending'
 }
+
+exports.PST_TIMEZONE = "America/Los_Angeles"

@@ -1,6 +1,7 @@
 const { google } = require('googleapis');
 const db = require("../db")
 const { getFreeTimeHelper } = require('./freetimes.utils');
+const { PST_TIMEZONE } = require('../constants/appointment.status');
 
 const User = db.user
 
@@ -32,7 +33,7 @@ exports.cancelGoogleEvent = async (
         calendarId: 'primary',
         timeMin: canceledAppt.pstStartDatetime,
         timeMax: canceledAppt.pstEndDatetime,
-        timeZone: 'America/Los_Angeles',
+        timeZone: PST_TIMEZONE,
         q: `Appointment with ${otherUser.displayedName}`
     });
     const events = response.data.items;
@@ -70,11 +71,11 @@ exports.createGoogleEvent = async (
         description: `Course: ${newAppt.course}. Notes: ${newAppt.notes}`,
         start: { 
             dateTime: newAppt.pstStartDatetime, 
-            timeZone: 'America/Los_Angeles',
+            timeZone: PST_TIMEZONE,
         },
         end: { 
             dateTime: newAppt.pstEndDatetime, 
-            timeZone: 'America/Los_Angeles',
+            timeZone: PST_TIMEZONE,
         },
     };
     
@@ -108,7 +109,7 @@ exports.getFreeTime = async (
         requestBody: {
             timeMin,
             timeMax,
-            timeZone: 'America/Los_Angeles',
+            timeZone: PST_TIMEZONE,
             items: [{ id: calendarId }],
         },
     });
@@ -134,7 +135,7 @@ exports.getCalendarEvents = async (
         calendarId: 'primary',
         timeMin,
         timeMax,
-        timeZone: 'America/Los_Angeles',
+        timeZone: PST_TIMEZONE,
         showDeleted: false,
         singleEvents: true
     });

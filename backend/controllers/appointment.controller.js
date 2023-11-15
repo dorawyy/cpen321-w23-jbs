@@ -1,4 +1,4 @@
-const { AppointmentStatus } = require("../constants/appointment.status");
+const { AppointmentStatus, PST_TIMEZONE } = require("../constants/appointment.status");
 const { UserType } = require("../constants/user.types");
 const db = require("../db")
 const googleUtils = require("../utils/google.utils")
@@ -137,15 +137,15 @@ exports.getTutorAvailability = async (req, res) => {
         }
             
         var tzOffset = momenttz(date)
-                    .tz('America/Los_Angeles')
+                    .tz(PST_TIMEZONE)
                     .format('Z')
 
         var timeMin = momenttz(`${date}T08:00:00${tzOffset}`)
-            .tz('America/Los_Angeles')
+            .tz(PST_TIMEZONE)
             .toISOString(true)
     
         var timeMax = momenttz(`${date}T19:00:00${tzOffset}`)
-            .tz('America/Los_Angeles')
+            .tz(PST_TIMEZONE)
             .toISOString(true)
     
         if (tutor.useGoogleCalendar) {
@@ -169,10 +169,10 @@ exports.getTutorAvailability = async (req, res) => {
                 
                 for (var block of dayAvailabilities) {            
                     var start = momenttz(`${date}T${block.startTime}:00${tzOffset}`)
-                        .tz('America/Los_Angeles')
+                        .tz(PST_TIMEZONE)
                         .toISOString(true)
                     var end = momenttz(`${date}T${block.endTime}:00${tzOffset}`)
-                        .tz('America/Los_Angeles')
+                        .tz(PST_TIMEZONE)
                         .toISOString(true)
                     var availability = await apptUtils.getManualFreeTimes(
                         tutor, start, end
@@ -340,13 +340,13 @@ exports.getUserAppointments = async (req, res) => {
         }
 
         var timeMin = momenttz()
-            .tz('America/Los_Angeles')
+            .tz(PST_TIMEZONE)
             .subtract(15, 'days')
             .startOf('day')
             .toISOString(true)
         
         var timeMax = momenttz()
-            .tz('America/Los_Angeles')
+            .tz(PST_TIMEZONE)
             .add(15, 'days')
             .endOf('day')
             .toISOString(true)

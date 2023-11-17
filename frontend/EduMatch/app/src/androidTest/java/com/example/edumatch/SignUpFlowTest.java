@@ -1,52 +1,35 @@
 package com.example.edumatch;
 
-import static androidx.core.util.Predicate.not;
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
-import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.google.api.client.repackaged.com.google.common.base.CharMatcher.is;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasToString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.when;
 
-import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TimePicker;
 
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.Root;
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -58,24 +41,14 @@ import com.example.edumatch.activities.MainActivity;
 import com.example.edumatch.activities.TutorHomeActivity;
 import com.example.edumatch.activities.TutorOrTuteeActivity;
 import com.example.edumatch.activities.UniversityInformationActivity;
-import com.example.edumatch.util.LoginSignupHelper;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
-import org.hamcrest.TypeSafeMatcher;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-import androidx.test.espresso.contrib.PickerActions;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -89,7 +62,7 @@ public class SignUpFlowTest {
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
 
-    static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmm", Locale.getDefault());
+    static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
     static String currentDateAndTime = dateFormat.format(new Date());
     private static final String NAME = "John Doe";
     private static final String EMAIL = "johndoe" + currentDateAndTime + "@example.com";
@@ -132,27 +105,9 @@ public class SignUpFlowTest {
     }
 
 
-//    @Test
-//    public void testSignUpButton() {
-//        activityRule.launchActivity(new Intent());
-//        Intents.init();
-//        onView(withId(R.id.signup_button)).perform(click());
-//        assertEquals(false, sharedPreferences.getBoolean("useGoogle", true));
-//        intended(hasComponent(TutorOrTuteeActivity.class.getName()));
-//        Intents.release();
-//    }
-//
-//    @Test
-//    public void testTutorButton() {
-//
-//        onView(withId(R.id.tutor_button)).perform(click());
-//        assertEquals("tutor", sharedPreferences.getString("userType", ""));
-//        intended(hasComponent(AccountInformationActivity.class.getName()));
-//        Intents.release();
-//    }
 
 
-
+    // ChatGPT usage: Yes
     @Test
     public void testSignUpFlow() {
         Intents.init();
@@ -238,7 +193,7 @@ public class SignUpFlowTest {
         }
 
 
-// Scroll to find the AutoCompleteTextView with the desired suggestion
+        // Scroll to find the AutoCompleteTextView with the desired suggestion
         onView(withText("CPEN 321")).inRoot(withDecorView(Matchers.not(Matchers.is(mActivity.getWindow().getDecorView())))).perform(click());
 
         onView(withId(R.id.add_button)).perform(click());
@@ -320,7 +275,7 @@ public class SignUpFlowTest {
         onView(withId(R.id.start_time_button)).perform(click());
 
 
-// Now, interact with the TimePickerDialog
+        // Now, interact with the TimePickerDialog
         onView(withClassName(Matchers.equalTo(TimePicker.class.getName())))
                 .perform(PickerActions.setTime(10, 30));
 
@@ -331,7 +286,7 @@ public class SignUpFlowTest {
         onView(withId(R.id.end_time_button)).perform(click());
 
 
-// Now, interact with the TimePickerDialog
+        // Now, interact with the TimePickerDialog
         onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(
                 PickerActions.setTime(18, 30) // Set the desired time (10:30 AM in this example)
         );
@@ -347,14 +302,18 @@ public class SignUpFlowTest {
                 .inRoot(withDecorView(Matchers.not(activityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
 
-
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         onView(withId(R.id.monday_button)).perform(click());
 
         onView(withId(R.id.start_time_button)).perform(click());
 
 
-// Now, interact with the TimePickerDialog
+        // Now, interact with the TimePickerDialog
         onView(withClassName(Matchers.equalTo(TimePicker.class.getName())))
                 .perform(PickerActions.setTime(18, 30));
 
@@ -365,7 +324,7 @@ public class SignUpFlowTest {
         onView(withId(R.id.end_time_button)).perform(click());
 
 
-// Now, interact with the TimePickerDialog
+        // Now, interact with the TimePickerDialog
         onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(
                 PickerActions.setTime(10, 30) // Set the desired time (10:30 AM in this example)
         );
@@ -409,12 +368,6 @@ public class SignUpFlowTest {
         editor.putString("jwtToken","");
         editor.commit();
 
-//        try {
-//            Thread.sleep(100000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-
         onView(withId(R.id.manually_set_button))
                 .perform(click());
 
@@ -422,12 +375,6 @@ public class SignUpFlowTest {
                 .inRoot(withDecorView(Matchers.not(activityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
 
-        try {
-            Thread.sleep(100000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        // Enter information
         Intents.release();
     }
 

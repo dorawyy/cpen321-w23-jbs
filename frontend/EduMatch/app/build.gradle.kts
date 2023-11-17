@@ -1,7 +1,10 @@
+import org.gradle.internal.classpath.Instrumented.systemProperties
+import org.gradle.internal.classpath.Instrumented.systemProperty
 import java.util.Properties
 plugins {
     id("com.android.application")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("jacoco")
 }
 
 android {
@@ -10,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.edumatch"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -33,13 +36,35 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            enableAndroidTestCoverage = true
         }
+        debug {
+            enableAndroidTestCoverage = true
+        }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
+
+    buildTypes {
+        getByName("debug") {
+            enableAndroidTestCoverage = true // Enable test coverage for the debug build type
+        }
+        // ...
+    }
+
+
 }
+
+
 
 dependencies {
     implementation("com.google.oauth-client:google-oauth-client-jetty:1.23.0")
@@ -56,7 +81,15 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+//    testImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation("org.robolectric:robolectric:4.6.1")
+    implementation("net.bytebuddy:byte-buddy:1.14.9")
+    testImplementation("net.bytebuddy:byte-buddy-agent:1.14.9")
+    testImplementation("org.objenesis:objenesis:3.3")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+
 
     // To avoid conflicts in libraries
     implementation("com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava")
@@ -68,5 +101,21 @@ dependencies {
 // So that we can easily control permissions
     implementation("pub.devrel:easypermissions:3.0.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
     implementation("com.android.support:recyclerview-v7:23.2.0")
+    testImplementation("org.json:json:20140107")
+    androidTestImplementation("org.mockito:mockito-android:5.7.0")
+//    testImplementation("org.mockito:mockito-core:5.7.0")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
+//    androidTestImplementation("org.mockito:mockito-inline:5.2.0")
+
+
+
+
+}
+
+
+jacoco {
+    toolVersion = "0.8.11" // Use the appropriate version
 }

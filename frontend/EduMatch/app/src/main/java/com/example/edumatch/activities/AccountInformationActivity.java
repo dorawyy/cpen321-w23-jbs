@@ -1,5 +1,6 @@
 package com.example.edumatch.activities;
 
+import static com.example.edumatch.util.LoginSignupHelper.constructEditCourseRates;
 import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
 import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
 import static com.example.edumatch.util.ProfileHelper.putEditProfile;
@@ -23,7 +24,7 @@ import org.json.JSONObject;
 
 public class AccountInformationActivity extends AppCompatActivity {
 
-    SharedPreferences sharedPreferences;
+    public SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
     @Override
@@ -49,8 +50,13 @@ public class AccountInformationActivity extends AppCompatActivity {
             int[] viewIds = {R.id.create_userName, R.id.create_password};
 
             for (int viewId : viewIds) {
-                LabelAndEditTextView view = findViewById(viewId);
-                view.setVisibility(View.GONE);
+                final LabelAndEditTextView view = findViewById(viewId);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.setVisibility(View.GONE);
+                    }
+                });
             }
         }
     }
@@ -93,7 +99,7 @@ public class AccountInformationActivity extends AppCompatActivity {
         printSharedPreferences(sharedPreferences);
         Intent newIntent;
         if (sharedPreferences.getBoolean("isEditing", false)) {
-            JSONObject request = constructEditCourseRates();
+            JSONObject request = constructEditCourseRates(sharedPreferences);
             putEditProfile(request, AccountInformationActivity.this);
             newIntent = new Intent(AccountInformationActivity.this, EditProfileListActivity.class);
         } else {
@@ -140,29 +146,4 @@ public class AccountInformationActivity extends AppCompatActivity {
         }
     }
 
-    // ChatGPT usage: Yes
-    public JSONObject constructEditCourseRates() {
-
-        try {
-            // Retrieve data from SharedPreferences
-
-            SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
-
-
-            JSONObject requestBody = new JSONObject();
-
-            // For education
-            requestBody.put("displayedName", sharedPreferences.getString("name", ""));
-            requestBody.put("email", sharedPreferences.getString("email", ""));
-            requestBody.put("phoneNumber", sharedPreferences.getString("phoneNumber", ""));
-            requestBody.put("bio", sharedPreferences.getString("bio", ""));
-
-            logRequestToConsole(requestBody);
-            return requestBody;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
 }

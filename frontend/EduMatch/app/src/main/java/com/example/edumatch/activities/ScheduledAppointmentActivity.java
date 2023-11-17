@@ -28,13 +28,12 @@ import java.util.TimeZone;
 
 public class ScheduledAppointmentActivity extends AppCompatActivity {
     String appointmentId;
-    String apptDate;
     Date currentDate;
     String tutorName;
     String tutorId;
     Boolean reviewed = false;
 
-    String set_Time;
+    String pstStartTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,7 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
         initFields();
         long currentTimeMillis = System.currentTimeMillis();
         currentDate = new Date(currentTimeMillis);
-        if (apptDate != null && !hasApptnotPassed(currentDate.toString(), apptDate)) {
+        if (pstStartTime != null && !hasApptnotPassed(currentDate.toString(), pstStartTime)) {
             initCancelButton();
         }
 
@@ -110,13 +109,8 @@ public class ScheduledAppointmentActivity extends AppCompatActivity {
                 course.setText(response.getString("course"));
             }
 
-            if (response.has("date")) {
-                date.setText(response.getString("date"));
-                apptDate = response.getString("date");
-            }
-
             if (response.has("pstStartDatetime") && response.has("pstEndDatetime")) {
-                String pstStartTime = response.getString("pstStartDatetime");
+                pstStartTime = response.getString("pstStartDatetime");
                 String pstEndTime = response.getString("pstEndDatetime");
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");

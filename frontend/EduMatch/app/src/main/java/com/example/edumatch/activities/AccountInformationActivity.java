@@ -44,7 +44,7 @@ public class AccountInformationActivity extends AppCompatActivity {
 
 
     // ChatGPT usage: Yes
-    public void initInvisibleFields() {
+    private void initInvisibleFields() {
 
         if (sharedPreferences.getBoolean("useGoogle", false) || sharedPreferences.getBoolean("isEditing", false)) {
             int[] viewIds = {R.id.create_userName, R.id.create_password};

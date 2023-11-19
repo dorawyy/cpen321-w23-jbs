@@ -1,6 +1,5 @@
 const request = require('supertest')
 const mongoose = require("mongoose")
-const db = require("../../../db")
 const { authJwt, account } = require("../../../middleware")
 const { app } = require('../../utils/express.mock.utils')
 const { UserType } = require('../../../constants/user.types')
@@ -33,7 +32,7 @@ jest.mock('../../../db', () => {
         })
     }
     return {
-        user: MockUser,
+        user: MockUser
     }
 })
 
@@ -43,8 +42,6 @@ beforeEach(() => {
     mockErrorMsg = undefined
     mockAddedUsers = []
 })
-
-const User = db.user
 
 // Interface POST https://edumatch.canadacentral.cloudapp.azure.com/user_action/reviewed_tutor
 describe("Reviewed tutor", () => {

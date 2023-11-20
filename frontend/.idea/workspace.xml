@@ -9,19 +9,118 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="Made everything work for tutor">
+    <list default="true" id="915a92b4-a56b-4a0e-b11b-360c57a32519" name="Changes" comment="Added all the comments">
+      <change afterPath="$PROJECT_DIR$/.idea/androidTestResultsUserPreferences.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_testing_2_2_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_recyclerview_recyclerview_1_3_2_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_espresso_espresso_contrib_3_5_1_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_espresso_espresso_intents_3_5_1_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_monitor_1_4_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_rules_1_5_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_viewpager2_viewpager2_1_1_0_beta02_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_almworks_sqlite4java_sqlite4java_1_0_392.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_apps_common_testing_accessibility_framework_accessibility_test_framework_3_1_2_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_auto_value_auto_value_annotations_1_7_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_findbugs_jsr305_3_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_errorprone_error_prone_annotations_2_15_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_failureaccess_1_0_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_guava_27_0_1_jre.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_j2objc_j2objc_annotations_1_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_ibm_icu_icu4j_53_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_squareup_okhttp3_okhttp_4_9_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_squareup_okio_okio_2_8_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__javax_annotation_javax_annotation_api_1_3_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__net_bytebuddy_byte_buddy_1_14_9.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__net_bytebuddy_byte_buddy_agent_1_14_9.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_bouncycastle_bcprov_jdk15on_1_68.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_checkerframework_checker_qual_2_5_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_codehaus_mojo_animal_sniffer_annotations_1_17.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_hamcrest_hamcrest_2_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_hamcrest_hamcrest_core_2_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_hamcrest_hamcrest_library_2_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_json_json_20140107.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_mockito_mockito_android_5_7_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_mockito_mockito_core_2_25_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_mockito_mockito_core_5_7_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_objenesis_objenesis_3_3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_ow2_asm_asm_9_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_ow2_asm_asm_analysis_9_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_ow2_asm_asm_commons_9_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_ow2_asm_asm_tree_9_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_ow2_asm_asm_util_9_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_robolectric_annotations_4_6_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_robolectric_junit_4_6_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_robolectric_pluginapi_4_6_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_robolectric_plugins_maven_dependency_resolver_4_6_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_robolectric_resources_4_6_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_robolectric_robolectric_4_6_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_robolectric_sandbox_4_6_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_robolectric_shadowapi_4_6_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_robolectric_shadows_framework_4_6_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_robolectric_utils_4_6_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_robolectric_utils_reflector_4_6_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_activity_activity_1_8_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_activity_activity_1_8_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_annotation_annotation_experimental_1_3_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_annotation_annotation_experimental_1_3_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_appcompat_appcompat_1_6_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_appcompat_appcompat_1_6_1_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_appcompat_appcompat_resources_1_6_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_appcompat_appcompat_resources_1_6_1_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_runtime_2_1_0_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_runtime_2_2_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_runtime_2_2_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cardview_cardview_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cardview_cardview_1_0_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_coordinatorlayout_coordinatorlayout_1_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_coordinatorlayout_coordinatorlayout_1_1_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_core_core_ktx_1_2_0_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_core_core_ktx_1_9_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_core_core_ktx_1_9_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cursoradapter_cursoradapter_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cursoradapter_cursoradapter_1_0_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_documentfile_documentfile_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_documentfile_documentfile_1_0_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_fragment_fragment_1_3_6_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_fragment_fragment_1_3_6_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_interpolator_interpolator_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_interpolator_interpolator_1_0_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_ui_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_ui_1_0_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_utils_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_utils_1_0_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_2_6_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_2_6_1_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_core_2_6_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_core_2_6_1_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_runtime_2_6_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_runtime_2_6_1_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_savedstate_2_6_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_savedstate_2_6_1_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_print_print_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_print_print_1_0_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_recyclerview_recyclerview_1_1_0_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_savedstate_savedstate_1_2_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_savedstate_savedstate_1_2_1_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_swiperefreshlayout_swiperefreshlayout_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_swiperefreshlayout_swiperefreshlayout_1_0_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_annotation_1_0_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_annotation_1_0_1_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_core_1_5_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_core_1_5_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_espresso_espresso_idling_resource_3_5_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_espresso_espresso_idling_resource_3_5_1_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_ext_junit_1_1_5_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_ext_junit_1_1_5_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_services_storage_1_4_2_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_services_storage_1_4_2_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_tracing_tracing_1_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_tracing_tracing_1_0_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_transition_transition_1_2_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_transition_transition_1_2_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_animated_1_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_animated_1_1_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_viewpager2_viewpager2_1_0_0_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_volley_volley_1_2_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_volley_volley_1_2_1_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_datatransport_transport_api_2_2_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_datatransport_transport_api_2_2_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_datatransport_transport_backend_cct_2_3_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_datatransport_transport_backend_cct_2_3_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_datatransport_transport_runtime_2_2_3_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_datatransport_transport_runtime_2_2_3_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_flexbox_flexbox_3_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_flexbox_flexbox_3_0_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_auth_20_7_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_auth_20_7_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_auth_api_phone_18_0_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_auth_api_phone_18_0_1_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_auth_base_18_0_4_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_auth_base_18_0_4_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_base_18_2_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_base_18_2_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_basement_18_2_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_basement_18_2_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_fido_20_0_1_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_fido_20_0_1_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_location_17_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_location_17_1_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_maps_18_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_maps_18_1_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_places_placereport_17_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_places_placereport_17_0_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_tasks_18_0_2_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_tasks_18_0_2_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_libraries_places_places_2_6_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_libraries_places_places_2_6_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_encoders_json_16_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_encoders_json_16_1_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_hamcrest_hamcrest_library_1_3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_jdk7_1_6_21.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_jdk8_1_6_21.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__pub_devrel_easypermissions_3_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__pub_devrel_easypermissions_3_0_0_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.androidTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.androidTest.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.unitTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/EduMatch.app.unitTest.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/AdminListComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/AdminListComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AdminHomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AdminHomeActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AppointmentListActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/AppointmentListActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/BookingFlowActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/BookingFlowActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ProfileActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/ProfileActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/.idea/androidTestResultsUserPreferences.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/.idea/androidTestResultsUserPreferences.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TuteeHomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TuteeHomeActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TuteeProfileActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TuteeProfileActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TutorHomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/activities/TutorHomeActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/AdminHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/AdminHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_admin_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/activity_admin_home.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/admin_list_component.xml" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/res/layout/admin_list_component.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/TutorsHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/util/TutorsHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipHomeView.java" beforeDir="false" afterPath="$PROJECT_DIR$/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipHomeView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +130,7 @@
   <component name="CodeInsightWorkspaceSettings">
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/maggiegu/.android/avd/Resizable_Experimental_API_34_6.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/maggiegu/.android/avd/Resizable_Experimental_API_34_5.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/EduMatch">
       <ProjectState />
@@ -81,15 +180,15 @@
         <option value="resourceFile" />
         <option value="valueResourceFile" />
         <option value="layoutResourceFile_vertical" />
-        <option value="Class" />
         <option value="layoutResourceFile" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="main" />
+        <entry key="$PROJECT_DIR$/.." value="fe-test-maggie" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -115,40 +214,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/AdminListComponent.java_SELECTED": "AdminListComponent",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/TutorRow.java_SELECTED": "TutorRow",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/activities/ChatButton.java_SELECTED": "ChatButton",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/ActivityBarView.java_SELECTED": "AppBarCustomView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomBackView.java_SELECTED": "AppBarCustomBackView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomTutorBackView.java_SELECTED": "AppBarCustomTutorBackView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java_SELECTED": "AppBarCustomView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AvailableTimesViews.java_SELECTED": "AvailableTimesViews",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/CourseRateItemView.java_SELECTED": "CourseRateItemView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/DayOfTheWeekView.java_SELECTED": "DayOfTheWeekView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndCommentTextView.java_SELECTED": "LabelAndCommentTextView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndRatingView.java_SELECTED": "LabelAndRatingView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndTextView.java_SELECTED": "LabelAndTextView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/MessageChipView.java_SELECTED": "MessageChipView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipHomeView.java_SELECTED": "SubjectChipHomeView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipView.java_SELECTED": "SubjectChipView",
-    "android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/TutorReviewChip.java_SELECTED": "TutorReviewChip",
-    "android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LabelAndEditText.java_SELECTED": "LabelAndEditText",
-    "android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LoginLabelAndEditText.java_SELECTED": "LoginLabelAndEditText",
-    "cidr.known.project.marker": "true",
-    "last_opened_file_path": "C:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch",
-    "memory.settings.postsync.last.time.stamp": "1698613940560",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "experimental"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Git.Branch.Popup.ShowAllRemotes&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/AdminListComponent.java_SELECTED&quot;: &quot;AdminListComponent&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/TutorRow.java_SELECTED&quot;: &quot;TutorRow&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/activities/ChatButton.java_SELECTED&quot;: &quot;ChatButton&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/ActivityBarView.java_SELECTED&quot;: &quot;AppBarCustomView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomBackView.java_SELECTED&quot;: &quot;AppBarCustomBackView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomTutorBackView.java_SELECTED&quot;: &quot;AppBarCustomTutorBackView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AppBarCustomView.java_SELECTED&quot;: &quot;AppBarCustomView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/AvailableTimesViews.java_SELECTED&quot;: &quot;AvailableTimesViews&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/CourseRateItemView.java_SELECTED&quot;: &quot;CourseRateItemView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/DayOfTheWeekView.java_SELECTED&quot;: &quot;DayOfTheWeekView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndCommentTextView.java_SELECTED&quot;: &quot;LabelAndCommentTextView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndRatingView.java_SELECTED&quot;: &quot;LabelAndRatingView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/LabelAndTextView.java_SELECTED&quot;: &quot;LabelAndTextView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/MessageChipView.java_SELECTED&quot;: &quot;MessageChipView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipHomeView.java_SELECTED&quot;: &quot;SubjectChipHomeView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/SubjectChipView.java_SELECTED&quot;: &quot;SubjectChipView&quot;,
+    &quot;android-custom-view/Users/maggiegu/AndroidStudioProjects/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/views/TutorReviewChip.java_SELECTED&quot;: &quot;TutorReviewChip&quot;,
+    &quot;android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LabelAndEditText.java_SELECTED&quot;: &quot;LabelAndEditText&quot;,
+    &quot;android-custom-viewC:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch/app/src/main/java/com/example/edumatch/LoginLabelAndEditText.java_SELECTED&quot;: &quot;LoginLabelAndEditText&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/maryd/EduMatch/jbs-edumatch/frontend/EduMatch&quot;,
+    &quot;memory.settings.postsync.last.time.stamp&quot;: &quot;1698613940560&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;recommended.upgrade.last.time.stamp&quot;: &quot;1700348483425&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;experimental&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="android.template.-1582889132">
       <recent name="com.example.edumatch.activities" />
@@ -163,7 +264,7 @@
       <recent name="com.example.edumatch" />
     </key>
   </component>
-  <component name="RunManager" selected="Android App.EduMatch.app">
+  <component name="RunManager" selected="Android Instrumented Tests.ExampleInstrumentedTest">
     <configuration name="EduMatch.app" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="EduMatch.app.main" />
       <option name="DEPLOY" value="true" />
@@ -230,6 +331,151 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ExampleInstrumentedTest" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests" temporary="true" nameIsGenerated="true">
+      <module name="EduMatch.app.androidTest" />
+      <option name="TESTING_TYPE" value="2" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="com.example.edumatch.ExampleInstrumentedTest" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_NAME_REGEX" value="" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="EXTRA_OPTIONS" value="" />
+      <option name="RETENTION_ENABLED" value="No" />
+      <option name="RETENTION_MAX_SNAPSHOTS" value="2" />
+      <option name="RETENTION_COMPRESS_SNAPSHOTS" value="false" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Hybrid>
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Java>
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SignUpFlowTest" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests" temporary="true" nameIsGenerated="true">
+      <module name="EduMatch.app.androidTest" />
+      <option name="TESTING_TYPE" value="2" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="com.example.edumatch.SignUpFlowTest" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_NAME_REGEX" value="" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="EXTRA_OPTIONS" value="" />
+      <option name="RETENTION_ENABLED" value="No" />
+      <option name="RETENTION_MAX_SNAPSHOTS" value="2" />
+      <option name="RETENTION_COMPRESS_SNAPSHOTS" value="false" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Hybrid>
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Java>
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EduMatch:app [testDebugUnitTest]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/EduMatch/app" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="testDebugUnitTest" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="build.gradle.kts" type="KotlinStandaloneScriptRunConfigurationType" temporary="true" nameIsGenerated="true">
       <module name="frontend" />
       <option name="filePath" value="$PROJECT_DIR$/EduMatch/build.gradle.kts" />
@@ -239,7 +485,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Kotlin script (Beta).build.gradle.kts" />
+        <item itemvalue="Android Instrumented Tests.ExampleInstrumentedTest" />
+        <item itemvalue="Android Instrumented Tests.SignUpFlowTest" />
+        <item itemvalue="Gradle.EduMatch:app [testDebugUnitTest]" />
         <item itemvalue="Kotlin script (Beta).build.gradle.kts" />
         <item itemvalue="Kotlin script (Beta).build.gradle.kts" />
       </list>

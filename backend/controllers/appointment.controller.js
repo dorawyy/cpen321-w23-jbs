@@ -15,20 +15,10 @@ exports.cancelAppointment = async (req, res) => {
     try {
         var userId = req.userId
         var apptId = req.query.appointmentId
-        var user = await User.findById(userId).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
-        if (!user || user.isBanned) {
-            return res.status(400).send({
-                message: "User not found"
-            })
-        }
+        
+        var user = await User.findById(userId)
+
         var upcomingAppointments = await apptUtils.cleanupUserAppointments(user)
-            .catch(err => {
-                console.log(err)
-                return res.status(500).send({ message: err.message })
-            })
     
         if (!apptId) {
             return res.status(400).send({
@@ -47,21 +37,15 @@ exports.cancelAppointment = async (req, res) => {
         var canceledAppt = await Appointment.findByIdAndUpdate(
             apptId, {status: AppointmentStatus.CANCELED},
             { new: true }
-        ).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
+        )
 
         if (!canceledAppt) {
             return res.status(404).send({
-                message: "Appointment not found"
+                message: "Unable to cancel appointment. Appointment not found"
             })
         }
     
-        user = await User.findById(userId).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
+        user = await User.findById(userId)
             
         if (!user || user.isBanned) {
             return res.status(400).send({
@@ -72,44 +56,25 @@ exports.cancelAppointment = async (req, res) => {
         var otherUserId = canceledAppt.participantsInfo
             .filter(user => user.userId != userId)[0].userId
         
-        var otherUser = await User.findById(otherUserId).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        }) 
+        var otherUser = await User.findById(otherUserId)
+
         if (!otherUser || otherUser.isBanned) {
-            return res.status(400).send({ message: "User not found" })
+            return res.status(404).send({ message: "The other user not found" })
         }
         
         if (user.useGoogleCalendar) {
             await googleUtils.cancelGoogleEvent(user, otherUser, canceledAppt)
-                .catch(err => {
-                    console.log(err)
-                    return res.status(500).send({ message: err.message })
-                })
         }
         if (otherUser.useGoogleCalendar) {
             await googleUtils.cancelGoogleEvent(otherUser, user, canceledAppt)
-                .catch(err => {
-                    console.log(err)
-                    return res.status(500).send({ message: err.message })
-                })
         }
     
         await apptUtils.cleanupUserAppointments(user)
-            .catch(err => {
-                console.log(err)
-                return res.status(500).send({ message: err.message })
-            })
-        
         await apptUtils.cleanupUserAppointments(otherUser)
-            .then(result => {
-                return res.status(200).send({
-                    message: "Canceled appointment successfully"
-                })
-            }).catch(err => {
-                console.log(err)
-                return res.status(500).send({ message: err.message })
-            })
+            
+        return res.status(200).send({
+            message: "Canceled appointment successfully"
+        })
     } catch (err) {
         console.log(err)
         return res.status(500).send({

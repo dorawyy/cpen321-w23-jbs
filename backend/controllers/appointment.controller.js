@@ -10,8 +10,6 @@ const Appointment = db.appointment
 
 // ChatGPT usage: No
 exports.cancelAppointment = async (req, res) => {
-    console.log("cancel appt")
-
     try {
         var userId = req.userId
         var apptId = req.query.appointmentId
@@ -30,7 +28,7 @@ exports.cancelAppointment = async (req, res) => {
     
         if (!(idStrings.includes(apptId))) {
             return res.status(404).send({
-                message: "Appointment not found"
+                message: "Appointment not found. You can't cancel a past appointment."
             })
         }
     
@@ -46,30 +44,31 @@ exports.cancelAppointment = async (req, res) => {
         }
     
         user = await User.findById(userId)
-            
         if (!user || user.isBanned) {
-            return res.status(400).send({
-                message: "User not found"
+            return res.status(404).send({
+                message: "User is not found or is banned"
             })
         }
-    
+        if (user.useGoogleCalendar) {
+            await googleUtils.cancelGoogleEvent(user, otherUser, canceledAppt)
+        }
+        await apptUtils.cleanupUserAppointments(user)
+
         var otherUserId = canceledAppt.participantsInfo
             .filter(user => user.userId != userId)[0].userId
         
         var otherUser = await User.findById(otherUserId)
 
         if (!otherUser || otherUser.isBanned) {
-            return res.status(404).send({ message: "The other user not found" })
+            return res.status(200).send({ 
+                message: "Canceled appointment successfully. However, the other user was not found or was banned" 
+            })
         }
         
-        if (user.useGoogleCalendar) {
-            await googleUtils.cancelGoogleEvent(user, otherUser, canceledAppt)
-        }
         if (otherUser.useGoogleCalendar) {
             await googleUtils.cancelGoogleEvent(otherUser, user, canceledAppt)
         }
     
-        await apptUtils.cleanupUserAppointments(user)
         await apptUtils.cleanupUserAppointments(otherUser)
             
         return res.status(200).send({

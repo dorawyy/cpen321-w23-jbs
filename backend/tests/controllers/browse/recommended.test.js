@@ -372,7 +372,7 @@ describe("Browse for users", () => {
         for (var i = 0; i < 50; i++) {
             mockAddedUsers.push(mockTutorWithCourseAndOppositeValues)
         }
-        for (var i = 0; i < 5; i++) {
+        for (var j = 0; j < 5; i++) {
             mockAddedTutorsWithoutCourses.push(mockTutorWithoutCourse)
         }
 

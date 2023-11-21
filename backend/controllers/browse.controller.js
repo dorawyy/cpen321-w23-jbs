@@ -93,7 +93,7 @@ exports.recommended = async (req, res) => {
                             tags: tutor.education.tags,
                         }))
                     })
-                } else if ((req.query.page - 1) * PAGE_SIZE >= tutorsWithSharedCourses.length) {
+                } else {
                     // the page will display only tutors without shared courses
                     const tutorsWithoutSharedCourses = await User.find({
                         'education.courses': { $nin: tutee.education.courses },
@@ -165,7 +165,7 @@ function budgetScore(budget, subjectHourlyRate) {
     if (!subjectHourlyRate || subjectHourlyRate.length === 0) {
         return 0
     }
-    const averageHourlyRate = subjectHourlyRate.reduce((acc, subject) => acc + subject.hourlyRate) / subjectHourlyRate.length
+    const averageHourlyRate = subjectHourlyRate.reduce((acc, subject) => acc + subject.hourlyRate, 0) / subjectHourlyRate.length
     return averageHourlyRate < budget ? 100 - (1/3) * averageHourlyRate : 100 - (1/3) * budget - (2/3) * (averageHourlyRate - budget)
 }
 
@@ -176,12 +176,12 @@ function ratingScore(minRating, rating) {
 
 // ChatGPT usage: No
 function locationModeScore(locationModeWeight, tuteeLocationMode, tutorLocationMode) {
-    if (locationModeWeight <= 0) return 0
     return tuteeLocationMode == tutorLocationMode ? 100 * locationModeWeight : -100 * locationModeWeight
 }
 
 // ChatGPT usage: No
 function distanceScore(maxDistance, tuteeLocation, tutorLocation) {
-    const distance = haversine(tutorLocation, tuteeLocation)
+    const distance = haversine({ latitude: tuteeLocation.lat, longitude: tuteeLocation.long },
+        { latitude: tutorLocation.lat, longitude: tutorLocation.long })
     return distance < maxDistance ? 100 - (1/3) * distance : 100 - (1/3) * maxDistance - (2/3) * (distance - maxDistance)
 }

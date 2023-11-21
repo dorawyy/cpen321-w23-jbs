@@ -5,7 +5,6 @@ const { app } = require('../../utils/express.mock.utils')
 const { UserType } = require('../../../constants/user.types')
 const { LocationMode } = require('../../../constants/location.modes')
 const { DEFAULT_RECOMMENDATION_WEIGHTS } = require('../../../controllers/auth.controller')
-const { findByIdAndDelete } = require('../../../db/user.model')
 
 const ENDPOINT = "/recommended"
 
@@ -75,8 +74,8 @@ describe("Browse for users", () => {
         ],
         locationMode: LocationMode.IN_PERSON,
         location: {
-            lat: 123,
-            long: 456
+            lat: 85,
+            long: 175
         },
         recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
         bio: "test bio",
@@ -116,8 +115,8 @@ describe("Browse for users", () => {
         ],
         locationMode: LocationMode.IN_PERSON,
         location: {
-            lat: 123,
-            long: 456
+            lat: 85,
+            long: 175
         },
         recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
         bio: "test bio",
@@ -163,8 +162,8 @@ describe("Browse for users", () => {
         ],
         locationMode: LocationMode.ONLINE,
         location: {
-            lat: 123,
-            long: 456
+            lat: 85,
+            long: 175
         },
         recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
         bio: "test bio",
@@ -210,8 +209,8 @@ describe("Browse for users", () => {
         ],
         locationMode: LocationMode.IN_PERSON,
         location: {
-            lat: 135,
-            long: 479
+            lat: 85,
+            long: -175
         },
         recommendationWeights: DEFAULT_RECOMMENDATION_WEIGHTS,
         bio: "test bio",
@@ -333,6 +332,102 @@ describe("Browse for users", () => {
         const res = await request(app)
             .get(ENDPOINT)
             .query({ page: 1 })
+
+        expect(res.status).toBe(200)
+        expect(res.body.tutors.length).toEqual(2)
+    })
+
+    // ChatGPT Usage: No
+    // Input: 
+    //  (1) page corresponds to less than number of tutors returned
+    //  (2) courses is not specified
+    //  (3) tutee has courses in education field
+    // Expected status code: 200
+    // Expected behavior: List of tutors is returned
+    // Expected output: List of tutors
+    test('Should pass when courses are not specified and tutee has courses in education field and page corresponds to less than number of tutors returned', async() => {
+        mockAddedUsers.push(mockTutee)
+        for (var i = 0; i < 105; i++) {
+            mockAddedUsers.push(mockTutorWithCourseAndOppositeValues)
+        }
+
+        const res = await request(app)
+            .get(ENDPOINT)
+            .query({ page: 1 })
+
+        expect(res.status).toBe(200)
+        expect(res.body.tutors.length).toEqual(100)
+    })
+
+    // ChatGPT Usage: No
+    // Input: 
+    //  (1) page corresponds to some tutors with courses and some without
+    //  (2) courses is not specified
+    //  (3) tutee has courses in education field
+    // Expected status code: 200
+    // Expected behavior: List of tutors is returned
+    // Expected output: List of tutors
+    test('Should pass when courses are not specified and tutee has courses in education field and page corresponds to some tutors with courses and some without', async() => {
+        mockAddedUsers.push(mockTutee)
+        for (var i = 0; i < 50; i++) {
+            mockAddedUsers.push(mockTutorWithCourseAndOppositeValues)
+        }
+        for (var i = 0; i < 5; i++) {
+            mockAddedTutorsWithoutCourses.push(mockTutorWithoutCourse)
+        }
+
+        const res = await request(app)
+            .get(ENDPOINT)
+            .query({ page: 1 })
+
+        expect(res.status).toBe(200)
+        expect(res.body.tutors.length).toEqual(55)
+    })
+
+    // ChatGPT Usage: No
+    // Input: 
+    //  (1) page corresponds to greater than number of tutors returned
+    //  (2) courses is not specified
+    //  (3) tutee has courses in education field
+    // Expected status code: 200
+    // Expected behavior: List of tutors is returned
+    // Expected output: List of tutors
+    test('Should pass when courses are not specified and tutee has courses in education field and page corresponds to less than number of tutors returned', async() => {
+        mockAddedUsers.push(mockTutee)
+        for (var i = 0; i < 10; i++) {
+            mockAddedTutorsWithoutCourses.push(mockTutorWithoutCourse)
+        }
+
+        const res = await request(app)
+            .get(ENDPOINT)
+            .query({ page: 1 })
+
+        expect(res.status).toBe(200)
+        expect(res.body.tutors.length).toEqual(10)
+    })
+
+    // ChatGPT Usage: No
+    // Input: 
+    //  (1) page is >= 1
+    //  (2) courses is specified
+    //  (3) tutee prefers online
+    // Expected status code: 200
+    // Expected behavior: List of tutors is returned
+    // Expected output: List of tutors
+    test('Should pass when page is valid and courses are specified and tutee prefers online', async() => {
+        mockAddedUsers.push({
+            ...mockTutee,
+            locationMode: LocationMode.ONLINE
+        })
+        mockAddedUsers.push(mockTutorWithCourse)
+        mockAddedUsers.push({
+            ...mockTutorWithCourse,
+            _id: new mongoose.Types.ObjectId()
+        })
+
+        const res = await request(app)
+            .get(ENDPOINT)
+            .query({ courses: ["CPEN 321"], page: 1 })
 
         expect(res.status).toBe(200)
         expect(res.body.tutors.length).toEqual(2)

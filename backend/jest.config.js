@@ -33,6 +33,7 @@ const config = {
 
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
+    "/server.js",
     "/node_modules/",
     "/coverage/",
     "/tests/"

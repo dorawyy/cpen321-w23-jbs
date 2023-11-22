@@ -12,7 +12,6 @@ const ENDPOINT = "/conversation/create"
 const mockUserId1 = new mongoose.Types.ObjectId()
 const mockUserId2 = new mongoose.Types.ObjectId()
 const mockConversationId1 = new mongoose.Types.ObjectId()
-const mockConversationId2 = new mongoose.Types.ObjectId()
 
 var mockErrorMsg
 var mockAddedUsers

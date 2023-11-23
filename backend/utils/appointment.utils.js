@@ -158,6 +158,10 @@ async function checkUserAvailabilityWithGoogleCalendar(user, pstStartDatetime, p
                 pstStartDatetime,
                 pstEndDatetime
             }
+            if (user.type === UserType.TUTEE) {
+                return isConflicted(appt, newAppt) 
+                    && appt.status !== AppointmentStatus.CANCELED
+            }
             return isConflicted(appt, newAppt) 
                     && appt.status === AppointmentStatus.ACCEPTED
         } 

@@ -346,21 +346,15 @@ exports.bookAppointment = async (req, res) => {
     try {
         const tutorId = req.body.tutorId
         var tutor = await User.findById(tutorId)
-            .catch(err => {
-                console.log(err)
-                return res.status(500).send({ message: err.message })
-            })
+
         if (!tutor || tutor.isBanned) {
-            return res.status(400).send({ message: "User not found." })
+            return res.status(404).send({ message: "Tutor is not found." })
         }
     
         var tutee = await User.findById(req.userId)
-            .catch(err => {
-                console.log(err)
-                return res.status(500).send({ message: err.message })
-            })
-        if (!tutee || tutee.isBanned) {
-            return res.status(400).send({ message: "User not found." })
+
+        if(tutee.type !== UserType.TUTEE) {
+            return res.status(403).send({ message: "Only tutee is allowed to book appointments" })
         }
     
         req.body.pstStartDatetime = apptUtils.toPST(req.body.pstStartDatetime)
@@ -370,28 +364,20 @@ exports.bookAppointment = async (req, res) => {
             .isAvailable(
                 tutor, req.body.pstStartDatetime, req.body.pstEndDatetime
             )
-            .catch(err => {
-                console.log(err)
-                return res.status(500).send({ message: err.message })
-            })
         
         var tuteeIsAvailable = await apptUtils
             .isAvailable(
                 tutee, req.body.pstStartDatetime, req.body.pstEndDatetime
             )
-            .catch(err => {
-                console.log(err)
-                return res.status(500).send({ message: err.message })
-            })
-
+        
         if (!tutorIsAvailable) {
             return res.status(400).send({ 
-                message: "Tutor is unavailable during the specified time slot. "
+                message: "Tutor is unavailable during the specified time slot."
             })
         }
         if (!tuteeIsAvailable) {
             return res.status(400).send({ 
-                message: "You already have a pending/accepted appointment during the specified time slot. "
+                message: "You already have a pending/accepted appointment during the specified time slot."
             })
         }
     
@@ -409,32 +395,22 @@ exports.bookAppointment = async (req, res) => {
             ],
             ...req.body,
             
-        }).save().catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
+        }).save()
     
         var userNewAppt = {
             _id: newAppt._id,
             pstStartDatetime: req.body.pstStartDatetime,
             pstEndDatetime: req.body.pstEndDatetime
         }
-        
-        await User.findByIdAndUpdate(
-            tutorId, { $push: {appointments: userNewAppt} }
-        ).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
 
-        await User.findByIdAndUpdate(
-            req.userId,
-            { $push: {appointments: userNewAppt} }
-        ).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
-        
+        const updateQuery = {
+            _id: {
+                $in: [tutorId, req.userId] 
+            },
+        };
+
+        await User.updateMany(updateQuery, { $push: {appointments: userNewAppt} })
+
         return res.status(200).send(newAppt)
     } catch (err) {
         console.log(err)

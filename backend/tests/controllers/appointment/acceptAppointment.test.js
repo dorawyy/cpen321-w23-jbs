@@ -11,7 +11,7 @@ const { mockGetOverallRating } = require('../../utils/rating.utils');
 const { MOCKED_VALUES } = require('../../utils/googleapis.mock.utils');
 const { UserType } = require('../../../constants/user.types');
 
-const ENDPOINT = "/appointment/cancel"
+const ENDPOINT = "/appointment/accept"
 
 var mockErrorMsg
 var mockAddedAppts = []
@@ -63,6 +63,23 @@ jest.mock('../../../db', () => {
 
     }
     class MockAppointment extends originalDb.appointment {
+        static updateMany = jest.fn((query, data) => {
+            var overlapIds = query._id.$in.map(id => id.toString())
+            var apptId = query._id.$ne
+            for (var i = 0; i < mockAddedAppts.length; i++) {
+                var appt = mockAddedAppts[i]
+                if (appt instanceof MockAppointment) {
+                    appt = appt.toObject()
+                }
+                if (overlapIds.includes(appt._id.toString()) && 
+                    appt._id.toString() !== apptId) {
+                    mockAddedAppts[i] = {
+                        ...appt,
+                        ...data
+                    }
+                }
+            }
+        })
         static findById = jest.fn((id, ...args) => {
             var queryId = id
             if (!(id instanceof mockMongoose.Types.ObjectId)) {
@@ -97,10 +114,10 @@ jest.mock('../../../db', () => {
             if (mockErrorMsg) {
                 return Promise.reject(new Error(mockErrorMsg))
             }
-            if (mockUnableToCreateUser) {
+            if (mockUnableToUpdate) {
                 return Promise.resolve(undefined)
             }
-            mockAddedAppts.push(this)
+            // mockAddedAppts.push(this)
             return Promise.resolve(this)
         })
 
@@ -115,9 +132,11 @@ jest.mock('../../../db', () => {
 jest.mock("../../../middleware")
 jest.mock("../../../utils/google.utils", () => {
     return {
-        cancelGoogleEvent: jest.fn()
+        createGoogleEvent: jest.fn()
     }
 })
+const User = db.user
+const Appointment = db.appointment
 const mockUserId = new mockMongoose.Types.ObjectId()
 beforeEach(() => {
     mockUnableToCreateUser = false
@@ -144,18 +163,20 @@ beforeEach(() => {
     // i = 1: first appointment is a past appointment
     // i = 2: a future canceled appointment
     // i = 3 -> 4: future pending appointments 
-    for (var i = 1; i <= 4; i++) {
+    // i = 5: an overlap pending appointment with appointment 4 from a different user
+    for (var i = 1; i <= 5; i++) {
         var start =  momenttz().tz(PST_TIMEZONE)
         var end
 
         if (i == 1) {
-            start = start.subtract(i, 'days')
+            start = start.clone().subtract(i, 'days')
+        } else if (i == 5) {
+            start = momenttz(mockAddedAppts[3].pstStartDatetime).tz(PST_TIMEZONE)
         } else {
             start = start.clone().add(i, 'days')
         }
         
         end = start.clone().add(2, 'hours')
-
         var appt = {
             _id: new mockMongoose.Types.ObjectId(),
             pstStartDatetime: start.toISOString(true),
@@ -166,7 +187,7 @@ beforeEach(() => {
             ...appt, 
             participantsInfo: [
                 { userId: mockUser._id.toString() },
-                { userId: otherUser._id.toString() },
+                { userId: i == 5 ? "user-id-5" : otherUser._id.toString() },
             ],
             course: `test course ${i}`,
             location: `test location ${i}`,
@@ -190,12 +211,8 @@ beforeEach(() => {
 })
 
 
-const User = db.user
-const Appointment = db.appointment
-
-// Interface PUT https://edumatch.canadacentral.cloudapp.azure.com/appointment/cancel?appointmentId=123
-describe("Cancel appointment for a Google Calendar user", () => {
-    
+// Interface PUT https://edumatch.canadacentral.cloudapp.azure.com/appointment/accept?appointmentId=123
+describe("Accept an appointment for a Google Calendar user", () => {
     // Assuming valid token
     authJwt.verifyJwt.mockImplementation((req, res, next) => {
         req.userId = mockUserId.toString()
@@ -208,41 +225,51 @@ describe("Cancel appointment for a Google Calendar user", () => {
     })
 
     // ChatGPT Usage: No
-    // Input: appointmentId for an upcoming pending/accepted appointment
+    // Input:
+    //  (1) userId for a tutor 
+    //  (2) appointmentId for an upcoming pending appointment
     // Expected status code: 200
-    // Expected behavior: Set the status of the appointment to CANCELED. 
+    // Expected behavior: Set the status of the appointment to ACCEPTED. 
     // Clean up user's appointments
     // Expected output: Success message
-    test("Should cancel an upcoming pending/accepted appointment successfully", async () => {
-        // use the last appointment (pending appointment)
+    test("Should accept an upcoming pending appointment successfully for a valid tutor", async () => {
+        // use the 4th appointment (pending appointment)
+        mockAddedAppts[mockAddedAppts.length - 2] = new Appointment(
+            mockAddedAppts[mockAddedAppts.length - 2]
+        )
         const res = await request(app)
             .put(ENDPOINT)
             .set('Authorization', 'Bearer mockToken')
             .query({ 
-                appointmentId: mockAddedAppts[mockAddedAppts.length - 1]._id.toString()
+                appointmentId: mockAddedAppts[mockAddedAppts.length - 2]._id.toString()
             });
-        
+
         expect(res.status).toBe(200)
-        var canceledAppt = mockAddedAppts[mockAddedAppts.length - 1]
+        var acceptedAppt = mockAddedAppts[mockAddedAppts.length - 2]
         
-        expect(canceledAppt.status).toBe(AppointmentStatus.CANCELED)
-        // the endpoint should remove the past or canceled appointments
-        for (var user of mockAddedUsers) {
-            expect(user.appointments.length).toBe(1)
-            expect(
-                user.appointments[0]._id
-                    .equals(mockAddedAppts[mockAddedAppts.length - 2]._id)
-            ).toBeTruthy()
-        }
+        expect(acceptedAppt.status).toBe(AppointmentStatus.ACCEPTED)
+        // the endpoint should remove the past/canceled/conflict with the accepted appointments
+        var user = mockAddedUsers[0]
+        expect(user.appointments.length).toBe(2)
+        expect(
+            user.appointments[0]._id
+                .equals(mockAddedAppts[mockAddedAppts.length - 3]._id)
+        ).toBeTruthy()
+        expect(
+            user.appointments[1]._id
+                .equals(mockAddedAppts[mockAddedAppts.length - 2]._id)
+        ).toBeTruthy()
     })
 
     // ChatGPT Usage: No
-    // Input: appointmentId for a past appointment
+    // Input: 
+    //  (1) userId of a tutor
+    //  (2) appointmentId for a past appointment
     // Expected status code: 404
     // Expected behavior: Clean up user's appointments. The appointment
     // status is unchanged
     // Expected output: Message saying appointment is not found
-    test("Should return 404 for canceling a past appointment", async () => {
+    test("Should return 404 for accepting a past appointment", async () => {
         // use the first appointment to query (a past appointment)        
         const res = await request(app)
             .put(ENDPOINT)
@@ -254,56 +281,41 @@ describe("Cancel appointment for a Google Calendar user", () => {
         expect(res.status).toBe(404)
         expect(res.body).toHaveProperty("message")
         var appt = mockAddedAppts[0]
-        expect(appt.status).not.toBe(AppointmentStatus.CANCELED)
+        expect(appt.status).not.toBe(AppointmentStatus.ACCEPTED)
         
         var currentUser = mockAddedUsers[0]
-        // the endpoint should leave the 2 future pending appointments left for 
+        // the endpoint should leave the 3 future pending appointments left for 
         // the current user
-        expect(currentUser.appointments.length).toBe(2)
-        expect(
-            currentUser.appointments[1]._id
-                .equals(mockAddedAppts[mockAddedAppts.length - 1]._id)
-        ).toBeTruthy()
-        expect(
-            currentUser.appointments[0]._id
-                .equals(mockAddedAppts[mockAddedAppts.length - 2]._id)
-        ).toBeTruthy()
+        expect(currentUser.appointments.length).toBe(3)
     })
 
     // ChatGPT Usage: No
-    // Input: appointmentId for an upcoming canceled appointment
+    // Input: 
+    //  (1) userId of a tutee
+    //  (2) appointmentId
     // Expected status code: 404
     // Expected behavior: Clean up user's appointments. The appointment
     // status is unchanged
     // Expected output: Message saying appointment is not found
-    test("Should return 404 for canceling an already canceled appointment", async () => {
-        // use the 2nd appointment to query (a canceled appointment)
+    test("Should return 403 if tutee tries to accept appointment", async () => {
+        authJwt.verifyJwt.mockImplementationOnce((req, res, next) => {
+            req.userId = mockAddedUsers[1]._id.toString()
+            return next()
+        })
         const res = await request(app)
             .put(ENDPOINT)
             .set('Authorization', 'Bearer mockToken')
             .query({ 
-                appointmentId: mockAddedAppts[1]._id.toString()
+                appointmentId: mockAddedAppts[0]._id.toString()
             });
-
-        expect(res.status).toBe(404)
+        expect(res.status).toBe(403)
         expect(res.body).toHaveProperty("message")
-
-        var currentUser = mockAddedUsers[0]
-        // the endpoint should leave the 2 future pending appointments left for 
-        // the current user
-        expect(currentUser.appointments.length).toBe(2)
-        expect(
-            currentUser.appointments[1]._id
-                .equals(mockAddedAppts[mockAddedAppts.length - 1]._id)
-        ).toBeTruthy()
-        expect(
-            currentUser.appointments[0]._id
-                .equals(mockAddedAppts[mockAddedAppts.length - 2]._id)
-        ).toBeTruthy()
     })
 
     // ChatGPT Usage: No
-    // Input: null
+    // Input: 
+    //  (1) userId for a tutor
+    //  (2) appointmentId: null
     // Expected status code: 400
     // Expected behavior: Database unchanged
     // Expected output: Error message
@@ -317,67 +329,68 @@ describe("Cancel appointment for a Google Calendar user", () => {
     })
 
     // ChatGPT Usage: No
-    // Input: appointmentId for an upcoming pending/accepted appointment
-    // Expected status code: 200
-    // Expected behavior: Clean up user's appointments. The appointment
-    // status is set to CANCEL
-    // Expected output: Message saying appointment is canceled successfully
-    // but the other user is not found
-    test("Should cancel an upcoming appointment successfully even if the other user is banned", async () => {
-        // use the last appointment (pending appointment)
+    // Input: 
+    //  (1) userId for a tutor
+    //  (2) appointmentId for an upcoming pending appointment with a banned tutee
+    // Expected status code: 404
+    // Expected behavior: Database unchanged
+    // Expected output: Error message
+    test("Should return 404 for accepting an appointment with a banned tutee", async () => {
         mockAddedUsers[1].isBanned = true
         const res = await request(app)
             .put(ENDPOINT)
             .set('Authorization', 'Bearer mockToken')
             .query({ 
-                appointmentId: mockAddedAppts[mockAddedAppts.length - 1]._id.toString()
+                appointmentId: mockAddedAppts[mockAddedAppts.length - 2]._id.toString()
             });
+
+        expect(res.status).toBe(404)
+        expect(res.body).toHaveProperty("message")
+
+        var acceptedAppt = mockAddedAppts[mockAddedAppts.length - 2]
         
-        expect(res.status).toBe(200)
-        expect(res.body).toEqual({
-            message: "Canceled appointment successfully. However, the other user was not found or was banned"
-        })
-        var canceledAppt = mockAddedAppts[mockAddedAppts.length - 1]
-        
-        expect(canceledAppt.status).toBe(AppointmentStatus.CANCELED)
-        // the endpoint should remove the past or canceled appointments
-        var user = mockAddedUsers[0]
-        expect(user.appointments.length).toBe(1)
-        expect(
-            user.appointments[0]._id
-                .equals(mockAddedAppts[mockAddedAppts.length - 2]._id)
-        ).toBeTruthy()
+        expect(acceptedAppt.status).not.toBe(AppointmentStatus.ACCEPTED)
     })
 
     // ChatGPT Usage: No
-    // Input: appointmentId for an upcoming pending/accepted appointment
-    // Expected status code: 500
-    // Expected behavior: Database unchanged
-    // Expected output: Error message
-    test("Should return 500 for a database error", async () => {
-        const errorMessage = "Database error"
-        User.findById.mockRejectedValueOnce(new Error(errorMessage))
-        const res = await request(app)
-            .put(ENDPOINT)
-            .set('Authorization', 'Bearer mockToken')
-            .query({ 
-                appointmentId: mockAddedAppts[mockAddedAppts.length - 1]._id.toString()
-            });
-        expect(res.status).toBe(500)
-        expect(res.body).toEqual({
-            message: errorMessage
-        })
-        expect(mockAddedUsers[0].appointments.length).toBe(4)
-    })
-
-    // ChatGPT Usage: No
-    // Input: appointmentId for an upcoming pending/accepted appointment
+    // Input: 
+    //  (1) userId for a tutor
+    //  (2) appointmentId for an upcoming pending appointment
     // Expected status code: 404
     // Expected behavior: Clean up user's appointments. The appointment
     // status is unchanged
     // Expected output: inform message
     test("Should return 404 if unable to update the appointment status due to some database issue", async () => {
         mockUnableToUpdate = true
+        mockAddedAppts[mockAddedAppts.length - 2] = new Appointment(
+            mockAddedAppts[mockAddedAppts.length - 2]
+        )
+        const res = await request(app)
+            .put(ENDPOINT)
+            .set('Authorization', 'Bearer mockToken')
+            .query({ 
+                appointmentId: mockAddedAppts[mockAddedAppts.length - 2]._id.toString()
+            });
+
+        expect(res.status).toBe(404)
+        expect(res.body).toEqual({
+            message:  "Unable to update appointment. Appointment not found"
+        })
+
+        var canceledAppt = mockAddedAppts[mockAddedAppts.length - 1]
+        expect(canceledAppt.status).not.toBe(AppointmentStatus.ACCEPTED)
+    })
+
+    // ChatGPT Usage: No
+    // Input: 
+    //  (1) userId for a tutor
+    //  (2) appointmentId for an upcoming pending appointment
+    // Expected status code: 500
+    // Expected behavior: Database unchanged
+    // Expected output: Error message
+    test("Should return 500 for a database error", async () => {
+        const errorMessage = "Database error"
+        Appointment.findById.mockRejectedValueOnce(new Error(errorMessage))
         const res = await request(app)
             .put(ENDPOINT)
             .set('Authorization', 'Bearer mockToken')
@@ -385,13 +398,10 @@ describe("Cancel appointment for a Google Calendar user", () => {
                 appointmentId: mockAddedAppts[mockAddedAppts.length - 1]._id.toString()
             });
 
-        expect(res.status).toBe(404)
+        expect(res.status).toBe(500)
         expect(res.body).toEqual({
-            message: "Unable to cancel appointment. Appointment not found"
+            message: errorMessage
         })
-
-        var canceledAppt = mockAddedAppts[mockAddedAppts.length - 1]
-        expect(canceledAppt.status).not.toBe(AppointmentStatus.CANCELED)
-
+        expect(mockAddedUsers[0].appointments.length).toBe(mockAddedAppts.length)
     })
 })

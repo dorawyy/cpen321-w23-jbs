@@ -44,11 +44,7 @@ exports.cancelAppointment = async (req, res) => {
         }
     
         user = await User.findById(userId)
-        if (!user || user.isBanned) {
-            return res.status(404).send({
-                message: "User is not found or is banned"
-            })
-        }
+
         if (user.useGoogleCalendar) {
             await googleUtils.cancelGoogleEvent(user, otherUser, canceledAppt)
         }
@@ -163,54 +159,50 @@ exports.getTutorAvailability = async (req, res) => {
 exports.acceptAppointment = async (req, res) => {
     try {
         var userId = req.userId
-        var user = await User.findById(userId).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
-
-        if (!user || user.isBanned) {
-            return res.status(400).send({ message: "User not found" })
-        }
-            
+        var user = await User.findById(userId)   
         if (user.type === UserType.TUTEE) {
             return res.status(403).send({ 
                 message: "Only tutors are allowed to accept appointments." 
             })
         }
-        var upcomingAppointments = await apptUtils.cleanupUserAppointments(user)
-            .catch(err => {
-                console.log(err)
-                return res.status(500).send({ message: err.message })
-            })
-    
+
         var apptId = req.query.appointmentId
         if (!apptId) {
             return res.status(400).send({
                 message: "appointmentId is required"
             })
         }
+
+        var upcomingAppointments = await apptUtils.cleanupUserAppointments(user)
+        
         var usersApptIds = upcomingAppointments.map(appt => appt._id)
         var idStrings = usersApptIds.map(id => id.toString())
     
         if (!(idStrings.includes(apptId))) {
             return res.status(404).send({
-                message: "Appointment not found"
+                message: "Appointment not found. Can't accept a past appointment"
             })
         }
-    
-        var acceptedAppt = await Appointment.findByIdAndUpdate(
-            apptId, {status: AppointmentStatus.ACCEPTED},
-            { new: true }
-        ).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
+
+        var acceptedAppt = await Appointment.findById(apptId)
+        var tuteeId = acceptedAppt.participantsInfo
+            .filter(user => user.userId != userId)[0].userId
+        
+        var tutee = await User.findById(tuteeId)
+
+        if (!tutee || tutee.isBanned) {
+            return res.status(404).send({ message: "Unable to accept appointment. Tutee is not found or banned." })
+        }
+
+        acceptedAppt.status = AppointmentStatus.ACCEPTED
+        acceptedAppt = await acceptedAppt.save()
 
         if (!acceptedAppt) {
             return res.status(404).send({
-                message: "Appointment not found"
+                message: "Unable to update appointment. Appointment not found"
             }) 
         }
+
         var overlaps = upcomingAppointments.filter(appt => {
             return apptUtils.isConflicted(appt, acceptedAppt)
         })
@@ -224,52 +216,21 @@ exports.acceptAppointment = async (req, res) => {
         await Appointment.updateMany(
             query,
             { status: AppointmentStatus.CANCELED },
-        ).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
-    
-        var tutor = await User.findById(userId).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
-        if (!tutor || tutor.isBanned) {
-            return res.status(400).send({ message: "User not found" })
-        }
-    
-        var tuteeId = acceptedAppt.participantsInfo
-            .filter(user => user.userId != userId)[0].userId
-        
-        var tutee = await User.findById(tuteeId).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
-        if (!tutee || tutee.isBanned) {
-            return res.status(400).send({ message: "User not found" })
-        }
-    
+        )
+
+        var tutor = await User.findById(userId)
+
         if (tutor.useGoogleCalendar) {
             await googleUtils.createGoogleEvent(tutor, tutee, acceptedAppt)
-                .catch(err => {
-                    console.log(err)
-                    return res.status(500).send({ message: err.message })
-                })
         }
         if (tutee.useGoogleCalendar) {
             await googleUtils.createGoogleEvent(tutee, tutor, acceptedAppt)
-                .catch(err => {
-                    console.log(err)
-                    return res.status(500).send({ message: err.message })
-                })
         }
         
-        await apptUtils.cleanupUserAppointments(tutor).then(result => {
-            return res.status(200).send({
-                message: "Accepted appointment successfully"
-            })
-        }).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
+        await apptUtils.cleanupUserAppointments(tutor)
+
+        return res.status(200).send({
+            message: "Accepted appointment successfully"
         })
     } catch (err) {
         console.log(err)

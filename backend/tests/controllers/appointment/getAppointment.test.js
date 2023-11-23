@@ -40,11 +40,7 @@ jest.mock('../../../db', () => {
 })
 
 jest.mock("../../../middleware")
-jest.mock("../../../utils/google.utils", () => {
-    return {
-        createGoogleEvent: jest.fn()
-    }
-})
+
 const Appointment = db.appointment
 const mockUserId = new mockMongoose.Types.ObjectId()
 beforeEach(() => {

@@ -10,6 +10,7 @@ const { PST_TIMEZONE, AppointmentStatus } = require('../../../constants/appointm
 const { mockGetOverallRating } = require('../../utils/rating.utils');
 const { MOCKED_VALUES } = require('../../utils/googleapis.mock.utils');
 const { UserType } = require('../../../constants/user.types');
+const { google } = require('googleapis');
 
 const ENDPOINT = "/appointment/accept"
 
@@ -18,6 +19,34 @@ var mockAddedAppts = []
 var mockAddedUsers = []
 var mockUnableToCreateUser = false
 var mockUnableToUpdate = false
+
+// ChatGPT Usage: No
+jest.mock('googleapis', () => {
+    return {
+        google: {
+            auth: {
+                OAuth2: jest.fn(() => {
+                    return {
+                        setCredentials: jest.fn(),
+                        credentials: {
+                            access_token: "access token",
+                            expiryDate: "123456789"
+                        }
+                    }
+                })
+            },
+            options: jest.fn(),
+            calendar: jest.fn(() => {
+                return {
+                    events: {
+                        insert: jest.fn()
+                    }
+                }
+            })
+        }
+        
+    } 
+})
 
 // ChatGPT Usage: Partial
 jest.mock('../../../db', () => {
@@ -130,11 +159,7 @@ jest.mock('../../../db', () => {
 })
 
 jest.mock("../../../middleware")
-jest.mock("../../../utils/google.utils", () => {
-    return {
-        createGoogleEvent: jest.fn()
-    }
-})
+
 const User = db.user
 const Appointment = db.appointment
 const mockUserId = new mockMongoose.Types.ObjectId()
@@ -149,13 +174,25 @@ beforeEach(() => {
         isBanned: false,
         type: UserType.TUTOR,
         useGoogleCalendar: true,
+        displayedName: "Tutor X",
+        googleOauth: {
+            accessToken: "access token",
+            refreshToken: "refresh token",
+            expiryDate: "123456789"
+        }
     }
 
     var otherUser = {
         _id: new mockMongoose.Types.ObjectId(),
         isBanned: false,
         type: UserType.TUTEE,
-        useGoogleCalendar: true
+        useGoogleCalendar: true,
+        displayedName: "Tutee X",
+        googleOauth: {
+            accessToken: "access token",
+            refreshToken: "refresh token",
+            expiryDate: "123456789"
+        }
     } 
 
     var mockUserAppts = []
@@ -210,20 +247,19 @@ beforeEach(() => {
     mockAddedUsers.push(mockCurrentUser, mockOtherUser)
 })
 
+// Assuming valid token
+authJwt.verifyJwt.mockImplementation((req, res, next) => {
+    req.userId = mockUserId.toString()
+    return next()
+})
+
+// User is not banned
+account.verifyAccountStatus.mockImplementation((req, res, next) => {
+    return next()
+})
 
 // Interface PUT https://edumatch.canadacentral.cloudapp.azure.com/appointment/accept?appointmentId=123
 describe("Accept an appointment for a Google Calendar user", () => {
-    // Assuming valid token
-    authJwt.verifyJwt.mockImplementation((req, res, next) => {
-        req.userId = mockUserId.toString()
-        return next()
-    })
-
-    // User is not banned
-    account.verifyAccountStatus.mockImplementation((req, res, next) => {
-        return next()
-    })
-
     // ChatGPT Usage: No
     // Input:
     //  (1) userId for a tutor 
@@ -403,5 +439,49 @@ describe("Accept an appointment for a Google Calendar user", () => {
             message: errorMessage
         })
         expect(mockAddedUsers[0].appointments.length).toBe(mockAddedAppts.length)
+    })
+})
+
+describe("Accept an appointment for manually-signed-up users", () => {
+    // ChatGPT Usage: No
+    // Input:
+    //  (1) userId for a tutor 
+    //  (2) appointmentId for an upcoming pending appointment
+    // Expected status code: 200
+    // Expected behavior: Set the status of the appointment to ACCEPTED. 
+    // Clean up user's appointments
+    // Expected output: Success message
+    test("Should accept an upcoming pending appointment successfully for a valid tutor", async () => {
+        // use the 4th appointment (pending appointment)
+        mockAddedUsers[0].useGoogleCalendar = false
+        mockAddedUsers[1].useGoogleCalendar = false
+
+        mockAddedAppts[mockAddedAppts.length - 2] = new Appointment(
+            mockAddedAppts[mockAddedAppts.length - 2]
+        )
+        const res = await request(app)
+            .put(ENDPOINT)
+            .set('Authorization', 'Bearer mockToken')
+            .query({ 
+                appointmentId: mockAddedAppts[mockAddedAppts.length - 2]._id.toString()
+            });
+
+        expect(res.status).toBe(200)
+        var acceptedAppt = mockAddedAppts[mockAddedAppts.length - 2]
+        
+        expect(acceptedAppt.status).toBe(AppointmentStatus.ACCEPTED)
+        // the endpoint should remove the past/canceled/conflict with the accepted appointments
+        var user = mockAddedUsers[0]
+        expect(user.appointments.length).toBe(2)
+        expect(
+            user.appointments[0]._id
+                .equals(mockAddedAppts[mockAddedAppts.length - 3]._id)
+        ).toBeTruthy()
+        expect(
+            user.appointments[1]._id
+                .equals(mockAddedAppts[mockAddedAppts.length - 2]._id)
+        ).toBeTruthy()
+        expect(google.auth.OAuth2).not.toHaveBeenCalled()
+
     })
 })

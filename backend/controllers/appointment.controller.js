@@ -44,15 +44,14 @@ exports.cancelAppointment = async (req, res) => {
         }
     
         user = await User.findById(userId)
-
         if (user.useGoogleCalendar) {
-            await googleUtils.cancelGoogleEvent(user, otherUser, canceledAppt)
+            await googleUtils.cancelGoogleEvent(user, canceledAppt)
         }
         await apptUtils.cleanupUserAppointments(user)
 
         var otherUserId = canceledAppt.participantsInfo
-            .filter(user => user.userId != userId)[0].userId
-        
+        .filter(user => user.userId != userId)[0].userId
+    
         var otherUser = await User.findById(otherUserId)
 
         if (!otherUser || otherUser.isBanned) {
@@ -60,9 +59,9 @@ exports.cancelAppointment = async (req, res) => {
                 message: "Canceled appointment successfully. However, the other user was not found or was banned" 
             })
         }
-        
+
         if (otherUser.useGoogleCalendar) {
-            await googleUtils.cancelGoogleEvent(otherUser, user, canceledAppt)
+            await googleUtils.cancelGoogleEvent(otherUser, canceledAppt)
         }
     
         await apptUtils.cleanupUserAppointments(otherUser)

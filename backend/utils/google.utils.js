@@ -18,7 +18,7 @@ const OAuth2Client = new google.auth.OAuth2(
 
 // ChatGPT usage: Partial
 exports.cancelGoogleEvent = async (
-    user, otherUser, canceledAppt
+    user, canceledAppt
 ) => {
     OAuth2Client.setCredentials({
         access_token: user.googleOauth.accessToken,
@@ -34,7 +34,6 @@ exports.cancelGoogleEvent = async (
         timeMin: canceledAppt.pstStartDatetime,
         timeMax: canceledAppt.pstEndDatetime,
         timeZone: PST_TIMEZONE,
-        q: `Appointment with ${otherUser.displayedName}`
     });
     const events = response.data.items;
 

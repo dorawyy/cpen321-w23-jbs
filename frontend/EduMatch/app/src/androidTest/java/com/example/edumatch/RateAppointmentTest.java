@@ -58,6 +58,7 @@ public class RateAppointmentTest {
 
         intended(hasComponent(ScheduledAppointmentActivity.class.getName()));
 
+
         // Navigate to ScheduledAppointmentActivity
         // ...
 

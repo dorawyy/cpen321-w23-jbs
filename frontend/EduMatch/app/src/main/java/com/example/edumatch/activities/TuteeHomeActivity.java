@@ -59,7 +59,7 @@ public class TuteeHomeActivity extends AppCompatActivity {
         subjectChipViews = new ArrayList<>();
         apiUrlBuilder = new StringBuilder(apiUrl);
         initializeCourseTags(courses);
-        fetchAllData();
+        //fetchAllData();
 
     }
 
@@ -223,6 +223,7 @@ public class TuteeHomeActivity extends AppCompatActivity {
 
 
                 TutorRow tutorRow = new TutorRow(TuteeHomeActivity.this);
+
                 tutorRow.setTutorName(tutorName);
                 tutorRow.setTutorDetails(tutorDetails);
                 tutorRow.setId(tutorID);

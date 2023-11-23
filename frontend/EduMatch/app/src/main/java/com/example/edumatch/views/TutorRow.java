@@ -24,6 +24,8 @@ public class TutorRow extends LinearLayout {
     private void initialize(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.tutor_row, null, false);
+
+
         this.addView(view);
 
         tvCourseCode = view.findViewById(R.id.tv_course_code);

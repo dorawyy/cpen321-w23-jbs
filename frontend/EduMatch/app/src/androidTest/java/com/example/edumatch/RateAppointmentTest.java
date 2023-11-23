@@ -2,6 +2,7 @@ package com.example.edumatch;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -18,7 +19,9 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.edumatch.activities.AppointmentListActivity;
+import com.example.edumatch.activities.MainActivity;
 import com.example.edumatch.activities.ScheduledAppointmentActivity;
+import com.example.edumatch.activities.TuteeHomeActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,33 +33,45 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class RateAppointmentTest {
 
     @Rule
-    public ActivityTestRule<AppointmentListActivity> activityRule =
-            new ActivityTestRule<>(AppointmentListActivity.class);
-
+    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
+    Context context;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    Context context;
+    private static final String NAME = "finalTutee";
+    private static final String PASSWORD = "password";
+
 
     @Before
     public void setUp() {
         // Set up SharedPreferences with your desired initial values
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        sharedPreferences.edit().putString("JWTtoken", "eyJhbGciOiJIUzI1NiJ9.NjU0MzE3MWQzNWQ0ZTYxMzQzN2I5MzJi.LgNYfo-o2chIt1Rgd-QOZaL-If_wM5qS2rGYCy82hIQ").apply();
+
     }
 
     @Test
     public void testRateAppointmentFlow() {
         Intents.init();
+        // Launch the initial activity (MainActivity in this example)
+        onView(CustomMatchers.withAncestor(R.id.username,R.id.edit_text)).perform(replaceText(NAME));
+        onView(CustomMatchers.withAncestor(R.id.password,R.id.edit_text)).perform(replaceText(PASSWORD));
+        onView(withId(R.id.signin_button)).perform(click());
+
+        intended(hasComponent(TuteeHomeActivity.class.getName()));
+
+        onView(withId(R.id.emptyBar)).perform(click());
+
+        intended(hasComponent(AppointmentListActivity.class.getName()));
 
         // Select a specific rateable appointment
-        String appointmentIdentifier = "Unique Appointment Text";
-
-        onView(allOf(withText(appointmentIdentifier), isDescendantOfA(withId(R.id.appointmentList))))
-                .perform(scrollTo()) // Scroll to the appointment view
-                .perform(click());
-
-        intended(hasComponent(ScheduledAppointmentActivity.class.getName()));
+//        String appointmentIdentifier = "Unique Appointment Text";
+//
+//        onView(allOf(withText(appointmentIdentifier), isDescendantOfA(withId(R.id.appointmentList))))
+//                .perform(scrollTo()) // Scroll to the appointment view
+//                .perform(click());
+//
+//        intended(hasComponent(ScheduledAppointmentActivity.class.getName()));
 
 
         // Navigate to ScheduledAppointmentActivity

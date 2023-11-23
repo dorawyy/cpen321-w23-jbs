@@ -318,7 +318,7 @@ public class BookingFlowActivity extends AppCompatActivity {
 
         c.add(Calendar.DAY_OF_MONTH, 1);
         // Set the DatePickerDialog to only show today's date or future dates
-        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
+        //datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
 
         // Show the DatePickerDialog
         datePickerDialog.show();

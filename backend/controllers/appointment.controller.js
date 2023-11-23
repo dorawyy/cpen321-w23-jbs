@@ -300,35 +300,45 @@ exports.getUserAppointments = async (req, res) => {
 
 // ChatGPT usage: No
 exports.getAppointment = async (req, res) => {
-    try {
-        var appointmentId = req.query.appointmentId
-        Appointment.findById(appointmentId)
-                    .then(async appt => {
-                        if (!appt) {
-                            return res.status(404).send({
-                                message: "Appointment not found."
-                            })
-                        }
-                        var otherUserName = ""
-                        for (var user of appt.participantsInfo) {
-                            if (user.userId != req.userId) {
-                                otherUserName = user.displayedName
-                            }
-                        }
-                        var ret = {
-                            ...appt.toObject(),
-                            otherUserName
-                        }
-                        return res.status(200).send(ret)
-                    }).catch(err => {
-                        console.log(err)
-                        return res.status(500).send({ message: err.message })
-                    })
-    } catch (err) {
-        return res.status(500).send({
-            message: err.message
+    var appointmentId = req.query.appointmentId
+    if (!appointmentId) {
+        return res.status(400).send({
+            message: "appointmentId is required"
         })
     }
+    Appointment.findById(appointmentId)
+                .then(async appt => {
+                    if (!appt) {
+                        return res.status(404).send({
+                            message: "Appointment not found."
+                        })
+                    }
+                    var otherUserName = ""
+                    var isOfUser = false
+                    for (var user of appt.participantsInfo) {
+                        if (user.userId != req.userId) {
+                            otherUserName = user.displayedName
+                        } else {
+                            isOfUser = true
+                        }
+                    }
+
+                    if (!isOfUser) {
+                        return res.status(403).send({
+                            message: "User is not allowed to view this appointment"
+                        })
+                    }
+
+                    var ret = {
+                        ...appt.toObject(),
+                        otherUserName
+                    }
+                    return res.status(200).send(ret)
+                }).catch(err => {
+                    console.log(err)
+                    return res.status(500).send({ message: err.message })
+                })
+
 }
 
 // ChatGPT usage: No

@@ -244,17 +244,7 @@ exports.acceptAppointment = async (req, res) => {
 exports.getUserAppointments = async (req, res) => {
     try {
         var userId = req.userId
-        var courses = req.query.courses ? req.query.courses.split(',') : []    
-        var user = await User.findById(userId).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
-            
-        if (!user || user.isBanned) {
-            return res.status(404).send({
-                message: "The other user is not found"
-            })
-        }
+        var courses = req.query.courses ? req.query.courses.split(',') : []
 
         var timeMin = momenttz()
             .tz(PST_TIMEZONE)
@@ -267,7 +257,8 @@ exports.getUserAppointments = async (req, res) => {
             .add(15, 'days')
             .endOf('day')
             .toISOString(true)
-        
+
+        var pstNow = momenttz().tz(PST_TIMEZONE)
 
         var query = { 
             $or: [
@@ -288,10 +279,14 @@ exports.getUserAppointments = async (req, res) => {
                 ...query
             })
             .sort({ pstStartDatetime: 'asc'})
-            .catch(err => {
-                console.log(err)
-                return res.status(500).send({ message: err.message })
-            })
+       
+        appointments = appointments.filter(appt => {
+            if (momenttz(appt.pstEndDatetime).isAfter(pstNow)) {
+                return true
+            } else {
+                return appt.status !== AppointmentStatus.PENDING
+            }
+        })
 
         return res.status(200).send({appointments})
     } catch (err) {

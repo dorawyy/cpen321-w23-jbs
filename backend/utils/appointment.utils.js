@@ -169,8 +169,7 @@ async function appointmentIsCompleted (appointmentId) {
     return Appointment
         .findById(appointmentId, "pstEndDatetime")
         .then(appt => {
-            var pstNow = momenttz(new Date().toISOString(true))
-                            .tz(PST_TIMEZONE)
+            var pstNow = momenttz().tz(PST_TIMEZONE)
             
             if (momenttz(appt.pstEndDatetime).isAfter(pstNow)) {
                 return Promise.resolve(false)

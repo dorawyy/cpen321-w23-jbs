@@ -193,7 +193,7 @@ beforeEach(() => {
 const User = db.user
 const Appointment = db.appointment
 
-// Interface PUT https://edumatch.canadacentral.cloudapp.azure.com//appointment/cancel?appointmentId=123
+// Interface PUT https://edumatch.canadacentral.cloudapp.azure.com/appointment/cancel?appointmentId=123
 describe("Cancel appointment for a Google Calendar user", () => {
     
     // Assuming valid token

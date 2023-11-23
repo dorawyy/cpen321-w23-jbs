@@ -92,12 +92,10 @@ exports.getTutorAvailability = async (req, res) => {
                 message: "userId and date are required."
             })
         }
-        var tutor = await User.findById(tutorId).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message })
-        })
+        var tutor = await User.findById(tutorId)
+
         if (!tutor || tutor.isBanned) {
-            return res.status(400).send({ message: "User not found" })
+            return res.status(404).send({ message: "User not found" })
         }
             
         var tzOffset = momenttz(date)
@@ -115,10 +113,7 @@ exports.getTutorAvailability = async (req, res) => {
         if (tutor.useGoogleCalendar) {
             var freeTimes = await googleUtils.getFreeTime(
                 tutor, timeMin, timeMax
-            ).catch(err => {
-                console.log(err)
-                return res.status(500).send({ message: err.message })
-            })
+            )
             var ret = {
                 availability: freeTimes
             }
@@ -140,10 +135,7 @@ exports.getTutorAvailability = async (req, res) => {
                         .toISOString(true)
                     var availability = await apptUtils.getManualFreeTimes(
                         tutor, start, end
-                    ).catch(err => {
-                        console.log(err)
-                        return res.status(500).send({ message: err.message })
-                    })
+                    )
                     availabilities = availabilities.concat(availability)
                 }
 
@@ -152,8 +144,8 @@ exports.getTutorAvailability = async (req, res) => {
                 })
             } else {
                 var defaultFreetimes = [{
-                    start: "08:00",
-                    end: "19:00"
+                    start: `${date}T08:00:00.000${tzOffset}`,
+                    end: `${date}T19:00:00.000${tzOffset}`
                 }]
                 return res.status(200).send({
                     availability: defaultFreetimes

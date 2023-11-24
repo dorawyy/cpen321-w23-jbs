@@ -15,7 +15,7 @@ describe("Get course codes", () => {
     // Expected output: a list of course codes of the program
     test("Valid program code", async () => {
         const code = "CPEN"
-        const expectedData = [
+        var expectedData = [
             "CPEN 211",
             "CPEN 212",
             "CPEN 221",
@@ -45,11 +45,20 @@ describe("Get course codes", () => {
             data: expectedData.map(
                 courseCode => {
                     return {
-                        course: courseCode.replace("CPEN ", "")
+                        course: courseCode.replace("CPEN ", ""),
+                        course_title: "Course title"
                     }
                 }
             )
         }
+
+        expectedData = expectedData.map(courseCode => {
+            return {
+                code: courseCode,
+                title: "Course title"
+            }
+        })
+
         axios.get.mockResolvedValue(mockUbcGradesResponse)
         const res = await request(app)
             .get(ENDPOINT)

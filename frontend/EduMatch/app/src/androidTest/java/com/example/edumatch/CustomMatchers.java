@@ -22,31 +22,6 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 public class CustomMatchers {
-    // ChatGPT usage: Yes
-    public static Matcher<View> withChildViewCountGreaterThanOrEqualTo(final int count, final Class<?> viewClass) {
-        return new TypeSafeMatcher<View>() {
-
-            @Override
-            protected boolean matchesSafely(View item) {
-                if (!(item instanceof ViewGroup)) {
-                    return false;
-                }
-                ViewGroup viewGroup = (ViewGroup) item;
-                int viewCount = 0;
-                for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                    if (viewClass.isInstance(viewGroup.getChildAt(i))) {
-                        viewCount++;
-                    }
-                }
-                return viewCount >= count;
-            }
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("ViewGroup has a child count greater than or equal to " + count);
-            }
-        };
-    }
 
     // ChatGPT usage: Yes
     public static TypeSafeMatcher<View> withChildViewCount(final int expectedCount, final Class<?> childClass) {
@@ -72,60 +47,7 @@ public class CustomMatchers {
             }
         };
     }
-    // ChatGPT usage: Yes
-    public static Matcher<View> withChipText(final String text) {
-        return new TypeSafeMatcher<View>() {
 
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("with chip text: " + text);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                // Assuming SubjectChipHomeView extends a ViewGroup like LinearLayout or similar
-                if (!(view instanceof ViewGroup)) {
-                    return false;
-                }
-
-                ViewGroup viewGroup = (ViewGroup) view;
-                for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                    View child = viewGroup.getChildAt(i);
-                    if (child instanceof SubjectChipHomeView) {
-                        SubjectChipHomeView chipView = (SubjectChipHomeView) child;
-                        if (chipView.getText().equals(text)) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-        };
-    }
-    // ChatGPT usage: Yes
-    public static ViewAction clickOnChipWithText(final String text) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return allOf(isDisplayed(), isAssignableFrom(SubjectChipHomeView.class));
-            }
-
-            @Override
-            public String getDescription() {
-                return "Click on a SubjectChipHomeView with text: " + text;
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                if (view instanceof SubjectChipHomeView) {
-                    SubjectChipHomeView chipView = (SubjectChipHomeView) view;
-                    if (chipView.getText().equals(text)) {
-                        chipView.performClick();
-                    }
-                }
-            }
-        };
-    }
     // ChatGPT usage: Yes
     public static Matcher<View> hasMinimumChildCount(final int minimumCount) {
         return new TypeSafeMatcher<View>() {
@@ -141,51 +63,7 @@ public class CustomMatchers {
         };
     }
 
-    // ChatGPT usage: Yes
-    public static ViewAction clickChildWithText(final String text) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isAssignableFrom(ViewGroup.class);
-            }
 
-            @Override
-            public String getDescription() {
-                return "Click on a child view with specified text.";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                ViewGroup group = (ViewGroup) view;
-                for (int i = 0; i < group.getChildCount(); i++) {
-                    View child = group.getChildAt(i);
-                    if (child instanceof TextView && ((TextView) child).getText().equals(text)) {
-                        child.performClick();
-                        return;
-                    }
-                }
-            }
-        };
-    }
-    // ChatGPT usage: Yes
-    public static Matcher<View> withItemCount(final Matcher<Integer> matcher) {
-        return new TypeSafeMatcher<View>() {
-            @Override
-            protected boolean matchesSafely(View item) {
-                if (!(item instanceof ViewGroup)) {
-                    return false;
-                }
-                int itemCount = ((ViewGroup) item).getChildCount();
-                return matcher.matches(itemCount);
-            }
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("a view with item count: ");
-                matcher.describeTo(description);
-            }
-        };
-    }
     // ChatGPT usage: Yes
     public static Matcher<View> withAncestor(final int ancestorId, final int targetId) {
         return new TypeSafeMatcher<View>() {

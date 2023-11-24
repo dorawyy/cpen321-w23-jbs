@@ -78,18 +78,18 @@ describe("Get course codes", () => {
 
     // ChatGPT usage: Yes
     // Input: the query `code` is an invalid program
-    // Expected status code: 500
-    // Expected behavior: sends back UBCGrades API error message
-    // Expected output: UBCGrades API error message
-    test("Invalid query, 3rd party API error", async () => {
+    // Expected status code: 200
+    // Expected behavior: catch the ubcgrades api error
+    // Expected output: empty list
+    test("Invalid query, 3rd party API error should return empty list", async () => {
         const errorMessage = 'Internal Server Error';
         axios.get.mockRejectedValue(new Error(errorMessage));
         const res = await request(app)
             .get(ENDPOINT)
             .query({ code: "invalid code" })
             
-        expect(res.status).toBe(500);
-        expect(res.body).toEqual({ message: errorMessage });
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual({ courses: [] });
             
     })
 })

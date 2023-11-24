@@ -90,7 +90,7 @@ public class FilteringRecommendedTutors {
         String[] chipTexts = {"ELEC 201", "MATH 220", "CPEN 221"};
 
         for (String chipText : chipTexts) {
-            // Click on the chip with the specified text
+            // Click on the chiphn with the specified text
             onView(withText(chipText)).perform(click());
 
             try {

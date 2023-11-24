@@ -5,6 +5,8 @@ import static com.example.edumatch.util.RateHelper.postReview;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -58,6 +60,41 @@ public class TutorRateActivity extends AppCompatActivity {
 
         LabelAndRatingView organizationRatingView = findViewById(R.id.rating);
         organizationRatingView.getRatingView().setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> ratingValue = rating);
+        LabelAndCommentEditTextView commentView = findViewById(R.id.comments);
+        commentView.getEnterUserEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String input = s.toString().trim();
+                int wordsCount = input.isEmpty() ? 0 : input.split("\\s+").length;
+
+                if (wordsCount > 200) {
+                    Toast.makeText(TutorRateActivity.this, "Word limit exceeded. Please limit comments to 200 words.", Toast.LENGTH_SHORT).show();
+                    // Optionally, you can trim the excess words
+                    String trimmed = trimToWordLimit(input, 200);
+                    s.replace(0, s.length(), trimmed);
+                }
+            }
+        });
+    }
+
+    private String trimToWordLimit(String text, int wordLimit) {
+        String[] words = text.split("\\s+");
+        StringBuilder trimmed = new StringBuilder();
+        for (int i = 0; i < Math.min(words.length, wordLimit); i++) {
+            trimmed.append(words[i]);
+            if (i < wordLimit - 1) {
+                trimmed.append(" ");
+            }
+        }
+        return trimmed.toString();
     }
 
     private void initName() {

@@ -22,6 +22,8 @@ import com.example.edumatch.activities.AppointmentListActivity;
 import com.example.edumatch.activities.MainActivity;
 import com.example.edumatch.activities.ScheduledAppointmentActivity;
 import com.example.edumatch.activities.TuteeHomeActivity;
+import com.example.edumatch.activities.TutorHomeActivity;
+import com.example.edumatch.activities.TutorRateActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -60,26 +62,31 @@ public class RateAppointmentTest {
 
         intended(hasComponent(TuteeHomeActivity.class.getName()));
 
-        onView(withId(R.id.emptyBar)).perform(click());
+        onView(allOf(withId(R.id.appointments), isDescendantOfA(withId(R.id.emptyBar)))).perform(click());
 
         intended(hasComponent(AppointmentListActivity.class.getName()));
 
+
+
         // Select a specific rateable appointment
-//        String appointmentIdentifier = "Unique Appointment Text";
-//
-//        onView(allOf(withText(appointmentIdentifier), isDescendantOfA(withId(R.id.appointmentList))))
-//                .perform(scrollTo()) // Scroll to the appointment view
-//                .perform(click());
-//
-//        intended(hasComponent(ScheduledAppointmentActivity.class.getName()));
+        String appointmentIdentifier = "Final Tutor1";
+
+        onView(allOf(withText(appointmentIdentifier), isDescendantOfA(withId(R.id.appointmentList))))
+                .perform(scrollTo()) // Scroll to the appointment view
+                .perform(click());
+
+        intended(hasComponent(ScheduledAppointmentActivity.class.getName()));
 
 
         // Navigate to ScheduledAppointmentActivity
         // ...
 
 //        // Click on rate appointment button
-//        onView(withId(R.id.rate_appointment_button)) // Replace with actual button ID
-//                .perform(click());
+        onView(withId(R.id.review_button)) // Replace with actual button ID
+                .perform(click());
+
+        intended(hasComponent(TutorRateActivity.class.getName()));
+
 //
 //        // In TutorRateActivity, set rating and feedback
 //        onView(withId(R.id.star_rating)) // Replace with star rating widget ID

@@ -74,8 +74,6 @@ public class FilteringRecommendedTutors {
 
         intended(hasComponent(TuteeHomeActivity.class.getName()));
 
-        //onView(withId(R.id.tutorList)).check(matches(withItemCount(greaterThan(0))));
-
         int expectedChipCount = 3; // Replace with the expected number of chips
         onView(withId(R.id.chipContainer))
                 .check(matches(withChildViewCount(expectedChipCount, SubjectChipHomeView.class)));

@@ -22,7 +22,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 public class CustomMatchers {
-
+    // ChatGPT usage: Yes
     public static Matcher<View> withChildViewCountGreaterThanOrEqualTo(final int count, final Class<?> viewClass) {
         return new TypeSafeMatcher<View>() {
 
@@ -48,7 +48,7 @@ public class CustomMatchers {
         };
     }
 
-
+    // ChatGPT usage: Yes
     public static TypeSafeMatcher<View> withChildViewCount(final int expectedCount, final Class<?> childClass) {
         return new TypeSafeMatcher<View>() {
             @Override
@@ -72,7 +72,7 @@ public class CustomMatchers {
             }
         };
     }
-
+    // ChatGPT usage: Yes
     public static Matcher<View> withChipText(final String text) {
         return new TypeSafeMatcher<View>() {
 
@@ -102,7 +102,7 @@ public class CustomMatchers {
             }
         };
     }
-
+    // ChatGPT usage: Yes
     public static ViewAction clickOnChipWithText(final String text) {
         return new ViewAction() {
             @Override
@@ -126,7 +126,7 @@ public class CustomMatchers {
             }
         };
     }
-
+    // ChatGPT usage: Yes
     public static Matcher<View> hasMinimumChildCount(final int minimumCount) {
         return new TypeSafeMatcher<View>() {
             @Override
@@ -141,7 +141,7 @@ public class CustomMatchers {
         };
     }
 
-
+    // ChatGPT usage: Yes
     public static ViewAction clickChildWithText(final String text) {
         return new ViewAction() {
             @Override
@@ -167,7 +167,7 @@ public class CustomMatchers {
             }
         };
     }
-
+    // ChatGPT usage: Yes
     public static Matcher<View> withItemCount(final Matcher<Integer> matcher) {
         return new TypeSafeMatcher<View>() {
             @Override
@@ -186,7 +186,7 @@ public class CustomMatchers {
             }
         };
     }
-
+    // ChatGPT usage: Yes
     public static Matcher<View> withAncestor(final int ancestorId, final int targetId) {
         return new TypeSafeMatcher<View>() {
             @Override

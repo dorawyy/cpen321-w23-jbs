@@ -7,38 +7,26 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
-import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.edumatch.CustomMatchers.clickChildWithText;
-import static com.example.edumatch.CustomMatchers.clickOnChipWithText;
 import static com.example.edumatch.CustomMatchers.hasMinimumChildCount;
 import static com.example.edumatch.CustomMatchers.withChildViewCount;
-import static com.example.edumatch.CustomMatchers.withChildViewCountGreaterThanOrEqualTo;
-import static com.example.edumatch.CustomMatchers.withItemCount;
-import static org.hamcrest.Matchers.greaterThan;
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.instanceOf;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.edumatch.activities.MainActivity;
 import com.example.edumatch.activities.TuteeHomeActivity;
-import com.example.edumatch.activities.UniversityInformationActivity;
 import com.example.edumatch.views.SubjectChipHomeView;
-import com.example.edumatch.views.SubjectChipView;
 import com.example.edumatch.views.TutorRow;
 
 import org.hamcrest.Matchers;
@@ -49,7 +37,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class FilteringRecommendedTutors {
+public class FilteringRecommendedTutorsTest {
 
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
@@ -61,23 +49,24 @@ public class FilteringRecommendedTutors {
 
     @Before
     public void setUp() {
-        // Set up SharedPreferences with your desired initial values
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         sharedPreferences.edit().putString("JWTtoken", "eyJhbGciOiJIUzI1NiJ9.NjU0MzE3MWQzNWQ0ZTYxMzQzN2I5MzJi.LgNYfo-o2chIt1Rgd-QOZaL-If_wM5qS2rGYCy82hIQ").apply();
     }
 
+    // ChatGPT usage: Yes
     @Test
     public void testTutorFiltering() {
         Intents.init();
-        // Launch the initial activity (MainActivity in this example)
+        // Sign-in with credentials
         onView(CustomMatchers.withAncestor(R.id.username,R.id.edit_text)).perform(replaceText(NAME));
         onView(CustomMatchers.withAncestor(R.id.password,R.id.edit_text)).perform(replaceText(PASSWORD));
         onView(withId(R.id.signin_button)).perform(click());
 
         intended(hasComponent(TuteeHomeActivity.class.getName()));
 
-        int expectedChipCount = 2; // Replace with the expected number of chips
+        // See if we have correct number of subject chips
+        int expectedChipCount = 2;
         onView(withId(R.id.chipContainer))
                 .check(matches(withChildViewCount(expectedChipCount, SubjectChipHomeView.class)));
 
@@ -85,7 +74,7 @@ public class FilteringRecommendedTutors {
         onView(withId(R.id.tutorList))
                 .check(matches(withChildViewCount(0, TutorRow.class)));
 
-
+        // Click on first course subject chip
         onView(withText("EOSC 114")).perform(click());
 
         try {
@@ -94,12 +83,12 @@ public class FilteringRecommendedTutors {
             throw new RuntimeException(e);
         }
 
+        // Check for Toast notification
         onView(withText("No recommended tutors for this course yet!"))
                 .inRoot(withDecorView(Matchers.not(activityRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
 
-
-
+        // Click on second course subject chip
         onView(withText("MATH 220")).perform(click());
         try {
             Thread.sleep(3000);
@@ -107,13 +96,16 @@ public class FilteringRecommendedTutors {
             throw new RuntimeException(e);
         }
 
+        // Check that there is a minimum of one recommended tutor on screen
         onView(withId(R.id.tutorList))
-                .check(matches(hasMinimumChildCount(1))); // Example assertion
+                .check(matches(hasMinimumChildCount(1)));
 
+        // Click on second course subject chip to un-select it
         onView(withText("MATH 220")).perform(click());
 
+        // Check that there is a minimum of one recommended tutor on screen
         onView(withId(R.id.tutorList))
-                .check(matches(hasMinimumChildCount(1))); // Example assertion
+                .check(matches(hasMinimumChildCount(1)));
 
         Intents.release();
 

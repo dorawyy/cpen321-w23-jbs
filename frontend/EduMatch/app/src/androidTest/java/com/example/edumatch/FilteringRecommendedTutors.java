@@ -6,7 +6,9 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -39,6 +41,7 @@ import com.example.edumatch.views.SubjectChipHomeView;
 import com.example.edumatch.views.SubjectChipView;
 import com.example.edumatch.views.TutorRow;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -53,7 +56,7 @@ public class FilteringRecommendedTutors {
     Context context;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private static final String NAME = "finalTutee";
+    private static final String NAME = "m6Tutee";
     private static final String PASSWORD = "password";
 
     @Before
@@ -74,7 +77,7 @@ public class FilteringRecommendedTutors {
 
         intended(hasComponent(TuteeHomeActivity.class.getName()));
 
-        int expectedChipCount = 3; // Replace with the expected number of chips
+        int expectedChipCount = 2; // Replace with the expected number of chips
         onView(withId(R.id.chipContainer))
                 .check(matches(withChildViewCount(expectedChipCount, SubjectChipHomeView.class)));
 
@@ -82,30 +85,50 @@ public class FilteringRecommendedTutors {
         onView(withId(R.id.tutorList))
                 .check(matches(withChildViewCount(0, TutorRow.class)));
 
-        // Click on ELEC 201 MATH 220 CPEN 221
 
-       // onView(allOf(instanceOf(SubjectChipHomeView.class), withText("MATH 220"), isDescendantOfA(withId(R.id.chipContainer))))
-              //  .perform(click());
+        String[] chipTexts = {"EOSC 114", "MATH 220"};
 
-        String[] chipTexts = {"ELEC 201", "MATH 220", "CPEN 221"};
+        onView(withText("EOSC 114")).perform(click());
 
-        for (String chipText : chipTexts) {
-            // Click on the chiphn with the specified text
-            onView(withText(chipText)).perform(click());
 
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+        onView(withText("No recommended tutors for this course yet!"))
+                .inRoot(withDecorView(Matchers.not(activityRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
 
-            // Now check the number of tutor rows. Replace this with your actual logic
-            // for checking the number of tutor rows. This is just a placeholder.
-            onView(withId(R.id.tutorList))
-                    .check(matches(hasMinimumChildCount(1))); // Example assertion
 
-            // Add any additional logic needed after clicking each chip
+
+        onView(withText("MATH 220")).perform(click());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+
+        onView(withId(R.id.tutorList))
+                .check(matches(hasMinimumChildCount(1))); // Example assertion
+
+        onView(withText("MATH 220")).perform(click());
+
+        onView(withId(R.id.tutorList))
+                .check(matches(hasMinimumChildCount(1))); // Example assertion
+
+//        for (String chipText : chipTexts) {
+//            // Click on the chiphn with the specified text
+//            onView(withText(chipText)).perform(click());
+//
+//            try {
+//                Thread.sleep(3000);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//            // Now check the number of tutor rows. Replace this with your actual logic
+//            // for checking the number of tutor rows. This is just a placeholder.
+//            onView(withId(R.id.tutorList))
+//                    .check(matches(hasMinimumChildCount(1))); // Example assertion
+//
+//            // Add any additional logic needed after clicking each chip
+//        }
 
 
 

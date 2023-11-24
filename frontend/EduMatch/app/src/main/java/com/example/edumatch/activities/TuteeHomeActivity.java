@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -201,6 +202,11 @@ public class TuteeHomeActivity extends AppCompatActivity {
 
         try {
             JSONArray tutorsArray = jsonResponse.getJSONArray("tutors");
+
+            if (tutorsArray.length() == 0) {
+                // JSONArray is empty, display toast message
+                Toast.makeText(TuteeHomeActivity.this, "No recommended tutors for this course yet!", Toast.LENGTH_SHORT).show();
+            }
 
             for (int i = 0; i < tutorsArray.length(); i++) {
                 JSONObject tutorObject = tutorsArray.getJSONObject(i);

@@ -605,8 +605,8 @@ describe("Book appointment for a manually-signed-up user", () => {
             mockAddedUsers[i].useGoogleCalendar = false
             mockAddedUsers[i].manualAvailability = [{
                 day: date.format("dddd"),
-                startTime: "08:00",
-                endTime: "19:00"
+                startTime: "00:00",
+                endTime: "23:59"
             }]
         }
 

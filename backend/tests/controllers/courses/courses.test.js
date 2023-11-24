@@ -70,6 +70,77 @@ describe("Get course codes", () => {
         })
     })
 
+    // ChatGPT usage: No
+    // Input: the query `code` is a valid program + some course code prefix
+    // Expected status code: 200
+    // Expected behavior: Process the output from UBCGrades API to find courses
+    // that match the prefix
+    // Expected output: a list of courses that match the prefix
+    test("Valid program code with some prefix", async () => {
+        const code = "CPEN 3"
+        var expectedData = [
+            "CPEN 211",
+            "CPEN 212",
+            "CPEN 221",
+            "CPEN 223",
+            "CPEN 281",
+            "CPEN 291",
+            "CPEN 311",
+            "CPEN 312",
+            "CPEN 321",
+            "CPEN 322",
+            "CPEN 331",
+            "CPEN 333",
+            "CPEN 391",
+            "CPEN 400",
+            "CPEN 411",
+            "CPEN 412",
+            "CPEN 421",
+            "CPEN 431",
+            "CPEN 432",
+            "CPEN 441",
+            "CPEN 442",
+            "CPEN 481",
+            "CPEN 491",
+        ]
+
+        const mockUbcGradesResponse =  {
+            data: expectedData.map(
+                courseCode => {
+                    return {
+                        course: courseCode.replace("CPEN ", ""),
+                        course_title: "Course title"
+                    }
+                }
+            )
+        }
+        expectedData = [
+            "CPEN 311",
+            "CPEN 312",
+            "CPEN 321",
+            "CPEN 322",
+            "CPEN 331",
+            "CPEN 333",
+            "CPEN 391",
+        ]
+        expectedData = expectedData.map(courseCode => {
+            return {
+                code: courseCode,
+                title: "Course title"
+            }
+        })
+
+        axios.get.mockResolvedValue(mockUbcGradesResponse)
+        const res = await request(app)
+            .get(ENDPOINT)
+            .query({ code })
+        
+        expect(res.status).toBe(200)
+        expect(res.body).toEqual({
+            courses: expectedData
+        })
+    })
+
     // ChatGPT usage: Yes
     // Input: the query `code` is empty
     // Expected status code: 400
@@ -99,7 +170,6 @@ describe("Get course codes", () => {
             
         expect(res.status).toBe(200);
         expect(res.body).toEqual({ courses: [] });
-            
     })
 })
 

@@ -86,10 +86,13 @@ public class FilteringRecommendedTutors {
                 .check(matches(withChildViewCount(0, TutorRow.class)));
 
 
-        String[] chipTexts = {"EOSC 114", "MATH 220"};
-
         onView(withText("EOSC 114")).perform(click());
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         onView(withText("No recommended tutors for this course yet!"))
                 .inRoot(withDecorView(Matchers.not(activityRule.getActivity().getWindow().getDecorView())))
@@ -112,57 +115,7 @@ public class FilteringRecommendedTutors {
         onView(withId(R.id.tutorList))
                 .check(matches(hasMinimumChildCount(1))); // Example assertion
 
-//        for (String chipText : chipTexts) {
-//            // Click on the chiphn with the specified text
-//            onView(withText(chipText)).perform(click());
-//
-//            try {
-//                Thread.sleep(3000);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//            // Now check the number of tutor rows. Replace this with your actual logic
-//            // for checking the number of tutor rows. This is just a placeholder.
-//            onView(withId(R.id.tutorList))
-//                    .check(matches(hasMinimumChildCount(1))); // Example assertion
-//
-//            // Add any additional logic needed after clicking each chip
-//        }
-
-
-
-//        onView(withId(R.id.chipContainer))
-//                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-//        onView(allOf(
-//                isDescendantOfA(withId(R.id.chipContainer)),
-//                withText("ELEC 201")))
-//                .perform(clickOnChipWithText("ELEC 201"));
-
-
-//        try {
-//            Thread.sleep(3000); // Sleep for 1 second
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//
-//        onView(withId(R.id.tutorList))
-//                .check(matches(withChildViewCountGreaterThanOrEqualTo(2, TutorRow.class)));
-//
-//        onView(withId(R.id.chipContainer))
-//                .perform(clickChildWithText("MATH 220"));
-//
-//        onView(withId(R.id.tutorList))
-//                .check(matches(withChildViewCountGreaterThanOrEqualTo(10, TutorRow.class)));
-//
-//        onView(withId(R.id.chipContainer))
-//                .perform(clickChildWithText("CPEN 221"));
-//
-//        onView(withId(R.id.tutorList))
-//                .check(matches(withChildViewCountGreaterThanOrEqualTo(10, TutorRow.class)));
-
+        Intents.release();
 
     }
 

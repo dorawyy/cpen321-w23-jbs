@@ -10,6 +10,7 @@ const { PST_TIMEZONE, AppointmentStatus } = require('../../../constants/appointm
 const { mockGetOverallRating } = require('../../utils/rating.utils');
 const { MOCKED_VALUES } = require('../../utils/googleapis.mock.utils');
 const { UserType } = require('../../../constants/user.types');
+const { google } = require('googleapis');
 
 const ENDPOINT = "/appointment/bookAppointment"
 
@@ -279,22 +280,23 @@ beforeEach(() => {
     mockAddedUsers.push(mockTutor, mockTutee)
 })
 
+const tutorId = mockTutorId.toString()
+const tuteeId = mockTuteeId.toString()
+
+// Assuming valid token
+authJwt.verifyJwt.mockImplementation((req, res, next) => {
+    req.userId = mockAddedUsers[1]._id.toString()
+    return next()
+})
+
+// User is not banned
+account.verifyAccountStatus.mockImplementation((req, res, next) => {
+    return next()
+})
+
 // Interface POST https://edumatch.canadacentral.cloudapp.azure.com/appointment/bookAppointment
 describe("Book an appointment for Google calendar users", () => {
 
-    const tutorId = mockTutorId.toString()
-    const tuteeId = mockTuteeId.toString()
-
-    // Assuming valid token
-    authJwt.verifyJwt.mockImplementation((req, res, next) => {
-        req.userId = mockAddedUsers[1]._id.toString()
-        return next()
-    })
-
-    // User is not banned
-    account.verifyAccountStatus.mockImplementation((req, res, next) => {
-        return next()
-    })
 
     // ChatGPT Usage: No
     // Input:
@@ -474,4 +476,160 @@ describe("Book an appointment for Google calendar users", () => {
         expect(mockAddedAppts.length).toBe(5)
     })
 
+})
+
+describe("Book appointment for a manually-signed-up user", () => {
+    // ChatGPT Usage: No
+    // Input:
+    //  (1) userId for a tutee
+    //  (2) tutorId for a unbanned tutor
+    //  (3) pstStartDatetime: valid appointment start datetime
+    //  (4) pstEndDatetime: valid appointment end datetime
+    // Expected status code: 200
+    // Expected behavior: Creates a new appointment for both users 
+    // Clean up user's appointments
+    // Expected output: The new appointment
+    test("Should book appointment successfully if there is no conflict for tutor", async () => {
+        var originalAddedApts = [...mockAddedAppts]
+        for (var i = 0; i < 4; i++) {
+            mockAddedAppts = originalAddedApts
+            var date = mockMoment()
+                .tz(PST_TIMEZONE)
+                .add(7 + i, "days")
+        
+            for (var j = 0; j < mockAddedUsers.length; j++) {
+                mockAddedUsers[j].useGoogleCalendar = false
+                mockAddedUsers[j].manualAvailability = [{
+                    day: date.format("dddd"),
+                    startTime: "08:00",
+                    endTime: "19:00"
+                }]
+            }
+            // no appointments
+            if (i == 1) {
+                mockAddedUsers[0].appointments = []
+            } else if (i == 2) {
+                // past appointment
+                mockAddedUsers[0].appointments = [mockAddedAppts[0]]
+            } else if (i == 3) {
+                mockAddedAppts[4].status = AppointmentStatus.PENDING
+            }
+            date = date.format("YYYY-MM-DD")
+
+            var tzOffset = mockMoment(date)
+                .tz(PST_TIMEZONE)
+                .format('Z')
+            
+            const pstStartDatetime = `${date}T13:00:00${tzOffset}`
+            const pstEndDatetime = `${date}T15:00:00${tzOffset}`
+
+            const res = await request(app)
+                .post(ENDPOINT)
+                .set('Authorization', 'Bearer mockToken')
+                .send({ 
+                    tutorId, pstStartDatetime, pstEndDatetime
+                });
+            
+            expect(res.status).toBe(200)
+            var newAppt = res.body
+            expect(newAppt.pstStartDatetime).toEqual(pstStartDatetime)
+            expect(newAppt.pstEndDatetime).toEqual(pstEndDatetime)
+            expect(newAppt.status).toBe(AppointmentStatus.PENDING)
+            for (var participant of newAppt.participantsInfo) {
+                expect([tutorId, tuteeId].includes(participant.userId)).toBeTruthy()
+            }
+            expect(google.auth.OAuth2).not.toHaveBeenCalled()
+        }
+    })
+
+    // ChatGPT Usage: No
+    // Input:
+    //  (1) userId for a tutee
+    //  (2) tutorId for a unbanned tutor
+    //  (3) pstStartDatetime: start datetime that isn't part of tutor's availabiltiy
+    //  (4) pstEndDatetime: valid appointment end datetime
+    // Expected status code: 400
+    // Expected behavior: detect tutor's unvailable
+    // Expected output: inform message
+    test("Should return tutor unavailable if the requested day is not in tutor's manual availabilities", async () => {
+        var date = mockMoment()
+            .tz(PST_TIMEZONE)
+            .add(6, "days")
+    
+        for (var i = 0; i < mockAddedUsers.length; i++) {
+            mockAddedUsers[i].useGoogleCalendar = false
+            mockAddedUsers[i].manualAvailability = [{
+                day: date.clone().add(1, "days").format("dddd"),
+                startTime: "08:00",
+                endTime: "19:00"
+            }]
+        }
+        date = date.format("YYYY-MM-DD")
+
+        var tzOffset = mockMoment(date)
+            .tz(PST_TIMEZONE)
+            .format('Z')
+        
+        const pstStartDatetime = `${date}T13:00:00${tzOffset}`
+        const pstEndDatetime = `${date}T15:00:00${tzOffset}`
+
+        const res = await request(app)
+            .post(ENDPOINT)
+            .set('Authorization', 'Bearer mockToken')
+            .send({ 
+                tutorId, pstStartDatetime, pstEndDatetime
+            });
+        
+        expect(res.status).toBe(400)
+        expect(res.body).toEqual({
+            message: "Tutor is unavailable during the specified time slot."
+        })
+        expect(google.auth.OAuth2).not.toHaveBeenCalled()
+
+    })
+
+    // ChatGPT Usage: No
+    // Input:
+    //  (1) userId for a tutee
+    //  (2) tutorId for a unbanned tutor
+    //  (3) pstStartDatetime: start datetime that conflicts with tutee's pending appointment
+    //  (4) pstEndDatetime: valid appointment end datetime
+    // Expected status code: 400
+    // Expected behavior: detect tutee's unvailable
+    // Expected output: inform message
+    test("Should return tutee unavailable if there is conflict pending appointment for tutee", async () => {
+        var date = mockMoment(mockAddedAppts[3].pstStartDatetime)
+            .tz(PST_TIMEZONE)
+    
+        for (var i = 0; i < mockAddedUsers.length; i++) {
+            mockAddedUsers[i].useGoogleCalendar = false
+            mockAddedUsers[i].manualAvailability = [{
+                day: date.format("dddd"),
+                startTime: "08:00",
+                endTime: "19:00"
+            }]
+        }
+
+        date = date.format("YYYY-MM-DD")
+
+        var tzOffset = mockMoment(date)
+            .tz(PST_TIMEZONE)
+            .format('Z')
+        
+        const pstStartDatetime = mockAddedAppts[3].pstStartDatetime
+        const pstEndDatetime = mockAddedAppts[3].pstEndDatetime
+
+        const res = await request(app)
+            .post(ENDPOINT)
+            .set('Authorization', 'Bearer mockToken')
+            .send({ 
+                tutorId, pstStartDatetime, pstEndDatetime
+            });
+
+        expect(res.status).toBe(400)
+        expect(res.body).toEqual({
+            message: "You already have a pending/accepted appointment during the specified time slot."
+        })
+        expect(google.auth.OAuth2).not.toHaveBeenCalled()
+    })
 })

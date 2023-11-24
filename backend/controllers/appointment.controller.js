@@ -115,7 +115,9 @@ exports.getTutorAvailability = async (req, res) => {
             return res.status(200).send(ret)
         } else {
             if (tutor.manualAvailability) {
-                var requestedDay = momenttz(date).format("dddd")
+                var requestedDay = momenttz(`${date}T00:00:00${tzOffset}`)
+                    .tz(PST_TIMEZONE)
+                    .format("dddd")
                 var dayAvailabilities = tutor.manualAvailability.filter(avail => {
                     return avail.day === requestedDay 
                 })
@@ -280,7 +282,7 @@ exports.getUserAppointments = async (req, res) => {
             .sort({ pstStartDatetime: 'asc'})
        
         appointments = appointments.filter(appt => {
-            if (momenttz(appt.pstEndDatetime).isAfter(pstNow)) {
+            if (momenttz(appt.pstEndDatetime).tz(PST_TIMEZONE).isAfter(pstNow)) {
                 return true
             } else {
                 return appt.status !== AppointmentStatus.PENDING
@@ -363,7 +365,7 @@ exports.bookAppointment = async (req, res) => {
             .isAvailable(
                 tutor, req.body.pstStartDatetime, req.body.pstEndDatetime
             )
-        
+
         var tuteeIsAvailable = await apptUtils
             .isAvailable(
                 tutee, req.body.pstStartDatetime, req.body.pstEndDatetime

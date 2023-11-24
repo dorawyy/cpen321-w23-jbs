@@ -45,17 +45,13 @@ public class SubjectChipHomeView extends RelativeLayout {
         }
     }
 
-    // ChatGPT usage: Yes
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.subject_chip_home, this, true);
 
-        // Find the TextView and the remove button inside the custom layout
         textView = findViewById(R.id.text);
         isClicked = false;
 
-
-        // Retrieve and set the text attribute if it's provided
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SubjectChip);
             String text = typedArray.getString(R.styleable.SubjectChip_chipText);
@@ -66,17 +62,14 @@ public class SubjectChipHomeView extends RelativeLayout {
             }
         }
 
-
         this.setOnClickListener(v -> {
-            // Toggle the clicked state and update background color accordingly
-            isClicked = !isClicked;
-            updateBackgroundColor();
+            setClicked(!isClicked); // Use the setClicked method here
             if(chipClickListener != null) {
                 chipClickListener.onChipClicked(SubjectChipHomeView.this);
             }
         });
     }
-    // ChatGPT usage: Yes
+
     private void updateBackgroundColor() {
         if (isClicked) {
             setBackgroundColor(Color.parseColor("#A9A9A9")); // Dark Grey color when clicked
@@ -92,5 +85,9 @@ public class SubjectChipHomeView extends RelativeLayout {
         return null;
     }
 
-
+    // Method to externally set the clicked state of the chip
+    public void setClicked(boolean clicked) {
+        isClicked = clicked;
+        updateBackgroundColor();
+    }
 }

@@ -106,7 +106,6 @@ public class SignUpFlowTest {
 
 
 
-
     // ChatGPT usage: Yes
     @Test
     public void testSignUpFlow() {

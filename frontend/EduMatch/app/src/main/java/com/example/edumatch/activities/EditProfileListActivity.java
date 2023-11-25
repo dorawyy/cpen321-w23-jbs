@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -63,6 +64,28 @@ public class EditProfileListActivity extends AppCompatActivity {
                     MainActivity.class);
             startActivity(newIntent);
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Check the current view and decide what action to take
+        super.onBackPressed();
+        SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+        String userType = sharedPreferences.getString("userType", ""); // Assuming the key for user type is "type"
+        Intent newIntent;
+        switch (userType) {
+            case "tutee":
+                newIntent = new Intent(EditProfileListActivity.this, TuteeHomeActivity.class);
+                break;
+            case "tutor":
+                newIntent = new Intent(EditProfileListActivity.this, TutorHomeActivity.class);
+                break;
+            default:
+                // Handle unexpected cases or errors here
+                Toast.makeText(this, "Invalid user type", Toast.LENGTH_SHORT).show();
+                return;
+        }
+        startActivity(newIntent);
     }
 
 

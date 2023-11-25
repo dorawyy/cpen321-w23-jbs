@@ -49,6 +49,8 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
+    private TextView dayText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,8 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
     }
 
     private void initInvisibleFields() {
-
+        dayText = findViewById(R.id.selected_day);
+        dayText.setVisibility(View.GONE);
         if (!sharedPreferences.getBoolean("useGoogle", false) && !sharedPreferences.getString("username", "").isEmpty()) {
             GoogleIconButtonView googleView = findViewById(R.id.google);
             googleView.setVisibility(View.GONE);
@@ -149,7 +152,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
     // ChatGPT usage: Yes
     @SuppressLint("SetTextI18n")
     private void updateAvailability(String day) {
-        TextView dayText = findViewById(R.id.selected_day);
+
         currentDay = day;
         if (availabilityMap.containsKey(day)) {
             List<String> availability = availabilityMap.get(day);
@@ -159,7 +162,7 @@ public class AvailabilityActivity extends AppCompatActivity implements DayOfTheW
             availableTimesViews.setStartTime(startTime);
             availableTimesViews.setEndTime(endTime);
         }
-
+        dayText.setVisibility(View.VISIBLE);
         dayText.setText("Selected Day: " + day);
     }
 

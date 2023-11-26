@@ -98,14 +98,14 @@ public class SubjectChipView extends RelativeLayout {
 
 
         // Inside your onClickListener in SubjectChipView
-        this.setOnClickListener(v -> {
-            // Toggle the clicked state and update background color accordingly
-            isClicked = !isClicked;
-            updateBackgroundColor();
-            if(chipClickListener != null) {
-                chipClickListener.onChipClicked(SubjectChipView.this);
-            }
-        });
+//        this.setOnClickListener(v -> {
+//            // Toggle the clicked state and update background color accordingly
+//            isClicked = !isClicked;
+//            updateBackgroundColor();
+//            if(chipClickListener != null) {
+//                chipClickListener.onChipClicked(SubjectChipView.this);
+//            }
+//        });
     }
 
     // ChatGPT usage: Yes

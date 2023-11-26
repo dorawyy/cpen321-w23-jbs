@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Set;
 
 public class TuteeHomeActivity extends AppCompatActivity {
-    private FlexboxLayout chipContainer;
+    private LinearLayout chipContainer;
 
 
     StringBuilder apiUrlBuilder;

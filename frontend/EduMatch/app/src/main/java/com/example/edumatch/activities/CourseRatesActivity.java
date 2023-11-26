@@ -34,7 +34,7 @@ import java.util.Set;
 
 public class CourseRatesActivity extends AppCompatActivity {
 
-    private FlexboxLayout chipContainer;
+    private LinearLayout chipContainer;
 
     private LabelAndEditTextView tagText;
 

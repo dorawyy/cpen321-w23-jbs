@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -173,7 +174,7 @@ public class SignUpFlowTest {
 
         MainActivity mActivity = activityRule.getActivity();
 
-        onView(withText("CPEN 221")).inRoot(withDecorView(Matchers.not(Matchers.is(mActivity.getWindow().getDecorView())))).perform(click());
+        onView(withText(containsString("CPEN 221"))).inRoot(withDecorView(Matchers.not(Matchers.is(mActivity.getWindow().getDecorView())))).perform(click());
         onView(withId(R.id.add_button)).perform(click());
 
         Espresso.onView(withId(R.id.chip_container))
@@ -193,7 +194,7 @@ public class SignUpFlowTest {
 
 
         // Scroll to find the AutoCompleteTextView with the desired suggestion
-        onView(withText("CPEN 321")).inRoot(withDecorView(Matchers.not(Matchers.is(mActivity.getWindow().getDecorView())))).perform(click());
+        onView(withText(containsString("CPEN 321"))).inRoot(withDecorView(Matchers.not(Matchers.is(mActivity.getWindow().getDecorView())))).perform(click());
 
         onView(withId(R.id.add_button)).perform(click());
 

@@ -11,16 +11,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -114,7 +110,13 @@ public class UniversityInformationActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // Not needed in this context
+                if (s.length() > 8) {
+                    // Keep only the first 8 characters
+                    String newText = s.subSequence(0, 8).toString();
+
+                    // Update the text in the EditText
+                    s.replace(0, s.length(), newText);
+                }
             }
         });
     }
@@ -122,30 +124,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
     // ChatGPT usage: Yes
     private void initSuggestions(String[] suggestions) {
         customAutoCompleteView = findViewById(R.id.search_courses_auto_complete);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.horizontal_dropdown_item, suggestions) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                if (position < suggestions.length) {
-                    // Display both code and title in the dropdown suggestions
-                    ((TextView) view.findViewById(R.id.drop_down_item))
-                            .setText(suggestions[position]);
-                }
-                return view;
-            }
-        };
-
-        customAutoCompleteView.setThreshold(1); // Set the threshold to 1 so that suggestions appear on the first character
-        customAutoCompleteView.setAdapter(adapter);
-
-        customAutoCompleteView.setOnItemClickListener((parent, view, position, id) -> {
-            // Set only the code in the AutoCompleteTextView when an item is selected
-            String selectedCode = suggestions[position].split("\n")[0];
-            Log.d("CourseSelection",selectedCode);
-            customAutoCompleteView.setText(selectedCode);
-        });
+        customAutoCompleteView.setSuggestions(suggestions);
     }
 
 
@@ -160,7 +139,6 @@ public class UniversityInformationActivity extends AppCompatActivity {
         Button addButton = findViewById(R.id.add_button); // Initialize the "add_button"
         addButton.setOnClickListener(view -> {
             String enteredText = customAutoCompleteView.getAutoCompleteTextView().getText().toString();
-            Log.d("CourseSelection",enteredText);
             if (!enteredText.isEmpty()) {
 
                 if (coursesArray != null && !Arrays.asList(coursesArray).contains(enteredText)) {
@@ -234,7 +212,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
     }
 
     // ChatGPT usage: Yes
-    private boolean updatePreferences() {
+    private void updatePreferences() {
 
         // Store the relevant data in SharedPreferences
         editor.putString("university", selectedUniversity);
@@ -249,46 +227,30 @@ public class UniversityInformationActivity extends AppCompatActivity {
         for (int i = 0; i < viewIds.length; i++) {
             LabelAndEditTextView view = findViewById(viewIds[i]);
             String userDataString = view.getEnterUserEditText().getText().toString();
-
-            if (viewIds[i] == R.id.select_year_level) {
-                if (TextUtils.isDigitsOnly(userDataString)) {
-                    editor.putString(keys[i], userDataString);
-                } else {
-                    // Display an error for invalid year level
-                    view.getEnterUserEditText().setError("Invalid year level. Please enter a number.");
-                    return false;
-                    // Optionally, you may want to clear the invalid value
-                    // editor.remove(keys[i]);
-                }
-            } else {
-                editor.putString(keys[i], userDataString);
-            }
+            editor.putString(keys[i], userDataString);
         }
 
         editor.commit();
-        return true;
     }
 
     // ChatGPT usage: Yes
     private void goToNewActivity() {
         Class nextClass;
-        boolean success = updatePreferences();
-        if(success){
-            printSharedPreferences(sharedPreferences);
-            if(Objects.equals(sharedPreferences.getString("userType",""), "tutor")){
-                nextClass = CourseRatesActivity.class;
+        updatePreferences();
+        printSharedPreferences(sharedPreferences);
+        if(Objects.equals(sharedPreferences.getString("userType",""), "tutor")){
+            nextClass = CourseRatesActivity.class;
+        } else {
+            if(sharedPreferences.getBoolean("isEditing",false)){
+                JSONObject request = constructEditUniversityInformation();
+                putEditProfile(request,UniversityInformationActivity.this);
+                nextClass =  EditProfileListActivity.class;
             } else {
-                if(sharedPreferences.getBoolean("isEditing",false)){
-                    JSONObject request = constructEditUniversityInformation();
-                    putEditProfile(request,UniversityInformationActivity.this);
-                    nextClass =  EditProfileListActivity.class;
-                } else {
-                    nextClass = LocationInformationActivity.class;
-                }
+                nextClass = LocationInformationActivity.class;
             }
-            Intent newIntent = new Intent(UniversityInformationActivity.this, nextClass);
-            startActivity(newIntent);
         }
+        Intent newIntent = new Intent(UniversityInformationActivity.this, nextClass);
+        startActivity(newIntent);
     }
 
     private void initSharedPreferences() {

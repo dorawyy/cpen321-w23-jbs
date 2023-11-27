@@ -18,38 +18,24 @@
         app:contentInsetRight="0dp">
 
         <ImageButton
-            android:id="@+id/appointments"
+            android:id="@+id/back_button"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_calendar"
-            android:paddingLeft="16dp"
+            android:src="@drawable/back_button"
+            android:paddingLeft="12dp"
             android:contentDescription="Settings" />
 
         <!-- Logo centered -->
-
-
         <ImageView
             android:id="@+id/logo"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_gravity="center"
-            android:src="@mipmap/logo_foreground"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground"/>
+            android:src="@mipmap/logo_foreground" />
 
-        <!-- Settings button on the right -->
-        <ImageButton
-            android:id="@+id/settings"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_gravity="end|center_vertical"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/baseline_settings_24"
-            android:paddingRight="16dp"
-            android:contentDescription="Settings" />
+
 
     </androidx.appcompat.widget.Toolbar>
 

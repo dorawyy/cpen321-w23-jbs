@@ -60,11 +60,8 @@ public class TuteeHomeActivity extends AppCompatActivity {
         subjectChipViews = new ArrayList<>();
         apiUrlBuilder = new StringBuilder(apiUrl);
         initializeCourseTags(courses);
-        //fetchAllData();
 
     }
-
-
 
     private void initializeChat() {
         FloatingActionButton fabChat = findViewById(R.id.fabChat);
@@ -76,6 +73,7 @@ public class TuteeHomeActivity extends AppCompatActivity {
             }
         });
     }
+
     // ChatGPT usage: Yes
     private void initializeCourseTags(Set<String> courses) {
         courseList = new ArrayList<>(courses);
@@ -131,7 +129,6 @@ public class TuteeHomeActivity extends AppCompatActivity {
         courseApiUrlBuilder.append("course=").append("&page=1");
         jsonResponse = getTuteeHome(courseApiUrlBuilder, TuteeHomeActivity.this);
 
-
         try {
             JSONArray tutorsArray = jsonResponse.getJSONArray("tutors");
 
@@ -156,13 +153,23 @@ public class TuteeHomeActivity extends AppCompatActivity {
 
 
                 TutorRow tutorRow = new TutorRow(TuteeHomeActivity.this);
+                // Set the margins for the appointmentView
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                // Set your desired space size in dp, for example, 8dp as an example
+                int spaceInPixels = (int) (8 * getResources().getDisplayMetrics().density);
+                layoutParams.setMargins(0, 0, 0, spaceInPixels);
+                tutorRow.setLayoutParams(layoutParams);
+
+
                 tutorRow.setTutorName(tutorName);
                 tutorRow.setTutorDetails(tutorDetails);
                 tutorRow.setId(tutorID);
                 tutorRow.setCourses(courses.trim());
                 tutorRow.setCourseCode(courses.trim());
-                tutorRow.setPrice("Rating: " + tutorRating);
-
+                tutorRow.setPrice(tutorRating);
                 tutorRow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -177,12 +184,11 @@ public class TuteeHomeActivity extends AppCompatActivity {
                 tutorList.addView(tutorRow);
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Toast.makeText(TuteeHomeActivity.this, "No recommended tutors for this course yet!", Toast.LENGTH_SHORT).show();
         }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // Update your UI elements here
                 tutorList.invalidate();
                 tutorList.requestLayout();
             }
@@ -217,25 +223,38 @@ public class TuteeHomeActivity extends AppCompatActivity {
                 JSONArray tutorCourses = tutorObject.getJSONArray("courses");
                 String tutorRating = tutorObject.getString("rating");
                 courses = "";
-                for (int j = 0; j < tutorCourses.length(); j++) {
-                    String course;
+                String course = tutorCourses.getString(0).trim();
+                courses = courses + course + ", ";
+                for (int j = 1; j < tutorCourses.length() - 1; j++) {
                     try {
                         course = tutorCourses.getString(j).trim();
                     } catch (JSONException e) {
                         course = "";
                     }
-                    courses = courses + " " + course;
+                    courses = courses + course + ", ";
                 }
+                course = tutorCourses.getString(tutorCourses.length() - 1).trim();
+                courses = courses + course;
 
 
                 TutorRow tutorRow = new TutorRow(TuteeHomeActivity.this);
+                // Set the margins for the appointmentView
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                // Set your desired space size in dp, for example, 8dp as an example
+                int spaceInPixels = (int) (8 * getResources().getDisplayMetrics().density);
+                layoutParams.setMargins(0, 0, 0, spaceInPixels);
+                tutorRow.setLayoutParams(layoutParams);
+
 
                 tutorRow.setTutorName(tutorName);
                 tutorRow.setTutorDetails(tutorDetails);
                 tutorRow.setId(tutorID);
                 tutorRow.setCourses(courses.trim());
                 tutorRow.setCourseCode(courses.trim());
-                tutorRow.setPrice("Rating: " + tutorRating);
+                tutorRow.setPrice(tutorRating);
 
 
 

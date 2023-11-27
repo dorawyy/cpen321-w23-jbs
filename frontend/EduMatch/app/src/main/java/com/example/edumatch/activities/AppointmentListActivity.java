@@ -34,14 +34,14 @@ public class AppointmentListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         SharedPreferences sharedPreferences = getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         if (sharedPreferences.getString("userType","tutee").equals("tutor")){
             setContentView(R.layout.activity_appointment_list_tutor);
         } else {
             setContentView(R.layout.activity_appointment_list);
         }
-        Log.d("appt2", sharedPreferences.getString("userType","tutee"));
-        JSONObject list = getAppointments(this);
+       JSONObject list = getAppointments(this);
         try {
             makeComponents(list.getJSONArray("appointments"));
         } catch (JSONException e) {
@@ -57,13 +57,24 @@ public class AppointmentListActivity extends AppCompatActivity {
                 JSONObject appointmentObject = appointments.getJSONObject(i);
                 LayoutInflater inflater = LayoutInflater.from(this);
                 View appointmentView = inflater.inflate(R.layout.appointment_component, null);
+                // Set the margins for the appointmentView
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                // Set your desired space size in dp, for example, 8dp as an example
+                int spaceInPixels = (int) (8 * getResources().getDisplayMetrics().density);
+                layoutParams.setMargins(0, 0, 0, spaceInPixels);
+                appointmentView.setLayoutParams(layoutParams);
+
                 String course = appointmentObject.getString("course");
                 String apptId = appointmentObject.getString("_id");
                 appointmentView.setTag(apptId);
 
                 String pstStartTime = appointmentObject.getString("pstStartDatetime");
                 String pstEndTime = appointmentObject.getString("pstEndDatetime");
-                String status = appointmentObject.getString("status");
+                String status = appointmentObject.getString("status").toUpperCase();
+                //status = status.substring(0, 1).toUpperCase() + status.substring(1).toLowerCase();
 
                 JSONArray participantsInfo = appointmentObject.getJSONArray("participantsInfo");
 
@@ -82,7 +93,7 @@ public class AppointmentListActivity extends AppCompatActivity {
                 courseText.setText(course);
                 TextView nameText = appointmentView.findViewById(R.id.tutorName);
                 nameText.setText(tutorName);
-                Button statusB = appointmentView.findViewById(R.id.statusButton);
+                TextView statusB = appointmentView.findViewById(R.id.statusButton);
                 statusB.setText(status);
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");

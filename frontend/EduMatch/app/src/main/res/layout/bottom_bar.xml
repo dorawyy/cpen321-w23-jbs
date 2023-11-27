@@ -1,0 +1,37 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#AAAA"
+    android:padding="16dp"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <ImageButton
+    android:id="@+id/btn_favorite"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:src="@drawable/ic_calendar"
+        android:contentDescription="Calendar" />
+
+
+    <ImageButton
+        android:id="@+id/btn_playlist"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Home"
+        android:src="@drawable/ic_home" />
+
+<ImageButton
+android:id="@+id/btn_notes"
+android:layout_width="0dp"
+android:layout_height="wrap_content"
+android:layout_weight="1"
+android:background="?attr/selectableItemBackgroundBorderless"
+android:src="@drawable/baseline_mode_comment_24"
+    android:contentDescription="Chat" />
+    </LinearLayout>

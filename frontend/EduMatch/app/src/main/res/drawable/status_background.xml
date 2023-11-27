@@ -1,0 +1,6 @@
+<!-- res/drawable/status_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="4dp" />
+    <solid android:color="#CD91C6FF" />
+
+</shape>

@@ -3,21 +3,15 @@ const mockMongoose = require("mongoose")
 const momenttz = require("moment-timezone")
 const db = require("../../../db");
 const { authJwt, account } = require("../../../middleware")
-const googleUtils = require("../../../utils/google.utils")
 
 const { app } = require('../../utils/express.mock.utils');
 const { PST_TIMEZONE, AppointmentStatus } = require('../../../constants/appointment.status');
-const { mockGetOverallRating } = require('../../utils/rating.utils');
-const { MOCKED_VALUES } = require('../../utils/googleapis.mock.utils');
 const { UserType } = require('../../../constants/user.types');
 
 const ENDPOINT = "/appointment"
 
-var mockErrorMsg
 var mockAddedAppts = []
 var mockAddedUsers = []
-var mockUnableToCreateUser = false
-var mockUnableToUpdate = false
 
 // ChatGPT Usage: Partial
 jest.mock('../../../db', () => {
@@ -44,9 +38,6 @@ jest.mock("../../../middleware")
 const Appointment = db.appointment
 const mockUserId = new mockMongoose.Types.ObjectId()
 beforeEach(() => {
-    mockUnableToCreateUser = false
-    mockUnableToUpdate = false
-    mockErrorMsg = undefined
     mockAddedAppts = []
     mockAddedUsers = []
     var mockUser = {

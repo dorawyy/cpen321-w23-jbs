@@ -3,12 +3,9 @@ const mockMongoose = require("mongoose")
 const momenttz = require("moment-timezone")
 const db = require("../../../db");
 const { authJwt, account } = require("../../../middleware")
-const googleUtils = require("../../../utils/google.utils")
 
 const { app } = require('../../utils/express.mock.utils');
 const { PST_TIMEZONE, AppointmentStatus } = require('../../../constants/appointment.status');
-const { mockGetOverallRating } = require('../../utils/rating.utils');
-const { MOCKED_VALUES } = require('../../utils/googleapis.mock.utils');
 const { UserType } = require('../../../constants/user.types');
 const { google } = require('googleapis');
 
@@ -240,7 +237,6 @@ beforeEach(() => {
 
 
 const User = db.user
-const Appointment = db.appointment
 
 // Assuming valid token
 authJwt.verifyJwt.mockImplementation((req, res, next) => {

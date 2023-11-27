@@ -167,7 +167,7 @@ if (env === 'prod') {
     });
 } else {
     // LOCAL
-    const server = app.listen(PORT, () => {
+    app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT} locally.`);
     });
 }

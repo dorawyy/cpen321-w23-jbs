@@ -3,12 +3,9 @@ const mockMongoose = require("mongoose")
 const mockMoment = require("moment-timezone")
 const db = require("../../../db");
 const { authJwt, account } = require("../../../middleware")
-const mockGoogleUtils = require("../../../utils/google.utils")
 
 const { app } = require('../../utils/express.mock.utils');
 const { PST_TIMEZONE, AppointmentStatus } = require('../../../constants/appointment.status');
-const { mockGetOverallRating } = require('../../utils/rating.utils');
-const { MOCKED_VALUES } = require('../../utils/googleapis.mock.utils');
 const { UserType } = require('../../../constants/user.types');
 const { google } = require('googleapis');
 
@@ -190,7 +187,6 @@ jest.mock('../../../db', () => {
 jest.mock("../../../middleware")
 
 const User = db.user
-const Appointment = db.appointment
 
 const mockTutorId = new mockMongoose.Types.ObjectId()
 const mockTuteeId = new mockMongoose.Types.ObjectId() 
@@ -611,10 +607,6 @@ describe("Book appointment for a manually-signed-up user", () => {
         }
 
         date = date.format("YYYY-MM-DD")
-
-        var tzOffset = mockMoment(date)
-            .tz(PST_TIMEZONE)
-            .format('Z')
         
         const pstStartDatetime = mockAddedAppts[3].pstStartDatetime
         const pstEndDatetime = mockAddedAppts[3].pstEndDatetime

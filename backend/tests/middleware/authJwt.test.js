@@ -14,7 +14,6 @@ describe("Verify JWT", () => {
         var initResult = initReqResMock()
         var req = initResult.req
         var res = initResult.res
-        var resSendMock = initResult.resSendMock
         req.header = jest.fn(() => `Bearer ${jwtToken}`)
         var next = jest.fn()
 

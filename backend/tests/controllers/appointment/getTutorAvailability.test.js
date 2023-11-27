@@ -2,16 +2,10 @@ const request = require('supertest');
 const mockMongoose = require("mongoose")
 const momenttz = require("moment-timezone")
 const db = require("../../../db");
-const { authJwt, account } = require("../../../middleware")
-const { google } = require('googleapis');
 
-const googleUtils = require("../../../utils/google.utils")
 
 const { app } = require('../../utils/express.mock.utils');
 const { PST_TIMEZONE, AppointmentStatus } = require('../../../constants/appointment.status');
-const { mockGetOverallRating } = require('../../utils/rating.utils');
-const { MOCKED_VALUES } = require('../../utils/googleapis.mock.utils');
-const { UserType } = require('../../../constants/user.types');
 const { default: mongoose } = require('mongoose');
 
 const ENDPOINT = "/user/availability"
@@ -169,7 +163,6 @@ jest.mock('../../../db', () => {
 
 jest.mock("../../../middleware")
 
-const mockUserId = new mockMongoose.Types.ObjectId()
 beforeEach(() => {
     mockUnableToCreateUser = false
     mockUnableToUpdate = false
@@ -181,7 +174,6 @@ beforeEach(() => {
 
 
 const User = db.user
-const Appointment = db.appointment
 
 // Interface GET https://edumatch.canadacentral.cloudapp.azure.com/user/availability?userId=123&date="2023-12-25"
 describe("Get tutor availability for a Google Calendar user", () => {

@@ -1,6 +1,5 @@
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
-const { google } = require('googleapis');
 const mongoose = require('mongoose');
 
 const { MOCKED_VALUES } = require('../../utils/googleapis.mock.utils');

@@ -3,12 +3,9 @@ const mockMongoose = require("mongoose")
 const momenttz = require("moment-timezone")
 const db = require("../../../db");
 const { authJwt, account } = require("../../../middleware")
-const googleUtils = require("../../../utils/google.utils")
 
 const { app } = require('../../utils/express.mock.utils');
 const { PST_TIMEZONE, AppointmentStatus } = require('../../../constants/appointment.status');
-const { mockGetOverallRating } = require('../../utils/rating.utils');
-const { MOCKED_VALUES } = require('../../utils/googleapis.mock.utils');
 const { UserType } = require('../../../constants/user.types');
 
 const ENDPOINT = "/appointments"
@@ -16,8 +13,6 @@ const ENDPOINT = "/appointments"
 var mockErrorMsg
 var mockAddedAppts = []
 var mockAddedUsers = []
-var mockUnableToCreateUser = false
-var mockUnableToUpdate = false
 var mockMoment = momenttz
 const MOCK_PST_TIMEZONE = PST_TIMEZONE
 
@@ -73,12 +68,9 @@ jest.mock('../../../db', () => {
 
 jest.mock("../../../middleware")
 
-const Appointment = db.appointment
 const mockUserId = new mockMongoose.Types.ObjectId()
 
 beforeEach(() => {
-    mockUnableToCreateUser = false
-    mockUnableToUpdate = false
     mockErrorMsg = undefined
     mockAddedAppts = []
     mockAddedUsers = []

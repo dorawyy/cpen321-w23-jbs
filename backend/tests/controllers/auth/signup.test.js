@@ -62,8 +62,6 @@ beforeEach(() => {
     mockAddedUsers = []
 })
 
-const User = db.user
-
 // Interface POST https://edumatch.canadacentral.cloudapp.azure.com/api/auth/signup
 describe("Manual sign up", () => {
     // ChatGPT Usage: No

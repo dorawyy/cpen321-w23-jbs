@@ -99,7 +99,7 @@ describe("Manual sign up", () => {
         expect(addedUser.recommendationWeights).toBeDefined()
         for (var key of Object.keys(userData)) {
             if (key == 'password') {
-                passwordIsValid = bcrypt.compareSync(
+                var passwordIsValid = bcrypt.compareSync(
                     userData.password,
                     addedUser.password
                 )

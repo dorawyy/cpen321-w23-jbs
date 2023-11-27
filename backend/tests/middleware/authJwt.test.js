@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { verifyJwt } = require('../../middleware/authJwt');
 const { initReqResMock } = require('../utils/express.mock.utils');
 
-SECRET_KEY = process.env.SECRET_KEY
+const SECRET_KEY = process.env.SECRET_KEY
 
 describe("Verify JWT", () => {
     // ChatGPT usage: Yes

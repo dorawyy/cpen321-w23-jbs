@@ -90,6 +90,7 @@ describe("Verify account status", () => {
 
         await account.verifyAccountStatus(req, res, next)
             .catch(err => {
+                console.log(err)
                 expect(db.user.findById).toHaveBeenCalledWith(userId);
                 expect(res.status).toHaveBeenCalledWith(500);
                 expect(resSendMock).toHaveBeenCalledWith({ message: errorMessage });

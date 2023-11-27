@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.AdminUserProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AppointmentListActivity"
             android:exported="false" />
         <activity

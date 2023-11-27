@@ -18,7 +18,8 @@ public class AdminHelper {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 
         JSONObject jsonResponse = sendHttpRequest(apiUrl.toString(),sharedPreferences.getString("jwtToken", ""), "GET", null);
-
+        Log.d("adminGet", apiUrl.toString());
+        Log.d("adminGet", jsonResponse.toString());
         String logTag = "AdminGet";
 
         return handleGetResponse(context,jsonResponse,logTag);

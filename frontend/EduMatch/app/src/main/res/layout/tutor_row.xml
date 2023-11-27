@@ -44,13 +44,29 @@
                 android:layout_marginStart="8dp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_price"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text=""
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_star"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="2dp" />
+
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginStart="6dp"/>
+
+        </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

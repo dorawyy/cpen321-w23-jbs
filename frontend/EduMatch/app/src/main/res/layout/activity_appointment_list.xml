@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.AppointmentListActivity">
 
-    <com.example.edumatch.views.AppBarCustomBackView
+    <com.example.edumatch.views.AppBarLogo
         android:id="@+id/go_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

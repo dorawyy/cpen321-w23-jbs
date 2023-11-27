@@ -1,5 +1,4 @@
 package com.example.edumatch.views;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -46,7 +45,7 @@ public class CustomAutoCompleteView extends RelativeLayout {
         this.suggestionsArray = suggestions;
 
         if (autoCompleteTextView != null) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, suggestions);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.horizontal_dropdown_item, suggestions);
             autoCompleteTextView.setAdapter(adapter);
         }
     }
@@ -59,7 +58,7 @@ public class CustomAutoCompleteView extends RelativeLayout {
         autoCompleteTextView = findViewById(R.id.auto_complete);
 
         if (suggestionsArray != null) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, suggestionsArray);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.horizontal_dropdown_item, suggestionsArray);
             autoCompleteTextView.setAdapter(adapter);
         }
 

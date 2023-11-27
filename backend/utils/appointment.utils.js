@@ -26,16 +26,15 @@ exports.isAvailable = async (user, pstStartDatetime, pstEndDatetime) => {
 // pending/accepted appointments
 async function cleanupUserAppointments(user) {
     var upcomingAppointments = []
-    if (user.appointments) {
-        for (var appt of user.appointments) {
-            var status = await getAppointmentStatus(appt._id)
-            var isCompleted = await appointmentIsCompleted(appt._id)
+    for (var appt of user.appointments) {
+        var status = await getAppointmentStatus(appt._id)
+        var isCompleted = await appointmentIsCompleted(appt._id)
 
-            if (!isCompleted && status !== AppointmentStatus.CANCELED) {
-                upcomingAppointments.push(appt)
-            }
+        if (!isCompleted && status !== AppointmentStatus.CANCELED) {
+            upcomingAppointments.push(appt)
         }
     }
+    
 
     return await 
         User.findByIdAndUpdate(
@@ -76,20 +75,20 @@ async function checkUserManualAvailability(
     user, pstStartDatetime, pstEndDatetime
 ) {
     if (user.manualAvailability && user.type === UserType.TUTOR) {
-        var requestedDay = momenttz(pstStartDatetime).format("dddd")
+        var requestedDay = momenttz(pstStartDatetime).tz(PST_TIMEZONE).format("dddd")
         var requestedStartTime = momenttz(
-            momenttz(pstStartDatetime).format("HH:mm"),
+            momenttz(pstStartDatetime).tz(PST_TIMEZONE).format("HH:mm"),
             "HH:mm"
-        )
+        ).tz(PST_TIMEZONE)
         var requestedEndTime = momenttz(
-            momenttz(pstEndDatetime).format("HH:mm"),
+            momenttz(pstEndDatetime).tz(PST_TIMEZONE).format("HH:mm"),
             "HH:mm"
-        )
+        ).tz(PST_TIMEZONE)
 
         var availabilities = user.manualAvailability.filter(avail => {
-            var availStart = momenttz(avail.startTime, "HH:mm")
-            var availEnd = momenttz(avail.endTime, "HH:mm")
-
+            var availStart = momenttz(avail.startTime, "HH:mm").tz(PST_TIMEZONE)
+            var availEnd = momenttz(avail.endTime, "HH:mm").tz(PST_TIMEZONE)
+            
             return avail.day === requestedDay
                 && availStart.isSameOrBefore(requestedStartTime)
                 && availEnd.isSameOrAfter(requestedEndTime)
@@ -129,15 +128,16 @@ async function checkUserManualAvailability(
             
         } 
     )
+
     return conflicts.length === 0
 }
 
 function isConflicted(appt1, appt2) {
-    var appt1Start = momenttz(appt1.pstStartDatetime)
-    var appt1End = momenttz(appt1.pstEndDatetime)
+    var appt1Start = momenttz(appt1.pstStartDatetime).tz(PST_TIMEZONE)
+    var appt1End = momenttz(appt1.pstEndDatetime).tz(PST_TIMEZONE)
 
-    var appt2Start = momenttz(appt2.pstStartDatetime)
-    var appt2End = momenttz(appt2.pstEndDatetime)
+    var appt2Start = momenttz(appt2.pstStartDatetime).tz(PST_TIMEZONE)
+    var appt2End = momenttz(appt2.pstEndDatetime).tz(PST_TIMEZONE)
 
     if (appt1End.isSameOrBefore(appt2Start) ||
         appt1Start.isSameOrAfter(appt2End)) {
@@ -158,6 +158,10 @@ async function checkUserAvailabilityWithGoogleCalendar(user, pstStartDatetime, p
                 pstStartDatetime,
                 pstEndDatetime
             }
+            if (user.type === UserType.TUTEE) {
+                return isConflicted(appt, newAppt) 
+                    && appt.status !== AppointmentStatus.CANCELED
+            }
             return isConflicted(appt, newAppt) 
                     && appt.status === AppointmentStatus.ACCEPTED
         } 
@@ -171,7 +175,7 @@ async function appointmentIsCompleted (appointmentId) {
         .then(appt => {
             var pstNow = momenttz().tz(PST_TIMEZONE)
             
-            if (momenttz(appt.pstEndDatetime).isAfter(pstNow)) {
+            if (momenttz(appt.pstEndDatetime).tz(PST_TIMEZONE).isAfter(pstNow)) {
                 return Promise.resolve(false)
             } else {
                 return Promise.resolve(true)

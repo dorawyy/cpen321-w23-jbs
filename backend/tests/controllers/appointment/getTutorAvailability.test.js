@@ -23,7 +23,7 @@ var mockUnableToCreateUser = false
 var mockUnableToUpdate = false
 var mockNoBusy = false
 
-// ChatGPT Usage: Partial
+// ChatGPT Usage: No
 jest.mock('googleapis', () => {
     return {
         google: {

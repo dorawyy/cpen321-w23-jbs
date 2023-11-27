@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,7 +32,7 @@ import java.util.List;
 import java.util.Set;
 
 public class TuteeHomeActivity extends AppCompatActivity {
-    private FlexboxLayout chipContainer;
+    private LinearLayout chipContainer;
 
 
     StringBuilder apiUrlBuilder;
@@ -62,8 +63,6 @@ public class TuteeHomeActivity extends AppCompatActivity {
 
     }
 
-
-
     private void initializeChat() {
         FloatingActionButton fabChat = findViewById(R.id.fabChat);
         fabChat.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +73,7 @@ public class TuteeHomeActivity extends AppCompatActivity {
             }
         });
     }
+
     // ChatGPT usage: Yes
     private void initializeCourseTags(Set<String> courses) {
         courseList = new ArrayList<>(courses);
@@ -84,17 +84,26 @@ public class TuteeHomeActivity extends AppCompatActivity {
                 subjectChipViews.add(subjectChipView);
                 int padding = (int) (4 * getResources().getDisplayMetrics().density);  // Convert 8dp to pixels
                 subjectChipView.setPadding(padding, padding, padding, padding);
+
                 subjectChipView.setChipClickListener(new SubjectChipHomeView.ChipClickListener() {
                     @Override
                     public void onChipClicked(SubjectChipHomeView chipView) {
-                        clearTutorList();
-                        selectedCourse = chipView.getText();
-                        if (!isAnyChipViewPressed()) {
-                            Log.d("mag", "all");
+                        if (selectedCourse != null && selectedCourse.equals(chipView.getText())) {
+                            // Deselect the currently selected chip and clear selection
+                            chipView.setClicked(false);
+                            selectedCourse = null;
                             fetchAllData();
+                            Log.d("maggie", "all");
                         } else {
-                            Log.d("mag", selectedCourse);
+                            // Update all chips to be deselected
+                            for (SubjectChipHomeView otherChipView : subjectChipViews) {
+                                otherChipView.setClicked(false);
+                            }
+                            // Select the clicked chip
+                            chipView.setClicked(true);
+                            selectedCourse = chipView.getText();
                             fetchCourseData(selectedCourse);
+                            Log.d("maggie", selectedCourse);
                         }
                     }
                 });
@@ -111,6 +120,7 @@ public class TuteeHomeActivity extends AppCompatActivity {
         }
     }
 
+
     // ChatGPT usage: Yes
     private void fetchAllData() {
         LinearLayout tutorList = findViewById(R.id.tutorList);
@@ -118,7 +128,6 @@ public class TuteeHomeActivity extends AppCompatActivity {
         StringBuilder courseApiUrlBuilder = new StringBuilder(apiUrl);
         courseApiUrlBuilder.append("course=").append("&page=1");
         jsonResponse = getTuteeHome(courseApiUrlBuilder, TuteeHomeActivity.this);
-
 
         try {
             JSONArray tutorsArray = jsonResponse.getJSONArray("tutors");
@@ -144,13 +153,23 @@ public class TuteeHomeActivity extends AppCompatActivity {
 
 
                 TutorRow tutorRow = new TutorRow(TuteeHomeActivity.this);
+                // Set the margins for the appointmentView
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                // Set your desired space size in dp, for example, 8dp as an example
+                int spaceInPixels = (int) (8 * getResources().getDisplayMetrics().density);
+                layoutParams.setMargins(0, 0, 0, spaceInPixels);
+                tutorRow.setLayoutParams(layoutParams);
+
+
                 tutorRow.setTutorName(tutorName);
                 tutorRow.setTutorDetails(tutorDetails);
                 tutorRow.setId(tutorID);
                 tutorRow.setCourses(courses.trim());
                 tutorRow.setCourseCode(courses.trim());
-                tutorRow.setPrice("Rating: " + tutorRating);
-
+                tutorRow.setPrice(tutorRating);
                 tutorRow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -165,8 +184,16 @@ public class TuteeHomeActivity extends AppCompatActivity {
                 tutorList.addView(tutorRow);
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Toast.makeText(TuteeHomeActivity.this, "No recommended tutors for this course yet!", Toast.LENGTH_SHORT).show();
         }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tutorList.invalidate();
+                tutorList.requestLayout();
+            }
+        });
+
     }
 
     // ChatGPT usage: Yes
@@ -174,12 +201,18 @@ public class TuteeHomeActivity extends AppCompatActivity {
         clearTutorList();
         LinearLayout tutorList = findViewById(R.id.tutorList); // Assuming you changed the ID to tutorListLayout
         StringBuilder courseApiUrlBuilder = new StringBuilder(apiUrl);
-        courseApiUrlBuilder.append("course=").append(courseName).append("&page=1");
+        courseApiUrlBuilder.append("courses=").append(courseName).append("&page=1");
 
         jsonResponse = getTuteeHome(courseApiUrlBuilder, TuteeHomeActivity.this);
+        Log.d("maggie", courseApiUrlBuilder.toString());
 
         try {
             JSONArray tutorsArray = jsonResponse.getJSONArray("tutors");
+
+            if (tutorsArray.length() == 0) {
+                // JSONArray is empty, display toast message
+                Toast.makeText(TuteeHomeActivity.this, "No recommended tutors for this course yet!", Toast.LENGTH_SHORT).show();
+            }
 
             for (int i = 0; i < tutorsArray.length(); i++) {
                 JSONObject tutorObject = tutorsArray.getJSONObject(i);
@@ -190,24 +223,38 @@ public class TuteeHomeActivity extends AppCompatActivity {
                 JSONArray tutorCourses = tutorObject.getJSONArray("courses");
                 String tutorRating = tutorObject.getString("rating");
                 courses = "";
-                for (int j = 0; j < tutorCourses.length(); j++) {
-                    String course;
+                String course = tutorCourses.getString(0).trim();
+                courses = courses + course + ", ";
+                for (int j = 1; j < tutorCourses.length() - 1; j++) {
                     try {
                         course = tutorCourses.getString(j).trim();
                     } catch (JSONException e) {
                         course = "";
                     }
-                    courses = courses + " " + course;
+                    courses = courses + course + ", ";
                 }
+                course = tutorCourses.getString(tutorCourses.length() - 1).trim();
+                courses = courses + course;
 
 
                 TutorRow tutorRow = new TutorRow(TuteeHomeActivity.this);
+                // Set the margins for the appointmentView
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                // Set your desired space size in dp, for example, 8dp as an example
+                int spaceInPixels = (int) (8 * getResources().getDisplayMetrics().density);
+                layoutParams.setMargins(0, 0, 0, spaceInPixels);
+                tutorRow.setLayoutParams(layoutParams);
+
+
                 tutorRow.setTutorName(tutorName);
                 tutorRow.setTutorDetails(tutorDetails);
                 tutorRow.setId(tutorID);
                 tutorRow.setCourses(courses.trim());
                 tutorRow.setCourseCode(courses.trim());
-                tutorRow.setPrice("Rating: " + tutorRating);
+                tutorRow.setPrice(tutorRating);
 
 
 
@@ -229,6 +276,15 @@ public class TuteeHomeActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Update your UI elements here
+                tutorList.invalidate();
+                tutorList.requestLayout();
+            }
+        });
 
 
     }

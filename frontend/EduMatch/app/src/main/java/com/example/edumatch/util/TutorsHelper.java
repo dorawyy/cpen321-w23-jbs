@@ -5,6 +5,7 @@ import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -14,7 +15,6 @@ public class TutorsHelper {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
 
         JSONObject jsonResponse = sendHttpRequest(apiUrl.toString(),sharedPreferences.getString("jwtToken", ""), "GET", null);
-
         String logTag = "TutorsGet";
 
         return handleGetResponse(context,jsonResponse,logTag);

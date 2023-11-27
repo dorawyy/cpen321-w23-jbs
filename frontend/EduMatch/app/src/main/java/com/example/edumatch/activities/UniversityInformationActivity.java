@@ -88,6 +88,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String enteredText = s.toString();
+                String[] concatCoursesArray;
                 if (enteredText.length() == 4) {
                     JSONObject response = getCourseCodes(UniversityInformationActivity.this,enteredText);
 
@@ -95,19 +96,27 @@ public class UniversityInformationActivity extends AppCompatActivity {
                         JSONArray jsonArray = response.getJSONArray("courses");
                         int length = jsonArray.length();
                         coursesArray = new String[length];
+                        concatCoursesArray = new String[length];
                         for (int i = 0; i < length; i++) {
-                            coursesArray[i] = jsonArray.getString(i);
+                            coursesArray[i] = jsonArray.getJSONObject(i).getString("code");
+                            concatCoursesArray[i] = jsonArray.getJSONObject(i).getString("code").concat("\n").concat(jsonArray.getJSONObject(i).getString("title"));
                         }
                     } catch (JSONException e) {
                         throw new CustomException("JSON parsing error");
                     }
-                    initSuggestions(coursesArray);
+                    initSuggestions(concatCoursesArray);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                // Not needed in this context
+                if (s.length() > 8) {
+                    // Keep only the first 8 characters
+                    String newText = s.subSequence(0, 8).toString();
+
+                    // Update the text in the EditText
+                    s.replace(0, s.length(), newText);
+                }
             }
         });
     }

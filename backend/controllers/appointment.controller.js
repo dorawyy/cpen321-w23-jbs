@@ -10,6 +10,7 @@ const Appointment = db.appointment
 
 // ChatGPT usage: No
 exports.cancelAppointment = async (req, res) => {
+    // cancelAppointment
     try {
         var userId = req.userId
         var apptId = req.query.appointmentId
@@ -79,6 +80,7 @@ exports.cancelAppointment = async (req, res) => {
 
 // ChatGPT usage: No
 exports.getTutorAvailability = async (req, res) => {
+    // getTutorAvailability
     try {
         var tutorId = req.query.userId
         var date = req.query.date
@@ -158,6 +160,7 @@ exports.getTutorAvailability = async (req, res) => {
 
 // ChatGPT usage: No
 exports.acceptAppointment = async (req, res) => {
+    // acceptAppointment
     try {
         var userId = req.userId
         var user = await User.findById(userId)   
@@ -243,6 +246,7 @@ exports.acceptAppointment = async (req, res) => {
 
 // ChatGPT usage: Partial
 exports.getUserAppointments = async (req, res) => {
+    // getUserAppointments
     try {
         var userId = req.userId
         var courses = req.query.courses ? req.query.courses.split(',') : []
@@ -301,6 +305,7 @@ exports.getUserAppointments = async (req, res) => {
 
 // ChatGPT usage: No
 exports.getAppointment = async (req, res) => {
+    // getAppointment
     var appointmentId = req.query.appointmentId
     if (!appointmentId) {
         return res.status(400).send({
@@ -344,6 +349,7 @@ exports.getAppointment = async (req, res) => {
 
 // ChatGPT usage: No
 exports.bookAppointment = async (req, res) => {
+    // bookAppointment
     try {
         const tutorId = req.body.tutorId
         var tutor = await User.findById(tutorId)

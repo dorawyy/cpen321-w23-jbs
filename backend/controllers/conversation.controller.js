@@ -5,6 +5,7 @@ const Conversation = db.conversation
 
 // ChatGPT usage: No
 exports.getList = async (req, res) => {
+    // getList
     try {
         const user = await User.findById(req.userId)
     
@@ -32,6 +33,7 @@ exports.getList = async (req, res) => {
 
 // ChatGPT usage: No
 exports.getConversation = async (req, res) => {
+    // getConversation
     try {
         if (req.query.page < 1)
             return res.status(400).send({ message: "Page number cannot be less than 1" })
@@ -76,6 +78,7 @@ exports.getConversation = async (req, res) => {
 
 // ChatGPT usage: No
 exports.create = async (req, res) => {
+    // create
     try {
         const user = await User.findById(req.userId)
         const otherUser = await User.findById(req.body.otherUserId)

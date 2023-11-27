@@ -81,14 +81,15 @@ describe("Verify sign up", () => {
     
     beforeEach(() => {
         mockAddedUsers = []
-        mockFindNum = 0
         mockFindFirst = false
         mockFindSecond = false
     })
 
     // ChatGPT Usage: No
     test('Should pass when token is provided', async() => {
-        var {req, res, resSendMock} = initReqResMock()
+        var initResult = initReqResMock()
+        var req = initResult.req
+        var res = initResult.res
         req.header = jest.fn(() => `Bearer mockToken`)
         var next = jest.fn()
 
@@ -100,7 +101,9 @@ describe("Verify sign up", () => {
 
     // ChatGPT Usage: No
     test('Should fail when userId query throws error', async() => {        
-        var {req, res, resSendMock} = initReqResMock()
+        var initResult = initReqResMock()
+        var req = initResult.req
+        var res = initResult.res
         var next = jest.fn()
 
         await checkDuplicateUsernameOrEmail(req, res, next)
@@ -112,7 +115,10 @@ describe("Verify sign up", () => {
     test('Should fail when username is taken', async() => {
         mockAddedUsers.push(mockTutee)
 
-        var {req, res, resSendMock} = initReqResMock()
+        var initResult = initReqResMock()
+        var req = initResult.req
+        var res = initResult.res
+        var resSendMock = initResult.resSendMock
         req.header = jest.fn()
         req.body = jest.fn(() => `username mockUsername`)
         var next = jest.fn()
@@ -128,7 +134,9 @@ describe("Verify sign up", () => {
         mockFindFirst = true
         mockAddedUsers.push(mockTutee)
 
-        var {req, res, resSendMock} = initReqResMock()
+        var initResult = initReqResMock()
+        var req = initResult.req
+        var res = initResult.res
         req.header = jest.fn()
         req.body = {
             username: "mockUsername",
@@ -147,7 +155,9 @@ describe("Verify sign up", () => {
         mockFindSecond = true
         mockAddedUsers.push(mockTutee)
 
-        var {req, res, resSendMock} = initReqResMock()
+        var initResult = initReqResMock()
+        var req = initResult.req
+        var res = initResult.res
         req.header = jest.fn()
         req.body = {
             username: "mockUsername",

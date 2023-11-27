@@ -15,7 +15,9 @@ describe("Verify account status", () => {
 
         // Mock the behavior of User.findById
         db.user.findById.mockResolvedValue(mockUser);
-        var {req, res, resSendMock} = initReqResMock()
+        var initResult = initReqResMock()
+        var req = initResult.req
+        var res = initResult.res
         var next = jest.fn()
 
         req.userId = userId
@@ -35,7 +37,10 @@ describe("Verify account status", () => {
         }
 
         db.user.findById.mockResolvedValue(mockUser);
-        var {req, res, resSendMock} = initReqResMock()
+        var initResult = initReqResMock()
+        var req = initResult.req
+        var res = initResult.res
+        var resSendMock = initResult.resSendMock
         var next = jest.fn()
 
         req.userId = userId
@@ -53,7 +58,10 @@ describe("Verify account status", () => {
         var userId = crypto.randomBytes(12).toString('hex')
         db.user.findById.mockResolvedValue(undefined);
 
-        var {req, res, resSendMock} = initReqResMock()
+        var initResult = initReqResMock()
+        var req = initResult.req
+        var res = initResult.res
+        var resSendMock = initResult.resSendMock
         var next = jest.fn()
 
         req.userId = userId
@@ -73,7 +81,9 @@ describe("Verify account status", () => {
         const errorMessage = 'Database error';
         db.user.findById.mockRejectedValue(new Error(errorMessage));
 
-        var {req, res, resSendMock} = initReqResMock()
+        var initResult = initReqResMock()
+        var req = initResult.req
+        var res = initResult.res
         var next = jest.fn()
         req.userId = userId
 

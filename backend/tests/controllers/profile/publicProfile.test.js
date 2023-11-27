@@ -39,9 +39,10 @@ jest.mock('../../../db', () => {
         })
 
     }
-    return {
-        user: MockUser,
+    var mockDb = {
+        user: MockUser
     }
+    return mockDb
 })
 
 beforeEach(() => {

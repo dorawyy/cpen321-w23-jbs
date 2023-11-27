@@ -65,9 +65,10 @@ jest.mock('../../../db', () => {
 
     }
 
-    return {
+    var mockDb = {
         appointment: MockAppointment
     }
+    return mockDb
 })
 
 jest.mock("../../../middleware")

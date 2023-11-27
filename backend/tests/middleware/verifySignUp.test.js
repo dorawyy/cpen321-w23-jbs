@@ -29,9 +29,10 @@ jest.mock('../../db', () => {
             }
         })
     }
-    return {
+    var mockDb = {
         user: MockUser
     }
+    return mockDb
 })
 
 describe("Verify sign up", () => {

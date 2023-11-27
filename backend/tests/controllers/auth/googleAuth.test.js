@@ -8,7 +8,7 @@ const { UserType } = require("../../../constants/user.types");
 
 const { app } = require('../../utils/express.mock.utils');
 
-SECRET_KEY = process.env.SECRET_KEY
+const SECRET_KEY = process.env.SECRET_KEY
 
 const ENDPOINT = "/api/auth/google"
 

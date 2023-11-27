@@ -1,7 +1,6 @@
 const request = require('supertest');
 const mockMongoose = require("mongoose")
 const momenttz = require("moment-timezone")
-const db = require("../../../db");
 const { authJwt, account } = require("../../../middleware")
 
 const { app } = require('../../utils/express.mock.utils');

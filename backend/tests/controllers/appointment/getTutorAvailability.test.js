@@ -337,7 +337,7 @@ describe("Get tutor availability for a manually-signed-up user", () => {
 
         var userId = mockUser._id.toString()
 
-        var tzOffset = momenttz(date)
+        tzOffset = momenttz(date)
             .tz(PST_TIMEZONE)
             .format('Z')
 

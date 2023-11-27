@@ -84,6 +84,7 @@ describe("Verify account status", () => {
         var initResult = initReqResMock()
         var req = initResult.req
         var res = initResult.res
+        var resSendMock = initResult.resSendMock
         var next = jest.fn()
         req.userId = userId
 
@@ -91,7 +92,7 @@ describe("Verify account status", () => {
             .catch(err => {
                 expect(db.user.findById).toHaveBeenCalledWith(userId);
                 expect(res.status).toHaveBeenCalledWith(500);
-                expect(sendMock).toHaveBeenCalledWith({ message: errorMessage });
+                expect(resSendMock).toHaveBeenCalledWith({ message: errorMessage });
                 expect(next).not.toHaveBeenCalled();
             })
     })

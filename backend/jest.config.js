@@ -1,3 +1,4 @@
+var path = require('path')
 /**
  * For a detailed explanation regarding each configuration property, visit:
  * https://jestjs.io/docs/configuration
@@ -141,7 +142,7 @@ const config = {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  setupFiles: [`${__dirname}/tests/jest.setup.js`],
+  setupFiles: [ path.join(__dirname, "/tests/jest.setup.js") ],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   // setupFilesAfterEnv: [],

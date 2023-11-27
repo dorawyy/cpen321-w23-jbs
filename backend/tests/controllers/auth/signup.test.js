@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
-const db = require("../../../db");
 const { UserType } = require("../../../constants/user.types");
 const { DEFAULT_RECOMMENDATION_WEIGHTS } = require("../../../controllers/auth.controller");
 
@@ -10,7 +9,7 @@ const { app } = require('../../utils/express.mock.utils');
 const { verifySignUp } = require("../../../middleware")
 
 
-SECRET_KEY = process.env.SECRET_KEY
+const SECRET_KEY = process.env.SECRET_KEY
 
 const ENDPOINT = "/api/auth/signup"
 

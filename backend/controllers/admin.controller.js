@@ -6,6 +6,7 @@ const Conversation = db.conversation
 
 // ChatGPT usage: No
 exports.ban = async (req, res) => {
+    // ban
     try {
         const admin = await User.findById(req.userId)
         if (admin.type != UserType.ADMIN)
@@ -31,6 +32,7 @@ exports.ban = async (req, res) => {
 
 // ChatGPT usage: No
 exports.unban = async (req, res) => {
+    // unban
     try {
         const admin = await User.findById(req.userId)
         if (admin.type != UserType.ADMIN)
@@ -53,6 +55,7 @@ exports.unban = async (req, res) => {
 
 // ChatGPT usage: No
 exports.getUsers = async (req, res) => {
+    // getUsers
     try {
         const admin = await User.findById(req.userId)
         if (admin.type != UserType.ADMIN)
@@ -78,6 +81,7 @@ exports.getUsers = async (req, res) => {
 
 // ChatGPT usage: No
 exports.getProfile = async (req, res) => {
+    // getProfile
     try {
         const admin = await User.findById(req.userId)
         if (admin.type != UserType.ADMIN)

@@ -24,9 +24,10 @@ jest.mock('../../../db', () => {
             return Promise.resolve(mockAddedUsers.find(user => user._id == id))
         })
     }
-    return {
+    var mockDb = {
         user: MockUser
     }
+    return mockDb
 })
 
 jest.mock("../../../middleware")

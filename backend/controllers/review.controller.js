@@ -6,6 +6,7 @@ const Appointment = db.appointment
 
 // ChatGPT usage: No
 exports.addReview = async (req, res) => {
+    // addReview
     try {        
         if (!req.body.appointmentId) {
             return res.status(400).send({message: "appointmentId is required"})
@@ -78,6 +79,7 @@ exports.addReview = async (req, res) => {
 
 // ChatGPT usage: No
 exports.getUserReviews = (req, res) => {
+    // getUserReviews
     var userId = req.query.userId
     if (!userId) {
         return res.status(400).send({ message: "Must specify userId" })
@@ -100,6 +102,7 @@ exports.getUserReviews = (req, res) => {
 
 // ChatGPT usage: No
 exports.getOverallRating = (userReviews) => {
+    // getOverallRating
     if (userReviews.length === 0) {
         return 0
     }

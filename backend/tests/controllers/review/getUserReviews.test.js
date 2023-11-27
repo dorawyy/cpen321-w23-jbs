@@ -1,12 +1,8 @@
 const request = require('supertest');
 const mongoose = require("mongoose")
-const momenttz = require("moment-timezone")
 const db = require("../../../db");
-const { authJwt, account } = require("../../../middleware")
 
 const { app } = require('../../utils/express.mock.utils');
-const { PST_TIMEZONE, AppointmentStatus } = require('../../../constants/appointment.status');
-const { mockGetOverallRating } = require('../../utils/rating.utils');
 
 const ENDPOINT = "/review"
 
@@ -72,10 +68,11 @@ jest.mock('../../../db', () => {
 
     }
 
-    return {
+    var mockDb = {
         user: MockUser,
         appointment: MockAppointment
     }
+    return mockDb
 })
 
 jest.mock("../../../middleware")
@@ -88,7 +85,6 @@ beforeEach(() => {
 
 
 const User = db.user
-const Appointment = db.appointment
 
 // Interface GET https://edumatch.canadacentral.cloudapp.azure.com/review?userId=123
 describe("Get user reviews", () => {

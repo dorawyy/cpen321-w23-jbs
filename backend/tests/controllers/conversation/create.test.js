@@ -39,10 +39,11 @@ jest.mock('../../../db', () => {
             return Promise.resolve(this)
         })
     }
-    return {
+    var mockDb = {
         user: MockUser,
         conversation: MockConversation
     }
+    return mockDb
 })
 
 jest.mock("../../../middleware")

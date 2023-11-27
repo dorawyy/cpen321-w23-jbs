@@ -1,6 +1,5 @@
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
-const { google } = require('googleapis');
 const mongoose = require('mongoose');
 
 const { MOCKED_VALUES } = require('../../utils/googleapis.mock.utils');
@@ -9,7 +8,7 @@ const { UserType } = require("../../../constants/user.types");
 
 const { app } = require('../../utils/express.mock.utils');
 
-SECRET_KEY = process.env.SECRET_KEY
+const SECRET_KEY = process.env.SECRET_KEY
 
 const ENDPOINT = "/api/auth/google"
 
@@ -81,9 +80,11 @@ jest.mock('../../../db', () => {
         })
 
     }
-    return {
-        user: MockUser,
+
+    var mockDb = {
+        user: MockUser
     }
+    return mockDb
 })
 
 beforeEach(() => {

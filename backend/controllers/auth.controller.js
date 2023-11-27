@@ -30,6 +30,7 @@ const User = db.user
 
 // ChatGPT usage: No
 exports.googleAuth = (req, res) => {
+    // googleAuth
     const idToken = req.body.idToken
     const authCode = req.body.authCode
 
@@ -53,7 +54,7 @@ exports.googleAuth = (req, res) => {
 // ChatGPT usage: No
 exports.signup = async (req, res) => {
     console.log("signing up user")
-
+    // signup
     try {
         var data = {...req.body}
         if (data.type && data.type === UserType.ADMIN) {
@@ -116,6 +117,7 @@ exports.signup = async (req, res) => {
 // ChatGPT usage: No
 // Adapted from: https://www.bezkoder.com/node-js-mongodb-auth-jwt/ 
 exports.login = (req, res) => {
+    // login
     User.findOne({
         username: req.body.username
     }).then(user => {

@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
-const db = require("../../../db");
 const { UserType } = require("../../../constants/user.types");
 const { DEFAULT_RECOMMENDATION_WEIGHTS } = require("../../../controllers/auth.controller");
 
@@ -10,7 +9,7 @@ const { app } = require('../../utils/express.mock.utils');
 const { verifySignUp } = require("../../../middleware")
 
 
-SECRET_KEY = process.env.SECRET_KEY
+const SECRET_KEY = process.env.SECRET_KEY
 
 const ENDPOINT = "/api/auth/signup"
 
@@ -47,9 +46,10 @@ jest.mock('../../../db', () => {
         })
 
     }
-    return {
-        user: MockUser,
+    var mockDb = {
+        user: MockUser
     }
+    return mockDb
 })
 
 jest.mock("../../../middleware")
@@ -60,8 +60,6 @@ beforeEach(() => {
     mockErrorMsg = undefined
     mockAddedUsers = []
 })
-
-const User = db.user
 
 // Interface POST https://edumatch.canadacentral.cloudapp.azure.com/api/auth/signup
 describe("Manual sign up", () => {
@@ -101,7 +99,7 @@ describe("Manual sign up", () => {
         expect(addedUser.recommendationWeights).toBeDefined()
         for (var key of Object.keys(userData)) {
             if (key == 'password') {
-                passwordIsValid = bcrypt.compareSync(
+                var passwordIsValid = bcrypt.compareSync(
                     userData.password,
                     addedUser.password
                 )

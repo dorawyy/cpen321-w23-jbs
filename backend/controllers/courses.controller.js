@@ -4,6 +4,7 @@ const API_URL =  "https://ubcgrades.com/api/v3"
 
 // ChatGPT usage: No
 exports.getCourseCodes = async (req, res) => {
+    // getCourseCodes
     var code = req.query.code
     if (!code) {
         return res.status(400).send({ message: "code is required" })

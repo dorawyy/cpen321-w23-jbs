@@ -6,6 +6,7 @@ const User = db.user
 
 // ChatGPT usage: No
 exports.checkedProfile = async (req, res) => {
+    // checkedProfile
     try {
         const tutor = await User.findById(req.body.tutorId)
         const tutee = await User.findById(req.userId)
@@ -39,6 +40,7 @@ exports.checkedProfile = async (req, res) => {
 
 // ChatGPT usage: No
 exports.contactedTutor = async (req, res) => {
+    // contactedTutor
     try {
         const tutor = await User.findById(req.body.tutorId)
         const tutee = await User.findById(req.userId)
@@ -79,6 +81,7 @@ exports.contactedTutor = async (req, res) => {
 
 // ChatGPT usage: No
 exports.scheduledAppointment = async (req, res) => {
+    // scheduledAppointment
     try {
         const tutor = await User.findById(req.body.tutorId)
         const tutee = await User.findById(req.userId)
@@ -123,6 +126,7 @@ exports.scheduledAppointment = async (req, res) => {
 
 // ChatGPT usage: No
 exports.reviewedTutor = async (req, res) => {
+    // reviewedTutor
     try {
         const tutor = await User.findById(req.body.tutorId)
         const tutee = await User.findById(req.userId)

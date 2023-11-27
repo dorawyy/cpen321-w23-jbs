@@ -3,12 +3,9 @@ const mockMongoose = require("mongoose")
 const momenttz = require("moment-timezone")
 const db = require("../../../db");
 const { authJwt, account } = require("../../../middleware")
-const googleUtils = require("../../../utils/google.utils")
 
 const { app } = require('../../utils/express.mock.utils');
 const { PST_TIMEZONE, AppointmentStatus } = require('../../../constants/appointment.status');
-const { mockGetOverallRating } = require('../../utils/rating.utils');
-const { MOCKED_VALUES } = require('../../utils/googleapis.mock.utils');
 const { UserType } = require('../../../constants/user.types');
 const { google } = require('googleapis');
 
@@ -151,16 +148,15 @@ jest.mock('../../../db', () => {
         })
 
     }
-
-    return {
+    var mockDb = {
         user: MockUser,
         appointment: MockAppointment
     }
+    return mockDb
 })
 
 jest.mock("../../../middleware")
 
-const User = db.user
 const Appointment = db.appointment
 const mockUserId = new mockMongoose.Types.ObjectId()
 beforeEach(() => {

@@ -34,9 +34,10 @@ jest.mock('../../../db', () => {
             }
         })
     }
-    return {
+    var mockDb = {
         user: MockUser
     }
+    return mockDb
 })
 
 jest.mock("../../../middleware")

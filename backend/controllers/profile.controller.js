@@ -24,6 +24,7 @@ const ALLOWED_TO_CHANGE = [
 
 // ChatGPT usage: No
 exports.getPublicProfile = (req, res) => {
+    // getPublicProfile
     
     var userId = req.query.userId
     if (!userId) {
@@ -65,6 +66,7 @@ exports.getPublicProfile = (req, res) => {
 
 // ChatGPT usage: No
 exports.getPrivateProfile = (req, res) => {
+    // getPrivateProfile
     var userId = req.userId
     User.findById(userId).select(EXCLUDED_FIELDS).then(user => {
         return res.status(200).send(user)
@@ -76,6 +78,7 @@ exports.getPrivateProfile = (req, res) => {
 
 // ChatGPT usage: No
 exports.editProfile = (req, res) => {
+    // editProfile
     var userId = req.userId
     var data = {}
     var keys = Object.keys(req.body)

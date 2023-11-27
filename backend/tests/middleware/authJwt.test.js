@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { verifyJwt } = require('../../middleware/authJwt');
 const { initReqResMock } = require('../utils/express.mock.utils');
 
-SECRET_KEY = process.env.SECRET_KEY
+const SECRET_KEY = process.env.SECRET_KEY
 
 describe("Verify JWT", () => {
     // ChatGPT usage: Yes
@@ -11,7 +11,9 @@ describe("Verify JWT", () => {
         var userId = crypto.randomBytes(12).toString('hex')
         const jwtToken = jwt.sign(userId, SECRET_KEY)
 
-        var {req, res, resSendMock} = initReqResMock()
+        var initResult = initReqResMock()
+        var req = initResult.req
+        var res = initResult.res
         req.header = jest.fn(() => `Bearer ${jwtToken}`)
         var next = jest.fn()
 
@@ -24,7 +26,10 @@ describe("Verify JWT", () => {
 
     // ChatGPT usage: Yes
     test("Return 403 for no token provided", async () => {
-        var {req, res, resSendMock} = initReqResMock()
+        var initResult = initReqResMock()
+        var req = initResult.req
+        var res = initResult.res
+        var resSendMock = initResult.resSendMock
         req.header = jest.fn()
         var next = jest.fn()
 
@@ -40,7 +45,10 @@ describe("Verify JWT", () => {
         var userId = crypto.randomBytes(12).toString('hex')
         const jwtToken = jwt.sign(userId, "wrong secret key")
         
-        var {req, res, resSendMock} = initReqResMock()
+        var initResult = initReqResMock()
+        var req = initResult.req
+        var res = initResult.res
+        var resSendMock = initResult.resSendMock
         req.header = jest.fn(() => `Bearer ${jwtToken}`)
         var next = jest.fn()
 
@@ -55,7 +63,10 @@ describe("Verify JWT", () => {
     test("Return 500 for an error", async () => {
         const errorMessage = 'Token verification error';
 
-        var {req, res, resSendMock} = initReqResMock()
+        var initResult = initReqResMock()
+        var req = initResult.req
+        var res = initResult.res
+        var resSendMock = initResult.resSendMock
         req.header = jest.fn(() => { throw new Error(errorMessage) })
         var next = jest.fn()
 

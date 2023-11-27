@@ -6,19 +6,9 @@ const { app } = require('../../utils/express.mock.utils');
 const { UserType } = require('../../../constants/user.types');
 const { LocationMode } = require('../../../constants/location.modes');
 const { DEFAULT_RECOMMENDATION_WEIGHTS } = require('../../../controllers/auth.controller');
-const { EXCLUDED_FIELDS } = require('../../../controllers/profile.controller');
 const { filterOutExcludedFields } = require('../../utils/profile.utils');
 
 const ENDPOINT = "/user/profile"
-
-const MOCK_EXCLUDED_FIELDS = [
-    "-_id",
-    "-googleId",
-    "-password",
-    "-googleOauth",
-    "-recommendationWeights",
-    "-hasSignedUp"
-]
 
 
 var mockErrorMsg
@@ -55,9 +45,10 @@ jest.mock('../../../db', () => {
         })
 
     }
-    return {
-        user: MockUser,
+    var mockDb = {
+        user: MockUser
     }
+    return mockDb
 })
 
 jest.mock("../../../middleware")

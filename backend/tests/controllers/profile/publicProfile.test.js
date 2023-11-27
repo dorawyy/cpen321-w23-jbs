@@ -39,9 +39,10 @@ jest.mock('../../../db', () => {
         })
 
     }
-    return {
-        user: MockUser,
+    var mockDb = {
+        user: MockUser
     }
+    return mockDb
 })
 
 beforeEach(() => {
@@ -75,13 +76,13 @@ describe("Get public profile", () => {
         ]
 
         for (var i = 0; i < 3; i++) {
-            if (i == 1) {
+            if (i === 1) {
                 testReview.push({ 
                     rating: 3, 
                     comment: 'Great tutor',
                     reviewerId: 'reviewer3'
                 })
-            } else if (i == 2) {
+            } else if (i === 2) {
                 testReview = []
             }
             const mockUserId = 'mockUserId';

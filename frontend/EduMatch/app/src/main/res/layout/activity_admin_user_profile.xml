@@ -7,6 +7,8 @@
     android:padding="16dp"
     android:background="#FFFFFF">
 
+
+
     <com.example.edumatch.views.AppBarLogo
         android:id="@+id/emptyBar"
         android:layout_width="match_parent"
@@ -14,6 +16,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+
 
 
     <TextView
@@ -80,51 +84,68 @@
         android:textSize="16sp"
         android:layout_marginBottom="16dp"/>
 
-
-
-    <!-- Description -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:text="Bio"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/bio"
-        android:background="@drawable/rounded_border"
-        android:text=""
+        android:text="No bio yet"
         android:textSize="16sp"
         android:layout_marginBottom="16dp"/>
 
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Studying at"-->
-<!--        android:textSize="20sp"-->
-<!--        android:textStyle="bold"-->
-<!--        android:layout_marginBottom="8dp"/>-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reviews"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
 
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:id="@+id/school"-->
-<!--        android:text=""-->
-<!--        android:textSize="16sp"-->
-<!--        android:layout_marginBottom="16dp"/>-->
 
-<!--    &lt;!&ndash; Major &ndash;&gt;-->
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Majoring In"-->
-<!--        android:textSize="20sp"-->
-<!--        android:textStyle="bold"-->
-<!--        android:layout_marginBottom="8dp"/>-->
 
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:id="@+id/major"-->
-<!--        android:text=""-->
-<!--        android:textSize="16sp"-->
-<!--        android:layout_marginBottom="16dp"/>-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/container"
+            android:orientation="vertical">
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Messages"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/messageContainer"
+            android:orientation="vertical">
+        </LinearLayout>
+
+    </ScrollView>
+
 
 
 
@@ -140,7 +161,7 @@
             android:layout_margin="16dp"
             android:layout_gravity="bottom|end"
             android:src="@drawable/baseline_mode_comment_24"
-            android:backgroundTint="@color/colorAccent"
+            android:backgroundTint="@color/main"
             android:contentDescription="Chat Button" />
 
     </FrameLayout>

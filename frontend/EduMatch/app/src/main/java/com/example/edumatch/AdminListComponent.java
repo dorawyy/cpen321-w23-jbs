@@ -20,6 +20,7 @@ public class AdminListComponent extends LinearLayout {
     private TextView typeTextView;
     private TextView usernameTextView;
     private Button activeButton;
+    public String currentStatus;
 
     public String apptId;
 
@@ -54,16 +55,18 @@ public class AdminListComponent extends LinearLayout {
             @Override
             public void onClick(View v) {
                 Button button = (Button) v;
-                String currentStatus = button.getText().toString();
+                currentStatus = button.getText().toString();
                 String userId = (String) button.getTag();
 
                 if ("ACTIVE".equalsIgnoreCase(currentStatus)) {
                     button.setText("BANNED");
                     banUser(userId, context);
+                    currentStatus = "Banned";
 
                 } else {
                     button.setText("ACTIVE");
                     unbanUser(userId, context);
+                    currentStatus = "Active";
                 }
             }
         });
@@ -73,8 +76,10 @@ public class AdminListComponent extends LinearLayout {
 
         if (user.getString(("isBanned")) == "true") {
             activeButton.setText("Banned");
+            currentStatus = "Banned";
         } else {
             activeButton.setText("Active");
+            currentStatus = "Active";
         }
 
         activeButton.setTag(user.getString("userId"));

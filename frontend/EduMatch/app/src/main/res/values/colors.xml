@@ -11,4 +11,5 @@
     <color name="pending_outline">#878787</color>
     <color name="confirmed">#C182BF70</color>
     <color name="confirmed_outline">#5F8E51</color>
+    <color name="main">#078BF0</color>
 </resources>

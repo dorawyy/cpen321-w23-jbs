@@ -53,4 +53,13 @@ public class AdminHelper {
         sendHttpRequest(apiUrl,sharedPreferences.getString("jwtToken", ""), "PUT", requestBody);
 
     }
+    // ChatGPT usage: Yes
+    public static JSONObject fetchAdminUser(String userId, Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+        String apiUrl = "https://edumatch.canadacentral.cloudapp.azure.com/admin/profile?userId=" + userId;
+        JSONObject jsonResponse = sendHttpRequest(apiUrl,sharedPreferences.getString("jwtToken", ""), "GET", null);
+        String logTag = "fetchAdminUser";
+
+        return handleGetResponse(context,jsonResponse,logTag);
+    }
 }

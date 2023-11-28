@@ -51,12 +51,6 @@ public class TuteeProfileActivity extends AppCompatActivity {
             String school = sharedPreferences.getString("school", "Nothing");
             screenSchool.setText(school);
 
-
-
-
-
-
-
             // Now you can get values from the shared preferences
             Set<String> subjects = sharedPreferences.getStringSet("courses", defaultCourses);
 

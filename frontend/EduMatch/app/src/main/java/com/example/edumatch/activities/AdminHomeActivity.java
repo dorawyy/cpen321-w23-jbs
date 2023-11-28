@@ -32,66 +32,73 @@ public class AdminHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_home);
 
-//        Button logOut = findViewById(R.id.logOut);
-//        logOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                clearPreferences();
-//                Intent newIntent = new Intent(AdminHomeActivity.this,
-//                        MainActivity.class);
-//                startActivity(newIntent);
-//
-//            }
-//        });
-//
-//        apiUrlBuilder = new StringBuilder(apiUrl);
-//        apiUrlBuilder.append("/admin/users");
-//
-//        JSONObject jsonResponse = getAdminHome(apiUrlBuilder,AdminHomeActivity.this);
-//
-//        try {
-//            JSONArray usersArray = jsonResponse.getJSONArray("users");
-//            Log.d("adminG", usersArray.toString());
-//
-//            LinearLayout linearLayout = findViewById(R.id.adminListComponentContainer);
-//
-//            for (int i = 0; i < usersArray.length(); i++) {
-//                JSONObject user = usersArray.getJSONObject(i);
-//
-//                AdminListComponent adminListComponent = new AdminListComponent(this);
-//                adminListComponent.populate(user);
-//                adminListComponent.setNameText(user.getString("displayedName"));
-//                if (user.getString("username").equals("")) {
-//                    adminListComponent.setUsernameText("Signed in with Google");
-//                } else {
-//                    adminListComponent.setUsernameText(user.getString("username"));
-//                }
-//                adminListComponent.setType(user.getString("type"));
-//                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-//                        LinearLayout.LayoutParams.MATCH_PARENT,
-//                        LinearLayout.LayoutParams.WRAP_CONTENT
-//                );
-//                layoutParams.setMargins(0, 16, 0, 16);
-//                adminListComponent.setLayoutParams(layoutParams);
-//
-//                adminListComponent.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent profileIntent = new Intent(AdminHomeActivity.this, ProfileActivity.class);
-//                        try {
-//                            profileIntent.putExtra("USER_ID", user.getString("username"));
-//                        } catch (JSONException e) {
-//                            profileIntent.putExtra("USER_ID", "");
-//                        }
-//                        startActivity(profileIntent);
-//                    }
-//                });
-//
-//                linearLayout.addView(adminListComponent);
-//            }
-//        } catch (JSONException e) {
-//            Toast.makeText(AdminHomeActivity.this, "No users yet!", Toast.LENGTH_SHORT).show();
-//        }
+        Button logOut = findViewById(R.id.logOut);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearPreferences();
+                Intent newIntent = new Intent(AdminHomeActivity.this,
+                        MainActivity.class);
+                startActivity(newIntent);
+
+            }
+        });
+
+        apiUrlBuilder = new StringBuilder(apiUrl);
+        apiUrlBuilder.append("/admin/users");
+
+        JSONObject jsonResponse = getAdminHome(apiUrlBuilder,AdminHomeActivity.this);
+
+        try {
+            JSONArray usersArray = jsonResponse.getJSONArray("users");
+            Log.d("adminG", usersArray.toString());
+
+            LinearLayout linearLayout = findViewById(R.id.adminListComponentContainer);
+
+            for (int i = 0; i < usersArray.length(); i++) {
+                JSONObject user = usersArray.getJSONObject(i);
+
+                AdminListComponent adminListComponent = new AdminListComponent(this);
+                adminListComponent.populate(user);
+                adminListComponent.setNameText(user.getString("displayedName"));
+                if (user.getString("username").equals("")) {
+                    adminListComponent.setUsernameText("Signed in with Google");
+                } else {
+                    adminListComponent.setUsernameText(user.getString("username"));
+                }
+                adminListComponent.setType(user.getString("type"));
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                layoutParams.setMargins(0, 16, 0, 16);
+                adminListComponent.setLayoutParams(layoutParams);
+
+                adminListComponent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent profileIntent = new Intent(AdminHomeActivity.this, AdminUserProfileActivity.class);
+                        try {
+                            profileIntent.putExtra("USER_ID", user.getString("userId"));
+                            profileIntent.putExtra("USERNAME", user.getString("username"));
+                            profileIntent.putExtra("TYPE", user.getString("type"));
+                            profileIntent.putExtra("DISPLAY_ID", user.getString("displayedName"));
+                            profileIntent.putExtra("STATUS", adminListComponent.currentStatus);
+                        } catch (JSONException e) {
+                            profileIntent.putExtra("USERNAME", "");
+                            profileIntent.putExtra("TYPE", "");
+                            profileIntent.putExtra("DISPLAY_ID", "");
+                            profileIntent.putExtra("STATUS", "");
+                        }
+                        startActivity(profileIntent);
+                    }
+                });
+
+                linearLayout.addView(adminListComponent);
+            }
+        } catch (JSONException e) {
+            Toast.makeText(AdminHomeActivity.this, "No users yet!", Toast.LENGTH_SHORT).show();
+        }
 
     }
     // ChatGPT usage: Yes

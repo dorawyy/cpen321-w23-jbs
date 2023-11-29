@@ -5,7 +5,6 @@ import static com.example.edumatch.util.NetworkUtils.sendHttpRequest;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import org.json.JSONObject;
 

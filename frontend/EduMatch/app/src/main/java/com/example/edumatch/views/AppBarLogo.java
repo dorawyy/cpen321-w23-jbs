@@ -3,16 +3,12 @@ package com.example.edumatch.views;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.edumatch.R;
-import com.example.edumatch.activities.AppointmentListActivity;
-import com.example.edumatch.activities.EditProfileListActivity;
 import com.example.edumatch.activities.TuteeHomeActivity;
 
 public class AppBarLogo extends LinearLayout {

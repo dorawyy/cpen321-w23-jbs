@@ -1,13 +1,9 @@
 package com.example.edumatch;
 
-import static android.app.PendingIntent.getActivity;
-import static androidx.core.util.Predicate.not;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -16,7 +12,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.google.api.client.repackaged.com.google.common.base.CharMatcher.is;
 import static org.hamcrest.Matchers.allOf;
 
 import android.content.Context;
@@ -30,9 +25,7 @@ import com.example.edumatch.activities.AppointmentListActivity;
 import com.example.edumatch.activities.MainActivity;
 import com.example.edumatch.activities.ScheduledAppointmentActivity;
 import com.example.edumatch.activities.TuteeHomeActivity;
-import com.example.edumatch.activities.TutorHomeActivity;
 import com.example.edumatch.activities.TutorRateActivity;
-import com.example.edumatch.views.LabelAndCommentTextView;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;

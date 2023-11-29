@@ -24,8 +24,6 @@ public class TuteeRateActivity extends AppCompatActivity {
     private boolean noShowValue;
     private boolean lateValue;
 
-    //TODO: I need the receiverId from the previous view
-    //TODO: I need the receiverName from the previous view
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

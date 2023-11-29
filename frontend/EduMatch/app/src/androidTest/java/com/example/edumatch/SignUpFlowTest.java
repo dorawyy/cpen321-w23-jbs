@@ -179,7 +179,7 @@ public class SignUpFlowTest {
 
         // Search for courses
 
-        Espresso.onView(CustomMatchers.withAncestor(R.id.search_courses_auto_complete, R.id.auto_complete))
+        onView(CustomMatchers.withAncestor(R.id.search_courses_auto_complete, R.id.auto_complete))
                 .perform(ViewActions.typeText("CPEN"), ViewActions.closeSoftKeyboard());
 
         try {
@@ -194,7 +194,7 @@ public class SignUpFlowTest {
         onView(withText(containsString("CPEN 221"))).inRoot(withDecorView(Matchers.not(Matchers.is(mActivity.getWindow().getDecorView())))).perform(click());
         onView(withId(R.id.add_button)).perform(click());
 
-        Espresso.onView(withId(R.id.chip_container))
+       onView(withId(R.id.chip_container))
                 .check(matches(allOf(
                         hasDescendant(withText("CPEN 221")), // Replace with the actual subject text
                         isDisplayed()
@@ -236,7 +236,7 @@ public class SignUpFlowTest {
 
         int expectedChildCount = 2; // Change this based on your scenario
 
-        onView(ViewMatchers.withId(R.id.course_rate_container))
+        onView(withId(R.id.course_rate_container))
                 .check(ViewAssertions.matches(ViewMatchers.hasChildCount(expectedChildCount)));
 
 

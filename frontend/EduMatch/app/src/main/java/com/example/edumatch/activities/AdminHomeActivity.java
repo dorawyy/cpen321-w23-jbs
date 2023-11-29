@@ -1,7 +1,6 @@
 package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.AdminHelper.getAdminHome;
-import static com.example.edumatch.util.RecommendationHelper.updateWhenTuteeChecksTutor;
 
 import android.content.Context;
 import android.content.Intent;

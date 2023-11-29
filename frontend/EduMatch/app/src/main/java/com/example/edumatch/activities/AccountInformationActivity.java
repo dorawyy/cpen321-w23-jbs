@@ -2,7 +2,6 @@ package com.example.edumatch.activities;
 
 import static com.example.edumatch.util.LoginSignupHelper.constructEditCourseRates;
 import static com.example.edumatch.util.LoginSignupHelper.printSharedPreferences;
-import static com.example.edumatch.util.ProfileHelper.logRequestToConsole;
 import static com.example.edumatch.util.ProfileHelper.putEditProfile;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,8 +16,6 @@ import android.widget.EditText;
 
 import com.example.edumatch.views.LabelAndEditTextView;
 import com.example.edumatch.R;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
 

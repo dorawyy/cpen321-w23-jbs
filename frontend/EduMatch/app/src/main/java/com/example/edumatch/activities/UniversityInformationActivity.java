@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
@@ -212,7 +213,7 @@ public class UniversityInformationActivity extends AppCompatActivity {
     }
 
     // ChatGPT usage: Yes
-    private void updatePreferences() {
+    private boolean updatePreferences() {
 
         // Store the relevant data in SharedPreferences
         editor.putString("university", selectedUniversity);
@@ -227,30 +228,46 @@ public class UniversityInformationActivity extends AppCompatActivity {
         for (int i = 0; i < viewIds.length; i++) {
             LabelAndEditTextView view = findViewById(viewIds[i]);
             String userDataString = view.getEnterUserEditText().getText().toString();
-            editor.putString(keys[i], userDataString);
+
+            if (viewIds[i] == R.id.select_year_level) {
+                if (TextUtils.isDigitsOnly(userDataString)) {
+                    editor.putString(keys[i], userDataString);
+                } else {
+                    // Display an error for invalid year level
+                    view.getEnterUserEditText().setError("Invalid year level. Please enter a number.");
+                    return false;
+                    // Optionally, you may want to clear the invalid value
+                    // editor.remove(keys[i]);
+                }
+            } else {
+                editor.putString(keys[i], userDataString);
+            }
         }
 
         editor.commit();
+        return true;
     }
 
     // ChatGPT usage: Yes
     private void goToNewActivity() {
         Class nextClass;
-        updatePreferences();
-        printSharedPreferences(sharedPreferences);
-        if(Objects.equals(sharedPreferences.getString("userType",""), "tutor")){
-            nextClass = CourseRatesActivity.class;
-        } else {
-            if(sharedPreferences.getBoolean("isEditing",false)){
-                JSONObject request = constructEditUniversityInformation();
-                putEditProfile(request,UniversityInformationActivity.this);
-                nextClass =  EditProfileListActivity.class;
+        boolean success = updatePreferences();
+        if(success){
+            printSharedPreferences(sharedPreferences);
+            if(Objects.equals(sharedPreferences.getString("userType",""), "tutor")){
+                nextClass = CourseRatesActivity.class;
             } else {
-                nextClass = LocationInformationActivity.class;
+                if(sharedPreferences.getBoolean("isEditing",false)){
+                    JSONObject request = constructEditUniversityInformation();
+                    putEditProfile(request,UniversityInformationActivity.this);
+                    nextClass =  EditProfileListActivity.class;
+                } else {
+                    nextClass = LocationInformationActivity.class;
+                }
             }
+            Intent newIntent = new Intent(UniversityInformationActivity.this, nextClass);
+            startActivity(newIntent);
         }
-        Intent newIntent = new Intent(UniversityInformationActivity.this, nextClass);
-        startActivity(newIntent);
     }
 
     private void initSharedPreferences() {

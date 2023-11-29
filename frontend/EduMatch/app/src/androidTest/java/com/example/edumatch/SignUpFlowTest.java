@@ -76,6 +76,8 @@ public class SignUpFlowTest {
 
     private static final String YEAR_LEVEL = "4";
 
+    private static final String INVALID_YEAR_LEVEL = "year";
+
     private static final String UNIVERSITY = "The University of British Columbia";
 
     private static final HashSet<String> COURSES = new HashSet<>(Arrays.asList("CPEN 221", "CPEN 321"));
@@ -158,6 +160,21 @@ public class SignUpFlowTest {
         // Fill in fields
 
         onView(CustomMatchers.withAncestor(R.id.choose_program,R.id.edit_text)).perform(replaceText(PROGRAM));
+
+        onView(CustomMatchers.withAncestor(R.id.select_year_level,R.id.edit_text)).perform(replaceText(INVALID_YEAR_LEVEL));
+
+        onView(withId(R.id.next_button)).perform(click());
+
+        Matcher<View> yearLevelEditText = CustomMatchers.withAncestor(R.id.select_year_level, R.id.edit_text);
+
+        onView(yearLevelEditText).check(matches(hasErrorText(  "Invalid year level. Please enter a number.")));
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         onView(CustomMatchers.withAncestor(R.id.select_year_level,R.id.edit_text)).perform(replaceText(YEAR_LEVEL));
 
         // Search for courses

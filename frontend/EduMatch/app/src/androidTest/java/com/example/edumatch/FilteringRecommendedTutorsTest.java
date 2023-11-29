@@ -22,6 +22,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.example.edumatch.activities.MainActivity;
 import com.example.edumatch.activities.TuteeHomeActivity;
+import com.example.edumatch.util.CustomException;
 import com.example.edumatch.views.SubjectChipHomeView;
 import com.example.edumatch.views.TutorRow;
 
@@ -38,15 +39,13 @@ public class FilteringRecommendedTutorsTest {
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
     Context context;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
     private static final String NAME = "m6Tutee";
     private static final String PASSWORD = "password";
 
     @Before
     public void setUp() {
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AccountPreferences", Context.MODE_PRIVATE);
         sharedPreferences.edit().putString("JWTtoken", "eyJhbGciOiJIUzI1NiJ9.NjU0MzE3MWQzNWQ0ZTYxMzQzN2I5MzJi.LgNYfo-o2chIt1Rgd-QOZaL-If_wM5qS2rGYCy82hIQ").apply();
     }
 
@@ -76,7 +75,7 @@ public class FilteringRecommendedTutorsTest {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("Interrupted Exception");
         }
 
         // Check for Toast notification
@@ -89,7 +88,7 @@ public class FilteringRecommendedTutorsTest {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("Interrupted Exception");
         }
 
         // Check that there is a minimum of one recommended tutor on screen

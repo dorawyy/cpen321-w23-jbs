@@ -42,6 +42,7 @@ import com.example.edumatch.activities.MainActivity;
 import com.example.edumatch.activities.TutorHomeActivity;
 import com.example.edumatch.activities.TutorOrTuteeActivity;
 import com.example.edumatch.activities.UniversityInformationActivity;
+import com.example.edumatch.util.CustomException;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -172,7 +173,7 @@ public class SignUpFlowTest {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("Interrupted Exception");
         }
 
         onView(CustomMatchers.withAncestor(R.id.select_year_level,R.id.edit_text)).perform(replaceText(YEAR_LEVEL));
@@ -185,7 +186,7 @@ public class SignUpFlowTest {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("Interrupted Exception");
         }
 
 
@@ -206,7 +207,7 @@ public class SignUpFlowTest {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("Interrupted Exception");
         }
 
 
@@ -284,7 +285,7 @@ public class SignUpFlowTest {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("Interrupted Exception");
         }
 
         onView(withId(R.id.sunday_button)).perform(click());
@@ -322,7 +323,7 @@ public class SignUpFlowTest {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("Interrupted Exception");
         }
 
         onView(withId(R.id.monday_button)).perform(click());
@@ -359,7 +360,7 @@ public class SignUpFlowTest {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("Interrupted Exception");
         }
 
         onView(withId(R.id.manually_set_button))
@@ -377,7 +378,7 @@ public class SignUpFlowTest {
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("Interrupted Exception");
         }
 
         onView(isRoot()).perform(ViewActions.pressBack());

@@ -6,15 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.edumatch.R;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AdminUserProfileActivity extends AppCompatActivity {
@@ -23,90 +20,71 @@ public class AdminUserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_user_profile);
+
         Intent intent = getIntent();
+        setupUserProfile(intent);
+        JSONObject response = fetchAdminUser(intent.getStringExtra("USER_ID"), this);
+        populateBio(response);
+        populateComments(response);
+        populateMessages(response);
+    }
+
+    private void setupUserProfile(Intent intent) {
         String userId = intent.getStringExtra("USERNAME");
         String displayId = intent.getStringExtra("DISPLAY_ID");
         String type = intent.getStringExtra("TYPE");
         String status = intent.getStringExtra("STATUS");
 
-        TextView userText = findViewById(R.id.username);
-        if (!userId.equals("")) {
-            userText.setText(userId);
-        }
-        TextView displayText = findViewById(R.id.name);
-        displayText.setText(displayId);
-        TextView typeView = findViewById(R.id.userType);
-        typeView.setText(type);
-        TextView statusView = findViewById(R.id.start);
-        statusView.setText(status);
+        setText(R.id.username, userId);
+        setText(R.id.name, displayId);
+        setText(R.id.userType, type);
+        setText(R.id.start, status);
+    }
 
-        JSONObject response = fetchAdminUser(intent.getStringExtra("USER_ID"), AdminUserProfileActivity.this);
-
-        try {
-            String bio = "";
-            if (response != null && response.has("bio") && !response.getString("bio").equals("")) {
-                bio = response.getString("bio");
-                TextView bioText = findViewById(R.id.bio);
-                bioText.setText(bio);
-            }
-        } catch (JSONException e) {
-            Toast.makeText(AdminUserProfileActivity.this, "No bio yet!", Toast.LENGTH_SHORT).show();
+    private void setText(int viewId, String text) {
+        TextView textView = findViewById(viewId);
+        if (text != null && !text.isEmpty()) {
+            textView.setText(text);
         }
+    }
 
-        JSONArray comments;
-        try {
-            comments = response.getJSONArray("reviews");
-        } catch (JSONException e) {
-            comments = null;
+    private void populateBio(JSONObject response) {
+        String bio = response.optString("bio");
+        if (!bio.isEmpty()) {
+            setText(R.id.bio, bio);
         }
-        if (comments.length() > 0) {
+    }
+
+    private void populateComments(JSONObject response) {
+        JSONArray comments = response.optJSONArray("reviews");
+        if (comments != null && comments.length() > 0) {
+            LinearLayout commentContainer = findViewById(R.id.container);
             for (int i = 0; i < comments.length(); i++) {
-                LinearLayout commentContainer = findViewById(R.id.container);
-                JSONObject commentObject;
-                try {
-                    commentObject = comments.getJSONObject(i);
-                } catch (JSONException e) {
-                    commentObject = null;
-                }
+                JSONObject commentObject = comments.optJSONObject(i);
                 if (commentObject != null) {
-                    Comment comment = new Comment(this);
-                    comment.setText(commentObject.toString());
-                    commentContainer.addView(comment);
+                    addComment(commentContainer, commentObject.toString());
                 }
             }
         }
+    }
 
-        JSONArray messages;
-        try {
-            messages = response.getJSONArray("messages");
-            Log.d("fetchAd", messages.toString());
-        } catch (JSONException e) {
-            messages = null;
-        }
+    private void populateMessages(JSONObject response) {
+        JSONArray messages = response.optJSONArray("messages");
         if (messages != null) {
             LinearLayout messageContainer = findViewById(R.id.messageContainer);
             for (int i = 0; i < messages.length(); i++) {
-                JSONObject messageObject;
-                try {
-                    messageObject = messages.getJSONObject(i);
-                    Log.d("fetchAd", messageObject.toString());
-
-                } catch (JSONException e) {
-                    messageObject = null;
-                }
+                JSONObject messageObject = messages.optJSONObject(i);
                 if (messageObject != null) {
-                    Comment comment = new Comment(this);
-                    try {
-                        comment.setText(messageObject.getString("content"));
-                        Log.d("fetchAd", messageObject.getString("content"));
-                    } catch (JSONException e) {
-                        comment.setText("");
-                    }
-                    messageContainer.addView(comment);
+                    String content = messageObject.optString("content");
+                    addComment(messageContainer, content);
                 }
             }
         }
+    }
 
-
+    private void addComment(LinearLayout container, String text) {
+        Comment comment = new Comment(this);
+        comment.setText(text);
+        container.addView(comment);
     }
 }

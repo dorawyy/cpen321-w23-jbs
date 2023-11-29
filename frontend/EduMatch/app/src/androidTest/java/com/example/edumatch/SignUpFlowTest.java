@@ -124,81 +124,7 @@ public class SignUpFlowTest {
 
         accountDetails();
 
-        intended(hasComponent(UniversityInformationActivity.class.getName()));
-
-
-        // Fill in fields
-
-        onView(CustomMatchers.withAncestor(R.id.choose_program,R.id.edit_text)).perform(replaceText(PROGRAM));
-
-        onView(CustomMatchers.withAncestor(R.id.select_year_level,R.id.edit_text)).perform(replaceText(INVALID_YEAR_LEVEL));
-
-        onView(withId(R.id.next_button)).perform(click());
-
-        Matcher<View> yearLevelEditText = CustomMatchers.withAncestor(R.id.select_year_level, R.id.edit_text);
-
-        onView(yearLevelEditText).check(matches(hasErrorText(  "Invalid year level. Please enter a number.")));
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new CustomException("Interrupted Exception");
-        }
-
-        onView(CustomMatchers.withAncestor(R.id.select_year_level,R.id.edit_text)).perform(replaceText(YEAR_LEVEL));
-
-        // Search for courses
-
-        onView(CustomMatchers.withAncestor(R.id.search_courses_auto_complete, R.id.auto_complete))
-                .perform(ViewActions.typeText("CPEN"), ViewActions.closeSoftKeyboard());
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new CustomException("Interrupted Exception");
-        }
-
-
-        MainActivity mActivity = activityRule.getActivity();
-
-        onView(withText(containsString("CPEN 221"))).inRoot(withDecorView(Matchers.not(Matchers.is(mActivity.getWindow().getDecorView())))).perform(click());
-        onView(withId(R.id.add_button)).perform(click());
-
-       onView(withId(R.id.chip_container))
-                .check(matches(allOf(
-                        hasDescendant(withText("CPEN 221")), // Replace with the actual subject text
-                        isDisplayed()
-                )));
-
-        onView(CustomMatchers.withAncestor(R.id.search_courses_auto_complete, R.id.auto_complete))
-                .perform(ViewActions.typeText("CPEN 32"), ViewActions.closeSoftKeyboard());
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new CustomException("Interrupted Exception");
-        }
-
-
-        // Scroll to find the AutoCompleteTextView with the desired suggestion
-        onView(withText(containsString("CPEN 321"))).inRoot(withDecorView(Matchers.not(Matchers.is(mActivity.getWindow().getDecorView())))).perform(click());
-
-        onView(withId(R.id.add_button)).perform(click());
-
-        onView(withId(R.id.chip_container))
-                .check(matches(allOf(
-                        hasDescendant(withText("CPEN 321")), // Replace with the actual subject text
-                        isDisplayed()
-                )));
-
-
-        // Call the updatePreferences method to update SharedPreferences
-        onView(withId(R.id.next_button)).perform(click());
-
-        assertEquals(PROGRAM, sharedPreferences.getString("program", ""));
-        assertEquals(YEAR_LEVEL, sharedPreferences.getString("yearLevel", ""));
-        assertEquals(UNIVERSITY, sharedPreferences.getString("university", ""));
-        assertEquals(COURSES, sharedPreferences.getStringSet("courses", new HashSet<>()));
+        universityInformation();
 
         // Next Activity
         intended(hasComponent(CourseRatesActivity.class.getName()));
@@ -363,6 +289,84 @@ public class SignUpFlowTest {
                 .check(matches(isDisplayed()));
 
         Intents.release();
+    }
+
+    private void universityInformation() {
+        intended(hasComponent(UniversityInformationActivity.class.getName()));
+
+
+        // Fill in fields
+
+        onView(CustomMatchers.withAncestor(R.id.choose_program,R.id.edit_text)).perform(replaceText(PROGRAM));
+
+        onView(CustomMatchers.withAncestor(R.id.select_year_level,R.id.edit_text)).perform(replaceText(INVALID_YEAR_LEVEL));
+
+        onView(withId(R.id.next_button)).perform(click());
+
+        Matcher<View> yearLevelEditText = CustomMatchers.withAncestor(R.id.select_year_level, R.id.edit_text);
+
+        onView(yearLevelEditText).check(matches(hasErrorText(  "Invalid year level. Please enter a number.")));
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new CustomException("Interrupted Exception");
+        }
+
+        onView(CustomMatchers.withAncestor(R.id.select_year_level,R.id.edit_text)).perform(replaceText(YEAR_LEVEL));
+
+        // Search for courses
+
+        onView(CustomMatchers.withAncestor(R.id.search_courses_auto_complete, R.id.auto_complete))
+                .perform(ViewActions.typeText("CPEN"), ViewActions.closeSoftKeyboard());
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new CustomException("Interrupted Exception");
+        }
+
+
+        MainActivity mActivity = activityRule.getActivity();
+
+        onView(withText(containsString("CPEN 221"))).inRoot(withDecorView(Matchers.not(Matchers.is(mActivity.getWindow().getDecorView())))).perform(click());
+        onView(withId(R.id.add_button)).perform(click());
+
+        onView(withId(R.id.chip_container))
+                .check(matches(allOf(
+                        hasDescendant(withText("CPEN 221")), // Replace with the actual subject text
+                        isDisplayed()
+                )));
+
+        onView(CustomMatchers.withAncestor(R.id.search_courses_auto_complete, R.id.auto_complete))
+                .perform(ViewActions.typeText("CPEN 32"), ViewActions.closeSoftKeyboard());
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new CustomException("Interrupted Exception");
+        }
+
+
+        // Scroll to find the AutoCompleteTextView with the desired suggestion
+        onView(withText(containsString("CPEN 321"))).inRoot(withDecorView(Matchers.not(Matchers.is(mActivity.getWindow().getDecorView())))).perform(click());
+
+        onView(withId(R.id.add_button)).perform(click());
+
+        onView(withId(R.id.chip_container))
+                .check(matches(allOf(
+                        hasDescendant(withText("CPEN 321")), // Replace with the actual subject text
+                        isDisplayed()
+                )));
+
+
+        // Call the updatePreferences method to update SharedPreferences
+        onView(withId(R.id.next_button)).perform(click());
+
+        assertEquals(PROGRAM, sharedPreferences.getString("program", ""));
+        assertEquals(YEAR_LEVEL, sharedPreferences.getString("yearLevel", ""));
+        assertEquals(UNIVERSITY, sharedPreferences.getString("university", ""));
+        assertEquals(COURSES, sharedPreferences.getStringSet("courses", new HashSet<>()));
     }
 
     private void accountDetails() {

@@ -37,7 +37,8 @@ const config = {
     "/server.js",
     "/node_modules/",
     "/coverage/",
-    "/tests/"
+    "/tests/",
+    "/utils/"
   ],
 
   // Indicates which provider should be used to instrument code for coverage

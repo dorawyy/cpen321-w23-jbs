@@ -200,7 +200,7 @@ public class SignUpFlowTest {
                         isDisplayed()
                 )));
 
-        Espresso.onView(CustomMatchers.withAncestor(R.id.search_courses_auto_complete, R.id.auto_complete))
+        onView(CustomMatchers.withAncestor(R.id.search_courses_auto_complete, R.id.auto_complete))
                 .perform(ViewActions.typeText("CPEN 32"), ViewActions.closeSoftKeyboard());
 
         try {
@@ -215,7 +215,7 @@ public class SignUpFlowTest {
 
         onView(withId(R.id.add_button)).perform(click());
 
-        Espresso.onView(withId(R.id.chip_container))
+        onView(withId(R.id.chip_container))
                 .check(matches(allOf(
                         hasDescendant(withText("CPEN 321")), // Replace with the actual subject text
                         isDisplayed()
@@ -237,7 +237,7 @@ public class SignUpFlowTest {
         int expectedChildCount = 2; // Change this based on your scenario
 
         onView(withId(R.id.course_rate_container))
-                .check(ViewAssertions.matches(ViewMatchers.hasChildCount(expectedChildCount)));
+                .check(matches(ViewMatchers.hasChildCount(expectedChildCount)));
 
 
         onView(allOf(

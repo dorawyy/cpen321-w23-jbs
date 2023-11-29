@@ -25,9 +25,7 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.TimePicker;
 
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -124,36 +122,7 @@ public class SignUpFlowTest {
         // Continue the flow by clicking the "Tutor" button
         onView(withId(R.id.tutor_button)).perform(click());
 
-        // Verify that we are in the next activity (AccountInformationActivity)
-        intended(hasComponent(AccountInformationActivity.class.getName()));
-        assertEquals("tutor", sharedPreferences.getString("userType", ""));
-
-        // Try to continue without filling in required field
-        onView(withId(R.id.next_button)).perform(click());
-
-        // Check if the error message is displayed
-        Matcher<View> editText = CustomMatchers.withAncestor(R.id.create_name, R.id.edit_text);
-        onView(editText).check(matches(hasErrorText("This field is required")));
-
-        //Enter information in edit text
-
-        onView(CustomMatchers.withAncestor(R.id.create_name,R.id.edit_text)).perform(replaceText(NAME));
-        onView(CustomMatchers.withAncestor(R.id.create_email,R.id.edit_text)).perform(replaceText(EMAIL));
-        onView(CustomMatchers.withAncestor(R.id.create_phone_number,R.id.edit_text)).perform(replaceText(PHONE_NUMBER));
-        onView(CustomMatchers.withAncestor(R.id.create_userName,R.id.edit_text)).perform(replaceText(USERNAME));
-        onView(CustomMatchers.withAncestor(R.id.create_password,R.id.edit_text)).perform(replaceText(PASSWORD));
-        onView(CustomMatchers.withAncestor(R.id.create_bio,R.id.edit_text)).perform(replaceText(BIO));
-
-        // Call the updatePreferences method to update SharedPreferences
-        onView(withId(R.id.next_button)).perform(click());
-
-        // Verify SharedPreferences
-        assertEquals(NAME, sharedPreferences.getString("name", ""));
-        assertEquals(EMAIL, sharedPreferences.getString("email", ""));
-        assertEquals(PHONE_NUMBER, sharedPreferences.getString("phoneNumber", ""));
-        assertEquals(USERNAME, sharedPreferences.getString("username", ""));
-        assertEquals(PASSWORD, sharedPreferences.getString("password", ""));
-        assertEquals(BIO, sharedPreferences.getString("bio", ""));
+        accountDetails();
 
         intended(hasComponent(UniversityInformationActivity.class.getName()));
 
@@ -249,7 +218,7 @@ public class SignUpFlowTest {
         for(String tag : TAGS){
             onView(CustomMatchers.withAncestor(R.id.add_tags,R.id.edit_text)).perform(replaceText(tag));
             onView(withId(R.id.add_button)).perform(click());
-            Espresso.onView(withId(R.id.chip_container))
+            onView(withId(R.id.chip_container))
                     .check(matches(allOf(
                             hasDescendant(withText(tag)), // Replace with the actual subject text
                             isDisplayed()
@@ -394,6 +363,39 @@ public class SignUpFlowTest {
                 .check(matches(isDisplayed()));
 
         Intents.release();
+    }
+
+    private void accountDetails() {
+        // Verify that we are in the next activity (AccountInformationActivity)
+        intended(hasComponent(AccountInformationActivity.class.getName()));
+        assertEquals("tutor", sharedPreferences.getString("userType", ""));
+
+        // Try to continue without filling in required field
+        onView(withId(R.id.next_button)).perform(click());
+
+        // Check if the error message is displayed
+        Matcher<View> editText = CustomMatchers.withAncestor(R.id.create_name, R.id.edit_text);
+        onView(editText).check(matches(hasErrorText("This field is required")));
+
+        //Enter information in edit text
+
+        onView(CustomMatchers.withAncestor(R.id.create_name,R.id.edit_text)).perform(replaceText(NAME));
+        onView(CustomMatchers.withAncestor(R.id.create_email,R.id.edit_text)).perform(replaceText(EMAIL));
+        onView(CustomMatchers.withAncestor(R.id.create_phone_number,R.id.edit_text)).perform(replaceText(PHONE_NUMBER));
+        onView(CustomMatchers.withAncestor(R.id.create_userName,R.id.edit_text)).perform(replaceText(USERNAME));
+        onView(CustomMatchers.withAncestor(R.id.create_password,R.id.edit_text)).perform(replaceText(PASSWORD));
+        onView(CustomMatchers.withAncestor(R.id.create_bio,R.id.edit_text)).perform(replaceText(BIO));
+
+        // Call the updatePreferences method to update SharedPreferences
+        onView(withId(R.id.next_button)).perform(click());
+
+        // Verify SharedPreferences
+        assertEquals(NAME, sharedPreferences.getString("name", ""));
+        assertEquals(EMAIL, sharedPreferences.getString("email", ""));
+        assertEquals(PHONE_NUMBER, sharedPreferences.getString("phoneNumber", ""));
+        assertEquals(USERNAME, sharedPreferences.getString("username", ""));
+        assertEquals(PASSWORD, sharedPreferences.getString("password", ""));
+        assertEquals(BIO, sharedPreferences.getString("bio", ""));
     }
 
 }

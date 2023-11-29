@@ -64,10 +64,12 @@ public class TutorRateActivity extends AppCompatActivity {
         commentView.getEnterUserEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d("mary", "test");
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("mary", "test");
             }
 
             @Override

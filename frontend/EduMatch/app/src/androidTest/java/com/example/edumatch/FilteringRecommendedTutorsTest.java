@@ -12,10 +12,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.edumatch.CustomMatchers.hasMinimumChildCount;
 import static com.example.edumatch.CustomMatchers.withChildViewCount;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 
 import android.content.Context;
 import android.content.SharedPreferences;

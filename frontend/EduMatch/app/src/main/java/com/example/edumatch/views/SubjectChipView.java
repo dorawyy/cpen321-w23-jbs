@@ -14,7 +14,6 @@ import com.example.edumatch.R;
 
 public class SubjectChipView extends RelativeLayout {
 
-    private ChipClickListener chipClickListener;
     private TextView textView;
     public Button removeButton; // Add a reference to the remove button
 
@@ -22,9 +21,6 @@ public class SubjectChipView extends RelativeLayout {
 
     private OnChipRemovedListener chipRemovedListener;
 
-    public interface ChipClickListener {
-        void onChipClicked(SubjectChipView chipView);
-    }
 
     // ChatGPT usage: Yes
     public interface OnChipRemovedListener {
@@ -96,25 +92,6 @@ public class SubjectChipView extends RelativeLayout {
             }
         }
 
-
-        // Inside your onClickListener in SubjectChipView
-//        this.setOnClickListener(v -> {
-//            // Toggle the clicked state and update background color accordingly
-//            isClicked = !isClicked;
-//            updateBackgroundColor();
-//            if(chipClickListener != null) {
-//                chipClickListener.onChipClicked(SubjectChipView.this);
-//            }
-//        });
-    }
-
-    // ChatGPT usage: Yes
-    private void updateBackgroundColor() {
-        if (isClicked) {
-            setBackgroundColor(Color.parseColor("#A9A9A9")); // Dark Grey color when clicked
-        } else {
-            setBackgroundColor(Color.TRANSPARENT); // Reset to original or transparent color
-        }
     }
 
     public String getText() {

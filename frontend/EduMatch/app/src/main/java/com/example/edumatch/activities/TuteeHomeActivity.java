@@ -3,8 +3,6 @@ package com.example.edumatch.activities;
 import static com.example.edumatch.util.ProfileHelper.getProfile;
 import static com.example.edumatch.util.RecommendationHelper.updateWhenTuteeChecksTutor;
 import static com.example.edumatch.util.TutorsHelper.getTuteeHome;
-
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.edumatch.R;
 import com.example.edumatch.views.SubjectChipHomeView;
 import com.example.edumatch.views.TutorRow;
-import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
@@ -292,18 +289,5 @@ public class TuteeHomeActivity extends AppCompatActivity {
         LinearLayout tutorList = findViewById(R.id.tutorList);
         tutorList.removeAllViews();
     }
-
-    // ChatGPT usage: Yes
-    private boolean isAnyChipViewPressed() {
-        for (SubjectChipHomeView chipView : subjectChipViews) {
-            if (chipView.isClicked) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-
 
 }

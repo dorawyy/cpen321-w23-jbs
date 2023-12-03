@@ -36,8 +36,7 @@ const config = {
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "/coverage/",
-    "/tests/",
-    "/utils/"
+    "/tests/"
   ],
 
   // Indicates which provider should be used to instrument code for coverage
